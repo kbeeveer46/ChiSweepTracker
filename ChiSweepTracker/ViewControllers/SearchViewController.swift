@@ -33,7 +33,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         
         // Style buttons and add images
-        searchAddressButton.backgroundColor = UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
+        searchAddressButton.backgroundColor = .systemBlue //UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
         searchAddressButton.layer.cornerRadius = 7.0
         searchAddressButton.tintColor = .white
         if #available(iOS 13.0, *) {
@@ -139,25 +139,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             chicagoMapView.addAnnotation(annotation)
         }
     }
-//    @objc func addAnnotation(gesture: UILongPressGestureRecognizer) {
-//
-//        print("addAnnotation has fired")
-//
-//        if gesture.state == .ended {
-//
-//            let point = gesture.location(in: chicagoMapView)
-//            let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
-//            print(coordinate)
-//
-//
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = coordinate
-//            //annotation.title = "Title"
-//            //annotation.subtitle = "subtitle"
-//
-//            chicagoMapView.addAnnotation(annotation)
-//        }
-//    }
     
     // Check if segue should perform (for validatin fields)
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -228,6 +209,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBAction func searchAddressTapped(_ sender: Any) {
         
         // Check for empty string
+        
+        if searchTypeSegment.selectedSegmentIndex != 1 {
+            locationManager.stopUpdatingLocation()
+        }
         
         getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
         //getSchedule("750 N Dearborn St Chicago, IL")
@@ -500,7 +485,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    // Fallback on earlier versions
+                }
                 
             }
         }

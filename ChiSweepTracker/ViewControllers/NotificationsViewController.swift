@@ -14,7 +14,7 @@ class NotificationsViewController: UIViewController {
         phoneNumberTextField.isUserInteractionEnabled = false
         emailTextField.isUserInteractionEnabled = false
         
-        saveButton.backgroundColor = UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
+        saveButton.backgroundColor = .systemBlue //UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
         saveButton.layer.cornerRadius = 7.0
         saveButton.tintColor = .white
 //        if #available(iOS 13.0, *) {

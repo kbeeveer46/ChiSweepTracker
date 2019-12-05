@@ -13,7 +13,10 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
 
         if !schedule.section.isEmpty {
-            self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+            sections = [schedule.section]
+            self.sectionTableView.delegate = self
+            self.sectionTableView.dataSource = self
+            self.sectionTableView.reloadData()
         }
         else {
             getSections()
@@ -69,6 +72,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                 
                     self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+//                    self.sectionTableView.delegate = self
+//                    self.sectionTableView.dataSource = self
+//                    self.sectionTableView.reloadData()
             
                 }
             case .error (let err):
