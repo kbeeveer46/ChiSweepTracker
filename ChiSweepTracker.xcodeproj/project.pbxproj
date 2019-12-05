@@ -7,19 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */; };
+		FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */; };
+		FA184FA5239872C300AB2FF6 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */; };
+		FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */; };
+		FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAB23987BE900AB2FF6 /* SODAClient.swift */; };
+		FA184FAE23987C2A00AB2FF6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAD23987C2A00AB2FF6 /* Constants.swift */; };
+		FA184FB02398C0A200AB2FF6 /* ScheduleTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAF2398C0A200AB2FF6 /* ScheduleTableTableViewController.swift */; };
 		FA29464023985FE300A24FFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29463F23985FE300A24FFC /* AppDelegate.swift */; };
 		FA29464223985FE300A24FFC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29464123985FE300A24FFC /* SceneDelegate.swift */; };
-		FA29464423985FE300A24FFC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29464323985FE300A24FFC /* ViewController.swift */; };
+		FA29464423985FE300A24FFC /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29464323985FE300A24FFC /* SearchViewController.swift */; };
 		FA29464723985FE300A24FFC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA29464523985FE300A24FFC /* Main.storyboard */; };
 		FA29464923985FE600A24FFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA29464823985FE600A24FFC /* Assets.xcassets */; };
 		FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
+		FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleModel.swift; sourceTree = "<group>"; };
+		FA184FAB23987BE900AB2FF6 /* SODAClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SODAClient.swift; sourceTree = "<group>"; };
+		FA184FAD23987C2A00AB2FF6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		FA184FAF2398C0A200AB2FF6 /* ScheduleTableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableTableViewController.swift; sourceTree = "<group>"; };
 		FA29463C23985FE300A24FFC /* ChiSweepTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChiSweepTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA29463F23985FE300A24FFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA29464123985FE300A24FFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FA29464323985FE300A24FFC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FA29464323985FE300A24FFC /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		FA29464623985FE300A24FFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FA29464823985FE600A24FFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA29464B23985FE600A24FFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -37,6 +51,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA184FA12398707C00AB2FF6 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */,
+				FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */,
+				FA29464323985FE300A24FFC /* SearchViewController.swift */,
+				FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */,
+				FA184FAF2398C0A200AB2FF6 /* ScheduleTableTableViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		FA184FA623987ADC00AB2FF6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		FA29463323985FE300A24FFC = {
 			isa = PBXGroup;
 			children = (
@@ -56,13 +90,16 @@
 		FA29463E23985FE300A24FFC /* ChiSweepTracker */ = {
 			isa = PBXGroup;
 			children = (
+				FA184FA623987ADC00AB2FF6 /* Models */,
+				FA184FA12398707C00AB2FF6 /* ViewControllers */,
 				FA29463F23985FE300A24FFC /* AppDelegate.swift */,
 				FA29464123985FE300A24FFC /* SceneDelegate.swift */,
-				FA29464323985FE300A24FFC /* ViewController.swift */,
 				FA29464523985FE300A24FFC /* Main.storyboard */,
 				FA29464823985FE600A24FFC /* Assets.xcassets */,
 				FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */,
 				FA29464D23985FE600A24FFC /* Info.plist */,
+				FA184FAB23987BE900AB2FF6 /* SODAClient.swift */,
+				FA184FAD23987C2A00AB2FF6 /* Constants.swift */,
 			);
 			path = ChiSweepTracker;
 			sourceTree = "<group>";
@@ -138,9 +175,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA29464423985FE300A24FFC /* ViewController.swift in Sources */,
+				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
+				FA184FB02398C0A200AB2FF6 /* ScheduleTableTableViewController.swift in Sources */,
+				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
+				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
+				FA184FA5239872C300AB2FF6 /* ErrorViewController.swift in Sources */,
+				FA29464423985FE300A24FFC /* SearchViewController.swift in Sources */,
 				FA29464023985FE300A24FFC /* AppDelegate.swift in Sources */,
 				FA29464223985FE300A24FFC /* SceneDelegate.swift in Sources */,
+				FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */,
+				FA184FAE23987C2A00AB2FF6 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,7 +260,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -270,7 +314,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

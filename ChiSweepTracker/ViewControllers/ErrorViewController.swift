@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ErrorViewController.swift
 //  ChiSweepTracker
 //
 //  Created by Macbook on 12/4/19.
@@ -8,13 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ErrorViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
 
-
 }
-

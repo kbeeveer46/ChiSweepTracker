@@ -1,24 +1,214 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8UQ-L6-Xkq">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Chicago Sweep Tracker-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="SearchViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
+                                <rect key="frame" x="0.0" y="44" width="375" height="265"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="265" id="XJi-jr-BwO"/>
+                                </constraints>
+                            </mapView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
+                                <rect key="frame" x="20" y="329" width="335" height="217"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123 Main St. Chicago, IL" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iz5-fA-FV8">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="55"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="55" id="yRh-DP-wdK"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
+                                        <rect key="frame" x="0.0" y="71" width="335" height="65"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="65" id="ySz-xS-V2V"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <state key="normal" title="Search Address"/>
+                                        <connections>
+                                            <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
+                                            <segue destination="Xr8-KD-z2R" kind="show" identifier="ScheduleSegue" id="ZsL-Az-HLm"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CUi-gP-i2H">
+                                        <rect key="frame" x="0.0" y="152" width="335" height="65"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="65" id="2Zn-gs-nhO"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <state key="normal" title="Use My Location"/>
+                                        <connections>
+                                            <action selector="useMyLocationTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8Ff-xs-yW0"/>
+                                            <segue destination="Xr8-KD-z2R" kind="show" id="cFW-kI-1KK"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="iz5-fA-FV8" firstAttribute="centerX" secondItem="a0x-bJ-ZY7" secondAttribute="centerX" id="0ge-QB-cMx"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="3h8-Sv-Ci3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a0x-bJ-ZY7" secondAttribute="trailing" constant="20" id="OkW-un-m0k"/>
+                            <constraint firstItem="l5K-mm-59I" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fdT-W4-34u"/>
+                            <constraint firstItem="l5K-mm-59I" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="mox-SX-2uH"/>
+                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="top" secondItem="l5K-mm-59I" secondAttribute="bottom" constant="20" id="sS0-5g-cEm"/>
+                            <constraint firstItem="l5K-mm-59I" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uBz-cO-qw5"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Chicago Sweep Tracker" id="20R-RE-6OG"/>
+                    <connections>
+                        <outlet property="addressTextField" destination="iz5-fA-FV8" id="tRP-VG-G6b"/>
+                        <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
+                        <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
+                        <outlet property="useMyLocationButton" destination="CUi-gP-i2H" id="bOc-YF-PLZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="792.79999999999995" y="80.50974512743629"/>
+        </scene>
+        <!--Sweep Schedule-->
+        <scene sceneID="3K6-sD-hJN">
+            <objects>
+                <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
+                                <rect key="frame" x="0.0" y="44" width="375" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Y6R-wb-aGO"/>
+                                </constraints>
+                            </mapView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
+                                <rect key="frame" x="0.0" y="244" width="375" height="423"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" tag="1" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gue-Fp-3PN" id="Lge-eF-dGr">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Month Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
+                                                    <rect key="frame" x="25" y="11" width="150" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="150" id="4fh-Xl-nMF"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Days" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
+                                                    <rect key="frame" x="312" y="11" width="38" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="6xo-qv-gRm" firstAttribute="leading" secondItem="Lge-eF-dGr" secondAttribute="leadingMargin" constant="10" id="JZG-m7-3in"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="78y-U4-UIn" secondAttribute="trailing" constant="10" id="WrZ-1l-r2e"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="top" secondItem="ORo-iT-5MZ" secondAttribute="top" id="1Bt-ku-YCZ"/>
+                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="trailing" secondItem="ORo-iT-5MZ" secondAttribute="trailing" id="2Lk-il-j7j"/>
+                            <constraint firstItem="LBw-Gl-6Ol" firstAttribute="trailing" secondItem="ORo-iT-5MZ" secondAttribute="trailing" id="5rG-s5-lZt"/>
+                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="leading" secondItem="ORo-iT-5MZ" secondAttribute="leading" id="DAi-N6-VPf"/>
+                            <constraint firstItem="LBw-Gl-6Ol" firstAttribute="bottom" secondItem="ORo-iT-5MZ" secondAttribute="bottom" id="YRF-zH-LXi"/>
+                            <constraint firstItem="LBw-Gl-6Ol" firstAttribute="leading" secondItem="ORo-iT-5MZ" secondAttribute="leading" id="ZFD-zW-W8R"/>
+                            <constraint firstItem="LBw-Gl-6Ol" firstAttribute="top" secondItem="IJE-QJ-UFJ" secondAttribute="bottom" id="sOu-zI-D0X"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ORo-iT-5MZ"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB"/>
+                    <connections>
+                        <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
+                        <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1476" y="80.50974512743629"/>
+        </scene>
+        <!--Error View Controller-->
+        <scene sceneID="l2i-C1-iXC">
+            <objects>
+                <viewController id="g9k-KL-pmC" customClass="ErrorViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fdi-3q-r8r">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="o1D-iR-LuJ"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ecv-Nh-HtQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="743"/>
+        </scene>
+        <!--Notifications View Controller-->
+        <scene sceneID="XQY-3Z-30v">
+            <objects>
+                <viewController id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="qWq-pT-RyA"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="zlF-Cz-MXS"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2140" y="81"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="sXP-ht-gqy">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8UQ-L6-Xkq" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="mD3-jK-kiL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="OIG-5u-pqf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bo8-5Z-Gft" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="81.409295352323838"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="cFW-kI-1KK"/>
+    </inferredMetricsTieBreakers>
 </document>
