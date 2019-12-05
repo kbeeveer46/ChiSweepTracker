@@ -16,9 +16,71 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
+    func getSchedule() {
+        
+        schedule.months.removeAll()
+        
+        let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+        
+        let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+            .filter("ward = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND section = '\(self.schedule.section)'" : "") ")
+        
+        scheduleQuery.get { res in
+            switch res {
+            case .dataset (let data):
+                
+                if data.count > 0 {
+                    
+                    for (_, item) in data.enumerated() {
+                        
+                        let monthName = item["month_name"] as? String ?? ""
+                        let monthNumber = item["month_number"] as? Int ?? 0
+                        let dates = item["dates"] as? String ?? ""
+                        let datesArray = dates.components(separatedBy: ",")
+                        
+                        print("Month name: \(monthName)")
+                        print("Dates: \(datesArray)")
+                        
+                        let month = Month()
+                        month.name = monthName
+                        month.number = monthNumber
+                        
+                        for day in datesArray {
+                            
+                            print("Date: \(day)")
+                            
+                            if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                
+                                let date = Date()
+                                date.date = Int(day) ?? 0
+                                
+                                if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
+                                    month.dates.append(date)
+                                }
+                            }
+                        }
+                        
+                        self.schedule.months.append(month)
+                        
+                    }
+                
+                    self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+            
+                }
+            case .error (let err):
+                
+                print((err as NSError).userInfo.debugDescription)
+                
+                //self.showingError = true
+                //self.errorMessage = (err as NSError).userInfo.debugDescription
+            }
+        }
+        
+    }
+    
     func getSections() {
         
-        //sections.removeAll()
+        sections.removeAll()
         
         let ward = self.schedule.ward
         
@@ -80,12 +142,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         let row = indexPath.row
         
-        //print("Selected section: \(sections[row])")
-        
         self.schedule.section = sections[row]
         
-        self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
-        //return
+        getSchedule()
         
     }
     
@@ -93,7 +152,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let scheduleViewController = segue.destination as? ScheduleViewController {
-            scheduleViewController.schedule = self.schedule
+            scheduleViewController.schedule = schedule
         }
     }
 }

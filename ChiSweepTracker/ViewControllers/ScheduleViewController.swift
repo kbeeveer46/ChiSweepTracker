@@ -18,8 +18,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             self.navigationItem.rightBarButtonItem = notificationButton
         }
         
+        loadSchedule()
+        
         self.scheduleTableView.dataSource = self
         self.scheduleTableView.delegate = self
+        self.scheduleTableView.allowsSelection = false
         self.scheduleTableView.reloadData()
 
     }
@@ -39,7 +42,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let monthNameLabel = cell.viewWithTag(1) as! UILabel
         let daysLabel = cell.viewWithTag(2) as! UILabel
         
-        
         var dates = ""
         for date in schedule.months[indexPath.row].dates  {
             
@@ -49,6 +51,15 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         monthNameLabel.text = schedule.months[indexPath.row].name
         daysLabel.text = dates
+        
+        let currentMonthNumber = Calendar.current.component(.month, from: Foundation.Date())
+        
+        if currentMonthNumber > schedule.months[indexPath.row].number {
+            
+            monthNameLabel.textColor = .lightGray
+            daysLabel.textColor = .lightGray
+            
+        }
         
         return cell
         

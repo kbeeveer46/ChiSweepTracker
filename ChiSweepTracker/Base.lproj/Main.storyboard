@@ -115,26 +115,26 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
-                                                            <rect key="frame" x="15" y="15.5" width="150" height="24"/>
+                                                            <rect key="frame" x="10" y="17" width="150" height="21.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="4fh-Xl-nMF"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1  5  10  15  20  25  30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
-                                                            <rect key="frame" x="210" y="18.5" width="150" height="18"/>
+                                                            <rect key="frame" x="215" y="18.5" width="150" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailingMargin" secondItem="78y-U4-UIn" secondAttribute="trailing" id="29c-pN-wt9"/>
+                                                        <constraint firstAttribute="trailingMargin" secondItem="78y-U4-UIn" secondAttribute="trailing" constant="-5" id="29c-pN-wt9"/>
                                                         <constraint firstItem="6xo-qv-gRm" firstAttribute="centerY" secondItem="Lge-eF-dGr" secondAttribute="centerY" id="7UM-My-jeh"/>
                                                         <constraint firstItem="78y-U4-UIn" firstAttribute="centerY" secondItem="Lge-eF-dGr" secondAttribute="centerY" id="G2p-sD-vhz"/>
-                                                        <constraint firstItem="6xo-qv-gRm" firstAttribute="leading" secondItem="Lge-eF-dGr" secondAttribute="leadingMargin" id="d2s-4t-il0"/>
+                                                        <constraint firstItem="6xo-qv-gRm" firstAttribute="leading" secondItem="Lge-eF-dGr" secondAttribute="leadingMargin" constant="-5" id="d2s-4t-il0"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -256,6 +256,9 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="a7p-fA-Rzq">
                                                 <rect key="frame" x="286" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="textNotificationTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="h5h-DY-fJK"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                         <constraints>
@@ -268,7 +271,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="bYR-Ph-5po"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <textInputTraits key="textInputTraits" textContentType="tel"/>
                                     </textField>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="CRt-9z-bwN">
@@ -282,6 +285,9 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BEh-Uc-Tzz">
                                                 <rect key="frame" x="286" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="emailNotificationTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="Hty-Ww-1SM"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                         <constraints>
@@ -294,7 +300,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="g5l-d7-MOT"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <textInputTraits key="textInputTraits" textContentType="email"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PuS-6X-GvQ">
@@ -357,6 +363,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Y2c-go-eSE"/>
+        <segue reference="wS6-r3-dzE"/>
     </inferredMetricsTieBreakers>
 </document>

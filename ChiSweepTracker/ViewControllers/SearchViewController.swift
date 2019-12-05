@@ -32,6 +32,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         // Make enter key close keyboard
         self.addressTextField.delegate = self
+        //addressTextField.layer.borderColor = UIColor(red: 48/255, green: 178/255, blue: 99/255, alpha: 1).cgColor
+        //addressTextField.layer.borderWidth = 1
+        //addressTextField.layer.cornerRadius = 7.0
+        
         
         // Style buttons and add images
         searchAddressButton.backgroundColor = UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
