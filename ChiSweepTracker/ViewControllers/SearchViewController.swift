@@ -19,8 +19,21 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Request location access
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.startUpdatingLocation()
+            
+        }
+        
+        // Make enter key close keyboard
         self.addressTextField.delegate = self
         
+        // Style buttons and add images
         searchAddressButton.backgroundColor = UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
         searchAddressButton.layer.cornerRadius = 7.0
         searchAddressButton.tintColor = .white
@@ -36,7 +49,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         // Load Chicago map
-        
         chicagoMapView.delegate = self
         
         let longPressGesture = UILongPressGestureRecognizer(target: chicagoMapView, action: #selector(addAnnotation(gesture:)))
@@ -53,24 +65,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         chicagoMapView.setRegion(region, animated: true)
         
-        locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            locationManager.startUpdatingLocation()
-            
-        }
-        
     }
     
+    // Make enter key close keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         self.view.endEditing(true)
         return false
     }
     
+    // Add annotation when Chicago map is long pressed
     @objc func addAnnotation(gesture: UILongPressGestureRecognizer) {
         
         print("addAnnotation has fired")
@@ -91,6 +95,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
     }
     
+    // Check if segue should perform (for validatin fields)
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         
         //addressFromTextField = addressTextField.text!.trimmingCharacters(in: .whitespaces)
@@ -125,6 +130,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
     }
     
+    // Prepare segue and pass data to view controllers
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "selectSectionSegue" {
@@ -155,17 +161,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
     }
     
+    // Search address button is tapped
     @IBAction func searchAddressTapped(_ sender: Any) {
-        
         
         // Check for empty string
         
-        getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
-         
+        //getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
+        getSchedule("750 N Dearborn St Chicago, IL")
     
-        
     }
     
+    // Use my location button is tapped
     @IBAction func useMyLocationTapped(_ sender: Any) {
         
         
@@ -343,13 +349,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 //self.errorMessage = "Could not find sweep area. Please try again."
             }
         }
-        
-        //return schedule
-        //finished()
-        
     }
 
-    
+    // Get address from coordinates after location manager retrieves user's location
     func getAddressFromCoordinates(_ location: CLLocation) {
         
         var address = ""
@@ -398,6 +400,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
     }
     
+    // Get user's last location and get address from coordinates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if let location = locations.last {
@@ -407,6 +410,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
     }
     
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         if status == CLAuthorizationStatus.denied {
@@ -414,7 +418,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             showLocationDisabledPopup()
             
         }
-        
     }
     
     func showLocationDisabledPopup() {
@@ -438,6 +441,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.present(alertController, animated: true, completion: nil)
     }
 }
+
+// MARK - Helpers
 
 extension UIButton {
     

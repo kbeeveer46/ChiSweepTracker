@@ -55,6 +55,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 //            loadSchedule(schedule)
 //        }
         
+        self.scheduleTableView.dataSource = self
+        self.scheduleTableView.delegate = self
+        self.scheduleTableView.reloadData()
 
         
     }
