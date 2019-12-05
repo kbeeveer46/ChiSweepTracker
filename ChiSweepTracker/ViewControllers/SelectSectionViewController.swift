@@ -12,8 +12,12 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        getSections()
-        
+        if !schedule.section.isEmpty {
+            self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+        }
+        else {
+            getSections()
+        }
     }
     
     func getSchedule() {

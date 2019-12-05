@@ -12,6 +12,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     let locationManager = CLLocationManager()
     let constants = Constants()
+    var droppedPin = MKPointAnnotation()
     
     var schedule = Schedule()
     var addressFromTextField = ""
@@ -49,12 +50,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         // Load Chicago map
         chicagoMapView.delegate = self
         
-        //let longPressGesture = UILongPressGestureRecognizer(target: chicagoMapView, action: #selector(addAnnotation(gesture:)))
-        //let longPressGesture = UILongPressGestureRecognizer(target: chicagoMapView, action: #selector(addAnnotation))
-        //longPressGesture.minimumPressDuration = 2.0
-        //longPressGesture.delegate = self
-        //chicagoMapView.addGestureRecognizer(longPressGesture)
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addAnnotation(gesture:)))
         chicagoMapView.addGestureRecognizer(tapGesture)
         
@@ -76,23 +71,43 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             self.addressTextField.isHidden = false
             self.searchAddressButton.isHidden = false
-            self.useMyLocationButton.isHidden = true
+            //self.useMyLocationButton.isHidden = true
+            chicagoMapView.addAnnotation(droppedPin)
+            locationManager.stopUpdatingLocation()
             
         }
         else if searchTypeSegment.selectedSegmentIndex == 1 {
             
-            useMyLocationButton.isHidden = false
-            searchAddressButton.isHidden = true
-            addressTextField.isHidden = true
+            //useMyLocationButton.isHidden = false
+            searchAddressButton.isHidden = false
+            addressTextField.isHidden = false
+            addressTextField.text = ""
+            
+            // Request location access
+            locationManager.requestWhenInUseAuthorization()
+            
+            if CLLocationManager.locationServicesEnabled() {
+                
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+                locationManager.startUpdatingLocation()
+                
+            }
+            
+            //locationManager.startUpdatingLocation()
+            
             
         }
         else if searchTypeSegment.selectedSegmentIndex == 2 {
             
-            useMyLocationButton.isHidden = true
+            //useMyLocationButton.isHidden = true
             searchAddressButton.isHidden = false
             addressTextField.isHidden = false
+            locationManager.stopUpdatingLocation()
             
         }
+        
+        chicagoMapView.removeAnnotations(chicagoMapView.annotations)
         
     }
     
@@ -116,6 +131,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
+            droppedPin = annotation
             //annotation.title = addressFromCoordinates
             //annotation.subtitle = "subtitle"
             
@@ -222,16 +238,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     // Use my location button is tapped
     @IBAction func useMyLocationTapped(_ sender: Any) {
         
-        // Request location access
-        locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            locationManager.startUpdatingLocation()
-            
-        }
+//        // Request location access
+//        locationManager.requestWhenInUseAuthorization()
+//
+//        if CLLocationManager.locationServicesEnabled() {
+//
+//            locationManager.delegate = self
+//            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+//            locationManager.startUpdatingLocation()
+//
+//        }
         
     }
     
@@ -363,7 +379,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             
                                         }
                                     
-                                        self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+                                        self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
                                 
                                     }
                                 case .error (let err):
@@ -455,6 +471,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             getAddressFromCoordinates(location)
             
+//            if searchTypeSegment.selectedSegmentIndex == 1 {
+//                
+//                self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
+//                
+//            }
         }
     }
     

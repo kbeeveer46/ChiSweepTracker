@@ -17,20 +17,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
-                                <rect key="frame" x="0.0" y="44" width="375" height="250"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="225"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="265" id="XJi-jr-BwO"/>
+                                    <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="324" width="355" height="246"/>
+                                <rect key="frame" x="10" y="294" width="355" height="246"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
                                         <segments>
                                             <segment title="Drop Pin"/>
                                             <segment title="Use My Location"/>
-                                            <segment title="Search"/>
+                                            <segment title="Manual"/>
                                         </segments>
                                         <connections>
                                             <action selector="searchTypeTapped:" destination="BYZ-38-t0r" eventType="valueChanged" id="Vi9-bg-ymc"/>
@@ -50,7 +50,7 @@
                                             <constraint firstAttribute="height" constant="65" id="ySz-xS-V2V"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                        <state key="normal" title="Search Address"/>
+                                        <state key="normal" title="Search"/>
                                         <connections>
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
                                         </connections>
@@ -375,6 +375,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wS6-r3-dzE"/>
+        <segue reference="reu-Hk-b72"/>
     </inferredMetricsTieBreakers>
 </document>
