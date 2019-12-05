@@ -10,8 +10,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var chicagoMapView: MKMapView!
     
     let locationManager = CLLocationManager()
+    let constants = Constants()
     
-    //var schedule = Schedule()
+    var schedule = Schedule()
     var addressFromTextField = ""
     var addressFromCoordinates = ""
     
@@ -126,6 +127,18 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        if segue.identifier == "selectSectionSegue" {
+            if let selectSectionViewController = segue.destination as? SelectSectionViewController {
+                selectSectionViewController.schedule = schedule
+            }
+        }
+        else if segue.identifier == "sweepScheduleSegue" {
+            if let sweepScheduleViewController = segue.destination as? ScheduleViewController {
+                //schedule.address = "750 N Dearborn St Chicago"
+                sweepScheduleViewController.schedule = schedule
+            }
+        }
+        
 //        let scheduleViewController = segue.destination as! ScheduleViewController
 //
 //        if (sender as? UIButton == searchAddressButton) {
@@ -144,17 +157,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     @IBAction func searchAddressTapped(_ sender: Any) {
         
-         self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
         
-//        if launchedBefore  {
-//               /*Use the Identifier you given in story Board*/
-//                      self.performSegue(withIdentifier: "otherVC", sender: self)
-//
-//                   } else {
-//           /*Use the Identifier you given in story Board*/
-//               self.performSegue(withIdentifier: "register", sender: self))
-//                       UserDefaults.standard.set(true, forKey: "launchedBefore")
-//                   }
+        // Check for empty string
+        
+        getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
+         
+    
         
     }
     
@@ -162,6 +170,185 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         
     }
+    
+    //func getSchedule(_ address: String, _ finished: () -> Void) {
+    func getSchedule(_ address: String) {
+        
+        self.schedule.months.removeAll()
+        self.schedule.polygonCoordinatesForMap.removeAll()
+        
+        print("Address: \(address)")
+        
+        self.schedule.address = address
+        
+        // 1. Get coordinates
+        
+        let geocoder = CLGeocoder()
+        
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            
+            if error != nil {
+                
+                //self.showingError = true
+                //self.errorMessage = (error! as NSError).userInfo.debugDescription
+            }
+            
+            if placemarks != nil {
+            
+                let placemark = placemarks?.first
+                
+                var coordinates = CLLocationCoordinate2D()
+                coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                self.schedule.locationCoordinate = coordinates
+                
+                print("Latitude: \(self.schedule.locationCoordinate.latitude)")
+                print("Longitude: \(self.schedule.locationCoordinate.longitude)")
+                
+                let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                
+                // 2. Get ward and section JSON from City of Chicago
+                
+                //print("Ward query: intersects(the_geom,'POINT(\(self.longitude) \(self.latitude))')")
+                
+                let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
+                    .filter("intersects(\(self.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                
+                wardQuery.get { res in
+                    switch res {
+                    case .dataset (let data):
+                        
+                        if data.count > 0 {
+                            
+                            let ward = data[0]["ward"] as? String ?? ""
+                            let section = data[0]["section"] as? String ?? ""
+                            let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom["coordinates"] as? NSMutableArray
+                            let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                            
+                            for(_, coordinate) in coordinatesArray!.enumerated() {
+                                
+                                for item in coordinate {
+                                    
+                                    var coordinate = CLLocationCoordinate2D()
+                                    coordinate.longitude = item[0] as? Double ?? 0
+                                    coordinate.latitude = item[1] as? Double ?? 0
+                                    
+                                    self.schedule.polygonCoordinatesForMap.append(coordinate)
+                                    
+                                }
+                            }
+                            
+                            print("Ward: \(ward)")
+                            print("Section: \(section)")
+                            
+                            self.schedule.ward = ward
+                            
+                            if section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                
+                                //self.multipleSections = true
+                                return
+                                
+                            }
+                            
+                            self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
+                            
+                            // 3. Get schedule JSON from City of Chicago
+                            
+                            let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+                                .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
+                            
+                            scheduleQuery.get { res in
+                                switch res {
+                                case .dataset (let data):
+                                    
+                                    if data.count > 0 {
+                                        
+                                        //self.schedules = data
+                                        
+                                        // 4. Populate schedule model to be used on schedule view
+                                        
+                                        for (_, item) in data.enumerated() {
+                                            
+                                            let monthName = item["month_name"] as? String ?? ""
+                                            let monthNumber = item["month_number"] as? Int ?? 0
+                                            let dates = item["dates"] as? String ?? ""
+                                            let datesArray = dates.components(separatedBy: ",")
+                                            
+                                            print("Month name: \(monthName)")
+                                            print("Dates: \(datesArray)")
+                                            
+                                            let month = Month()
+                                            month.name = monthName
+                                            month.number = monthNumber
+                                            
+                                            for day in datesArray {
+                                                
+                                                print("Date: \(day)")
+                                                
+                                                if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                                    
+                                                    let date = Date()
+                                                    date.date = Int(day) ?? 0
+                                                    
+                                                    if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
+                                                        month.dates.append(date)
+                                                    }
+                                                }
+                                            }
+                                            
+                                            self.schedule.months.append(month)
+                                            
+                                        }
+                                        
+                                        if self.schedule.section.isEmpty {
+                                            self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
+                                        }
+                                        else {
+                                            self.performSegue(withIdentifier: "sweepScheduleSegue", sender: self)
+                                        }
+                                        
+                                        //self.loadSchedule()
+                                        
+                                        //self.scheduleTableView.dataSource = self
+                                        //self.scheduleTableView.delegate = self
+                                        //self.scheduleTableView.reloadData()
+                                        
+                                    }
+                                case .error (let err):
+                                    
+                                    print((err as NSError).userInfo.debugDescription)
+                                    
+                                    //self.showingError = true
+                                    //self.errorMessage = (err as NSError).userInfo.debugDescription
+                                }
+                            }
+                        }
+                        else {
+                            //self.showingError = true
+                            //self.errorMessage = "Could not find sweep area. Please try again."
+                        }
+                    case .error (let err):
+                        
+                        print((err as NSError).userInfo.debugDescription)
+                        
+                        //self.showingError = true
+                        //self.errorMessage = (err as NSError).userInfo.debugDescription
+                        
+                    }
+                }
+            }
+            else {
+                //self.showingError = true
+                //self.errorMessage = "Could not find sweep area. Please try again."
+            }
+        }
+        
+        //return schedule
+        //finished()
+        
+    }
+
     
     func getAddressFromCoordinates(_ location: CLLocation) {
         

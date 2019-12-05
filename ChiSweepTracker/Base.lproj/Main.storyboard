@@ -80,6 +80,7 @@
                         <outlet property="useMyLocationButton" destination="CUi-gP-i2H" id="bOc-YF-PLZ"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="Zb2-Z2-HGh"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="sweepScheduleSegue" id="dHZ-7M-a2E"/>
+                        <segue destination="g9k-KL-pmC" kind="show" id="reu-Hk-b72"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -154,7 +155,7 @@
                     <connections>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
-                        <segue destination="aNg-gl-cTZ" kind="show" id="fQa-F9-pDL"/>
+                        <segue destination="aNg-gl-cTZ" kind="show" identifier="notificationsSegue" id="fQa-F9-pDL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -206,12 +207,15 @@
                         <viewLayoutGuide key="safeArea" id="zlC-ki-fTP"/>
                     </view>
                     <navigationItem key="navigationItem" title="Select Sweep Section" id="ctW-41-WHe"/>
+                    <connections>
+                        <segue destination="g9k-KL-pmC" kind="show" id="Y2c-go-eSE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lNZ-pf-Vzg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1508" y="81"/>
         </scene>
-        <!--Error View Controller-->
+        <!--Error-->
         <scene sceneID="l2i-C1-iXC">
             <objects>
                 <viewController id="g9k-KL-pmC" customClass="ErrorViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -221,10 +225,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="o1D-iR-LuJ"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Error" id="GZX-dQ-SKD"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecv-Nh-HtQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="132" y="743"/>
+            <point key="canvasLocation" x="1151" y="848"/>
         </scene>
         <!--Enable Notifications-->
         <scene sceneID="XQY-3Z-30v">
@@ -237,6 +242,9 @@
                         <viewLayoutGuide key="safeArea" id="qWq-pT-RyA"/>
                     </view>
                     <navigationItem key="navigationItem" title="Enable Notifications" id="zlF-Cz-MXS"/>
+                    <connections>
+                        <segue destination="g9k-KL-pmC" kind="show" id="wS6-r3-dzE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -261,4 +269,7 @@
             <point key="canvasLocation" x="132" y="81.409295352323838"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="wS6-r3-dzE"/>
+    </inferredMetricsTieBreakers>
 </document>
