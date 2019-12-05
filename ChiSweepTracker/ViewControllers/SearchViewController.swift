@@ -138,12 +138,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 selectSectionViewController.schedule = schedule
             }
         }
-        else if segue.identifier == "sweepScheduleSegue" {
-            if let sweepScheduleViewController = segue.destination as? ScheduleViewController {
-                //schedule.address = "750 N Dearborn St Chicago"
-                sweepScheduleViewController.schedule = schedule
-            }
-        }
+//        else if segue.identifier == "viewScheduleSegue" {
+//            if let sweepScheduleViewController = segue.destination as? ScheduleViewController {
+//                sweepScheduleViewController.schedule = schedule
+//            }
+//        }
         
 //        let scheduleViewController = segue.destination as! ScheduleViewController
 //
@@ -167,7 +166,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         // Check for empty string
         
         //getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
-        getSchedule("750 N Dearborn St Chicago, IL")
+        //getSchedule("750 N Dearborn St Chicago, IL")
+        getSchedule("1601 North Clark Street, Chicago, IL, USA")
     
     }
     
@@ -249,15 +249,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             print("Section: \(section)")
                             
                             self.schedule.ward = ward
-                            
-                            if section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                                
-                                //self.multipleSections = true
-                                return
-                                
-                            }
-                            
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
+                            
+                            if self.schedule.section.isEmpty {
+                                
+                                self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
+                                return
+                            }
                             
                             // 3. Get schedule JSON from City of Chicago
                             
@@ -306,20 +304,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             self.schedule.months.append(month)
                                             
                                         }
-                                        
-                                        if self.schedule.section.isEmpty {
-                                            self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
-                                        }
-                                        else {
-                                            self.performSegue(withIdentifier: "sweepScheduleSegue", sender: self)
-                                        }
-                                        
-                                        //self.loadSchedule()
-                                        
-                                        //self.scheduleTableView.dataSource = self
-                                        //self.scheduleTableView.delegate = self
-                                        //self.scheduleTableView.reloadData()
-                                        
+                                    
+                                        self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+                                
                                     }
                                 case .error (let err):
                                     
