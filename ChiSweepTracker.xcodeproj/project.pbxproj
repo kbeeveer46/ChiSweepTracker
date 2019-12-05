@@ -14,6 +14,7 @@
 		FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAB23987BE900AB2FF6 /* SODAClient.swift */; };
 		FA184FAE23987C2A00AB2FF6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAD23987C2A00AB2FF6 /* Constants.swift */; };
 		FA184FB02398C0A200AB2FF6 /* ScheduleTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAF2398C0A200AB2FF6 /* ScheduleTableTableViewController.swift */; };
+		FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FB12399581C00AB2FF6 /* SelectSectionViewController.swift */; };
 		FA29464023985FE300A24FFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29463F23985FE300A24FFC /* AppDelegate.swift */; };
 		FA29464223985FE300A24FFC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29464123985FE300A24FFC /* SceneDelegate.swift */; };
 		FA29464423985FE300A24FFC /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29464323985FE300A24FFC /* SearchViewController.swift */; };
@@ -30,6 +31,7 @@
 		FA184FAB23987BE900AB2FF6 /* SODAClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SODAClient.swift; sourceTree = "<group>"; };
 		FA184FAD23987C2A00AB2FF6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FA184FAF2398C0A200AB2FF6 /* ScheduleTableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableTableViewController.swift; sourceTree = "<group>"; };
+		FA184FB12399581C00AB2FF6 /* SelectSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSectionViewController.swift; sourceTree = "<group>"; };
 		FA29463C23985FE300A24FFC /* ChiSweepTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChiSweepTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA29463F23985FE300A24FFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA29464123985FE300A24FFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				FA29464323985FE300A24FFC /* SearchViewController.swift */,
 				FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */,
 				FA184FAF2398C0A200AB2FF6 /* ScheduleTableTableViewController.swift */,
+				FA184FB12399581C00AB2FF6 /* SelectSectionViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			files = (
 				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
 				FA184FB02398C0A200AB2FF6 /* ScheduleTableTableViewController.swift in Sources */,
+				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
 				FA184FA5239872C300AB2FF6 /* ErrorViewController.swift in Sources */,

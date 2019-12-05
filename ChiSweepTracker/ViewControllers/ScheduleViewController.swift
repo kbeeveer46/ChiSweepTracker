@@ -11,27 +11,60 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     let constants = Constants()
     var schedule = Schedule()
     
-    var address = ""
+    class Months {
+        
+        var monthName = ""
+        var days: [String] = []
+        
+        init(monthName: String, days: [String]) {
+            self.monthName = monthName
+            self.days = days
+        }
 
+        
+    }
+    
+    
+    var address = ""
+    var testMonths: [Months] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let month1 = Months(monthName: "January", days: ["1", "2", "3"])
+        let month2 = Months(monthName: "February", days: ["5", "10", "15", "20", "25", "30" ])
+        testMonths.append(month1)
+        testMonths.append(month2)
+        
+        if #available(iOS 13.0, *) {
+            let notificationButton = UIBarButtonItem(image: UIImage(systemName: "bell"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(loadNotificationView))
+            self.navigationItem.rightBarButtonItem = notificationButton
+        }
+        
+
+        
         print("Address \(address)")
         
-        getSchedule(address)
+       getSchedule(address)
         
 //        getSchedule(address) {
 //            loadSchedule(schedule)
 //        }
         
-        self.scheduleTableView.dataSource = self
-        self.scheduleTableView.delegate = self
+
+        
+    }
+    
+    @objc func loadNotificationView() {
+        
+        print("Go to notification view")
         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return schedule.months.count
+        //return testMonths.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -41,13 +74,22 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let monthNameLabel = cell.viewWithTag(1) as! UILabel
         let daysLabel = cell.viewWithTag(2) as! UILabel
         
+        
         var dates = ""
-        for day in schedule.months[indexPath.row].dates {
+        for date in schedule.months[indexPath.row].dates  {
             
-            dates = dates + String(day.date)
+            dates = dates + String(date.date).padding(toLength: 5, withPad: " ", startingAt: 0)
             
         }
         
+//        var dates = ""
+//        for day in testMonths[indexPath.row].days {
+//
+//            dates = dates + day.padding(toLength: 5, withPad: " ", startingAt: 0)
+//
+//        }
+//
+        //monthNameLabel.text = testMonths[indexPath.row].monthName
         monthNameLabel.text = schedule.months[indexPath.row].name
         daysLabel.text = dates
         
@@ -228,6 +270,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                                         
                                         //self.showingSchedule = true
                                         self.loadSchedule()
+                                        
+                                        self.scheduleTableView.dataSource = self
+                                        self.scheduleTableView.delegate = self
+                                        self.scheduleTableView.reloadData()
                                         
                                     }
                                 case .error (let err):

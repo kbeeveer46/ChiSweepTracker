@@ -42,7 +42,6 @@
                                         <state key="normal" title="Search Address"/>
                                         <connections>
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
-                                            <segue destination="Xr8-KD-z2R" kind="show" identifier="ScheduleSegue" id="ZsL-Az-HLm"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CUi-gP-i2H">
@@ -54,7 +53,6 @@
                                         <state key="normal" title="Use My Location"/>
                                         <connections>
                                             <action selector="useMyLocationTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8Ff-xs-yW0"/>
-                                            <segue destination="Xr8-KD-z2R" kind="show" id="cFW-kI-1KK"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -80,6 +78,8 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="useMyLocationButton" destination="CUi-gP-i2H" id="bOc-YF-PLZ"/>
+                        <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="Zb2-Z2-HGh"/>
+                        <segue destination="Xr8-KD-z2R" kind="show" identifier="sweepScheduleSegue" id="dHZ-7M-a2E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -95,41 +95,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
-                                <rect key="frame" x="0.0" y="44" width="375" height="200"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="160"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="Y6R-wb-aGO"/>
+                                    <constraint firstAttribute="height" constant="160" id="Y6R-wb-aGO"/>
                                 </constraints>
                             </mapView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                <rect key="frame" x="0.0" y="244" width="375" height="423"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
+                                <rect key="frame" x="0.0" y="204" width="375" height="463"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" tag="1" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gue-Fp-3PN" id="Lge-eF-dGr">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Month Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
-                                                    <rect key="frame" x="25" y="11" width="150" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
+                                                    <rect key="frame" x="15" y="15.5" width="150" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="150" id="4fh-Xl-nMF"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Days" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
-                                                    <rect key="frame" x="312" y="11" width="38" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1  5  10  15  20  25  30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
+                                                    <rect key="frame" x="210" y="18.5" width="150" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="6xo-qv-gRm" firstAttribute="leading" secondItem="Lge-eF-dGr" secondAttribute="leadingMargin" constant="10" id="JZG-m7-3in"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="78y-U4-UIn" secondAttribute="trailing" constant="10" id="WrZ-1l-r2e"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="78y-U4-UIn" secondAttribute="trailing" id="29c-pN-wt9"/>
+                                                <constraint firstItem="6xo-qv-gRm" firstAttribute="centerY" secondItem="Lge-eF-dGr" secondAttribute="centerY" id="7UM-My-jeh"/>
+                                                <constraint firstItem="78y-U4-UIn" firstAttribute="centerY" secondItem="Lge-eF-dGr" secondAttribute="centerY" id="G2p-sD-vhz"/>
+                                                <constraint firstItem="6xo-qv-gRm" firstAttribute="leading" secondItem="Lge-eF-dGr" secondAttribute="leadingMargin" id="d2s-4t-il0"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -152,11 +154,62 @@
                     <connections>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
+                        <segue destination="aNg-gl-cTZ" kind="show" id="fQa-F9-pDL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1476" y="80.50974512743629"/>
+            <point key="canvasLocation" x="2225" y="81"/>
+        </scene>
+        <!--Select Sweep Section-->
+        <scene sceneID="Ofh-FB-Cvn">
+            <objects>
+                <viewController id="gu7-gj-SCi" customClass="SelectSectionViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="p9q-d0-1iZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OH9-2i-nMt">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ZwO-Sg-zxU">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="55"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZwO-Sg-zxU" id="HX0-1t-eGv">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ward 1 Section 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61d-w6-cis">
+                                                    <rect key="frame" x="130" y="18.5" width="115.5" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="61d-w6-cis" firstAttribute="centerY" secondItem="HX0-1t-eGv" secondAttribute="centerY" id="QsC-N7-ozc"/>
+                                                <constraint firstItem="61d-w6-cis" firstAttribute="centerX" secondItem="HX0-1t-eGv" secondAttribute="centerX" id="dgU-rW-Qmv"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="OH9-2i-nMt" firstAttribute="leading" secondItem="zlC-ki-fTP" secondAttribute="leading" id="JO3-Vv-QuB"/>
+                            <constraint firstItem="zlC-ki-fTP" firstAttribute="trailing" secondItem="OH9-2i-nMt" secondAttribute="trailing" id="OHG-Uj-8rM"/>
+                            <constraint firstItem="OH9-2i-nMt" firstAttribute="top" secondItem="zlC-ki-fTP" secondAttribute="top" id="hYc-HV-mUq"/>
+                            <constraint firstItem="zlC-ki-fTP" firstAttribute="bottom" secondItem="OH9-2i-nMt" secondAttribute="bottom" id="isr-JH-Dq9"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="zlC-ki-fTP"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Select Sweep Section" id="ctW-41-WHe"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lNZ-pf-Vzg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1508" y="81"/>
         </scene>
         <!--Error View Controller-->
         <scene sceneID="l2i-C1-iXC">
@@ -173,7 +226,7 @@
             </objects>
             <point key="canvasLocation" x="132" y="743"/>
         </scene>
-        <!--Notifications View Controller-->
+        <!--Enable Notifications-->
         <scene sceneID="XQY-3Z-30v">
             <objects>
                 <viewController id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="ChiSweepTracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -183,11 +236,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="qWq-pT-RyA"/>
                     </view>
-                    <navigationItem key="navigationItem" id="zlF-Cz-MXS"/>
+                    <navigationItem key="navigationItem" title="Enable Notifications" id="zlF-Cz-MXS"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2140" y="81"/>
+            <point key="canvasLocation" x="2943" y="81"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sXP-ht-gqy">
@@ -208,7 +261,4 @@
             <point key="canvasLocation" x="132" y="81.409295352323838"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="cFW-kI-1KK"/>
-    </inferredMetricsTieBreakers>
 </document>

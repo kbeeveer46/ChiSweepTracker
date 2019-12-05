@@ -25,8 +25,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         searchAddressButton.tintColor = .white
         if #available(iOS 13.0, *) {
             searchAddressButton.leftImage(image: UIImage(systemName: "magnifyingglass.circle")!)
-        } else {
-            // Fallback on earlier versions
         }
         
         useMyLocationButton.backgroundColor = UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
@@ -34,8 +32,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         useMyLocationButton.tintColor = .white
         if #available(iOS 13.0, *) {
             useMyLocationButton.leftImage(image: UIImage(systemName: "location.circle")!)
-        } else {
-            // Fallback on earlier versions
         }
         
         // Load Chicago map
@@ -46,11 +42,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         longPressGesture.minimumPressDuration = 2.0
         chicagoMapView.addGestureRecognizer(longPressGesture)
         
-        let span = MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)
+        let span = MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
         
         var chicagoCoordinate = CLLocationCoordinate2D()
-        chicagoCoordinate.latitude = 41.878113
-        chicagoCoordinate.longitude = -87.629799
+        chicagoCoordinate.latitude = 41.882698
+        chicagoCoordinate.longitude = -87.694779
         
         let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
         
@@ -97,56 +93,68 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         
         //addressFromTextField = addressTextField.text!.trimmingCharacters(in: .whitespaces)
-        addressFromTextField = "750 N Dearborn St. Chicago, IL"
+        //addressFromTextField = "750 N Dearborn St. Chicago, IL"
+        //addressFromTextField = "1060 W Addison Chicago, IL"
+        addressFromTextField = "1601 North Clark Street, Chicago, IL, USA"
         
-        if (sender as? UIButton == searchAddressButton) {
-            
-            if addressFromTextField.isEmpty {
-                
-                // Show error
-                
-                return false
-                
-            }
-            
-        } else if (sender as? UIButton == useMyLocationButton) {
-            
-            if addressFromCoordinates.isEmpty {
-                
-                // Show error
-                
-                return false
-                
-            }
-            
-            
-        }
-        
-        return true
+//        if (sender as? UIButton == searchAddressButton) {
+//
+//            if addressFromTextField.isEmpty {
+//
+//                // Show error
+//
+//                return false
+//
+//            }
+//
+//        } else if (sender as? UIButton == useMyLocationButton) {
+//
+//            if addressFromCoordinates.isEmpty {
+//
+//                // Show error
+//
+//                return false
+//
+//            }
+//
+//
+//        }
+//
+       return true
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let scheduleViewController = segue.destination as! ScheduleViewController
-        
-        if (sender as? UIButton == searchAddressButton) {
-            
-            //print("search address button")
-            scheduleViewController.address = addressFromTextField
-            
-        } else if (sender as? UIButton == useMyLocationButton) {
-            
-            //print("my location button")
-            scheduleViewController.address = addressFromCoordinates
-            
-        }
+//        let scheduleViewController = segue.destination as! ScheduleViewController
+//
+//        if (sender as? UIButton == searchAddressButton) {
+//
+//            //print("search address button")
+//            scheduleViewController.address = addressFromTextField
+//
+//        } else if (sender as? UIButton == useMyLocationButton) {
+//
+//            //print("my location button")
+//            scheduleViewController.address = addressFromCoordinates
+//
+//        }
         
     }
     
     @IBAction func searchAddressTapped(_ sender: Any) {
         
+         self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
         
+//        if launchedBefore  {
+//               /*Use the Identifier you given in story Board*/
+//                      self.performSegue(withIdentifier: "otherVC", sender: self)
+//
+//                   } else {
+//           /*Use the Identifier you given in story Board*/
+//               self.performSegue(withIdentifier: "register", sender: self))
+//                       UserDefaults.standard.set(true, forKey: "launchedBefore")
+//                   }
         
     }
     
