@@ -16,25 +16,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
-                                <rect key="frame" x="0.0" y="44" width="375" height="265"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
+                                <rect key="frame" x="0.0" y="44" width="375" height="250"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="265" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="20" y="329" width="335" height="217"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
+                                <rect key="frame" x="10" y="324" width="355" height="246"/>
                                 <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
+                                        <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
+                                        <segments>
+                                            <segment title="Drop Pin"/>
+                                            <segment title="Use My Location"/>
+                                            <segment title="Search"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="searchTypeTapped:" destination="BYZ-38-t0r" eventType="valueChanged" id="Vi9-bg-ymc"/>
+                                        </connections>
+                                    </segmentedControl>
                                     <textField opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123 Main St. Chicago, IL" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iz5-fA-FV8">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="55"/>
+                                        <rect key="frame" x="0.0" y="46" width="355" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="55" id="yRh-DP-wdK"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="yRh-DP-wdK"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <textInputTraits key="textInputTraits" textContentType="street-address"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
-                                        <rect key="frame" x="0.0" y="71" width="335" height="65"/>
+                                        <rect key="frame" x="0.0" y="101" width="355" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="ySz-xS-V2V"/>
                                         </constraints>
@@ -45,7 +56,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CUi-gP-i2H">
-                                        <rect key="frame" x="0.0" y="152" width="335" height="65"/>
+                                        <rect key="frame" x="0.0" y="181" width="355" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="2Zn-gs-nhO"/>
                                         </constraints>
@@ -63,11 +74,11 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="3h8-Sv-Ci3"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a0x-bJ-ZY7" secondAttribute="trailing" constant="20" id="OkW-un-m0k"/>
+                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="3h8-Sv-Ci3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a0x-bJ-ZY7" secondAttribute="trailing" constant="10" id="OkW-un-m0k"/>
                             <constraint firstItem="l5K-mm-59I" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fdT-W4-34u"/>
                             <constraint firstItem="l5K-mm-59I" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="mox-SX-2uH"/>
-                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="top" secondItem="l5K-mm-59I" secondAttribute="bottom" constant="20" id="sS0-5g-cEm"/>
+                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="top" secondItem="l5K-mm-59I" secondAttribute="bottom" constant="15" id="sS0-5g-cEm"/>
                             <constraint firstItem="l5K-mm-59I" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uBz-cO-qw5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -77,6 +88,7 @@
                         <outlet property="addressTextField" destination="iz5-fA-FV8" id="tRP-VG-G6b"/>
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
+                        <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <outlet property="useMyLocationButton" destination="CUi-gP-i2H" id="bOc-YF-PLZ"/>
                         <segue destination="g9k-KL-pmC" kind="show" id="reu-Hk-b72"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
