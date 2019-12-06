@@ -9,6 +9,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
+    
     let locationManager = CLLocationManager()
     let constants = Constants()
     var droppedPin = MKPointAnnotation()
@@ -60,6 +61,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
                 locationManager.startUpdatingLocation()
                 
+                
             }
 
         }
@@ -103,11 +105,36 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            droppedPin = annotation // Doesn't work!!
+            //droppedPin = annotation // Doesn't work!!
             
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
+
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let annotationIdentifier = "AnnotationIdentifier"
+
+        var annotationView: MKAnnotationView?
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+            annotationView = dequeuedAnnotationView
+            annotationView?.annotation = annotation
+        }
+        else {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+
+        if let annotationView = annotationView {
+            // Configure your annotation view here
+            annotationView.canShowCallout = true
+            annotationView.image = UIImage(named: "car_pin")
+        }
+        
+        return annotationView
+
     }
     
 
@@ -353,6 +380,21 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         if let location = locations.last {
             
             getAddressFromCoordinates(location)
+            
+            var coordinates = CLLocationCoordinate2D()
+            coordinates.latitude = location.coordinate.latitude
+            coordinates.longitude = location.coordinate.longitude
+            
+            let span = MKCoordinateSpan(latitudeDelta: 0.0009, longitudeDelta: 0.0009)
+            let region = MKCoordinateRegion(center: coordinates, span: span)
+            
+            chicagoMapView.setRegion(region, animated: true)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinates
+            //annotation.title = addressTextField.text
+            chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+            chicagoMapView.addAnnotation(annotation)
             
         }
     }

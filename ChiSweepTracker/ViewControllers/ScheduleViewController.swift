@@ -100,6 +100,30 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         return MKOverlayRenderer(overlay: overlay)
     }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let annotationIdentifier = "AnnotationIdentifier"
+
+        var annotationView: MKAnnotationView?
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+            annotationView = dequeuedAnnotationView
+            annotationView?.annotation = annotation
+        }
+        else {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+
+        if let annotationView = annotationView {
+            // Configure your annotation view here
+            annotationView.canShowCallout = true
+            annotationView.image = UIImage(named: "car_pin")
+        }
+        
+        return annotationView
+
+    }
 }
 
 //class CustomCell: UITableViewCell {

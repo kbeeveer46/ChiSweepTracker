@@ -7,6 +7,7 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var emailNotificationSwitch: UISwitch!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var pushNotificationsSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,17 @@ class NotificationsViewController: UIViewController {
         
     }
     
+    // MARK - Actions
+    
+    @IBAction func pushNotificationsTapped(_ sender: Any) {
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+            // Enable or disable features based on authorization.
+        }
+        
+    }
+    
     @IBAction func emailNotificationTapped(_ sender: Any) {
         
         if emailNotificationSwitch.isOn == true {
@@ -34,6 +46,8 @@ class NotificationsViewController: UIViewController {
         }
         else {
             emailTextField.layer.borderColor = UIColor.clear.cgColor
+            emailTextField.text = ""
+            emailTextField.isUserInteractionEnabled = false
         }
     }
     
@@ -47,6 +61,8 @@ class NotificationsViewController: UIViewController {
         }
         else {
             phoneNumberTextField.layer.borderColor = UIColor.clear.cgColor
+            phoneNumberTextField.text = ""
+            phoneNumberTextField.isUserInteractionEnabled = false
         }
         
     }
