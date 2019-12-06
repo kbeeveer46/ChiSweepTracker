@@ -16,14 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
-                                <rect key="frame" x="0.0" y="44" width="375" height="225"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
+                                <rect key="frame" x="0.0" y="44" width="375" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="246"/>
+                                <rect key="frame" x="10" y="294" width="355" height="166"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
@@ -49,21 +49,10 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="ySz-xS-V2V"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <state key="normal" title="Search"/>
                                         <connections>
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CUi-gP-i2H">
-                                        <rect key="frame" x="0.0" y="181" width="355" height="65"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="65" id="2Zn-gs-nhO"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                        <state key="normal" title="Use My Location"/>
-                                        <connections>
-                                            <action selector="useMyLocationTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8Ff-xs-yW0"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -89,8 +78,7 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
-                        <outlet property="useMyLocationButton" destination="CUi-gP-i2H" id="bOc-YF-PLZ"/>
-                        <segue destination="g9k-KL-pmC" kind="show" id="reu-Hk-b72"/>
+                        <segue destination="g9k-KL-pmC" kind="show" identifier="showErrorSegue" id="reu-Hk-b72"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
                     </connections>
                 </viewController>
@@ -126,7 +114,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
                                                             <rect key="frame" x="10" y="17" width="150" height="21.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="4fh-Xl-nMF"/>
@@ -136,7 +124,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1  5  10  15  20  25  30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
-                                                            <rect key="frame" x="215" y="18.5" width="150" height="18"/>
+                                                            <rect key="frame" x="165" y="18.5" width="200" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -144,6 +132,7 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="trailingMargin" secondItem="78y-U4-UIn" secondAttribute="trailing" constant="-5" id="29c-pN-wt9"/>
+                                                        <constraint firstItem="78y-U4-UIn" firstAttribute="leading" secondItem="6xo-qv-gRm" secondAttribute="trailing" constant="5" id="6CP-mM-bpH"/>
                                                         <constraint firstItem="6xo-qv-gRm" firstAttribute="centerY" secondItem="Lge-eF-dGr" secondAttribute="centerY" id="7UM-My-jeh"/>
                                                         <constraint firstItem="78y-U4-UIn" firstAttribute="centerY" secondItem="Lge-eF-dGr" secondAttribute="centerY" id="G2p-sD-vhz"/>
                                                         <constraint firstItem="6xo-qv-gRm" firstAttribute="leading" secondItem="Lge-eF-dGr" secondAttribute="leadingMargin" constant="-5" id="d2s-4t-il0"/>
@@ -222,7 +211,7 @@
                     <navigationItem key="navigationItem" title="Select Sweep Section" id="ctW-41-WHe"/>
                     <connections>
                         <outlet property="sectionTableView" destination="OH9-2i-nMt" id="VmB-pb-Ey4"/>
-                        <segue destination="g9k-KL-pmC" kind="show" id="Y2c-go-eSE"/>
+                        <segue destination="g9k-KL-pmC" kind="show" identifier="showErrorSegue" id="Y2c-go-eSE"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleSegue" id="aU1-JL-7NV"/>
                     </connections>
                 </viewController>
@@ -348,7 +337,7 @@
                         <outlet property="phoneNumberTextField" destination="nma-cm-Uxd" id="SIo-tS-H4v"/>
                         <outlet property="saveButton" destination="PuS-6X-GvQ" id="q9t-b0-YHH"/>
                         <outlet property="textNotificationSwitch" destination="a7p-fA-Rzq" id="HkE-IY-g9w"/>
-                        <segue destination="g9k-KL-pmC" kind="show" id="wS6-r3-dzE"/>
+                        <segue destination="g9k-KL-pmC" kind="show" identifier="showErrorSegue" id="wS6-r3-dzE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

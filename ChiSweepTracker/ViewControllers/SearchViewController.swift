@@ -6,7 +6,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchAddressButton: UIButton!
-    @IBOutlet weak var useMyLocationButton: UIButton!
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
@@ -17,13 +16,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     var schedule = Schedule()
     var addressFromTextField = ""
     var addressFromCoordinates = ""
+    //var errorMessage = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //self.addressTextField.isHidden = true
-        //self.searchAddressButton.isHidden = true
-        self.useMyLocationButton.isHidden = true
         
         // Make enter key close keyboard
         self.addressTextField.delegate = self
@@ -31,56 +27,28 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         //addressTextField.layer.borderWidth = 1
         //addressTextField.layer.cornerRadius = 7.0
         
+        self.styleControls()
         
-        // Style buttons and add images
-        searchAddressButton.backgroundColor = .systemBlue //UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
-        searchAddressButton.layer.cornerRadius = 7.0
-        searchAddressButton.tintColor = .white
-        if #available(iOS 13.0, *) {
-            searchAddressButton.leftImage(image: UIImage(systemName: "magnifyingglass.circle")!)
-        }
+        self.loadChicagoMap()
         
-        useMyLocationButton.backgroundColor = UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
-        useMyLocationButton.layer.cornerRadius = 7.0
-        useMyLocationButton.tintColor = .white
-        if #available(iOS 13.0, *) {
-            useMyLocationButton.leftImage(image: UIImage(systemName: "location.circle")!)
-        }
-        
-        // Load Chicago map
-        chicagoMapView.delegate = self
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addAnnotation(gesture:)))
-        chicagoMapView.addGestureRecognizer(tapGesture)
-        
-        let span = MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
-        
-        var chicagoCoordinate = CLLocationCoordinate2D()
-        chicagoCoordinate.latitude = 41.882698
-        chicagoCoordinate.longitude = -87.694779
-        
-        let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
-        
-        chicagoMapView.setRegion(region, animated: true)
+        //self.showError("This is an error message")
         
     }
     
+    // MARK - Actions
+    
     @IBAction func searchTypeTapped(_ sender: Any) {
+        
+        chicagoMapView.removeAnnotations(chicagoMapView.annotations)
         
         if searchTypeSegment.selectedSegmentIndex == 0 {
             
-            self.addressTextField.isHidden = false
-            self.searchAddressButton.isHidden = false
-            //self.useMyLocationButton.isHidden = true
-            chicagoMapView.addAnnotation(droppedPin)
+            chicagoMapView.addAnnotation(droppedPin) // Doesn't work!
             locationManager.stopUpdatingLocation()
             
         }
         else if searchTypeSegment.selectedSegmentIndex == 1 {
             
-            //useMyLocationButton.isHidden = false
-            searchAddressButton.isHidden = false
-            addressTextField.isHidden = false
             addressTextField.text = ""
             
             // Request location access
@@ -93,25 +61,29 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 locationManager.startUpdatingLocation()
                 
             }
-            
-            //locationManager.startUpdatingLocation()
-            
-            
+
         }
         else if searchTypeSegment.selectedSegmentIndex == 2 {
             
-            //useMyLocationButton.isHidden = true
-            searchAddressButton.isHidden = false
-            addressTextField.isHidden = false
             locationManager.stopUpdatingLocation()
-            
+
         }
-        
-        chicagoMapView.removeAnnotations(chicagoMapView.annotations)
-        
     }
     
-    // Add annotation when Chicago map is long pressed
+    // Search address button is tapped
+    @IBAction func searchAddressTapped(_ sender: Any) {
+        
+        if searchTypeSegment.selectedSegmentIndex != 1 {
+            locationManager.stopUpdatingLocation()
+        }
+        
+        getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
+        //getSchedule("750 N Dearborn St Chicago, IL")
+        //getSchedule("1601 North Clark Street, Chicago, IL, USA")
+    
+    }
+    
+    // Add annotation when Chicago map is tapped
     @objc func addAnnotation(gesture: UIGestureRecognizer) {
         
         if gesture.state == .ended {
@@ -131,49 +103,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            droppedPin = annotation
-            //annotation.title = addressFromCoordinates
-            //annotation.subtitle = "subtitle"
+            droppedPin = annotation // Doesn't work!!
             
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
         }
     }
     
-    // Check if segue should perform (for validatin fields)
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        
-        addressFromTextField = addressTextField.text!.trimmingCharacters(in: .whitespaces)
-        //addressFromTextField = "750 N Dearborn St. Chicago, IL"
-        //addressFromTextField = "1060 W Addison Chicago, IL"
-        //addressFromTextField = "1601 North Clark Street, Chicago, IL, USA"
-        
-//        if (sender as? UIButton == searchAddressButton) {
-//
-//            if addressFromTextField.isEmpty {
-//
-//                // Show error
-//
-//                return false
-//
-//            }
-//
-//        } else if (sender as? UIButton == useMyLocationButton) {
-//
-//            if addressFromCoordinates.isEmpty {
-//
-//                // Show error
-//
-//                return false
-//
-//            }
-//
-//
-//        }
-//
-       return true
-        
-    }
+
     
     // Prepare segue and pass data to view controllers
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -183,60 +120,31 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 selectSectionViewController.schedule = schedule
             }
         }
-//        else if segue.identifier == "viewScheduleSegue" {
-//            if let sweepScheduleViewController = segue.destination as? ScheduleViewController {
-//                sweepScheduleViewController.schedule = schedule
+//        else if segue.identifier == "showErrorSegue" {
+//            if let errorViewController = segue.destination as? ErrorViewController {
+//                errorViewController.errorMessage = errorMessage
 //            }
 //        }
         
-//        let scheduleViewController = segue.destination as! ScheduleViewController
-//
-//        if (sender as? UIButton == searchAddressButton) {
-//
-//            //print("search address button")
-//            scheduleViewController.address = addressFromTextField
-//
-//        } else if (sender as? UIButton == useMyLocationButton) {
-//
-//            //print("my location button")
-//            scheduleViewController.address = addressFromCoordinates
-//
-//        }
+    }
+
+    //func showError() {
+    func showError(_ error: String) {
+        
+        //self.errorMessage = errorMessage
+        //self.performSegue(withIdentifier: "showErrorSegue", sender: self)
+        
+        let alert = UIAlertController(title: "Something went wrong...", message: error, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        //alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+
+        self.present(alert, animated: true)
+        
+        return
         
     }
     
-    // Search address button is tapped
-    @IBAction func searchAddressTapped(_ sender: Any) {
-        
-        // Check for empty string
-        
-        if searchTypeSegment.selectedSegmentIndex != 1 {
-            locationManager.stopUpdatingLocation()
-        }
-        
-        getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
-        //getSchedule("750 N Dearborn St Chicago, IL")
-        //getSchedule("1601 North Clark Street, Chicago, IL, USA")
-    
-    }
-    
-    // Use my location button is tapped
-    @IBAction func useMyLocationTapped(_ sender: Any) {
-        
-//        // Request location access
-//        locationManager.requestWhenInUseAuthorization()
-//
-//        if CLLocationManager.locationServicesEnabled() {
-//
-//            locationManager.delegate = self
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-//            locationManager.startUpdatingLocation()
-//
-//        }
-        
-    }
-    
-    //func getSchedule(_ address: String, _ finished: () -> Void) {
     func getSchedule(_ address: String) {
         
         self.schedule.months.removeAll()
@@ -246,7 +154,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         self.schedule.address = address
         
-        // 1. Get coordinates
+        // Get coordinates
         
         let geocoder = CLGeocoder()
         
@@ -254,8 +162,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if error != nil {
                 
-                //self.showingError = true
-                //self.errorMessage = (error! as NSError).userInfo.debugDescription
+                //self.showError((error! as NSError).userInfo.debugDescription)
             }
             
             if placemarks != nil {
@@ -272,9 +179,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
                 let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
                 
-                // 2. Get ward and section JSON from City of Chicago
-                
-                //print("Ward query: intersects(the_geom,'POINT(\(self.longitude) \(self.latitude))')")
+                // Get ward and section JSON from City of Chicago
                 
                 let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
                     .filter("intersects(\(self.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
@@ -316,7 +221,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 return
                             }
                             
-                            // 3. Get schedule JSON from City of Chicago
+                            // Get schedule JSON from City of Chicago
                             
                             let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
                                 .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
@@ -327,9 +232,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     
                                     if data.count > 0 {
                                         
-                                        //self.schedules = data
-                                        
-                                        // 4. Populate schedule model to be used on schedule view
+                                        // Populate schedule model to be used on schedule view
                                         
                                         for (_, item) in data.enumerated() {
                                             
@@ -369,30 +272,26 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     }
                                 case .error (let err):
                                     
-                                    print((err as NSError).userInfo.debugDescription)
+                                    self.showError((err as NSError).userInfo.debugDescription)
                                     
-                                    //self.showingError = true
-                                    //self.errorMessage = (err as NSError).userInfo.debugDescription
                                 }
                             }
                         }
                         else {
-                            //self.showingError = true
-                            //self.errorMessage = "Could not find sweep area. Please try again."
+                            
+                            self.showError(self.constants.notFound)
+                            
                         }
                     case .error (let err):
                         
-                        print((err as NSError).userInfo.debugDescription)
-                        
-                        //self.showingError = true
-                        //self.errorMessage = (err as NSError).userInfo.debugDescription
+                        self.showError((err as NSError).userInfo.debugDescription)
                         
                     }
                 }
             }
             else {
-                //self.showingError = true
-                //self.errorMessage = "Could not find sweep area. Please try again."
+                
+                self.showError(self.constants.notFound)
             }
         }
     }
@@ -409,7 +308,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             {(placemarks, error) in
                 if (error != nil)
                 {
-                    print("reverse geodcode fail: \(error!.localizedDescription)")
+                    //self.showError(error!.localizedDescription)
                 }
                 
                 if placemarks != nil {
@@ -444,7 +343,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                     }
                 }
         })
-        
     }
     
     // MARK - Location Manager
@@ -456,11 +354,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             getAddressFromCoordinates(location)
             
-//            if searchTypeSegment.selectedSegmentIndex == 1 {
-//                
-//                self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
-//                
-//            }
         }
     }
     
@@ -476,7 +369,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     func showLocationDisabledPopup() {
         
-        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to manually search for your address if you wish to disable location access", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin or manually search for your address", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
@@ -497,6 +390,38 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         alertController.addAction(openAction)
         
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK - Load Chicago map
+    
+    func loadChicagoMap() {
+        
+        chicagoMapView.delegate = self
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addAnnotation(gesture:)))
+        chicagoMapView.addGestureRecognizer(tapGesture)
+        
+        let span = MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
+        
+        var chicagoCoordinate = CLLocationCoordinate2D()
+        chicagoCoordinate.latitude = 41.882698
+        chicagoCoordinate.longitude = -87.694779
+        
+        let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+        
+        chicagoMapView.setRegion(region, animated: true)
+        
+    }
+    
+    // MARK - Styling
+    
+    func styleControls() {
+        
+        searchAddressButton.backgroundColor = .systemBlue
+        searchAddressButton.layer.cornerRadius = 7.0
+        searchAddressButton.tintColor = .white
+        searchAddressButton.leftImage(image: UIImage(named: "search_circle")!)
+        
     }
     
     // MARK - Helpers
@@ -520,3 +445,38 @@ extension UIButton {
     }
 }
 
+
+//    // Check if segue should perform (for validatin fields)
+//    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+//
+//        addressFromTextField = addressTextField.text!.trimmingCharacters(in: .whitespaces)
+//        //addressFromTextField = "750 N Dearborn St. Chicago, IL"
+//        //addressFromTextField = "1060 W Addison Chicago, IL"
+//        //addressFromTextField = "1601 North Clark Street, Chicago, IL, USA"
+//
+////        if (sender as? UIButton == searchAddressButton) {
+////
+////            if addressFromTextField.isEmpty {
+////
+////                // Show error
+////
+////                return false
+////
+////            }
+////
+////        } else if (sender as? UIButton == useMyLocationButton) {
+////
+////            if addressFromCoordinates.isEmpty {
+////
+////                // Show error
+////
+////                return false
+////
+////            }
+////
+////
+////        }
+////
+//       return true
+//
+//    }

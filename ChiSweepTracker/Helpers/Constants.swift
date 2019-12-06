@@ -19,6 +19,10 @@ struct Constants {
     let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
     let SODADomain = "data.cityofchicago.org"
     
+    // MARK - Errors
+    
+    let notFound = "Could not find sweep area."
+    
     // MARK - Styling
     
     //let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)

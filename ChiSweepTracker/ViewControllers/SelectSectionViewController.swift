@@ -141,7 +141,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         let sectionLabel = cell.viewWithTag(1) as! UILabel
     
-        sectionLabel.text = "Ward \(schedule.ward) Section \(self.sections[indexPath.row])"
+        sectionLabel.text = "Ward \(schedule.ward) - Section \(self.sections[indexPath.row])"
         
         return cell
         
