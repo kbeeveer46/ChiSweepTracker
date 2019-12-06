@@ -13,7 +13,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let notificationButton = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(loadNotificationView))
+        let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(loadNotificationView))
         self.navigationItem.rightBarButtonItem = notificationButton
         
         loadSchedule()

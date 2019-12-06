@@ -396,6 +396,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
             
+            locationManager.stopUpdatingLocation()
+            
         }
     }
     
@@ -443,11 +445,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addAnnotation(gesture:)))
         chicagoMapView.addGestureRecognizer(tapGesture)
         
-        let span = MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
+        let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
         
         var chicagoCoordinate = CLLocationCoordinate2D()
-        chicagoCoordinate.latitude = 41.882698
-        chicagoCoordinate.longitude = -87.694779
+        chicagoCoordinate.latitude = 41.846647
+        chicagoCoordinate.longitude = -87.629576
         
         let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
         

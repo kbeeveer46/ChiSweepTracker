@@ -11,7 +11,7 @@
         <!--Chicago Sweep Tracker-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="SearchViewController" customModule="Chicago_Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="SearchViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,14 +23,14 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="166"/>
+                                <rect key="frame" x="10" y="294" width="355" height="347"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
                                         <segments>
                                             <segment title="Drop Pin"/>
                                             <segment title="Use My Location"/>
-                                            <segment title="Manual"/>
+                                            <segment title="Enter Address"/>
                                         </segments>
                                         <connections>
                                             <action selector="searchTypeTapped:" destination="BYZ-38-t0r" eventType="valueChanged" id="Vi9-bg-ymc"/>
@@ -45,9 +45,9 @@
                                         <textInputTraits key="textInputTraits" textContentType="street-address"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
-                                        <rect key="frame" x="0.0" y="101" width="355" height="65"/>
+                                        <rect key="frame" x="0.0" y="101" width="355" height="60"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="65" id="ySz-xS-V2V"/>
+                                            <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <state key="normal" title="Search"/>
@@ -55,6 +55,20 @@
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s3f-Yb-UyJ">
+                                        <rect key="frame" x="0.0" y="176" width="355" height="62.5"/>
+                                        <string key="text">During street sweeping season (April - November) the Chicago Department of Streets and Sanitation uses mechanical street sweepers to remove debris and litter from streets, weather permitting.</string>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-5R-4jl">
+                                        <rect key="frame" x="0.0" y="253.5" width="355" height="93.5"/>
+                                        <string key="text">Bright orange temporary parking restrictions are posted at least 24 hours before sweeping service is scheduled to begin on any street to ensure curb-to-curb cleaning.  Some arterial streets have permanently posted signs that specify a once-per-week period when parking is prohibited for street sweeping. </string>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="iz5-fA-FV8" firstAttribute="centerX" secondItem="a0x-bJ-ZY7" secondAttribute="centerX" id="0ge-QB-cMx"/>
@@ -78,7 +92,6 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
-                        <segue destination="g9k-KL-pmC" kind="show" identifier="showErrorSegue" id="reu-Hk-b72"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
                     </connections>
                 </viewController>
@@ -89,7 +102,7 @@
         <!--Sweep Schedule-->
         <scene sceneID="3K6-sD-hJN">
             <objects>
-                <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Chicago_Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -170,7 +183,7 @@
         <!--Select Sweep Section-->
         <scene sceneID="Ofh-FB-Cvn">
             <objects>
-                <viewController id="gu7-gj-SCi" customClass="SelectSectionViewController" customModule="Chicago_Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="gu7-gj-SCi" customClass="SelectSectionViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="p9q-d0-1iZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -214,7 +227,6 @@
                     <navigationItem key="navigationItem" title="Select Sweep Section" id="ctW-41-WHe"/>
                     <connections>
                         <outlet property="sectionTableView" destination="OH9-2i-nMt" id="VmB-pb-Ey4"/>
-                        <segue destination="g9k-KL-pmC" kind="show" identifier="showErrorSegue" id="Y2c-go-eSE"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleSegue" id="aU1-JL-7NV"/>
                     </connections>
                 </viewController>
@@ -222,26 +234,10 @@
             </objects>
             <point key="canvasLocation" x="1508" y="81"/>
         </scene>
-        <!--Error-->
-        <scene sceneID="l2i-C1-iXC">
-            <objects>
-                <viewController id="g9k-KL-pmC" customClass="ErrorViewController" customModule="Chicago_Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fdi-3q-r8r">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="o1D-iR-LuJ"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Error" id="GZX-dQ-SKD"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ecv-Nh-HtQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1508" y="863"/>
-        </scene>
-        <!--Enable Notifications-->
+        <!--Enable Sweep Notifications-->
         <scene sceneID="XQY-3Z-30v">
             <objects>
-                <viewController id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Chicago_Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -333,7 +329,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="6VR-s8-xPy"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <state key="normal" title="Save"/>
                                         <connections>
                                             <action selector="saveTapped:" destination="aNg-gl-cTZ" eventType="touchUpInside" id="VL9-0V-OuX"/>
@@ -354,7 +350,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qWq-pT-RyA"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Enable Notifications" id="zlF-Cz-MXS"/>
+                    <navigationItem key="navigationItem" title="Enable Sweep Notifications" id="zlF-Cz-MXS"/>
                     <connections>
                         <outlet property="emailNotificationSwitch" destination="BEh-Uc-Tzz" id="H8i-34-NU1"/>
                         <outlet property="emailTextField" destination="D9s-bz-j2H" id="I8r-uI-sDc"/>
@@ -362,7 +358,6 @@
                         <outlet property="pushNotificationsSwitch" destination="jk6-Wy-pyD" id="f6m-W1-H1h"/>
                         <outlet property="saveButton" destination="PuS-6X-GvQ" id="q9t-b0-YHH"/>
                         <outlet property="textNotificationSwitch" destination="a7p-fA-Rzq" id="HkE-IY-g9w"/>
-                        <segue destination="g9k-KL-pmC" kind="show" identifier="showErrorSegue" id="wS6-r3-dzE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -388,7 +383,4 @@
             <point key="canvasLocation" x="132" y="81.409295352323838"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="wS6-r3-dzE"/>
-    </inferredMetricsTieBreakers>
 </document>
