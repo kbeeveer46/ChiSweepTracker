@@ -70,7 +70,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             if CLLocationManager.locationServicesEnabled() {
                 
                 locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
                 locationManager.startUpdatingLocation()
             
             }
@@ -355,7 +355,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             coordinates.latitude = location.coordinate.latitude
             coordinates.longitude = location.coordinate.longitude
             
-            let span = MKCoordinateSpan(latitudeDelta: 0.0009, longitudeDelta: 0.0009)
+            let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
             let region = MKCoordinateRegion(center: coordinates, span: span)
             
             chicagoMapView.setRegion(region, animated: true)
@@ -436,7 +436,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
             annotation.coordinate = location.coordinate
             
-            let span = MKCoordinateSpan(latitudeDelta: 0.0009, longitudeDelta: 0.0009)
+            let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
