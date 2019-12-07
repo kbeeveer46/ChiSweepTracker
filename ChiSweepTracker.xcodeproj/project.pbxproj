@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC34F239AFB2600DD3127 /* Assets.xcassets */; };
 		FA0EC353239B0BC600DD3127 /* icon-white.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC352239B0BC600DD3127 /* icon-white.png */; };
+		FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0EC355239B105F00DD3127 /* MapKit.framework */; };
+		FA0EC358239B263200DD3127 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0EC357239B263200DD3127 /* Common.swift */; };
 		FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */; };
 		FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */; };
-		FA184FA5239872C300AB2FF6 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */; };
 		FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */; };
 		FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAB23987BE900AB2FF6 /* SODAClient.swift */; };
 		FA184FAE23987C2A00AB2FF6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FAD23987C2A00AB2FF6 /* Constants.swift */; };
@@ -26,9 +27,10 @@
 /* Begin PBXFileReference section */
 		FA0EC34F239AFB2600DD3127 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ChiSweepTracker/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		FA0EC352239B0BC600DD3127 /* icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-white.png"; sourceTree = "<group>"; };
+		FA0EC355239B105F00DD3127 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		FA0EC357239B263200DD3127 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
-		FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 		FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleModel.swift; sourceTree = "<group>"; };
 		FA184FAB23987BE900AB2FF6 /* SODAClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SODAClient.swift; sourceTree = "<group>"; };
 		FA184FAD23987C2A00AB2FF6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -47,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,10 +64,17 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		FA0EC354239B105F00DD3127 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FA0EC355239B105F00DD3127 /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FA184FA12398707C00AB2FF6 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				FA184FA4239872C300AB2FF6 /* ErrorViewController.swift */,
 				FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */,
 				FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */,
 				FA29464323985FE300A24FFC /* SearchViewController.swift */,
@@ -86,6 +96,7 @@
 			children = (
 				FA184FAB23987BE900AB2FF6 /* SODAClient.swift */,
 				FA184FAD23987C2A00AB2FF6 /* Constants.swift */,
+				FA0EC357239B263200DD3127 /* Common.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -95,6 +106,7 @@
 			children = (
 				FA29463E23985FE300A24FFC /* ChiSweepTracker */,
 				FA29463D23985FE300A24FFC /* Products */,
+				FA0EC354239B105F00DD3127 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -199,11 +211,11 @@
 				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
-				FA184FA5239872C300AB2FF6 /* ErrorViewController.swift in Sources */,
 				FA29464423985FE300A24FFC /* SearchViewController.swift in Sources */,
 				FA29464023985FE300A24FFC /* AppDelegate.swift in Sources */,
 				FA29464223985FE300A24FFC /* SceneDelegate.swift in Sources */,
 				FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */,
+				FA0EC358239B263200DD3127 /* Common.swift in Sources */,
 				FA184FAE23987C2A00AB2FF6 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -50,14 +50,14 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         monthNameLabel.text = schedule.months[indexPath.row].name
         daysLabel.text = dates
 
-        let currentMonthNumber = Calendar.current.component(.month, from: Foundation.Date())
+ //       let currentMonthNumber = Calendar.current.component(.month, from: Foundation.Date())
 
-        if currentMonthNumber > schedule.months[indexPath.row].number {
-
-            monthNameLabel.textColor = .lightGray
-            daysLabel.textColor = .lightGray
-
-        }
+//        if currentMonthNumber > schedule.months[indexPath.row].number {
+//
+//            monthNameLabel.textColor = .lightGray
+//            daysLabel.textColor = .lightGray
+//
+//        }
 
         return cell
         

@@ -3,7 +3,7 @@ import Foundation
 
 struct Constants {
     
-    // MARK - SODA
+    // MARK: SODA
     
     let wardDataset = "eiv4-4c3n"
     let scheduleDataset = "k737-xg34"
@@ -19,13 +19,14 @@ struct Constants {
     let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
     let SODADomain = "data.cityofchicago.org"
     
-    // MARK - Errors
+    // MARK: Errors
     
+    let errorTitle = "Something went wrong..."
     let notFound = "Could not find sweep area."
     
-    // MARK - Styling
+    // MARK: Styling
     
-    //let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)
+    
 
     
 }

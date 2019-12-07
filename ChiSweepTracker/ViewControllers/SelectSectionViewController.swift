@@ -6,6 +6,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     
     var schedule = Schedule()
     let constants = Constants()
+    let common = Common()
     
     var sections: [String] = []
     
@@ -13,13 +14,16 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
 
         if !schedule.section.isEmpty {
+            
             sections = [schedule.section]
             self.sectionTableView.delegate = self
             self.sectionTableView.dataSource = self
             self.sectionTableView.reloadData()
         }
         else {
+            
             getSections()
+            
         }
     }
     
@@ -40,9 +44,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     for (_, item) in data.enumerated() {
                         
-                        let monthName = item["month_name"] as? String ?? ""
-                        let monthNumber = item["month_number"] as? Int ?? 0
-                        let dates = item["dates"] as? String ?? ""
+                        let monthName = item[self.constants.month_name] as? String ?? ""
+                        let monthNumber = item[self.constants.month_number] as? Int ?? 0
+                        let dates = item[self.constants.dates] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",")
                         
                         print("Month name: \(monthName)")
@@ -72,17 +76,12 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                 
                     self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
-//                    self.sectionTableView.delegate = self
-//                    self.sectionTableView.dataSource = self
-//                    self.sectionTableView.reloadData()
             
                 }
             case .error (let err):
                 
-                print((err as NSError).userInfo.debugDescription)
+                self.common.showError((err as NSError).userInfo.debugDescription)
                 
-                //self.showingError = true
-                //self.errorMessage = (err as NSError).userInfo.debugDescription
             }
         }
         
@@ -123,9 +122,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             case .error (let err):
                 
-                //self.showingError = true
-                //self.errorMessage = (err as NSError).userInfo.debugDescription
-                print((err as NSError).userInfo.debugDescription)
+                self.common.showError((err as NSError).userInfo.debugDescription)
             }
         }
         

@@ -12,15 +12,21 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     let locationManager = CLLocationManager()
     let constants = Constants()
+    let common = Common()
     var droppedPin = MKPointAnnotation()
+    let defaults = UserDefaults.standard
     
     var schedule = Schedule()
     var addressFromTextField = ""
     var addressFromCoordinates = ""
-    //var errorMessage = ""
+    var addressFromDefaults = ""
+    var longitudeFromDefaults = 0.0
+    var latitudeFromDefaults = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getDefaults()
         
         // Make enter key close keyboard
         self.addressTextField.delegate = self
@@ -28,15 +34,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         //addressTextField.layer.borderWidth = 1
         //addressTextField.layer.cornerRadius = 7.0
         
-        self.styleControls()
+        self.common.styleButton(searchAddressButton, "search_circle")
         
-        self.loadChicagoMap()
-        
-        //self.showError("This is an error message")
+        loadChicagoMap()
         
     }
     
-    // MARK - Actions
+    // MARK: Actions
     
     @IBAction func searchTypeTapped(_ sender: Any) {
         
@@ -44,7 +48,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         if searchTypeSegment.selectedSegmentIndex == 0 {
             
-            chicagoMapView.addAnnotation(droppedPin) // Doesn't work!
+            //chicagoMapView.addAnnotation(droppedPin) // Doesn't work!
             locationManager.stopUpdatingLocation()
             
         }
@@ -60,10 +64,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
                 locationManager.startUpdatingLocation()
-                
-                
+            
             }
-
         }
         else if searchTypeSegment.selectedSegmentIndex == 2 {
             
@@ -75,30 +77,28 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     // Search address button is tapped
     @IBAction func searchAddressTapped(_ sender: Any) {
         
-        if searchTypeSegment.selectedSegmentIndex != 1 {
-            locationManager.stopUpdatingLocation()
-        }
+        let address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         
-        getSchedule(addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? "")
+        defaults.set(address, forKey: "address")
+        
+         getSchedule(address)
         //getSchedule("750 N Dearborn St Chicago, IL")
         //getSchedule("1601 North Clark Street, Chicago, IL, USA")
     
     }
     
     // Add annotation when Chicago map is tapped
-    @objc func addAnnotation(gesture: UIGestureRecognizer) {
+    @objc func addDroppedPin(gesture: UIGestureRecognizer) {
         
         if gesture.state == .ended {
             
             let point = gesture.location(in: chicagoMapView)
             let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
             
-            //print("Pin coordinates: \(coordinate))")
+            let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             
-            let getLat: CLLocationDegrees = coordinate.latitude
-            let getLon: CLLocationDegrees = coordinate.longitude
-
-            let location: CLLocation =  CLLocation(latitude: getLat, longitude: getLon)
+            self.defaults.set(coordinate.latitude, forKey: "latitude")
+            self.defaults.set(coordinate.longitude, forKey: "longitude")
             
             getAddressFromCoordinates(location)
             addressTextField.text = addressFromCoordinates
@@ -128,7 +128,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
 
         if let annotationView = annotationView {
-            // Configure your annotation view here
+
             annotationView.canShowCallout = true
             annotationView.image = UIImage(named: "car_pin")
         }
@@ -136,8 +136,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         return annotationView
 
     }
-    
-
     
     // Prepare segue and pass data to view controllers
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -147,30 +145,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 selectSectionViewController.schedule = schedule
             }
         }
-//        else if segue.identifier == "showErrorSegue" {
-//            if let errorViewController = segue.destination as? ErrorViewController {
-//                errorViewController.errorMessage = errorMessage
-//            }
-//        }
-        
     }
-
-    //func showError() {
-    func showError(_ error: String) {
-        
-        //self.errorMessage = errorMessage
-        //self.performSegue(withIdentifier: "showErrorSegue", sender: self)
-        
-        let alert = UIAlertController(title: "Something went wrong...", message: error, preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        //alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-
-        self.present(alert, animated: true)
-        
-        return
-        
-    }
+    
+    // MARK: Methods
     
     func getSchedule(_ address: String) {
         
@@ -189,7 +166,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if error != nil {
                 
-                //self.showError((error! as NSError).userInfo.debugDescription)
+                self.common.showError((error! as NSError).userInfo.debugDescription)
             }
             
             if placemarks != nil {
@@ -200,6 +177,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                 self.schedule.locationCoordinate = coordinates
+                
+                self.defaults.set(placemark?.location?.coordinate.latitude, forKey: "latitude")
+                self.defaults.set(placemark?.location?.coordinate.longitude, forKey: "longitude")
                 
                 print("Latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("Longitude: \(self.schedule.locationCoordinate.longitude)")
@@ -217,10 +197,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         
                         if data.count > 0 {
                             
-                            let ward = data[0]["ward"] as? String ?? ""
-                            let section = data[0]["section"] as? String ?? ""
+                            let ward = data[0][self.constants.ward] as? String ?? ""
+                            let section = data[0][self.constants.section] as? String ?? ""
                             let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom["coordinates"] as? NSMutableArray
+                            let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             for(_, coordinate) in coordinatesArray!.enumerated() {
@@ -263,9 +243,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item["month_name"] as? String ?? ""
-                                            let monthNumber = item["month_number"] as? Int ?? 0
-                                            let dates = item["dates"] as? String ?? ""
+                                            let monthName = item[self.constants.month_name] as? String ?? ""
+                                            let monthNumber = item[self.constants.month_number] as? Int ?? 0
+                                            let dates = item[self.constants.dates] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
                                             print("Month name: \(monthName)")
@@ -299,26 +279,26 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     }
                                 case .error (let err):
                                     
-                                    self.showError((err as NSError).userInfo.debugDescription)
+                                    self.common.showError((err as NSError).userInfo.debugDescription)
                                     
                                 }
                             }
                         }
                         else {
                             
-                            self.showError(self.constants.notFound)
+                            self.common.showError(self.constants.notFound)
                             
                         }
                     case .error (let err):
                         
-                        self.showError((err as NSError).userInfo.debugDescription)
+                        self.common.showError((err as NSError).userInfo.debugDescription)
                         
                     }
                 }
             }
             else {
                 
-                self.showError(self.constants.notFound)
+                self.common.showError(self.constants.notFound)
             }
         }
     }
@@ -327,15 +307,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     func getAddressFromCoordinates(_ location: CLLocation) {
         
         var address = ""
-        let ceo: CLGeocoder = CLGeocoder()
-        let loc: CLLocation = CLLocation(latitude: location.coordinate.latitude,
-                                         longitude: location.coordinate.longitude)
+        let ceo = CLGeocoder()
+        let loc = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         
         ceo.reverseGeocodeLocation(loc, completionHandler:
             {(placemarks, error) in
                 if (error != nil)
                 {
-                    //self.showError(error!.localizedDescription)
+                    self.common.showError(error!.localizedDescription)
                 }
                 
                 if placemarks != nil {
@@ -363,6 +342,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
                             self.addressTextField.text = self.addressFromCoordinates
+                            self.defaults.set(self.addressFromCoordinates, forKey: "address")
                             
                             print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
                             
@@ -372,12 +352,15 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         })
     }
     
-    // MARK - Location Manager
+    // MARK: Location Manager
     
     // Get user's last location and get address from coordinates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if let location = locations.last {
+            
+            self.defaults.set(location.coordinate.latitude, forKey: "latitude")
+            self.defaults.set(location.coordinate.longitude, forKey: "longitude")
             
             getAddressFromCoordinates(location)
             
@@ -392,7 +375,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinates
-            //annotation.title = addressTextField.text
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
             
@@ -413,62 +395,82 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     func showLocationDisabledPopup() {
         
-        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin or manually search for your address", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin or enter your address", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         
-        let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+        if #available(iOS 10.0, *) {
             
-            if let url = URL(string: UIApplication.openSettingsURLString) {
+            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
                 
-                if #available(iOS 10.0, *) {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                } else {
-                    // Fallback on earlier versions
+                    
                 }
-                
             }
+            
+            alertController.addAction(openAction)
         }
-        
-        alertController.addAction(openAction)
-        
+
         self.present(alertController, animated: true, completion: nil)
     }
     
-    // MARK - Load Chicago map
+    func getDefaults() {
+        
+        addressFromDefaults = defaults.string(forKey: "address") ?? ""
+        longitudeFromDefaults = defaults.double(forKey: "longitude")
+        latitudeFromDefaults = defaults.double(forKey: "latitude")
+        
+        print("Default address: \(addressFromDefaults)")
+        print("Default longitude: \(longitudeFromDefaults)")
+        print("Default latitude: \(latitudeFromDefaults)")
+        
+        if !addressFromDefaults.isEmpty {
+            addressTextField.text = addressFromDefaults
+        }
+        
+    }
     
     func loadChicagoMap() {
         
         chicagoMapView.delegate = self
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addAnnotation(gesture:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addDroppedPin(gesture:)))
         chicagoMapView.addGestureRecognizer(tapGesture)
         
-        let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
-        
-        var chicagoCoordinate = CLLocationCoordinate2D()
-        chicagoCoordinate.latitude = 41.846647
-        chicagoCoordinate.longitude = -87.629576
-        
-        let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
-        
-        chicagoMapView.setRegion(region, animated: true)
-        
+        if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
+            
+            let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
+            
+            let annotation = MKPointAnnotation()
+            annotation.title = addressFromDefaults
+            //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
+            annotation.coordinate = location.coordinate
+            
+            let span = MKCoordinateSpan(latitudeDelta: 0.0009, longitudeDelta: 0.0009)
+            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+            
+            chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+            chicagoMapView.addAnnotation(annotation)
+            chicagoMapView.setRegion(region, animated: true)
+        }
+        else {
+            
+            let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+            
+            let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+            
+            let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+            
+            chicagoMapView.setRegion(region, animated: true)
+            
+        }
+
     }
     
-    // MARK - Styling
-    
-    func styleControls() {
-        
-        searchAddressButton.backgroundColor = .systemBlue
-        searchAddressButton.layer.cornerRadius = 7.0
-        searchAddressButton.tintColor = .white
-        searchAddressButton.leftImage(image: UIImage(named: "search_circle")!)
-        
-    }
-    
-    // MARK - Helpers
+    // MARK: Helpers
     
     // Make enter key close keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -478,49 +480,3 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     }
 }
 
-// MARK - Extensions
-
-extension UIButton {
-    
-    // Add image on left view
-    func leftImage(image: UIImage) {
-        self.setImage(image, for: .normal)
-        self.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: image.size.width)
-    }
-}
-
-
-//    // Check if segue should perform (for validatin fields)
-//    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-//
-//        addressFromTextField = addressTextField.text!.trimmingCharacters(in: .whitespaces)
-//        //addressFromTextField = "750 N Dearborn St. Chicago, IL"
-//        //addressFromTextField = "1060 W Addison Chicago, IL"
-//        //addressFromTextField = "1601 North Clark Street, Chicago, IL, USA"
-//
-////        if (sender as? UIButton == searchAddressButton) {
-////
-////            if addressFromTextField.isEmpty {
-////
-////                // Show error
-////
-////                return false
-////
-////            }
-////
-////        } else if (sender as? UIButton == useMyLocationButton) {
-////
-////            if addressFromCoordinates.isEmpty {
-////
-////                // Show error
-////
-////                return false
-////
-////            }
-////
-////
-////        }
-////
-//       return true
-//
-//    }

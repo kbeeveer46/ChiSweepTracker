@@ -49,8 +49,8 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
-                                        <state key="normal" title="Search"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                        <state key="normal" title="Find Your Sweep Section"/>
                                         <connections>
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
                                         </connections>
