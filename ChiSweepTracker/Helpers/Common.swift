@@ -1,11 +1,3 @@
-//
-//  Common.swift
-//  ChiSweepTracker
-//
-//  Created by Macbook on 12/6/19.
-//  Copyright © 2019 Kyle Beverforden. All rights reserved.
-//
-
 import UIKit
 
 class Common {
@@ -14,14 +6,17 @@ class Common {
 
     public func showError(_ error: String) {
         
-        //self.errorMessage = errorMessage
-        //self.performSegue(withIdentifier: "showErrorSegue", sender: self)
-        
         let alert = UIAlertController(title: self.constants.errorTitle, message: error, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
-        alert.present(alert, animated: true)
+        var rootViewController = UIApplication.shared.keyWindow?.rootViewController
+        
+        if let navigationController = rootViewController as? UINavigationController {
+            rootViewController = navigationController.viewControllers.first
+        }
+        
+        rootViewController?.present(alert, animated: true, completion: nil)
         
         return
         

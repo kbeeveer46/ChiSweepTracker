@@ -9,14 +9,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
-    
+    var schedule = Schedule()
     let locationManager = CLLocationManager()
     let constants = Constants()
     let common = Common()
-    var droppedPin = MKPointAnnotation()
     let defaults = UserDefaults.standard
     
-    var schedule = Schedule()
     var addressFromTextField = ""
     var addressFromCoordinates = ""
     var addressFromDefaults = ""
@@ -25,6 +23,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+            
+            let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+            searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
+            
+        } else {
+            // Fallback on earlier versions
+        }
         
         getDefaults()
         
@@ -48,7 +57,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         if searchTypeSegment.selectedSegmentIndex == 0 {
             
-            //chicagoMapView.addAnnotation(droppedPin) // Doesn't work!
             locationManager.stopUpdatingLocation()
             
         }
@@ -77,7 +85,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     // Search address button is tapped
     @IBAction func searchAddressTapped(_ sender: Any) {
         
-        let address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        
+        if !address.lowercased().contains("chicago") {
+            address = address + " Chicago"
+        }
         
         defaults.set(address, forKey: "address")
         
@@ -105,36 +117,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            //droppedPin = annotation // Doesn't work!!
             
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
 
         }
-    }
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        let annotationIdentifier = "AnnotationIdentifier"
-
-        var annotationView: MKAnnotationView?
-        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
-            annotationView = dequeuedAnnotationView
-            annotationView?.annotation = annotation
-        }
-        else {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-
-        if let annotationView = annotationView {
-
-            annotationView.canShowCallout = true
-            annotationView.image = UIImage(named: "car_pin")
-        }
-        
-        return annotationView
-
     }
     
     // Prepare segue and pass data to view controllers

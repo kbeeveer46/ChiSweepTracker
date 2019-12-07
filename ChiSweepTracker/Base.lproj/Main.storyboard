@@ -23,7 +23,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="347"/>
+                                <rect key="frame" x="10" y="294" width="355" height="161"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
@@ -55,15 +55,15 @@
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s3f-Yb-UyJ">
-                                        <rect key="frame" x="0.0" y="176" width="355" height="62.5"/>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s3f-Yb-UyJ">
+                                        <rect key="frame" x="0.0" y="161" width="355" height="0.0"/>
                                         <string key="text">During street sweeping season (April - November) the Chicago Department of Streets and Sanitation uses mechanical street sweepers to remove debris and litter from streets, weather permitting.</string>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-5R-4jl">
-                                        <rect key="frame" x="0.0" y="253.5" width="355" height="93.5"/>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-5R-4jl">
+                                        <rect key="frame" x="0.0" y="161" width="355" height="0.0"/>
                                         <string key="text">Bright orange temporary parking restrictions are posted at least 24 hours before sweeping service is scheduled to begin on any street to ensure curb-to-curb cleaning.  Some arterial streets have permanently posted signs that specify a once-per-week period when parking is prohibited for street sweeping. </string>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                         <nil key="textColor"/>

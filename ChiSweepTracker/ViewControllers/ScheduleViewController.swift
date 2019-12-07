@@ -13,10 +13,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(loadNotificationView))
+        let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"),
+                                                 landscapeImagePhone: nil, style: .plain,
+                                                 target: self, action: #selector(loadNotificationView))
         self.navigationItem.rightBarButtonItem = notificationButton
         
-        loadSchedule()
+        loadScheduleMap()
         
         self.scheduleTableView.dataSource = self
         self.scheduleTableView.delegate = self
@@ -63,14 +65,15 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
     }
     
-    func loadSchedule() {
+    func loadScheduleMap() {
         
         scheduleMapView.delegate = self
         
         let coordinates = self.schedule.polygonCoordinatesForMap
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
-
+        
         let annotation = MKPointAnnotation()
+        
         annotation.title = "\(self.schedule.address)"
         annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
         annotation.coordinate = self.schedule.locationCoordinate
@@ -101,29 +104,27 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         return MKOverlayRenderer(overlay: overlay)
     }
     
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        let annotationIdentifier = "AnnotationIdentifier"
-
-        var annotationView: MKAnnotationView?
-        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
-            annotationView = dequeuedAnnotationView
-            annotationView?.annotation = annotation
-        }
-        else {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-
-        if let annotationView = annotationView {
-            // Configure your annotation view here
-            annotationView.canShowCallout = true
-            annotationView.image = UIImage(named: "car_pin")
-        }
-        
-        return annotationView
-
-    }
+////        let annotationIdentifier = "AnnotationIdentifier"
+////
+////        var annotationView: MKAnnotationView?
+////        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+////            annotationView = dequeuedAnnotationView
+////            annotationView?.annotation = annotation
+////        }
+////        else {
+////            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+////            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+////        }
+////
+////        if let annotationView = annotationView {
+////
+////            annotationView.canShowCallout = true
+////            annotationView.image = UIImage(named: "car_pin")
+////        }
+////
+////        return annotationView
+//
+//    }
 }
 
 //class CustomCell: UITableViewCell {
