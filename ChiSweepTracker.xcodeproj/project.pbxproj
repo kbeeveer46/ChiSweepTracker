@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -70,7 +70,6 @@
 				BA3238BEB5A79E34C5F71659 /* Pods-ChiSweepTracker.debug.xcconfig */,
 				DF241862024D4CE31CA6E263 /* Pods-ChiSweepTracker.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -169,6 +168,7 @@
 				FA29463923985FE300A24FFC /* Frameworks */,
 				FA29463A23985FE300A24FFC /* Resources */,
 				7697AAA64B43DF9AA91CC684 /* [CP] Embed Pods Frameworks */,
+				FA0EC392239C3DDB00DD3127 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -266,6 +266,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		FA0EC392239C3DDB00DD3127 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
