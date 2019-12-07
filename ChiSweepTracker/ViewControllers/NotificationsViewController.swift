@@ -1,4 +1,5 @@
 import UIKit
+import UserNotifications
 
 class NotificationsViewController: UIViewController {
     
@@ -26,10 +27,7 @@ class NotificationsViewController: UIViewController {
     
     @IBAction func pushNotificationsTapped(_ sender: Any) {
         
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
-            // Enable or disable features based on authorization.
-        }
+        registerForPushNotifications()
         
     }
     
@@ -63,10 +61,40 @@ class NotificationsViewController: UIViewController {
         }
         
     }
-
+    
     @IBAction func saveTapped(_ sender: Any) {
         
         
+        
+    }
+    
+    func registerForPushNotifications() {
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            granted, error in
+            
+            print("Permission granted: \(granted)")
+            
+            guard granted else { return }
+            
+            self.getNotificationSettings()
+            
+        }
+        
+    }
+    
+    func getNotificationSettings() {
+        
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            
+            print("Notification settings: \(settings)")
+            
+            guard settings.authorizationStatus == .authorized else { return }
+            DispatchQueue.main.async {
+              UIApplication.shared.registerForRemoteNotifications()
+            }
+            
+        }
         
     }
     

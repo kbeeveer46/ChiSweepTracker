@@ -81,7 +81,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             address = address + " Chicago"
         }
         
-        defaults.set(address, forKey: "address")
+        //defaults.set(address, forKey: "address")
         
          getSchedule(address)
         //getSchedule("750 N Dearborn St Chicago, IL")
@@ -99,8 +99,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             
-            self.defaults.set(coordinate.latitude, forKey: "latitude")
-            self.defaults.set(coordinate.longitude, forKey: "longitude")
+            self.defaults.set(coordinate.latitude, forKey: "defaultLatitude")
+            self.defaults.set(coordinate.longitude, forKey: "defaultLongitude")
             
             getAddressFromCoordinates(location)
             addressTextField.text = addressFromCoordinates
@@ -161,8 +161,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                 self.schedule.locationCoordinate = coordinates
                 
-                self.defaults.set(placemark?.location?.coordinate.latitude, forKey: "latitude")
-                self.defaults.set(placemark?.location?.coordinate.longitude, forKey: "longitude")
+                self.defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
+                self.defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
                 
                 print("Latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("Longitude: \(self.schedule.locationCoordinate.longitude)")
@@ -330,7 +330,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
                             self.addressTextField.text = self.addressFromCoordinates
-                            //self.defaults.set(self.addressFromCoordinates, forKey: "address")
+                            self.defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
                             
                             print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
                             
@@ -347,8 +347,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         if let location = locations.last {
             
-            self.defaults.set(location.coordinate.latitude, forKey: "latitude")
-            self.defaults.set(location.coordinate.longitude, forKey: "longitude")
+            self.defaults.set(location.coordinate.latitude, forKey: "defaultLatitude")
+            self.defaults.set(location.coordinate.longitude, forKey: "defaultLongitude")
             
             getAddressFromCoordinates(location)
             
@@ -408,8 +408,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     func getDefaults() {
         
         addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
-        longitudeFromDefaults = defaults.double(forKey: "longitude")
-        latitudeFromDefaults = defaults.double(forKey: "latitude")
+        longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
+        latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
         
         print("Default address: \(addressFromDefaults)")
         print("Default longitude: \(longitudeFromDefaults)")

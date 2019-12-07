@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B0EC987EB5B4567CAC7F11F /* Pods_ChiSweepTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99969CE76945B753DD567C6 /* Pods_ChiSweepTracker.framework */; };
 		FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC34F239AFB2600DD3127 /* Assets.xcassets */; };
 		FA0EC353239B0BC600DD3127 /* icon-white.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC352239B0BC600DD3127 /* icon-white.png */; };
 		FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0EC355239B105F00DD3127 /* MapKit.framework */; };
 		FA0EC358239B263200DD3127 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0EC357239B263200DD3127 /* Common.swift */; };
+		FA0EC391239C31CF00DD3127 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */; };
 		FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */; };
 		FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */; };
 		FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */; };
@@ -25,10 +27,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BA3238BEB5A79E34C5F71659 /* Pods-ChiSweepTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.debug.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		C99969CE76945B753DD567C6 /* Pods_ChiSweepTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChiSweepTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF241862024D4CE31CA6E263 /* Pods-ChiSweepTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.release.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.release.xcconfig"; sourceTree = "<group>"; };
 		FA0EC34F239AFB2600DD3127 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ChiSweepTracker/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		FA0EC352239B0BC600DD3127 /* icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-white.png"; sourceTree = "<group>"; };
 		FA0EC355239B105F00DD3127 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA0EC357239B263200DD3127 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		FA0EC38F239C265E00DD3127 /* Sweep Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Sweep Tracker.entitlements"; sourceTree = "<group>"; };
+		FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleModel.swift; sourceTree = "<group>"; };
@@ -50,12 +57,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */,
+				7B0EC987EB5B4567CAC7F11F /* Pods_ChiSweepTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E13D92BDDB6117AABF4FF81 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BA3238BEB5A79E34C5F71659 /* Pods-ChiSweepTracker.debug.xcconfig */,
+				DF241862024D4CE31CA6E263 /* Pods-ChiSweepTracker.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		FA0EC351239B0B8200DD3127 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				FA0EC355239B105F00DD3127 /* MapKit.framework */,
+				C99969CE76945B753DD567C6 /* Pods_ChiSweepTracker.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -107,6 +126,7 @@
 				FA29463E23985FE300A24FFC /* ChiSweepTracker */,
 				FA29463D23985FE300A24FFC /* Products */,
 				FA0EC354239B105F00DD3127 /* Frameworks */,
+				5E13D92BDDB6117AABF4FF81 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,12 +141,14 @@
 		FA29463E23985FE300A24FFC /* ChiSweepTracker */ = {
 			isa = PBXGroup;
 			children = (
-				FA184FA12398707C00AB2FF6 /* ViewControllers */,
+				FA0EC38F239C265E00DD3127 /* Sweep Tracker.entitlements */,
 				FA29464523985FE300A24FFC /* Main.storyboard */,
 				FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */,
 				FA29464D23985FE600A24FFC /* Info.plist */,
+				FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */,
 				FA29463F23985FE300A24FFC /* AppDelegate.swift */,
 				FA29464123985FE300A24FFC /* SceneDelegate.swift */,
+				FA184FA12398707C00AB2FF6 /* ViewControllers */,
 				FA184FB6239967A400AB2FF6 /* Helpers */,
 				FA184FA623987ADC00AB2FF6 /* Models */,
 				FA0EC351239B0B8200DD3127 /* Images */,
@@ -142,9 +164,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA29465023985FE600A24FFC /* Build configuration list for PBXNativeTarget "ChiSweepTracker" */;
 			buildPhases = (
+				1E09C50E4C7CFFD22F9A5F77 /* [CP] Check Pods Manifest.lock */,
 				FA29463823985FE300A24FFC /* Sources */,
 				FA29463923985FE300A24FFC /* Frameworks */,
 				FA29463A23985FE300A24FFC /* Resources */,
+				7697AAA64B43DF9AA91CC684 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -195,12 +219,55 @@
 			files = (
 				FA0EC353239B0BC600DD3127 /* icon-white.png in Resources */,
 				FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */,
+				FA0EC391239C31CF00DD3127 /* GoogleService-Info.plist in Resources */,
 				FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */,
 				FA29464723985FE300A24FFC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1E09C50E4C7CFFD22F9A5F77 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChiSweepTracker-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7697AAA64B43DF9AA91CC684 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FA29463823985FE300A24FFC /* Sources */ = {
@@ -358,8 +425,10 @@
 		};
 		FA29465123985FE600A24FFC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA3238BEB5A79E34C5F71659 /* Pods-ChiSweepTracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "ChiSweepTracker/Sweep Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 29ZYSAUDQH;
 				INFOPLIST_FILE = ChiSweepTracker/Info.plist;
@@ -376,8 +445,10 @@
 		};
 		FA29465223985FE600A24FFC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF241862024D4CE31CA6E263 /* Pods-ChiSweepTracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "ChiSweepTracker/Sweep Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 29ZYSAUDQH;
 				INFOPLIST_FILE = ChiSweepTracker/Info.plist;
