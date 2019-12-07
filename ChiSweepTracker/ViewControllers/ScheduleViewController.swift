@@ -9,7 +9,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     let constants = Constants()
     var schedule = Schedule()
-
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -17,6 +18,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                                                  landscapeImagePhone: nil, style: .plain,
                                                  target: self, action: #selector(loadNotificationView))
         self.navigationItem.rightBarButtonItem = notificationButton
+    
+        defaults.set(schedule.address, forKey: "defaultAddress")
         
         loadScheduleMap()
         
@@ -104,6 +107,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         return MKOverlayRenderer(overlay: overlay)
     }
     
+
 ////        let annotationIdentifier = "AnnotationIdentifier"
 ////
 ////        var annotationView: MKAnnotationView?

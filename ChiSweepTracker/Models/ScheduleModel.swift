@@ -1,7 +1,7 @@
 import Foundation
 import CoreLocation
 
-class Schedule {
+public class Schedule  {
 
     var address = ""
     var ward = ""
@@ -15,12 +15,12 @@ class Schedule {
 class Month: Identifiable {
     
     var name = ""
-    var number  = 0
+    var number = 0
     var dates: [Date] = []
     
 }
 
-class Date: Identifiable{
+class Date: Identifiable {
     
     var date = 0
     

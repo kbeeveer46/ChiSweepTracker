@@ -4,6 +4,8 @@ import MapKit
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
+    var window: UIWindow?
+    
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchAddressButton: UIButton!
     @IBOutlet weak var chicagoMapView: MKMapView!
@@ -24,28 +26,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 13.0, *) {
-            self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
-            
-            let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
-            searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
-            
-        } else {
-            // Fallback on earlier versions
-        }
+        self.window = UIWindow()
+        
+        styleControls()
         
         getDefaults()
         
+        loadChicagoMap()
+        
         // Make enter key close keyboard
         self.addressTextField.delegate = self
-        //addressTextField.layer.borderColor = UIColor(red: 48/255, green: 178/255, blue: 99/255, alpha: 1).cgColor
-        //addressTextField.layer.borderWidth = 1
-        //addressTextField.layer.cornerRadius = 7.0
-        
-        self.common.styleButton(searchAddressButton, "search_circle")
-        
-        loadChicagoMap()
         
     }
     
@@ -132,6 +122,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 selectSectionViewController.schedule = schedule
             }
         }
+//        else if segue.identifier == "viewScheduleSegue" {
+//
+//            if let viewScheduleViewController = segue.destination as? ScheduleViewController {
+//                viewScheduleViewController.schedule = schedule
+//            }
+//        }
     }
     
     // MARK: Methods
@@ -260,8 +256,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             self.schedule.months.append(month)
                                             
                                         }
-                                    
-                                        self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
+                                        
+                                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                                            destinationViewController.schedule = self.schedule
+                                            self.navigationController?.pushViewController(destinationViewController, animated: true)
+                                        }
+                                        
+                                        //self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
                                 
                                     }
                                 case .error (let err):
@@ -329,7 +330,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
                             self.addressTextField.text = self.addressFromCoordinates
-                            self.defaults.set(self.addressFromCoordinates, forKey: "address")
+                            //self.defaults.set(self.addressFromCoordinates, forKey: "address")
                             
                             print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
                             
@@ -406,7 +407,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     func getDefaults() {
         
-        addressFromDefaults = defaults.string(forKey: "address") ?? ""
+        addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
         longitudeFromDefaults = defaults.double(forKey: "longitude")
         latitudeFromDefaults = defaults.double(forKey: "latitude")
         
@@ -415,7 +416,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         print("Default latitude: \(latitudeFromDefaults)")
         
         if !addressFromDefaults.isEmpty {
+            
             addressTextField.text = addressFromDefaults
+            
+            //getSchedule(addressFromDefaults)
+
         }
         
     }
@@ -428,17 +433,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         chicagoMapView.addGestureRecognizer(tapGesture)
         
         if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
-            
+
             let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
-            
+
             let annotation = MKPointAnnotation()
             annotation.title = addressFromDefaults
             //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
             annotation.coordinate = location.coordinate
-            
+
             let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
-            
+
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
             chicagoMapView.setRegion(region, animated: true)
@@ -464,6 +469,22 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         self.view.endEditing(true)
         return false
+    }
+    
+    func styleControls() {
+        
+        if #available(iOS 13.0, *) {
+            
+            self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+            
+            let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+            searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
+            
+        }
+        
+        self.common.styleButton(searchAddressButton, "search_circle")
+        
     }
 }
 

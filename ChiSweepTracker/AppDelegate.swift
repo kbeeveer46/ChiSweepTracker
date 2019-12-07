@@ -6,7 +6,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        self.window = UIWindow()
+//
+//        let defaults = UserDefaults.standard
+//        //let schedule = defaults.object(forKey: "defaultSchedule") as? Schedule ?? Schedule()
+//        
+//        guard let scheduleData = defaults.object(forKey: "defaultSchedule") as? Data else {
+//            return true
+//        }
+//        
+//        // Use NSKeyedUnarchiver to convert Data / NSData back to Player object
+//        guard let schedule = NSKeyedUnarchiver.unarchiveObject(with: scheduleData) as? Schedule else {
+//            return true
+//        }
+//
+//        if !schedule.ward.isEmpty && !schedule.section.isEmpty {
+//
+//            let scheduleViewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController")
+//            self.window?.rootViewController = scheduleViewController
+//
+//        }
+//
+//        self.window?.makeKeyAndVisible()
+        
         return true
     }
 
