@@ -1,5 +1,6 @@
 import UIKit
 import UserNotifications
+import Crashlytics
 
 class NotificationsViewController: UIViewController {
     
@@ -9,26 +10,58 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
+    @IBOutlet weak var pushNotificationsMessage: UIButton!
+    
+    let common = Common()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        phoneNumberTextField.isUserInteractionEnabled = false
-        emailTextField.isUserInteractionEnabled = false
+        styleControls()
         
-        saveButton.backgroundColor = .systemBlue //UIColor.init(red: 48/255, green: 178/255, blue: 99/255, alpha: 1)
-        saveButton.layer.cornerRadius = 7.0
-        saveButton.tintColor = .white
-        saveButton.leftImage(image: UIImage(named: "save")!)
+        getNotificationSettings()
         
     }
     
     // MARK: Actions
     
+    @IBAction func pushNotificationMessageTapped(_ sender: Any) {
+        
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+        
+    }
+    
     @IBAction func pushNotificationsTapped(_ sender: Any) {
         
-        registerForPushNotifications()
+        if pushNotificationsSwitch.isOn == true {
         
+            registerForPushNotifications()
+        }
+        else {
+            
+            //unregisterForPushNotifications()
+            
+            let alertController = UIAlertController(title: "Disable Notifications", message: "Open the device settings page to disable notifications", preferredStyle: .alert)
+            
+            //let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            //alertController.addAction(cancelAction)
+            
+            if #available(iOS 10.0, *) {
+                
+                let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+                    
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                            
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        
+                    }
+                }
+                
+                alertController.addAction(openAction)
+            }
+
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     @IBAction func emailNotificationTapped(_ sender: Any) {
@@ -64,8 +97,21 @@ class NotificationsViewController: UIViewController {
     
     @IBAction func saveTapped(_ sender: Any) {
         
+        //Crashlytics.sharedInstance().crash()
         
+    }
+    
+    //MARK: Methods
+    
+    func styleControls() {
         
+         self.common.styleButton(saveButton, "save")
+        
+        self.phoneNumberTextField.isUserInteractionEnabled = false
+        self.emailTextField.isUserInteractionEnabled = false
+        
+        self.pushNotificationsMessage.isHidden = true
+        self.pushNotificationsSwitch.isOn = false
     }
     
     func registerForPushNotifications() {
@@ -77,7 +123,7 @@ class NotificationsViewController: UIViewController {
             
             guard granted else { return }
             
-            self.getNotificationSettings()
+            //self.getNotificationSettings()
             
         }
         
@@ -89,10 +135,23 @@ class NotificationsViewController: UIViewController {
             
             print("Notification settings: \(settings)")
             
-            guard settings.authorizationStatus == .authorized else { return }
-            DispatchQueue.main.async {
-              UIApplication.shared.registerForRemoteNotifications()
+            if settings.authorizationStatus == .authorized {
+            
+                DispatchQueue.main.async {
+                
+                    UIApplication.shared.registerForRemoteNotifications()
+                    
+                    self.pushNotificationsSwitch.isOn = true
+                    //self.pushNotificationsSwitch.isUserInteractionEnabled = false
+                }
             }
+            else if settings.authorizationStatus == .denied {
+                    
+                self.pushNotificationsSwitch.isOn = true
+                self.pushNotificationsSwitch.isUserInteractionEnabled = false
+                self.pushNotificationsMessage.isHidden = false
+            }
+            
             
         }
         
