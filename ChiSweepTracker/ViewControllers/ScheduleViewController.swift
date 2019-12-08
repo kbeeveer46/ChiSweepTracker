@@ -31,7 +31,15 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     }
     
     @objc func loadNotificationView() {
-        self.performSegue(withIdentifier: "notificationsSegue", sender: self)
+        
+        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
+            
+            destinationViewController.schedule = self.schedule
+            self.navigationController?.pushViewController(destinationViewController, animated: true)
+            
+        }
+        
+        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -2,7 +2,7 @@ import UIKit
 import UserNotifications
 import Crashlytics
 
-class NotificationsViewController: UIViewController {
+class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var textNotificationSwitch: UISwitch!
     @IBOutlet weak var phoneNumberTextField: UITextField!
@@ -11,8 +11,14 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
     @IBOutlet weak var pushNotificationsMessage: UIButton!
+    @IBOutlet weak var onPicker: UIPickerView!
+    //@IBOutlet weak var timePicker: UIDatePicker!
+    
     
     let common = Common()
+    var schedule = Schedule()
+    
+    let onData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +26,9 @@ class NotificationsViewController: UIViewController {
         styleControls()
         
         getNotificationSettings()
+        
+        self.onPicker.delegate = self
+        self.onPicker.dataSource = self
         
     }
     
@@ -125,8 +134,65 @@ class NotificationsViewController: UIViewController {
             
             //self.getNotificationSettings()
             
+            let center = UNUserNotificationCenter.current()
+            
+//            let calendar = Calendar.current
+//            
+//            let dateComponents = DateComponents(year: 2019, month: 12, day: 7, hour: 22, minute: 40)
+//            let triggerDate = calendar.date(from: dateComponents)
+//            let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: triggerDate!)
+//            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+//
+//            let content = UNMutableNotificationContent()
+//            content.title = "Sweep Alert"
+//            content.body = "Your section is scheduled to be swept today. You may have to move your car to avoid being ticketed"
+//            content.sound = .default
+//            
+//            let identifier = "LocalNotificationTest"
+//            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+//
+//            center.add(request, withCompletionHandler: { (error) in
+//                if let error = error {
+//                    
+//                    self.common.showError(error.localizedDescription)
+//                    
+//                }
+//            })
+            
+            let date = Foundation.Date()
+            let calendar = Calendar.current
+            let currentYear = calendar.component(.year, from: date)
+
+            //self.schedule.months.forEach { month in
+            for month in self.schedule.months {
+
+                //month.dates.forEach { day in
+                for day in month.dates {
+
+                    let calendar = Calendar.current
+                    let dateComponents = DateComponents(year: currentYear, month: month.number, day: day.date, hour: 8, minute: 0)
+                    let triggerDate = calendar.date(from: dateComponents)
+                    let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: triggerDate!)
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+
+                    let content = UNMutableNotificationContent()
+                    content.title = "Sweep Alert"
+                    content.body = "Your section is scheduled to be swept today. You may have to move your car to avoid being ticketed"
+                    content.sound = .default
+
+                    let identifier = "LocalNotification-\(month)-\(day)"
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+                    center.add(request, withCompletionHandler: { (error) in
+                        if let error = error {
+
+                            self.common.showError(error.localizedDescription)
+
+                        }
+                    })
+                }
+            }
         }
-        
     }
     
     func getNotificationSettings() {
@@ -142,7 +208,6 @@ class NotificationsViewController: UIViewController {
                     UIApplication.shared.registerForRemoteNotifications()
                     
                     self.pushNotificationsSwitch.isOn = true
-                    //self.pushNotificationsSwitch.isUserInteractionEnabled = false
                 }
             }
             else if settings.authorizationStatus == .denied {
@@ -151,11 +216,19 @@ class NotificationsViewController: UIViewController {
                 self.pushNotificationsSwitch.isUserInteractionEnabled = false
                 self.pushNotificationsMessage.isHidden = false
             }
-            
-            
         }
-        
     }
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return onData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return onData[row]
+    }
 }
 
