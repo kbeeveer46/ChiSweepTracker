@@ -1,8 +1,7 @@
 import UIKit
 import UserNotifications
-import Crashlytics
 
-class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, NotificationsModelDelegate {
     
     @IBOutlet weak var textNotificationSwitch: UISwitch!
     @IBOutlet weak var phoneNumberTextField: UITextField!
@@ -12,25 +11,52 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
     @IBOutlet weak var pushNotificationsMessage: UIButton!
     @IBOutlet weak var onPicker: UIPickerView!
-    //@IBOutlet weak var timePicker: UIDatePicker!
-    
+    @IBOutlet weak var timePicker: UIDatePicker!
     
     let common = Common()
     var schedule = Schedule()
+    let notificationModel = NotificationsModel()
+    var currentUser = UserModel()
+    let defaults = UserDefaults.standard
     
-    let onData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
+    var email = ""
+    
+    let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        styleControls()
+        self.styleControls()
         
-        getNotificationSettings()
+        self.getNotificationSettings()
         
-        self.onPicker.delegate = self
-        self.onPicker.dataSource = self
+        email = defaults.string(forKey: "defaultEmail") ?? ""
+        
+        notificationModel.getUser(email)
+        notificationModel.delegate = self
+        
+        //emailTextField.text = currentUser.email
+        //onPicker.selectedRow(inComponent: whenData.lastIndex(of: currentUser.when_day)!)
+    }
+    
+    func userDownloaded(user: UserModel) {
+        
+        self.currentUser = user
         
     }
+    
+//    func getUser(_ email: String) {
+//
+//        if !email.isEmpty {
+//
+//            currentUser = userModel.getUser(email)
+//
+//            emailTextField.text = currentUser.email
+//            onPicker.selectedRow(inComponent: whenData.lastIndex(of: currentUser.when_day)!)
+//
+//        }
+//
+//    }
     
     // MARK: Actions
     
@@ -45,31 +71,29 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
         if pushNotificationsSwitch.isOn == true {
         
             registerForPushNotifications()
+            
         }
         else {
             
-            //unregisterForPushNotifications()
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
-            let alertController = UIAlertController(title: "Disable Notifications", message: "Open the device settings page to disable notifications", preferredStyle: .alert)
-            
-            //let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-            //alertController.addAction(cancelAction)
-            
-            if #available(iOS 10.0, *) {
-                
-                let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
-                    
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                                            
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                        
-                    }
-                }
-                
-                alertController.addAction(openAction)
-            }
-
-            self.present(alertController, animated: true, completion: nil)
+//            let alertController = UIAlertController(title: "Disable Notifications", message: "Open the device settings page to disable notifications", preferredStyle: .alert)
+//
+//            if #available(iOS 10.0, *) {
+//
+//                let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+//
+//                    if let url = URL(string: UIApplication.openSettingsURLString) {
+//
+//                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//
+//                    }
+//                }
+//
+//                alertController.addAction(openAction)
+//            }
+//
+//            self.present(alertController, animated: true, completion: nil)
         }
     }
     
@@ -106,7 +130,48 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     @IBAction func saveTapped(_ sender: Any) {
         
-        //Crashlytics.sharedInstance().crash()
+        let email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
+        let when = whenData[onPicker.selectedRow(inComponent: 0)]
+        let time = timePicker.date
+        
+        defaults.set(email, forKey: "defaultEmail")
+        
+        // Get hour and minute
+        let calendar = Calendar.current
+        let comp = calendar.dateComponents([.hour, .minute], from: time)
+        let hour = comp.hour!
+        let minute = comp.minute!
+        
+        // Get AM/PM
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "a"
+        let ampm = timeFormatter.string(from: time)
+        
+        print(email ?? "")
+        print(when)
+        print(hour)
+        print(minute)
+        print(ampm)
+        
+        if emailNotificationSwitch.isOn == true {
+        
+            if email?.isEmpty == true {
+            
+                common.showError("Email required for email notifications")
+                
+                return
+            
+            }
+            
+            if email?.isValidEmail == false {
+                
+                common.showError("Not a valid email. Please try again")
+                
+                return
+            }
+        
+        }
+        
         
     }
     
@@ -114,13 +179,20 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     func styleControls() {
         
-         self.common.styleButton(saveButton, "save")
+        self.common.styleButton(saveButton, "save")
         
         self.phoneNumberTextField.isUserInteractionEnabled = false
         self.emailTextField.isUserInteractionEnabled = false
         
         self.pushNotificationsMessage.isHidden = true
         self.pushNotificationsSwitch.isOn = false
+        
+        self.onPicker.delegate = self
+        self.onPicker.dataSource = self
+        
+        // Make enter key close keyboard
+        self.phoneNumberTextField.delegate = self
+        self.emailTextField.delegate = self
     }
     
     func registerForPushNotifications() {
@@ -131,8 +203,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
             print("Permission granted: \(granted)")
             
             guard granted else { return }
-            
-            //self.getNotificationSettings()
             
             let center = UNUserNotificationCenter.current()
             
@@ -163,10 +233,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
             let calendar = Calendar.current
             let currentYear = calendar.component(.year, from: date)
 
-            //self.schedule.months.forEach { month in
             for month in self.schedule.months {
 
-                //month.dates.forEach { day in
                 for day in month.dates {
 
                     let calendar = Calendar.current
@@ -177,10 +245,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
 
                     let content = UNMutableNotificationContent()
                     content.title = "Sweep Alert"
-                    content.body = "Your section is scheduled to be swept today. You may have to move your car to avoid being ticketed"
+                    content.body = "Your section is being swept on \(month.number)/\(day). You may have to move your vehicle to avoid getting a ticket"
                     content.sound = .default
 
-                    let identifier = "LocalNotification-\(month)-\(day)"
+                    let identifier = "LocalNotification-\(month.name)-\(day)"
                     let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
                     center.add(request, withCompletionHandler: { (error) in
@@ -207,13 +275,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
                 
                     UIApplication.shared.registerForRemoteNotifications()
                     
-                    self.pushNotificationsSwitch.isOn = true
+                    //self.pushNotificationsSwitch.isOn = true
                 }
             }
             else if settings.authorizationStatus == .denied {
                     
-                self.pushNotificationsSwitch.isOn = true
-                self.pushNotificationsSwitch.isUserInteractionEnabled = false
+                //self.pushNotificationsSwitch.isOn = true
+                //self.pushNotificationsSwitch.isUserInteractionEnabled = false
                 self.pushNotificationsMessage.isHidden = false
             }
         }
@@ -224,11 +292,19 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UIPic
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return onData.count
+        return whenData.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return onData[row]
+        return whenData[row]
     }
+    
+    // Make enter key close keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        self.view.endEditing(true)
+        return false
+    }
+    
 }
 
