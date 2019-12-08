@@ -11,7 +11,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
-    var schedule = Schedule()
+    var schedule = ScheduleModel()
     let locationManager = CLLocationManager()
     let constants = Constants()
     let common = Common()
@@ -135,7 +135,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     func getSchedule(_ address: String) {
         
         self.schedule.months.removeAll()
-        self.schedule.polygonCoordinatesForMap.removeAll()
+        self.schedule.polygonCoordinates.removeAll()
         
         print("Address: \(address)")
         
@@ -194,7 +194,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     coordinate.longitude = item[0] as? Double ?? 0
                                     coordinate.latitude = item[1] as? Double ?? 0
                                     
-                                    self.schedule.polygonCoordinatesForMap.append(coordinate)
+                                    self.schedule.polygonCoordinates.append(coordinate)
                                     
                                 }
                             }
@@ -234,7 +234,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             print("Month name: \(monthName)")
                                             print("Dates: \(datesArray)")
                                             
-                                            let month = Month()
+                                            let month = MonthModel()
                                             month.name = monthName
                                             month.number = monthNumber
                                             
@@ -244,7 +244,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                                 
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
-                                                    let date = Date()
+                                                    let date = DateModel()
                                                     date.date = Int(day) ?? 0
                                                     
                                                     if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {

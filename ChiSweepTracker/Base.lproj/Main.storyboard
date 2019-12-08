@@ -243,7 +243,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="20" y="64" width="335" height="467"/>
+                                <rect key="frame" x="20" y="64" width="335" height="515"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="31"/>
@@ -390,6 +390,10 @@
                                         <connections>
                                             <action selector="saveTapped:" destination="aNg-gl-cTZ" eventType="touchUpInside" id="VL9-0V-OuX"/>
                                         </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwe-lA-94Z">
+                                        <rect key="frame" x="0.0" y="485" width="335" height="30"/>
+                                        <state key="normal" title="Privacy Policy"/>
                                     </button>
                                 </subviews>
                                 <constraints>

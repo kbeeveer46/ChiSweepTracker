@@ -14,9 +14,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     @IBOutlet weak var timePicker: UIDatePicker!
     
     let common = Common()
-    var schedule = Schedule()
+    var schedule = ScheduleModel()
     let notificationModel = NotificationsModel()
-    var currentUser = UserModel()
     let defaults = UserDefaults.standard
     
     var email = ""
@@ -32,31 +31,37 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         email = defaults.string(forKey: "defaultEmail") ?? ""
         
-        notificationModel.getUser(email)
-        notificationModel.delegate = self
-        
-        //emailTextField.text = currentUser.email
-        //onPicker.selectedRow(inComponent: whenData.lastIndex(of: currentUser.when_day)!)
+        if !email.isEmpty {
+            notificationModel.getUser(email)
+            notificationModel.delegate = self
+        }
+
     }
     
     func userDownloaded(user: UserModel) {
         
-        self.currentUser = user
+        emailTextField.text = user.email
+        onPicker.selectRow(whenData.lastIndex(of: user.whenDay)!, inComponent: 0, animated: false)
+        
+        //setTimePickerValue(user)
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: Foundation.Date())
+        
+        let userComponents = DateComponents(year: currentYear,
+                                            day: Int(user.whenDay),
+                                            hour: Int(user.whenHour),
+                                            minute: Int(user.whenMinute))
+        let date = calendar.date(from: userComponents)!
+        timePicker.setDate(date, animated: false)
+        
+        if user.active {
+            emailNotificationSwitch.isOn = true
+        }
+        else {
+            emailNotificationSwitch.isOn = false
+        }
         
     }
-    
-//    func getUser(_ email: String) {
-//
-//        if !email.isEmpty {
-//
-//            currentUser = userModel.getUser(email)
-//
-//            emailTextField.text = currentUser.email
-//            onPicker.selectedRow(inComponent: whenData.lastIndex(of: currentUser.when_day)!)
-//
-//        }
-//
-//    }
     
     // MARK: Actions
     
@@ -107,8 +112,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         else {
             emailTextField.layer.borderColor = UIColor.clear.cgColor
-            emailTextField.text = ""
-            emailTextField.isUserInteractionEnabled = false
+            //emailTextField.text = ""
+            //emailTextField.isUserInteractionEnabled = false
         }
     }
     
@@ -122,19 +127,18 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         else {
             phoneNumberTextField.layer.borderColor = UIColor.clear.cgColor
-            phoneNumberTextField.text = ""
-            phoneNumberTextField.isUserInteractionEnabled = false
+            //phoneNumberTextField.text = ""
+            //phoneNumberTextField.isUserInteractionEnabled = false
         }
         
     }
     
     @IBAction func saveTapped(_ sender: Any) {
         
-        let email = emailTextField.text?.trimmingCharacters(in: .whitespaces)
+        let email = emailTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         let when = whenData[onPicker.selectedRow(inComponent: 0)]
         let time = timePicker.date
-        
-        defaults.set(email, forKey: "defaultEmail")
+        let active = emailNotificationSwitch.isOn ? 1 : 0
         
         // Get hour and minute
         let calendar = Calendar.current
@@ -142,20 +146,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         let hour = comp.hour!
         let minute = comp.minute!
         
-        // Get AM/PM
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "a"
-        let ampm = timeFormatter.string(from: time)
-        
-        print(email ?? "")
+        print(email)
         print(when)
         print(hour)
         print(minute)
-        print(ampm)
         
         if emailNotificationSwitch.isOn == true {
         
-            if email?.isEmpty == true {
+            if email.isEmpty == true {
             
                 common.showError("Email required for email notifications")
                 
@@ -163,7 +161,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             }
             
-            if email?.isValidEmail == false {
+            if email.isValidEmail == false {
                 
                 common.showError("Not a valid email. Please try again")
                 
@@ -171,6 +169,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             }
         
         }
+        
+        defaults.set(email, forKey: "defaultEmail")
+        
+        notificationModel.insertUpdateUser(email: email, active: active, ward: schedule.ward, section: schedule.section, whenDay: when, whenHour: String(hour), whenMinute: String(minute))
         
         
     }
@@ -181,8 +183,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         self.common.styleButton(saveButton, "save")
         
-        self.phoneNumberTextField.isUserInteractionEnabled = false
-        self.emailTextField.isUserInteractionEnabled = false
+        //self.phoneNumberTextField.isUserInteractionEnabled = false
+        //self.emailTextField.isUserInteractionEnabled = false
+        
+        phoneNumberTextField.layer.borderColor = UIColor(red: 48/255, green: 178/255, blue: 99/255, alpha: 1).cgColor
+        emailTextField.layer.borderColor = UIColor(red: 48/255, green: 178/255, blue: 99/255, alpha: 1).cgColor
         
         self.pushNotificationsMessage.isHidden = true
         self.pushNotificationsSwitch.isOn = false

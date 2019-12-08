@@ -1,26 +1,26 @@
 import Foundation
 import CoreLocation
 
-public class Schedule  {
+public class ScheduleModel  {
 
     var address = ""
     var ward = ""
     var section = ""
-    var months: [Month] = []
+    var months: [MonthModel] = []
     var locationCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var polygonCoordinatesForMap: [CLLocationCoordinate2D] = [CLLocationCoordinate2D]()
+    var polygonCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D]()
     
 }
 
-class Month: Identifiable {
+class MonthModel: Identifiable {
     
     var name = ""
     var number = 0
-    var dates: [Date] = []
+    var dates: [DateModel] = []
     
 }
 
-class Date: Identifiable {
+class DateModel: Identifiable {
     
     var date = 0
     

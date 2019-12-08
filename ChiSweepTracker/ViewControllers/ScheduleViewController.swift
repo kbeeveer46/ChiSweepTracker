@@ -8,7 +8,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     @IBOutlet weak var scheduleTableView: UITableView!
     
     let constants = Constants()
-    var schedule = Schedule()
+    var schedule = ScheduleModel()
     let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -80,7 +80,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         scheduleMapView.delegate = self
         
-        let coordinates = self.schedule.polygonCoordinatesForMap
+        let coordinates = self.schedule.polygonCoordinates
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
         let annotation = MKPointAnnotation()

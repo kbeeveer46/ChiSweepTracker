@@ -4,7 +4,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 
     @IBOutlet weak var sectionTableView: UITableView!
     
-    var schedule = Schedule()
+    var schedule = ScheduleModel()
     let constants = Constants()
     let common = Common()
     
@@ -52,7 +52,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         print("Month name: \(monthName)")
                         print("Dates: \(datesArray)")
                         
-                        let month = Month()
+                        let month = MonthModel()
                         month.name = monthName
                         month.number = monthNumber
                         
@@ -62,7 +62,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                             
                             if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                 
-                                let date = Date()
+                                let date = DateModel()
                                 date.date = Int(day) ?? 0
                                 
                                 if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {

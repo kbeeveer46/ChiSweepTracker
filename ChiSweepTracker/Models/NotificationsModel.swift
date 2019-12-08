@@ -9,10 +9,49 @@ protocol NotificationsModelDelegate {
 class NotificationsModel {
     
     var delegate:NotificationsModelDelegate?
+    
+    func insertUpdateUser(email: String,
+                        active: Int,
+                        ward: String,
+                        section: String,
+                        whenDay: String,
+                        whenHour: String,
+                        whenMinute: String) {
+        
+        var serviceURL = "http://chicagosweeptracker.info/insertupdateuser.php?active=\(active)&email=\(email)&ward=\(ward)&section=\(section)&when_day=\(whenDay)&when_hour=\(whenHour)&when_minute=\(whenMinute)"
+            
+        serviceURL = serviceURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        
+        let url = URL(string: serviceURL)
+        
+        if let url = url {
+            
+            let session = URLSession(configuration: .default)
+            
+            let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
+             
+                if error == nil {
+                    
+                    print(response!)
+                    
+                }
+                else {
+                    
+                    print(error!.localizedDescription)
+                }
+                
+            })
+            
+            task.resume()
+            
+        }
+        
+    }
+    
 
     func getUser(_ email: String) {
         
-        let serviceURL = "http://chicagosweeptracker.info/test.php?email=\(email)"
+        let serviceURL = "http://chicagosweeptracker.info/getuser.php?email=\(email)"
         
         let url = URL(string: serviceURL)
         
@@ -50,14 +89,22 @@ class NotificationsModel {
             
             let userArray = jsonArray[0] as? [String: Any] ?? [:]
             
-            user.id = userArray["id"] as! String
+            //user.id = userArray["id"] as! String
             user.email = userArray["email"] as! String
             user.ward = userArray["ward"] as! String
             user.section = userArray["section"] as! String
-            user.when_day = userArray["when_day"] as! String
-            user.when_hour = userArray["when_hour"] as! String
-            user.when_minute = userArray["when_minute"] as! String
-            user.when_ampm = userArray["when_ampm"] as! String
+            user.whenDay = userArray["when_day"] as! String
+            user.whenHour = userArray["when_hour"] as! String
+            user.whenMinute = userArray["when_minute"] as! String
+            //user.when_ampm = userArray["when_ampm"] as! String
+            
+            let active = userArray["active"] as! String
+            if active == "1" {
+                user.active = true
+            }
+            else {
+                user.active = false
+            }
             
             //print(userArray)
             
