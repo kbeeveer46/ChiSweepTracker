@@ -243,7 +243,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="20" y="64" width="335" height="333"/>
+                                <rect key="frame" x="20" y="64" width="335" height="281"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="31"/>
@@ -266,18 +266,8 @@
                                             <constraint firstItem="V1X-Vs-FoR" firstAttribute="centerY" secondItem="DFD-zz-Rlg" secondAttribute="centerY" id="fZO-el-gi3"/>
                                         </constraints>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8b5-qu-DB8">
-                                        <rect key="frame" x="0.0" y="56" width="335" height="27"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <state key="normal" title="Notifications are disabled in settings. Click here to enable.">
-                                            <color key="titleColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="pushNotificationMessageTapped:" destination="aNg-gl-cTZ" eventType="touchUpInside" id="axX-mr-C1V"/>
-                                        </connections>
-                                    </button>
                                     <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ahp-LZ-3fe">
-                                        <rect key="frame" x="0.0" y="95.5" width="335" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="43.5" width="335" height="0.0"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35Z-58-SIO">
                                                 <rect key="frame" x="0.0" y="0.0" width="286" height="0.0"/>
@@ -298,7 +288,7 @@
                                         </constraints>
                                     </stackView>
                                     <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="(111) 222-3333" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nma-cm-Uxd">
-                                        <rect key="frame" x="0.0" y="95.5" width="335" height="55"/>
+                                        <rect key="frame" x="0.0" y="43.5" width="335" height="55"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="bYR-Ph-5po"/>
                                         </constraints>
@@ -306,7 +296,7 @@
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad" smartDashesType="no" textContentType="tel"/>
                                     </textField>
                                     <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="CRt-9z-bwN">
-                                        <rect key="frame" x="0.0" y="95.5" width="335" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="43.5" width="335" height="0.0"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pDR-2G-1gp">
                                                 <rect key="frame" x="0.0" y="0.0" width="286" height="0.0"/>
@@ -327,7 +317,7 @@
                                         </constraints>
                                     </stackView>
                                     <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="JohnDoe@gmail.com" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="D9s-bz-j2H">
-                                        <rect key="frame" x="0.0" y="95.5" width="335" height="55"/>
+                                        <rect key="frame" x="0.0" y="43.5" width="335" height="55"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="g5l-d7-MOT"/>
                                         </constraints>
@@ -335,7 +325,7 @@
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" textContentType="email"/>
                                     </textField>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="108" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="56" width="335" height="100"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
                                                 <rect key="frame" x="0.0" y="0.0" width="135" height="100"/>
@@ -359,7 +349,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="233" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="181" width="335" height="100"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
                                                 <rect key="frame" x="0.0" y="0.0" width="135" height="100"/>
@@ -381,7 +371,7 @@
                                         </constraints>
                                     </stackView>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PuS-6X-GvQ">
-                                        <rect key="frame" x="0.0" y="333" width="335" height="65"/>
+                                        <rect key="frame" x="0.0" y="281" width="335" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="6VR-s8-xPy"/>
                                         </constraints>
@@ -392,7 +382,7 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwe-lA-94Z">
-                                        <rect key="frame" x="0.0" y="333" width="335" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="281" width="335" height="0.0"/>
                                         <state key="normal" title="Privacy Policy"/>
                                     </button>
                                 </subviews>
@@ -416,7 +406,6 @@
                         <outlet property="emailTextField" destination="D9s-bz-j2H" id="I8r-uI-sDc"/>
                         <outlet property="onPicker" destination="LL0-f2-4jY" id="mlx-aQ-uua"/>
                         <outlet property="phoneNumberTextField" destination="nma-cm-Uxd" id="SIo-tS-H4v"/>
-                        <outlet property="pushNotificationsMessage" destination="8b5-qu-DB8" id="U2d-um-Vlx"/>
                         <outlet property="pushNotificationsSwitch" destination="jk6-Wy-pyD" id="f6m-W1-H1h"/>
                         <outlet property="saveButton" destination="PuS-6X-GvQ" id="q9t-b0-YHH"/>
                         <outlet property="textNotificationSwitch" destination="a7p-fA-Rzq" id="HkE-IY-g9w"/>

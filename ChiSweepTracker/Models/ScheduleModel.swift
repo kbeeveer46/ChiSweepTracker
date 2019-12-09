@@ -15,7 +15,7 @@ public class ScheduleModel  {
 class MonthModel: Identifiable {
     
     var name = ""
-    var number = 0
+    var number = ""
     var dates: [DateModel] = []
     
 }

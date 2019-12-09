@@ -227,7 +227,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         for (_, item) in data.enumerated() {
                                             
                                             let monthName = item[self.constants.month_name] as? String ?? ""
-                                            let monthNumber = item[self.constants.month_number] as? Int ?? 0
+                                            let monthNumber = item[self.constants.month_number] as? String ?? ""
                                             let dates = item[self.constants.dates] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
