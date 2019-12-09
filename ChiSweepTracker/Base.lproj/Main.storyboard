@@ -432,28 +432,49 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QXi-U5-xHD">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QXi-U5-xHD">
                                 <rect key="frame" x="0.0" y="88" width="375" height="641"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoritesTableViewCell" id="gWD-q3-gYK">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoritesTableViewCell" rowHeight="60" id="gWD-q3-gYK">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gWD-q3-gYK" id="S44-90-Faq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDf-pm-KJJ">
-                                                    <rect key="frame" x="10" y="11.666666666666666" width="355" height="20.333333333333336"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FZD-7C-uyB">
+                                                    <rect key="frame" x="10" y="0.0" width="355" height="60"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Main St, Chicago IL 60654" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDf-pm-KJJ">
+                                                            <rect key="frame" x="0.0" y="0.0" width="295" height="60"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="LKk-RU-z7D"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jyb-yX-6cR">
+                                                            <rect key="frame" x="295" y="0.0" width="60" height="60"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="60" id="UPG-t2-5Eu"/>
+                                                                <constraint firstAttribute="width" constant="60" id="bw2-eT-ucx"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Button" image="star"/>
+                                                        </button>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="nDf-pm-KJJ" firstAttribute="centerY" secondItem="FZD-7C-uyB" secondAttribute="centerY" id="Rcm-ng-zY1"/>
+                                                        <constraint firstItem="Jyb-yX-6cR" firstAttribute="centerY" secondItem="FZD-7C-uyB" secondAttribute="centerY" id="wZK-tE-Xz7"/>
+                                                    </constraints>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="nDf-pm-KJJ" firstAttribute="leading" secondItem="S44-90-Faq" secondAttribute="leading" constant="10" id="PDj-cV-1u9"/>
-                                                <constraint firstAttribute="trailing" secondItem="nDf-pm-KJJ" secondAttribute="trailing" constant="10" id="uvO-hY-ixf"/>
-                                                <constraint firstItem="nDf-pm-KJJ" firstAttribute="centerY" secondItem="S44-90-Faq" secondAttribute="centerY" id="vHK-WH-Nhg"/>
+                                                <constraint firstItem="FZD-7C-uyB" firstAttribute="top" secondItem="S44-90-Faq" secondAttribute="top" id="F7Y-UO-xPH"/>
+                                                <constraint firstItem="FZD-7C-uyB" firstAttribute="leading" secondItem="S44-90-Faq" secondAttribute="leading" constant="10" id="Xix-jQ-17N"/>
+                                                <constraint firstAttribute="bottom" secondItem="FZD-7C-uyB" secondAttribute="bottom" id="acL-Qn-V8g"/>
+                                                <constraint firstAttribute="trailing" secondItem="FZD-7C-uyB" secondAttribute="trailing" constant="10" id="czl-cT-3UW"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -470,6 +491,10 @@
                         <viewLayoutGuide key="safeArea" id="U8j-Cl-Z7k"/>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="NmR-hu-ND7"/>
+                    <navigationItem key="navigationItem" id="hlL-9x-flN"/>
+                    <connections>
+                        <outlet property="favoritesTableView" destination="QXi-U5-xHD" id="yTM-Ps-QFJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuD-sq-9NS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -514,4 +539,7 @@
             <point key="canvasLocation" x="398" y="80"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="star" width="33.333332061767578" height="33.333332061767578"/>
+    </resources>
 </document>
