@@ -28,6 +28,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         self.window = UIWindow()
         
+        //tabBar.selectedItem = tabBar.items![0] as UITabBarItem
+        
         styleControls()
         
         getDefaults()

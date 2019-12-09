@@ -373,23 +373,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            
-        print(whenData[row])
         self.registerForPushNotifications()
-        
     }
     
     @objc func timePickerChanged(picker: UIDatePicker) {
-        
         self.registerForPushNotifications()
-        
-        let calendar = Calendar.current
-        let time = picker.date
-        let comp = calendar.dateComponents([.hour, .minute], from: time)
-        print(comp.hour!)
-        print(comp.minute!)
-        //let hour = comp.hour!
-        //let minute = comp.minute!
     }
     
 }

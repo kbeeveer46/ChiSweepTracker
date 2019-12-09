@@ -13,18 +13,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if !schedule.section.isEmpty {
+        getSections()
             
-            sections = [schedule.section]
-            self.sectionTableView.delegate = self
-            self.sectionTableView.dataSource = self
-            self.sectionTableView.reloadData()
-        }
-        else {
-            
-            getSections()
-            
-        }
     }
     
     func getSchedule() {
