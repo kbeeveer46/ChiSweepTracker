@@ -98,7 +98,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1276" y="330"/>
+            <point key="canvasLocation" x="1276" y="437"/>
         </scene>
         <!--Sweep Schedule-->
         <scene sceneID="3K6-sD-hJN">
@@ -185,7 +185,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2802" y="330"/>
+            <point key="canvasLocation" x="2876" y="122"/>
         </scene>
         <!--Select Sweep Section-->
         <scene sceneID="Ofh-FB-Cvn">
@@ -239,7 +239,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lNZ-pf-Vzg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2042" y="330"/>
+            <point key="canvasLocation" x="2050" y="436"/>
         </scene>
         <!--Enable Sweep Notifications-->
         <scene sceneID="XQY-3Z-30v">
@@ -421,7 +421,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2041" y="-353"/>
+            <point key="canvasLocation" x="2876" y="-545"/>
         </scene>
         <!--Favorites View Controller-->
         <scene sceneID="EnN-dt-ehy">
@@ -494,11 +494,12 @@
                     <connections>
                         <outlet property="favoritesTableView" destination="QXi-U5-xHD" id="yTM-Ps-QFJ"/>
                         <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationSegue" id="Jfa-BP-tdE"/>
+                        <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleFromFavoritesSegue" id="eeu-aC-kNn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuD-sq-9NS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1276" y="-353"/>
+            <point key="canvasLocation" x="1276" y="-247"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sXP-ht-gqy">
@@ -542,4 +543,7 @@
     <resources>
         <image name="star" width="33.333332061767578" height="33.333332061767578"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="eeu-aC-kNn"/>
+    </inferredMetricsTieBreakers>
 </document>

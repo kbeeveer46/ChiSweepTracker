@@ -15,11 +15,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"),
-        //                                         landscapeImagePhone: nil, style: .plain,
-        //                                         target: self, action: #selector(loadNotificationView))
-        //self.navigationItem.rightBarButtonItem = notificationButton
     
         defaults.set(schedule.address, forKey: "defaultAddress")
         
@@ -32,30 +27,59 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 
     }
     
-//    @objc func loadNotificationView() {
-//        
-//        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
-//            
-//            destinationViewController.schedule = self.schedule
-//            self.navigationController?.pushViewController(destinationViewController, animated: true)
-//            
-//        }
-//        
-//        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
-//    }
-    
     func addAddressToFavorites() {
         
-        print("Address added to favorites: \(self.schedule.address)")
+        //As we know that container is set up in the AppDelegates so we need to refer that container.
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
-        let favorites = Favorites(context: context)
-        favorites.address = self.schedule.address
-
-        // Search for address and only add it if it doesn't exist
+        //We need to create a context from this container
+        let managedContext = appDelegate.persistentContainer.viewContext
         
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        //Prepare the request of type NSFetchRequest  for the entity
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
+        
+        fetchRequest.predicate = NSPredicate(format: "address = %@", schedule.address)
+        
+        do {
+            
+            let result = try managedContext.fetch(fetchRequest)
+            
+            if result.count == 0 {
+
+                print("Address added to favorites: \(self.schedule.address)")
+
+                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
+                let favorites = Favorites(context: context)
+                favorites.address = self.schedule.address
+
+                // Search for address and only add it if it doesn't exist
+
+                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+
+
+            }
+            
+//            for data in result as! [NSManagedObject] {
+//
+//
+//                print("Address added to favorites: \(self.schedule.address)")
+//
+//                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//
+//                let favorites = Favorites(context: context)
+//                favorites.address = self.schedule.address
+//
+//                // Search for address and only add it if it doesn't exist
+//
+//                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+//
+//            }
+            
+        } catch {
+            
+            print("Could not retrieve favorites from Core Data")
+        }
         
     }
     

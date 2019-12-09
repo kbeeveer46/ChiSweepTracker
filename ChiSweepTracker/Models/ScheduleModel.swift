@@ -1,7 +1,7 @@
 import Foundation
 import CoreLocation
 
-public class ScheduleModel  {
+class ScheduleModel  {
 
     var address = ""
     var ward = ""
@@ -12,7 +12,7 @@ public class ScheduleModel  {
     
 }
 
-class MonthModel: Identifiable {
+class MonthModel: Identifiable  {
     
     var name = ""
     var number = ""
