@@ -21,6 +21,7 @@ struct Constants {
     
     // MARK: Errors
     
+    let successTitle = "Success"
     let errorTitle = "Something went wrong..."
     let notFound = "Could not find sweep area."
     

@@ -149,7 +149,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if error != nil {
                 
-                self.common.showError((error! as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
             }
             
             if placemarks != nil {
@@ -267,26 +267,26 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     }
                                 case .error (let err):
                                     
-                                    self.common.showError((err as NSError).userInfo.debugDescription)
+                                    self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                                     
                                 }
                             }
                         }
                         else {
                             
-                            self.common.showError(self.constants.notFound)
+                            self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
                             
                         }
                     case .error (let err):
                         
-                        self.common.showError((err as NSError).userInfo.debugDescription)
+                        self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                         
                     }
                 }
             }
             else {
                 
-                self.common.showError(self.constants.notFound)
+                self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
             }
         }
     }
@@ -302,7 +302,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             {(placemarks, error) in
                 if (error != nil)
                 {
-                    self.common.showError(error!.localizedDescription)
+                    self.common.showAlert(self.constants.errorTitle, error!.localizedDescription)
                 }
                 
                 if placemarks != nil {

@@ -2,7 +2,7 @@ import Foundation
 
 class UserModel {
     
-    //var id = ""
+    var id = ""
     var email = ""
     var ward = ""
     var section = ""
@@ -10,5 +10,5 @@ class UserModel {
     var whenHour = ""
     var whenMinute = ""
     var active = false
-    
+    var pushNotifications = false
 }

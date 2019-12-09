@@ -80,7 +80,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             case .error (let err):
                 
-                self.common.showError((err as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                 
             }
         }
@@ -122,7 +122,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             case .error (let err):
                 
-                self.common.showError((err as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
             }
         }
         

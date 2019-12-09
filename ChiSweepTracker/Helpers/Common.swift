@@ -4,9 +4,9 @@ class Common {
     
     let constants = Constants()
 
-    public func showError(_ error: String) {
+    public func showAlert(_ title: String, _ message: String) {
         
-        let alert = UIAlertController(title: self.constants.errorTitle, message: error, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
