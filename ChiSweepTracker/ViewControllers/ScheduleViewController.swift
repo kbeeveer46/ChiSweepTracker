@@ -1,12 +1,14 @@
 import UIKit
 import CoreLocation
 import MapKit
+import  CoreData
 
 class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var scheduleMapView: MKMapView!
     @IBOutlet weak var scheduleTableView: UITableView!
     
+    @IBOutlet weak var addFavoriteButton: UIBarButtonItem!
     let constants = Constants()
     var schedule = ScheduleModel()
     let defaults = UserDefaults.standard
@@ -14,10 +16,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"),
-                                                 landscapeImagePhone: nil, style: .plain,
-                                                 target: self, action: #selector(loadNotificationView))
-        self.navigationItem.rightBarButtonItem = notificationButton
+        //let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"),
+        //                                         landscapeImagePhone: nil, style: .plain,
+        //                                         target: self, action: #selector(loadNotificationView))
+        //self.navigationItem.rightBarButtonItem = notificationButton
     
         defaults.set(schedule.address, forKey: "defaultAddress")
         
@@ -30,18 +32,58 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 
     }
     
-    @objc func loadNotificationView() {
+//    @objc func loadNotificationView() {
+//        
+//        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
+//            
+//            destinationViewController.schedule = self.schedule
+//            self.navigationController?.pushViewController(destinationViewController, animated: true)
+//            
+//        }
+//        
+//        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
+//    }
+    
+    @IBAction func addFavoriteTapped(_ sender: Any) {
         
-        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
+        print("Add favorite tapped")
+        
+//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//
+//        let favorite = Favorites(context: context)
+//        favorite.address = schedule.address
+//
+//        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
+        //As we know that container is set up in the AppDelegates so we need to refer that container.
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        //We need to create a context from this container
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        //Now let’s create an entity and new user records.
+        let userEntity = NSEntityDescription.entity(forEntityName: "Favorites", in: managedContext)!
+        
+        //final, we need to add some data to our newly created record for each keys using
+        //here adding 5 data with loop
+        
+        for i in 1...5 {
             
-            destinationViewController.schedule = self.schedule
-            self.navigationController?.pushViewController(destinationViewController, animated: true)
-            
+            let favorite = NSManagedObject(entity: userEntity, insertInto: managedContext)
+            favorite.setValue("address-\(i)", forKeyPath: "address")
+        }
+
+        //Now we have set all the values. The next step is to save them inside the Core Data
+        
+        do {
+            try managedContext.save()
+           
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
         }
         
-        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
+        
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return schedule.months.count
     }

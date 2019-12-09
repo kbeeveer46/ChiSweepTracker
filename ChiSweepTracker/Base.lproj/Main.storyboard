@@ -50,7 +50,7 @@
                                             <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                        <state key="normal" title="Find Your Sweep Schedule"/>
+                                        <state key="normal" title="Find Sweep Schedule"/>
                                         <connections>
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
                                         </connections>
@@ -170,8 +170,15 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ORo-iT-5MZ"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB"/>
+                    <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="t9A-PN-tHn">
+                            <connections>
+                                <action selector="addFavoriteTapped:" destination="Xr8-KD-z2R" id="mxV-2K-czE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="addFavoriteButton" destination="t9A-PN-tHn" id="f5k-S5-OMH"/>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
                         <segue destination="aNg-gl-cTZ" kind="show" identifier="notificationsSegue" id="fQa-F9-pDL"/>
@@ -417,14 +424,49 @@
             </objects>
             <point key="canvasLocation" x="3884" y="80.541871921182263"/>
         </scene>
-        <!--View Controller-->
+        <!--Favorites View Controller-->
         <scene sceneID="EnN-dt-ehy">
             <objects>
-                <viewController id="QzM-TK-Pkh" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoritesViewController" id="QzM-TK-Pkh" customClass="FavoritesViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Bxe-an-x3q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QXi-U5-xHD">
+                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoritesTableViewCell" id="gWD-q3-gYK">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gWD-q3-gYK" id="S44-90-Faq">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDf-pm-KJJ">
+                                                    <rect key="frame" x="10" y="11.666666666666666" width="355" height="20.333333333333336"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="nDf-pm-KJJ" firstAttribute="leading" secondItem="S44-90-Faq" secondAttribute="leading" constant="10" id="PDj-cV-1u9"/>
+                                                <constraint firstAttribute="trailing" secondItem="nDf-pm-KJJ" secondAttribute="trailing" constant="10" id="uvO-hY-ixf"/>
+                                                <constraint firstItem="nDf-pm-KJJ" firstAttribute="centerY" secondItem="S44-90-Faq" secondAttribute="centerY" id="vHK-WH-Nhg"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="U8j-Cl-Z7k" firstAttribute="bottom" secondItem="QXi-U5-xHD" secondAttribute="bottom" id="7GR-DG-yIx"/>
+                            <constraint firstItem="QXi-U5-xHD" firstAttribute="leading" secondItem="U8j-Cl-Z7k" secondAttribute="leading" id="ZkX-60-hfn"/>
+                            <constraint firstItem="U8j-Cl-Z7k" firstAttribute="trailing" secondItem="QXi-U5-xHD" secondAttribute="trailing" id="ufx-Fe-vZB"/>
+                            <constraint firstItem="QXi-U5-xHD" firstAttribute="top" secondItem="U8j-Cl-Z7k" secondAttribute="top" id="z9U-YO-F7V"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="U8j-Cl-Z7k"/>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="NmR-hu-ND7"/>
@@ -451,13 +493,14 @@
             </objects>
             <point key="canvasLocation" x="-359" y="81"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Chicago Sweep Tracker-->
         <scene sceneID="3L0-Lw-vGs">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" sceneMemberID="viewController">
+                <tabBarController title="Chicago Sweep Tracker" automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="W89-O3-gLf"/>
+                    <navigationItem key="navigationItem" title="Chicago Sweep Tracker" id="W89-O3-gLf"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wJU-WM-a0Z">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

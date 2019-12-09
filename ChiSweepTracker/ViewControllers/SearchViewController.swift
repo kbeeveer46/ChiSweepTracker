@@ -28,6 +28,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         self.window = UIWindow()
         
+        //self.tabBarController?.title = "Chicago Sweep Tracker"
+        //self.title = "Chicago Sweep Tracker"
+        
         //tabBar.selectedItem = tabBar.items![0] as UITabBarItem
         
         styleControls()
@@ -79,7 +82,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         
-        if !address.lowercased().contains("chicago") {
+        if !address.lowercased().contains("chicago") && !address.isEmpty {
             address = address + " Chicago"
         }
         
