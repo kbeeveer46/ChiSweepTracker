@@ -11,6 +11,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
+    
     var schedule = ScheduleModel()
     let locationManager = CLLocationManager()
     let constants = Constants()
@@ -27,6 +28,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         super.viewDidLoad()
         
         self.window = UIWindow()
+        
+        //self.tabBar.dela
+        
+        //self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
         
         //self.tabBarController?.title = "Chicago Sweep Tracker"
         //self.title = "Chicago Sweep Tracker"
@@ -45,6 +50,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     }
     
     // MARK: Actions
+    
+//    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+//        print("Selected tab: \(item.title)")
+//    }
     
     @IBAction func searchTypeTapped(_ sender: Any) {
         
@@ -117,6 +126,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             chicagoMapView.addAnnotation(annotation)
 
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.tabBarController?.navigationItem.rightBarButtonItem = nil
+        self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
     }
     
     // Prepare segue and pass data to view controllers

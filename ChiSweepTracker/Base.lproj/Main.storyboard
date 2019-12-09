@@ -181,7 +181,6 @@
                         <outlet property="addFavoriteButton" destination="t9A-PN-tHn" id="f5k-S5-OMH"/>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
-                        <segue destination="aNg-gl-cTZ" kind="show" identifier="notificationsSegue" id="fQa-F9-pDL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -422,7 +421,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3884" y="80.541871921182263"/>
+            <point key="canvasLocation" x="2041" y="-353"/>
         </scene>
         <!--Favorites View Controller-->
         <scene sceneID="EnN-dt-ehy">
@@ -444,10 +443,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FZD-7C-uyB">
-                                                    <rect key="frame" x="10" y="0.0" width="355" height="60"/>
+                                                    <rect key="frame" x="10" y="0.0" width="350" height="60"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Main St, Chicago IL 60654" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDf-pm-KJJ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="295" height="60"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="290" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="LKk-RU-z7D"/>
                                                             </constraints>
@@ -456,12 +455,12 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jyb-yX-6cR">
-                                                            <rect key="frame" x="295" y="0.0" width="60" height="60"/>
+                                                            <rect key="frame" x="290" y="0.0" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="UPG-t2-5Eu"/>
                                                                 <constraint firstAttribute="width" constant="60" id="bw2-eT-ucx"/>
                                                             </constraints>
-                                                            <state key="normal" title="Button" image="star"/>
+                                                            <state key="normal" image="star"/>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -474,7 +473,7 @@
                                                 <constraint firstItem="FZD-7C-uyB" firstAttribute="top" secondItem="S44-90-Faq" secondAttribute="top" id="F7Y-UO-xPH"/>
                                                 <constraint firstItem="FZD-7C-uyB" firstAttribute="leading" secondItem="S44-90-Faq" secondAttribute="leading" constant="10" id="Xix-jQ-17N"/>
                                                 <constraint firstAttribute="bottom" secondItem="FZD-7C-uyB" secondAttribute="bottom" id="acL-Qn-V8g"/>
-                                                <constraint firstAttribute="trailing" secondItem="FZD-7C-uyB" secondAttribute="trailing" constant="10" id="czl-cT-3UW"/>
+                                                <constraint firstAttribute="trailing" secondItem="FZD-7C-uyB" secondAttribute="trailing" constant="15" id="czl-cT-3UW"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -494,6 +493,7 @@
                     <navigationItem key="navigationItem" id="hlL-9x-flN"/>
                     <connections>
                         <outlet property="favoritesTableView" destination="QXi-U5-xHD" id="yTM-Ps-QFJ"/>
+                        <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationSegue" id="Jfa-BP-tdE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuD-sq-9NS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -521,7 +521,7 @@
         <!--Chicago Sweep Tracker-->
         <scene sceneID="3L0-Lw-vGs">
             <objects>
-                <tabBarController title="Chicago Sweep Tracker" automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" sceneMemberID="viewController">
+                <tabBarController title="Chicago Sweep Tracker" automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" customClass="TabBarController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Chicago Sweep Tracker" id="W89-O3-gLf"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wJU-WM-a0Z">

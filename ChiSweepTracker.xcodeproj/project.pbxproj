@@ -28,6 +28,7 @@
 		FA29464423985FE300A24FFC /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA29464323985FE300A24FFC /* SearchViewController.swift */; };
 		FA29464723985FE300A24FFC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA29464523985FE300A24FFC /* Main.storyboard */; };
 		FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */; };
+		FA54D87C239EE77000507ADC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA54D87B239EE77000507ADC /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		FA29464623985FE300A24FFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FA29464B23985FE600A24FFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA29464D23985FE600A24FFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA54D87B239EE77000507ADC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */,
 				FA29464323985FE300A24FFC /* SearchViewController.swift */,
 				FA184FB12399581C00AB2FF6 /* SelectSectionViewController.swift */,
+				FA54D87B239EE77000507ADC /* TabBarController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				FA0EC398239E9A5200DD3127 /* FavoritesViewController.swift in Sources */,
 				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
 				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
+				FA54D87C239EE77000507ADC /* TabBarController.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
 				FA0EC3BE239EC3FF00DD3127 /* ChiSweepTracker.xcdatamodeld in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
