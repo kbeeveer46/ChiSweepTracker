@@ -2,64 +2,96 @@ import UIKit
 import UserNotifications
 import Firebase
 import FirebaseMessaging
-import  CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    let gcmMessageIDKey = "gcm.message_id"
+    //let gcmMessageIDKey = "gcm.message_id"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Check if launched from notification
-        //let notificationOption = launchOptions?[.remoteNotification]
+        // Deprecated - use didReceive with completion handler
+ //       let remoteNotif = launchOptions?[.localNotification] as? NSDictionary
+//
+//        if remoteNotif != nil {
+//
+//            let notifName = remoteNotif?["aps"] as! String
+//
+//            print("notifName: \(notifName)")
+//
+//        }
         
-        //if let notification = notificationOption as? [String: AnyObject],
-        //let aps = notification["aps"] as? [String: AnyObject] {
-        
-        //_ = NewsItem.makeNewsItem(aps)
-        
-        //(window?.rootViewController as? UITabBarController)?.selectedIndex = 1
-        //}
+        FirebaseApp.configure()
         
         Messaging.messaging().delegate = self
         
         application.registerForRemoteNotifications()
         
-        FirebaseApp.configure()
-        
-        //debugPrint(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        UIApplication.shared.applicationIconBadgeNumber = 0
         
         return true
     }
     
-//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//
-//        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
-//
-//        let token = tokenParts.joined()
-//
-//        print("Device Token: \(token)")
-//    }
-//
-//    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-//
-//        print("Failed to register: \(error)")
-//    }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        application.applicationIconBadgeNumber = 0
+    }
     
-//    func application( _ application: UIApplication,
-//                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-//                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-//
-////        guard let aps = userInfo["aps"] as? [String: AnyObject] else {
-////
-////            completionHandler(.failed)
-////            return
-////        }
-//
-//        //NewsItem.makeNewsItem(aps)
-//    }
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+      // If you are receiving a notification message while your app is in the background,
+      // this callback will not be fired till the user taps on the notification launching the application.
+      // TODO: Handle data of notification
+
+      // With swizzling disabled you must let Messaging know about the message, for Analytics
+      Messaging.messaging().appDidReceiveMessage(userInfo)
+
+      // Print message ID.
+      //if let messageID = userInfo[gcmMessageIDKey] {
+        //print("Message ID: \(messageID)")
+      //}
+
+      // Print full message.
+      //print(userInfo)
+        
+    }
+
+    func application(_ application: UIApplication,
+                       didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                       fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+      // If you are receiving a notification message while your app is in the background,
+      // this callback will not be fired till the user taps on the notification launching the application.
+      // TODO: Handle data of notification
+
+      // With swizzling disabled you must let Messaging know about the message, for Analytics
+      Messaging.messaging().appDidReceiveMessage(userInfo)
+
+      // Print message ID.
+      //if let messageID = userInfo[gcmMessageIDKey] {
+      //  print("Message ID: \(messageID)")
+      //}
+
+      // Print full message.
+      //print(userInfo)
+
+      completionHandler(UIBackgroundFetchResult.newData)
+    }
+    
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+
+        //let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+
+        //let token = tokenParts.joined()
+
+        //print("Device Token: \(token)")
+    }
+
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+
+        print("Failed to register: \(error)")
+    }
     
     // MARK: UISceneSession Lifecycle
     
@@ -76,136 +108,77 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-    
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-      // If you are receiving a notification message while your app is in the background,
-      // this callback will not be fired till the user taps on the notification launching the application.
-      // TODO: Handle data of notification
-
-      // With swizzling disabled you must let Messaging know about the message, for Analytics
-      // Messaging.messaging().appDidReceiveMessage(userInfo)
-
-      // Print message ID.
-      if let messageID = userInfo[gcmMessageIDKey] {
-        print("Message ID: \(messageID)")
-      }
-
-      // Print full message.
-      print(userInfo)
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-      // If you are receiving a notification message while your app is in the background,
-      // this callback will not be fired till the user taps on the notification launching the application.
-      // TODO: Handle data of notification
-
-      // With swizzling disabled you must let Messaging know about the message, for Analytics
-      // Messaging.messaging().appDidReceiveMessage(userInfo)
-
-      // Print message ID.
-      if let messageID = userInfo[gcmMessageIDKey] {
-        print("Message ID: \(messageID)")
-      }
-
-      // Print full message.
-      print(userInfo)
-
-      completionHandler(UIBackgroundFetchResult.newData)
-    }
-    
-    // MARK: - Core Data stack
-
-    lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
-        let container = NSPersistentContainer(name: "ChiSweepTracker")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-
-    // MARK: - Core Data Saving support
-
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
 }
 
 extension AppDelegate : UNUserNotificationCenterDelegate {
 
   // Receive displayed notifications for iOS 10 devices.
   func userNotificationCenter(_ center: UNUserNotificationCenter,
-                              willPresent notification: UNNotification,
-                              withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    
         let userInfo = notification.request.content.userInfo
 
         // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
+        Messaging.messaging().appDidReceiveMessage(userInfo)
 
         // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-          print("Message ID: \(messageID)")
-        }
+        //if let messageID = userInfo[gcmMessageIDKey] {
+          //print("Message ID: \(messageID)")
+        //}
 
         // Print full message.
-        print(userInfo)
+        //print(userInfo)
 
         // Change this to your preferred presentation option
-        completionHandler([.alert])
+        completionHandler([.alert, .badge, .sound])
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                   didReceive response: UNNotificationResponse,
                                   withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
+        
+        //let userInfo = response.notification.request.content.userInfo
+        
         // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-          print("Message ID: \(messageID)")
-        }
+        //if let messageID = userInfo[gcmMessageIDKey] {
+        //  print("Message ID: \(messageID)")
+        //}
 
         // Print full message.
-        print(userInfo)
+        //print(userInfo)
+        
+        // Not working!
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//        if  let conversationVC = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController,
+//            let tabBarController = self.window?.rootViewController as? UITabBarController,
+//            let navController = tabBarController.selectedViewController as? UINavigationController {
+//
+//                // we can modify variable of the new view controller using notification data
+//                // (eg: title of notification)
+//                conversationVC.sentFromNotification = true
+//                // you can access custom data of the push notification by using userInfo property
+//                // response.notification.request.content.userInfo
+//                navController.pushViewController(conversationVC, animated: true)
+//        }
 
         completionHandler()
+        
       }
+
 }
 
 extension AppDelegate: MessagingDelegate {
 
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-      print("Firebase registration token: \(fcmToken)")
+    func messaging(_ messaging: Messaging,
+                   didReceiveRegistrationToken fcmToken: String) {
+        
+      //print("Firebase registration token: \(fcmToken)")
 
       let dataDict:[String: String] = ["token": fcmToken]
-      NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+      
+        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
       // TODO: If necessary send token to application server.
       // Note: This callback is fired at each app startup and whenever a new token is generated.
     }

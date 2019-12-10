@@ -5,16 +5,14 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 
     @IBOutlet weak var sectionTableView: UITableView!
     
-    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
     var schedule = ScheduleModel()
-    let constants = Constants()
     let common = Common()
-    
     var sections: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Get all sections in ward so user can select a section before going to the schedule view
         getSections()
             
     }
@@ -23,10 +21,10 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         schedule.months.removeAll()
         
-        let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
-        let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
-            .filter("ward = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND section = '\(self.schedule.section)'" : "") ")
+        let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+            .filter("\(self.common.constants.ward) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.constants.section) = '\(self.schedule.section)'" : "") ")
         
         scheduleQuery.get { res in
             switch res {
@@ -36,15 +34,14 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     for (_, item) in data.enumerated() {
                         
-                        let monthName = item[self.constants.month_name] as? String ?? ""
-                        let monthNumber = item[self.constants.month_number] as? String ?? ""
-                        let dates = item[self.constants.dates] as? String ?? ""
+                        let monthName = item[self.common.constants.month_name] as? String ?? ""
+                        let monthNumber = item[self.common.constants.month_number] as? String ?? ""
+                        let dates = item[self.common.constants.dates] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",")
                         
                         print("Month name: \(monthName)")
                         print("Dates: \(datesArray)")
                         
-                        //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                         let month = MonthModel()
                         month.name = monthName
                         month.number = monthNumber
@@ -55,7 +52,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                             
                             if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                 
-                                //let date = DateModel(date: 0)
                                 let date = DateModel()
                                 date.date = Int(day) ?? 0
                                 
@@ -69,12 +65,13 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         
                     }
                 
+                    // Segue to schedule view now that schedule model is populated
                     self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
             
                 }
             case .error (let err):
                 
-                self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                 
             }
         }
@@ -83,14 +80,16 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     
     func getSections() {
         
+        // Use Chicago data portal API to get sweep sections in a ward
+        
         sections.removeAll()
         
         let ward = self.schedule.ward
         
-        let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
-        let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
-            .filter("ward = '\(ward)'")
+        let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+            .filter("\(self.common.constants.ward) = '\(ward)'")
         
         scheduleQuery.get { res in
             switch res {
@@ -100,7 +99,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     for (_, item) in data.enumerated() {
                         
-                        let section = item["section"] as? String ?? ""
+                        let section = item[self.common.constants.section] as? String ?? ""
                         
                         if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                             
@@ -116,12 +115,13 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             case .error (let err):
                 
-                self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
             }
         }
         
     }
     
+    // Section table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections.count
     }
@@ -129,9 +129,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTableCell", for: indexPath)
-        
         let sectionLabel = cell.viewWithTag(1) as! UILabel
-    
         sectionLabel.text = "Ward \(schedule.ward) - Section \(self.sections[indexPath.row])"
         
         return cell
@@ -145,11 +143,12 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         self.schedule.section = sections[row]
         
+        // Get schedule and go to schedule view when a user selects a section
         getSchedule()
         
     }
     
-    // Prepare segue and pass data to view controllers
+    // Pass schedule model to schedule view controller
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let scheduleViewController = segue.destination as? ScheduleViewController {

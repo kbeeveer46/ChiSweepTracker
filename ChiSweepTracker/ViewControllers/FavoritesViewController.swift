@@ -10,7 +10,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     var schedule = ScheduleModel()
     var schedules = [ScheduleModel]()
     let common = Common()
-    let constants = Constants()
+    //let constants = Constants()
     let defaults = UserDefaults.standard
     var favorites = [String]()
     
@@ -32,7 +32,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tabBarController?.navigationItem.rightBarButtonItem = notificationButton
         self.tabBarController?.navigationItem.title = "Favorites"
         
-        getFavorites()
+       // getFavorites()
         
         self.favoritesTableView.delegate = self
         self.favoritesTableView.dataSource = self
@@ -40,38 +40,38 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         self.favoritesTableView.reloadData()
     }
     
-    func getFavorites() {
-        
-        favorites.removeAll()
-        
-        //As we know that container is set up in the AppDelegates so we need to refer that container.
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        //We need to create a context from this container
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        //Prepare the request of type NSFetchRequest  for the entity
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
-        
-        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "address", ascending: true)]
-        //fetchRequest.predicate = NSPredicate(format: "username = %@", "Ankur")
-        
-        do {
-            
-            let result = try managedContext.fetch(fetchRequest)
-            
-            for data in result as! [NSManagedObject] {
-                
-                print("Favorite: \(data.value(forKey: "address") as! String)")
-                favorites.append(data.value(forKey: "address") as! String)
-            
-            }
-            
-        } catch {
-            
-            print("Could not retrieve favorites from Core Data")
-        }
-    }
+//    func getFavorites() {
+//
+//        favorites.removeAll()
+//
+//        //As we know that container is set up in the AppDelegates so we need to refer that container.
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//        //We need to create a context from this container
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//
+//        //Prepare the request of type NSFetchRequest  for the entity
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
+//
+//        fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "address", ascending: true)]
+//        //fetchRequest.predicate = NSPredicate(format: "username = %@", "Ankur")
+//
+//        do {
+//
+//            let result = try managedContext.fetch(fetchRequest)
+//
+//            for data in result as! [NSManagedObject] {
+//
+//                print("Favorite: \(data.value(forKey: "address") as! String)")
+//                favorites.append(data.value(forKey: "address") as! String)
+//
+//            }
+//
+//        } catch {
+//
+//            print("Could not retrieve favorites from Core Data")
+//        }
+//    }
     
     @objc func loadNotificationView() {
         
@@ -87,57 +87,57 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
     }
     
-    @objc func removeFavorite(sender: UIButton) {
-        
-        let buttonTag = sender.tag
-        let address = favorites[buttonTag]
-        
-        let alert = UIAlertController(title: "Delete favorite?", message: "", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-            
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            
-            //We need to create a context from this container
-            let managedContext = appDelegate.persistentContainer.viewContext
-            
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
-            fetchRequest.predicate = NSPredicate(format: "address = %@", address)
-            
-            do
-            {
-                let test = try managedContext.fetch(fetchRequest)
-                
-                let objectToDelete = test[0] as! NSManagedObject
-                managedContext.delete(objectToDelete)
-                
-                do{
-                    try managedContext.save()
-                    
-                    self.favorites.remove(at: buttonTag)
-                    
-                    print("Favorite removed: \(address)")
-                    
-                    self.favoritesTableView.reloadData()
-                }
-                catch
-                {
-                    print(error)
-                }
-                
-            }
-            catch
-            {
-                print(error)
-            }
-            
-        }))
-        
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true, completion: nil)
-        
-    }
+//    @objc func removeFavorite(sender: UIButton) {
+//        
+//        let buttonTag = sender.tag
+//        let address = favorites[buttonTag]
+//        
+//        let alert = UIAlertController(title: "Delete favorite?", message: "", preferredStyle: .alert)
+//        
+//        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+//            
+//            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//            
+//            //We need to create a context from this container
+//            let managedContext = appDelegate.persistentContainer.viewContext
+//            
+//            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
+//            fetchRequest.predicate = NSPredicate(format: "address = %@", address)
+//            
+//            do
+//            {
+//                let test = try managedContext.fetch(fetchRequest)
+//                
+//                let objectToDelete = test[0] as! NSManagedObject
+//                managedContext.delete(objectToDelete)
+//                
+//                do{
+//                    try managedContext.save()
+//                    
+//                    self.favorites.remove(at: buttonTag)
+//                    
+//                    print("Favorite removed: \(address)")
+//                    
+//                    self.favoritesTableView.reloadData()
+//                }
+//                catch
+//                {
+//                    print(error)
+//                }
+//                
+//            }
+//            catch
+//            {
+//                print(error)
+//            }
+//            
+//        }))
+//        
+//        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+//        
+//        self.present(alert, animated: true, completion: nil)
+//        
+//    }
     
     func getSchedules(_ addresses: [String]) {
         
@@ -156,7 +156,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 if error != nil {
                     
-                    self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
+                    self.common.showAlert(self.common.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
                 }
                 
                 if placemarks != nil {
@@ -168,12 +168,12 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                     coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                     scheduleForNotifications.locationCoordinate = coordinates
                     
-                    let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                    let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                     
                     // Get ward and section JSON from City of Chicago
                     
-                    let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
-                        .filter("intersects(\(self.constants.the_geom),'POINT(\(scheduleForNotifications.locationCoordinate.longitude) \(scheduleForNotifications.locationCoordinate.latitude))')")
+                    let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
+                        .filter("intersects(\(self.common.constants.the_geom),'POINT(\(scheduleForNotifications.locationCoordinate.longitude) \(scheduleForNotifications.locationCoordinate.latitude))')")
                     
                     wardQuery.get { res in
                         switch res {
@@ -181,10 +181,10 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                             
                             if data.count > 0 {
                                 
-                                let ward = data[0][self.constants.ward] as? String ?? ""
-                                let section = data[0][self.constants.section] as? String ?? ""
-                                let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
-                                let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
+                                let ward = data[0][self.common.constants.ward] as? String ?? ""
+                                let section = data[0][self.common.constants.section] as? String ?? ""
+                                let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
+                                let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
                                 let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                                 
                                 for(_, coordinate) in coordinatesArray!.enumerated() {
@@ -213,7 +213,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                 
                                 // Get schedule JSON from City of Chicago
                                 
-                                let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+                                let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
                                     .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
                                 
                                 scheduleQuery.get { res in
@@ -226,9 +226,9 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                             
                                             for (_, item) in data.enumerated() {
                                                 
-                                                let monthName = item[self.constants.month_name] as? String ?? ""
-                                                let monthNumber = item[self.constants.month_number] as? String ?? ""
-                                                let dates = item[self.constants.dates] as? String ?? ""
+                                                let monthName = item[self.common.constants.month_name] as? String ?? ""
+                                                let monthNumber = item[self.common.constants.month_number] as? String ?? ""
+                                                let dates = item[self.common.constants.dates] as? String ?? ""
                                                 let datesArray = dates.components(separatedBy: ",")
                                                 
                                                 //let month = MonthModel(name: "", number: "", dates: [DateModel]())
@@ -261,26 +261,26 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                         }
                                     case .error (let err):
                                         
-                                        self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                                        self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                                         
                                     }
                                 }
                             }
                             else {
                                 
-                                self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                                 
                             }
                         case .error (let err):
                             
-                            self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                            self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                             
                         }
                     }
                 }
                 else {
                     
-                    self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                    self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                 }
             }
             
@@ -305,7 +305,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
             
             if error != nil {
                 
-                self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.common.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
             }
             
             if placemarks != nil {
@@ -323,12 +323,12 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                 print("Latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("Longitude: \(self.schedule.locationCoordinate.longitude)")
                 
-                let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
                 // Get ward and section JSON from City of Chicago
                 
-                let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
-                    .filter("intersects(\(self.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
+                    .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                 
                 wardQuery.get { res in
                     switch res {
@@ -336,10 +336,10 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.constants.ward] as? String ?? ""
-                            let section = data[0][self.constants.section] as? String ?? ""
-                            let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
+                            let ward = data[0][self.common.constants.ward] as? String ?? ""
+                            let section = data[0][self.common.constants.section] as? String ?? ""
+                            let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             for(_, coordinate) in coordinatesArray!.enumerated() {
@@ -369,7 +369,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                             
                             // Get schedule JSON from City of Chicago
                             
-                            let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
                                 .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
@@ -382,9 +382,9 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.constants.month_name] as? String ?? ""
-                                            let monthNumber = item[self.constants.month_number] as? String ?? ""
-                                            let dates = item[self.constants.dates] as? String ?? ""
+                                            let monthName = item[self.common.constants.month_name] as? String ?? ""
+                                            let monthNumber = item[self.common.constants.month_number] as? String ?? ""
+                                            let dates = item[self.common.constants.dates] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
                                             print("Month name: \(monthName)")
@@ -423,26 +423,26 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                     }
                                 case .error (let err):
                                     
-                                    self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                                    self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                                     
                                 }
                             }
                         }
                         else {
                             
-                            self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                            self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                             
                         }
                     case .error (let err):
                         
-                        self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                        self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                         
                     }
                 }
             }
             else {
                 
-                self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
             }
         }
     }
@@ -460,7 +460,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         //let star = cell.viewWithTag(2) as! UIButton
         
         if let star = cell.contentView.viewWithTag(2) as? UIButton {
-            star.addTarget(self, action: #selector(removeFavorite(sender:)), for: .touchUpInside)
+            //star.addTarget(self, action: #selector(removeFavorite(sender:)), for: .touchUpInside)
             star.tag = indexPath.row
         }
         

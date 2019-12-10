@@ -17,11 +17,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     let current = UNUserNotificationCenter.current()
     let common = Common()
-    let constants = Constants()
-    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
+    //let constants = Constants()
     var schedule = ScheduleModel()
     var favoriteAddress = ""
-    //let notificationModel = NotificationsModel()
     let defaults = UserDefaults.standard
     
     var removeFavoriteButton = UIBarButtonItem()
@@ -65,6 +63,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                         self.registerForPushNotifications()
                         self.pushNotificationsSwitch.isOn = true
                         
+                        let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
+                        self.pushNotificationsSwitch.isOn = notificationsToggled
+                        
                     }
                 }
             })
@@ -72,13 +73,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         else {
             
-            self.addressLabel.text = "Search for a sweep schedule and star an address to receive notifications"
+            self.addressLabel.text = "Star an address to receive notifications"
             self.pushNotificationsSwitch.isOn = false
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
             self.onPicker.isUserInteractionEnabled = false
             self.timePicker.isUserInteractionEnabled = false
             
         }
+        
     }
     
     @objc func removeFavorite() {
@@ -122,47 +124,55 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         if pushNotificationsSwitch.isOn == true {
             
-            registerForPushNotifications()
+            self.defaults.set(true, forKey: "notificationsToggled")
             
-            //            current.getNotificationSettings(completionHandler: { (settings) in
-            //                if settings.authorizationStatus == .notDetermined {
-            //
-            //                } else if settings.authorizationStatus == .denied {
-            //
-            //                    //DispatchQueue.main.async {
-            //
-            //                    //UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-            //                    //}
-            //                } else if settings.authorizationStatus == .authorized {
-            //
-            //                }
-            //            })
-            //
+            registerForPushNotifications()
+        
         }
         else {
             
+            self.defaults.set(false, forKey: "notificationsToggled")
+            
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
-            //UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
             print("Deleted user's local notifications")
             
         }
     }
     
-    func registerForPushNotifications() {
+    func sendTestNotifications() {
         
-//        let calendar = Calendar.current
-//        let currentYear = calendar.component(.year, from: Date())
-//
-//        let time = self.timePicker.date
-//        let comp = calendar.dateComponents([.hour, .minute], from: time)
-//        let hour = comp.hour!
-//        let minute = comp.minute!
-//        let when = whenData[onPicker.selectedRow(inComponent: 0)]
-//
-//        print(when)
-//        print(hour)
-//        print(minute)
+        let center = UNUserNotificationCenter.current()
+        let calendar = Calendar.current
+        let earlyDate = calendar.date(byAdding: .minute, value: 1,to: Date())
+
+        let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: earlyDate!)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+       
+        let content = UNMutableNotificationContent()
+        content.title = "Sweep Alert"
+        content.body = "Your section is being swept on 7/9. You may have to move your vehicle to avoid getting a ticket"
+        let soundName = UNNotificationSoundName("notification.m4r")
+        content.sound = UNNotificationSound(named: soundName)
+        content.badge = 1
+        
+        let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
+        
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        
+        center.add(request, withCompletionHandler: { (error) in
+            if let error = error {
+                //self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
+                print(error.localizedDescription)
+            }
+            else {
+                print("Local notification added: \(identifier)")
+            }
+        })
+        
+    }
+    
+    func registerForPushNotifications() {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
             granted, error in
@@ -173,30 +183,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
+            self.sendTestNotifications()
+            
             print("Deleted user's local notifications")
-            
-            let center = UNUserNotificationCenter.current()
-            
-            //            let dateComponents = DateComponents(year: 2019, month: 12, day: 8, hour: 20, minute: 13)
-            //            let triggerDate = calendar.date(from: dateComponents)
-            //            let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: triggerDate!)
-            //            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
-            //
-            //            let content = UNMutableNotificationContent()
-            //            content.title = "Sweep Alert"
-            //            content.body = "Your section is scheduled to be swept today. You may have to move your car to avoid being ticketed"
-            //            content.sound = .default
-            //
-            //            let identifier = "LocalNotificationTest"
-            //            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-            //
-            //            center.add(request, withCompletionHandler: { (error) in
-            //                if let error = error {
-            //
-            //                    self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
-            //
-            //                }
-            //            })
             
             self.schedule.months.removeAll()
             //self.schedule.polygonCoordinates.removeAll()
@@ -232,12 +221,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                     print("Latitude: \(self.schedule.locationCoordinate.latitude)")
                     print("Longitude: \(self.schedule.locationCoordinate.longitude)")
                     
-                    let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                    let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                     
                     // Get ward and section JSON from City of Chicago
                     
-                    let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
-                        .filter("intersects(\(self.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                    let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
+                        .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                     
                     wardQuery.get { res in
                         switch res {
@@ -245,8 +234,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             
                             if data.count > 0 {
                                 
-                                let ward = data[0][self.constants.ward] as? String ?? ""
-                                let section = data[0][self.constants.section] as? String ?? ""
+                                let ward = data[0][self.common.constants.ward] as? String ?? ""
+                                let section = data[0][self.common.constants.section] as? String ?? ""
                                 //let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
                                 //let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
                                 //let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
@@ -276,7 +265,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                 
                                 // Get schedule JSON from City of Chicago
                                 
-                                let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+                                let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
                                     .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
                                 
                                 scheduleQuery.get { res in
@@ -289,9 +278,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                             
                                             for (_, item) in data.enumerated() {
                                                 
-                                                let monthName = item[self.constants.month_name] as? String ?? ""
-                                                let monthNumber = item[self.constants.month_number] as? String ?? ""
-                                                let dates = item[self.constants.dates] as? String ?? ""
+                                                let monthName = item[self.common.constants.month_name] as? String ?? ""
+                                                let monthNumber = item[self.common.constants.month_number] as? String ?? ""
+                                                let dates = item[self.common.constants.dates] as? String ?? ""
                                                 let datesArray = dates.components(separatedBy: ",")
                                                 
                                                 print("Month name: \(monthName)")
@@ -322,6 +311,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                 
                                             }
                                             
+                                            let center = UNUserNotificationCenter.current()
+                                            
                                             let calendar = Calendar.current
                                             let currentYear = calendar.component(.year, from: Date())
                                             
@@ -331,38 +322,34 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                             let minute = comp.minute!
                                             let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
                                             
-                                            //print(when)
-                                            //print(hour)
-                                            //print(minute)
-                                            
                                             for monthInSchedule in self.schedule.months {
                                                 
                                                 for dayInMonth in monthInSchedule.dates {
                                                     
                                                     let dateComponents = DateComponents(year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date)
-                                                    var date = Calendar.current.date(from: dateComponents)
+                                                    var date = calendar.date(from: dateComponents)
                                                     
                                                     switch when {
                                                     case "1 Day Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -1, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -1, to: date!)
                                                     case "2 Days Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -2, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -2, to: date!)
                                                     case "3 Days Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -3, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -3, to: date!)
                                                     case "4 Days Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -4, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -4, to: date!)
                                                     case "5 Days Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -5, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -5, to: date!)
                                                     case "6 Days Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -6, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -6, to: date!)
                                                     case "7 Days Prior":
-                                                        date = Calendar.current.date(byAdding: .day, value: -7, to: date!)
+                                                        date = calendar.date(byAdding: .day, value: -7, to: date!)
                                                     default:
                                                         break
                                                     }
                                                     
-                                                    date = Calendar.current.date(bySetting: .hour, value: hour, of: date!)
-                                                    date = Calendar.current.date(bySetting: .minute, value: minute, of: date!)
+                                                    date = calendar.date(bySetting: .hour, value: hour, of: date!)
+                                                    date = calendar.date(bySetting: .minute, value: minute, of: date!)
                                                     
                                                     let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: date!)
                                                     let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
@@ -371,6 +358,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                     content.title = "Sweep Alert"
                                                     content.body = "Your section is being swept on \(monthInSchedule.number)/\(dayInMonth.date). You may have to move your vehicle to avoid getting a ticket"
                                                     content.sound = .default
+                                                    content.badge = 1
                                                     
                                                     let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
                                                     
@@ -400,7 +388,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             else {
                                 
                                 //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
-                                print(self.constants.notFound)
+                                print(self.common.constants.notFound)
                                 
                             }
                         case .error (let err):
@@ -414,66 +402,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 else {
                     
                     //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
-                    print(self.constants.notFound)
+                    print(self.common.constants.notFound)
                 }
             }
-            
-//            for monthInSchedule in self.schedule.months {
-//
-//                for dayInMonth in monthInSchedule.dates {
-//
-//                    let dateComponents = DateComponents(year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date)
-//                    var date = Calendar.current.date(from: dateComponents)
-//
-//                    switch when {
-//                    case "1 Day Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -1, to: date!)
-//                    case "2 Days Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -2, to: date!)
-//                    case "3 Days Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -3, to: date!)
-//                    case "4 Days Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -4, to: date!)
-//                    case "5 Days Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -5, to: date!)
-//                    case "6 Days Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -6, to: date!)
-//                    case "7 Days Prior":
-//                        date = Calendar.current.date(byAdding: .day, value: -7, to: date!)
-//                    default:
-//                        break
-//                    }
-//
-//                    date = Calendar.current.date(bySetting: .hour, value: hour, of: date!)
-//                    date = Calendar.current.date(bySetting: .minute, value: minute, of: date!)
-//
-//                    let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: date!)
-//                    let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
-//
-//                    let content = UNMutableNotificationContent()
-//                    content.title = "Sweep Alert"
-//                    content.body = "Your section is being swept on \(monthInSchedule.number)/\(dayInMonth.date). You may have to move your vehicle to avoid getting a ticket"
-//                    content.sound = .default
-//
-//                    let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
-//
-//                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-//
-//                    center.add(request, withCompletionHandler: { (error) in
-//                        if let error = error {
-//                            self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
-//                        }
-//                        else {
-//                            print("Local notification added: \(identifier)")
-//                        }
-//                    })
-//                }
-//            }
         }
     }
 
 
-    
+    // When and time picker methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -498,49 +434,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         self.view.endEditing(true)
         return false
     }
-    
-    //    @objc func addFavorite() {
-    //
-    //        //UserDefaults.standard.set(try? PropertyListEncoder().encode(schedule), forKey:"favoriteSchedule")
-    //        //let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: schedule)
-    //        //defaults.set(encodedData, forKey: "favoriteSchedule")
-    //        //defaults.synchronize()
-    //
-    //        //As we know that container is set up in the AppDelegates so we need to refer that container.
-    //        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-    //
-    //        //We need to create a context from this container
-    //        let managedContext = appDelegate.persistentContainer.viewContext
-    //
-    //        //Prepare the request of type NSFetchRequest  for the entity
-    //        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
-    //
-    //        do {
-    //
-    //            let result = try managedContext.fetch(fetchRequest)
-    //
-    //            if result.count == 0 {
-    //
-    //                print("Address added to favorites: \(self.schedule.address)")
-    //
-    //                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    //
-    //                let favorites = Favorites(context: context)
-    //                favorites.address = self.schedule.address
-    //
-    //                // Search for address and only add it if it doesn't exist
-    //
-    //                (UIApplication.shared.delegate as! AppDelegate).saveContext()
-    //            }
-    //
-    //        } catch {
-    //
-    //            print("Could not retrieve favorites from Core Data")
-    //        }
-    //
-    //    }
-    
-    
+
     
     
     // MARK: Actions
@@ -549,9 +443,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     //
     //        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
     //
-    //    }
-    
-    //    @IBAction func removeFavoriteButton(_ sender: Any) {
     //    }
     
     

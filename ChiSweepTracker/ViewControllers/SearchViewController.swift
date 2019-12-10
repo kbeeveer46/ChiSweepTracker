@@ -11,11 +11,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
-    
-    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
-    let constants = Constants()
     let common = Common()
     let defaults = UserDefaults.standard
     
@@ -28,16 +25,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.window = UIWindow()
-        
-        //self.tabBar.dela
-        
-        //self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
-        
-        //self.tabBarController?.title = "Chicago Sweep Tracker"
-        //self.title = "Chicago Sweep Tracker"
-        
-        //tabBar.selectedItem = tabBar.items![0] as UITabBarItem
+        //self.window = UIWindow()
         
         styleControls()
         
@@ -171,7 +159,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if error != nil {
                 
-                self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.common.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
             }
             
             if placemarks != nil {
@@ -189,12 +177,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 print("Latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("Longitude: \(self.schedule.locationCoordinate.longitude)")
                 
-                let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
                 // Get ward and section JSON from City of Chicago
                 
-                let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
-                    .filter("intersects(\(self.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
+                    .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                 
                 wardQuery.get { res in
                     switch res {
@@ -202,10 +190,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.constants.ward] as? String ?? ""
-                            let section = data[0][self.constants.section] as? String ?? ""
-                            let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
+                            let ward = data[0][self.common.constants.ward] as? String ?? ""
+                            let section = data[0][self.common.constants.section] as? String ?? ""
+                            let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             for(_, coordinate) in coordinatesArray!.enumerated() {
@@ -235,7 +223,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             // Get schedule JSON from City of Chicago
                             
-                            let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
                                 .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
@@ -248,9 +236,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.constants.month_name] as? String ?? ""
-                                            let monthNumber = item[self.constants.month_number] as? String ?? ""
-                                            let dates = item[self.constants.dates] as? String ?? ""
+                                            let monthName = item[self.common.constants.month_name] as? String ?? ""
+                                            let monthNumber = item[self.common.constants.month_number] as? String ?? ""
+                                            let dates = item[self.common.constants.dates] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
                                             print("Month name: \(monthName)")
@@ -285,32 +273,30 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             destinationViewController.schedule = self.schedule
                                             self.navigationController?.pushViewController(destinationViewController, animated: true)
                                         }
-                                        
-                                        //self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
                                 
                                     }
                                 case .error (let err):
                                     
-                                    self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                                    self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                                     
                                 }
                             }
                         }
                         else {
                             
-                            self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                            self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                             
                         }
                     case .error (let err):
                         
-                        self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                        self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                         
                     }
                 }
             }
             else {
                 
-                self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
             }
         }
     }
@@ -326,7 +312,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             {(placemarks, error) in
                 if (error != nil)
                 {
-                    self.common.showAlert(self.constants.errorTitle, error!.localizedDescription)
+                    self.common.showAlert(self.common.constants.errorTitle, error!.localizedDescription)
                 }
                 
                 if placemarks != nil {
@@ -439,13 +425,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         print("Default longitude: \(longitudeFromDefaults)")
         print("Default latitude: \(latitudeFromDefaults)")
         
-        if !addressFromDefaults.isEmpty {
-            
-            addressTextField.text = addressFromDefaults
-            
-            //getSchedule(addressFromDefaults)
-
-        }
+        addressTextField.text = addressFromDefaults
         
     }
     
@@ -453,16 +433,18 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         chicagoMapView.delegate = self
         
+        // Add tap gesture to allow user to tap on map to drop a pin
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addDroppedPin(gesture:)))
         chicagoMapView.addGestureRecognizer(tapGesture)
         
+        // If user has previously searched for an address use those defaults to load the map
+        // Load default map of the entire city of Chicago if no defaults are set
         if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
 
             let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
 
             let annotation = MKPointAnnotation()
             annotation.title = addressFromDefaults
-            //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
             annotation.coordinate = location.coordinate
 
             let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
@@ -497,6 +479,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     func styleControls() {
         
+        // Style segmented search type control
         if #available(iOS 13.0, *) {
             
             self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
@@ -504,9 +487,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
             searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
-            
         }
         
+        // Style find sweep area button
         self.common.styleButton(searchAddressButton, "search_circle")
         
     }
