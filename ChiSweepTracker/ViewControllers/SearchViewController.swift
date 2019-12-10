@@ -84,9 +84,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             address = address + " Chicago"
         }
         
-        //defaults.set(address, forKey: "address")
+        if address.isEmpty {
+            
+            self.common.showAlert(self.common.constants.errorTitle, "Please enter an address")
+            return
+            
+        }
         
-         getSchedule(address)
+        getSchedule(address)
         //getSchedule("750 N Dearborn St Chicago, IL")
         //getSchedule("1601 North Clark Street, Chicago, IL, USA")
     
@@ -159,7 +164,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if error != nil {
                 
-                self.common.showAlert(self.common.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
+                self.common.showAlert(self.common.constants.errorTitle, (error! as NSError).userInfo.description)
+                return
             }
             
             if placemarks != nil {

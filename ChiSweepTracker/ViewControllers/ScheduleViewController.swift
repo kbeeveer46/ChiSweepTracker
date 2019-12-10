@@ -8,6 +8,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     @IBOutlet weak var scheduleMapView: MKMapView!
     @IBOutlet weak var scheduleTableView: UITableView!
     
+    let generator = UISelectionFeedbackGenerator()
+    
     var schedule = ScheduleModel()
     let defaults = UserDefaults.standard
     var addFavoriteButton = UIBarButtonItem()
@@ -56,6 +58,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     @objc func addFavorite() {
         
+        generator.prepare()
+        generator.selectionChanged()
+        
         // Set favorite address and section.
         // Section is used when creating location notifications that way we know the section in case there are multiple
         defaults.set(schedule.address, forKey: "favoriteAddress")
@@ -63,6 +68,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //defaults.set(schedule.section, forKey: "favoriteSection")
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
         defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
+        //defaults.set(schedule.polygonCoordinates., forKey: "favoriteSectionCoordinates")
         
         // Set right bar button to remove now that a favorite has been set
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
@@ -82,6 +88,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     }
     
     @objc func removeFavorite() {
+        
+        generator.prepare()
+        generator.selectionChanged()
         
         // Prompt the user  if they want to delete their favorite.
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
@@ -147,7 +156,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
         let annotation = MKPointAnnotation()
-        
         annotation.title = "\(self.schedule.address)"
         annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
         annotation.coordinate = self.schedule.locationCoordinate
@@ -155,7 +163,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
         let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
         
-        scheduleMapView.setRegion(region, animated: false)
+        scheduleMapView.setRegion(region, animated: true)
         scheduleMapView.removeOverlays(scheduleMapView.overlays)
         scheduleMapView.addOverlay(polygon)
         scheduleMapView.addAnnotation(annotation)

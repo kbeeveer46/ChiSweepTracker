@@ -36,10 +36,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         self.onPicker.delegate = self
         self.onPicker.dataSource = self
         
-        timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
-        
-        self.tabBarController?.navigationItem.title = "Favorite Address"
-        favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+        loadDefaultNotificationValues()
+    
         //let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
         //let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
         
@@ -112,6 +110,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             favoriteMapView.addAnnotation(annotation)
             favoriteMapView.setRegion(region, animated: true)
         }
+        else {
+            
+            favoriteMapView.isHidden = true
+            self.tabBarController?.navigationItem.title = "No Favorite Address"
+            
+        }
         
     }
     
@@ -147,6 +151,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
+        saveDefaultNotificationValues()
+        
         if self.pushNotificationsSwitch.isOn {
             self.registerForPushNotifications()
         }
@@ -157,6 +163,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         if pushNotificationsSwitch.isOn == true {
             
             self.defaults.set(true, forKey: "notificationsToggled")
+            
+            saveDefaultNotificationValues()
             
             registerForPushNotifications()
         
@@ -201,6 +209,48 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 print("Local test notification added: \(identifier)")
             }
         })
+        
+    }
+    
+    func loadDefaultNotificationValues() {
+        
+        let when = self.defaults.object(forKey: "notificationWhen") as? String ?? ""
+        let index = whenData.firstIndex(of: when) ?? 0
+        let hour = self.defaults.integer(forKey: "notificationHour")
+        let minute = self.defaults.integer(forKey: "notificationMinute")
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat =  "HH:mm"
+        let date = dateFormatter.date(from: "\(hour):\(minute)")
+        
+        self.onPicker.selectRow(index, inComponent: 0, animated: false)
+        self.timePicker.date = date!
+        
+        timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
+        
+        self.tabBarController?.navigationItem.title = "Favorite Address"
+        favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+    }
+    
+    func saveDefaultNotificationValues() {
+        
+        let time = self.timePicker.date
+        let comp = Calendar.current.dateComponents([.hour, .minute], from: time)
+        let hour = comp.hour!
+        let minute = comp.minute!
+        let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
+        
+        self.defaults.set(when, forKey: "notificationWhen")
+        self.defaults.set(hour, forKey: "notificationHour")
+        self.defaults.set(minute, forKey: "notificationMinute")
+        
+    }
+    
+    func removeDefaultNotificationValues() {
+        
+        self.defaults.set("", forKey: "notificationWhen")
+        self.defaults.set(0, forKey: "notificationHour")
+        self.defaults.set(0, forKey: "notificationMinute")
         
     }
     
@@ -467,6 +517,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        saveDefaultNotificationValues()
+        
         if self.pushNotificationsSwitch.isOn {
             self.registerForPushNotifications()
         }

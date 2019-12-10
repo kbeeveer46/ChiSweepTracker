@@ -7,7 +7,7 @@ import FirebaseMessaging
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    //let gcmMessageIDKey = "gcm.message_id"
+    let gcmMessageIDKey = "gcm.message_id"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -128,12 +128,14 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                   didReceive response: UNNotificationResponse,
                                   withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        //let userInfo = response.notification.request.content.userInfo
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        let userInfo = response.notification.request.content.userInfo
         
         // Print message ID.
-        //if let messageID = userInfo[gcmMessageIDKey] {
-        //  print("Message ID: \(messageID)")
-        //}
+        if let messageID = userInfo[gcmMessageIDKey] {
+          print("Message ID: \(messageID)")
+        }
 
         // Print full message.
         //print(userInfo)
