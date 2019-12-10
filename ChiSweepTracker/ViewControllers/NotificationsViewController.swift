@@ -16,6 +16,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     let common = Common()
     let constants = Constants()
     var schedule = ScheduleModel()
+    var schedules = [ScheduleModel]()
     let notificationModel = NotificationsModel()
     //let defaults = UserDefaults.standard
     

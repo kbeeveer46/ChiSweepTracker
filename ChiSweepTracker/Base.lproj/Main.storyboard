@@ -170,17 +170,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ORo-iT-5MZ"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="t9A-PN-tHn">
-                            <connections>
-                                <action selector="addFavoriteTapped:" destination="Xr8-KD-z2R" id="mxV-2K-czE"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB"/>
                     <connections>
-                        <outlet property="addFavoriteButton" destination="t9A-PN-tHn" id="f5k-S5-OMH"/>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
+                        <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationsFromScheduleSegue" id="eEQ-YS-Bae"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -522,10 +516,10 @@
         <!--Chicago Sweep Tracker-->
         <scene sceneID="3L0-Lw-vGs">
             <objects>
-                <tabBarController title="Chicago Sweep Tracker" automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" customClass="TabBarController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController title="Chicago Sweep Tracker" automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Chicago Sweep Tracker" id="W89-O3-gLf"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wJU-WM-a0Z">
+                    <tabBar key="tabBar" hidden="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wJU-WM-a0Z">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -544,6 +538,7 @@
         <image name="star" width="33.333332061767578" height="33.333332061767578"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="eEQ-YS-Bae"/>
         <segue reference="eeu-aC-kNn"/>
     </inferredMetricsTieBreakers>
 </document>

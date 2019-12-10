@@ -1,20 +1,26 @@
 import UIKit
 import CoreLocation
 import MapKit
-import  CoreData
+import CoreData
 
 class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var scheduleMapView: MKMapView!
     @IBOutlet weak var scheduleTableView: UITableView!
     
-    @IBOutlet weak var addFavoriteButton: UIBarButtonItem!
+    //@IBOutlet weak var addFavoriteButton: UIBarButtonItem!
     let constants = Constants()
     var schedule = ScheduleModel()
     let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"),
+                                                 landscapeImagePhone: nil, style: .plain,
+                                                 target: self, action: #selector(loadNotificationView))
+        
+        self.navigationItem.rightBarButtonItem = notificationButton
     
         defaults.set(schedule.address, forKey: "defaultAddress")
         
@@ -27,41 +33,36 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 
     }
     
-    func addAddressToFavorites() {
+    @objc func loadNotificationView() {
         
-        //As we know that container is set up in the AppDelegates so we need to refer that container.
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        //We need to create a context from this container
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        //Prepare the request of type NSFetchRequest  for the entity
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
-        
-        fetchRequest.predicate = NSPredicate(format: "address = %@", schedule.address)
-        
-        do {
+        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
             
-            let result = try managedContext.fetch(fetchRequest)
+            destinationViewController.schedule = self.schedule
+            self.navigationController?.pushViewController(destinationViewController, animated: true)
             
-            if result.count == 0 {
-
-                print("Address added to favorites: \(self.schedule.address)")
-
-                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
-                let favorites = Favorites(context: context)
-                favorites.address = self.schedule.address
-
-                // Search for address and only add it if it doesn't exist
-
-                (UIApplication.shared.delegate as! AppDelegate).saveContext()
-
-
-            }
-            
-//            for data in result as! [NSManagedObject] {
+        }
+        
+        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
+    }
+    
+//    func addAddressToFavorites() {
 //
+//        //As we know that container is set up in the AppDelegates so we need to refer that container.
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//        //We need to create a context from this container
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//
+//        //Prepare the request of type NSFetchRequest  for the entity
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
+//
+//        fetchRequest.predicate = NSPredicate(format: "address = %@", schedule.address)
+//
+//        do {
+//
+//            let result = try managedContext.fetch(fetchRequest)
+//
+//            if result.count == 0 {
 //
 //                print("Address added to favorites: \(self.schedule.address)")
 //
@@ -73,31 +74,30 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 //                // Search for address and only add it if it doesn't exist
 //
 //                (UIApplication.shared.delegate as! AppDelegate).saveContext()
-//
 //            }
-            
-        } catch {
-            
-            print("Could not retrieve favorites from Core Data")
-        }
-        
-    }
+//
+//        } catch {
+//
+//            print("Could not retrieve favorites from Core Data")
+//        }
+//
+//    }
     
-    @IBAction func addFavoriteTapped(_ sender: Any) {
-        
-        print("Add favorite tapped")
-        
-        let alert = UIAlertController(title: "Add address to favorites?", message: "Address must be in your favorites to receive push notifications", preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-            self.addAddressToFavorites()
-        }))
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-
-        self.present(alert, animated: true)
-        
-    }
-    
+//    @IBAction func addFavoriteTapped(_ sender: Any) {
+//
+//        print("Add favorite tapped")
+//
+//        let alert = UIAlertController(title: "Add address to favorites?", message: "Address must be in your favorites to receive push notifications", preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+//            self.addAddressToFavorites()
+//        }))
+//        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+//
+//        self.present(alert, animated: true)
+//
+//    }
+//
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return schedule.months.count
     }
@@ -170,54 +170,4 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         return MKOverlayRenderer(overlay: overlay)
     }
-    
-
-////        let annotationIdentifier = "AnnotationIdentifier"
-////
-////        var annotationView: MKAnnotationView?
-////        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
-////            annotationView = dequeuedAnnotationView
-////            annotationView?.annotation = annotation
-////        }
-////        else {
-////            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-////            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-////        }
-////
-////        if let annotationView = annotationView {
-////
-////            annotationView.canShowCallout = true
-////            annotationView.image = UIImage(named: "car_pin")
-////        }
-////
-////        return annotationView
-//
-//    }
 }
-
-//class CustomCell: UITableViewCell {
-//    var cellButton: UIButton!
-//    //var cellLabel: UILabel!
-//
-//    init(frame: CGRect, title: String) {
-//        super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "customScheduleCell")
-//
-//        //cellLabel = UILabel(frame: CGRectMake(self.frame.width - 100, 10, 100.0, 40))
-//        //cellLabel.textColor = UIColor.blackColor()
-//        //cellLabel.font = //set font here
-//
-//        //cellButton = UIButton(frame: CGRectMake(5, 5, 50, 30))
-//        cellButton.setTitle(title, for: UIControl.State.normal)
-//
-//        //addSubview(cellLabel)
-//        addSubview(cellButton)
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//    }
-//}

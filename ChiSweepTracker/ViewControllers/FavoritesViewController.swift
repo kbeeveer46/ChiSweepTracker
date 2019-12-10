@@ -7,6 +7,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var favoritesTableView: UITableView!
     
     var schedule = ScheduleModel()
+    var schedules = [ScheduleModel]()
     let common = Common()
     let constants = Constants()
     let defaults = UserDefaults.standard
@@ -75,7 +76,9 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
             
-            destinationViewController.schedule = self.schedule
+            getSchedules(favorites)
+            
+            destinationViewController.schedules = self.schedules //self.schedule
             self.navigationController?.pushViewController(destinationViewController, animated: true)
             
         }
@@ -135,7 +138,153 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
-    func getSchedule(_ address: String) {
+    func getSchedules(_ addresses: [String]) {
+        
+        addresses.forEach { address in
+            
+            let scheduleForNotifications = ScheduleModel()
+            
+            scheduleForNotifications.address = address
+            
+            // Get coordinates
+            
+            let geocoder = CLGeocoder()
+            
+            geocoder.geocodeAddressString(address) { placemarks, error in
+                
+                if error != nil {
+                    
+                    self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
+                }
+                
+                if placemarks != nil {
+                    
+                    let placemark = placemarks?.first
+                    
+                    var coordinates = CLLocationCoordinate2D()
+                    coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                    coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                    scheduleForNotifications.locationCoordinate = coordinates
+                    
+                    let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                    
+                    // Get ward and section JSON from City of Chicago
+                    
+                    let wardQuery = wardClient.query(dataset: self.constants.wardDataset)
+                        .filter("intersects(\(self.constants.the_geom),'POINT(\(scheduleForNotifications.locationCoordinate.longitude) \(scheduleForNotifications.locationCoordinate.latitude))')")
+                    
+                    wardQuery.get { res in
+                        switch res {
+                        case .dataset (let data):
+                            
+                            if data.count > 0 {
+                                
+                                let ward = data[0][self.constants.ward] as? String ?? ""
+                                let section = data[0][self.constants.section] as? String ?? ""
+                                let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
+                                let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
+                                let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                                
+                                for(_, coordinate) in coordinatesArray!.enumerated() {
+                                    
+                                    for item in coordinate {
+                                        
+                                        var coordinate = CLLocationCoordinate2D()
+                                        coordinate.longitude = item[0] as? Double ?? 0
+                                        coordinate.latitude = item[1] as? Double ?? 0
+                                        
+                                        scheduleForNotifications.polygonCoordinates.append(coordinate)
+                                        
+                                    }
+                                }
+                                
+                                scheduleForNotifications.ward = ward
+                                scheduleForNotifications.section = String(section).trimmingCharacters(in: .whitespaces)
+                                
+                                if self.schedule.section.isEmpty {
+                                    
+                                    //self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
+                                    break
+                                    
+                                    // TODO!! How to handle missing section
+                                }
+                                
+                                // Get schedule JSON from City of Chicago
+                                
+                                let scheduleQuery = wardClient.query(dataset: self.constants.scheduleDataset)
+                                    .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
+                                
+                                scheduleQuery.get { res in
+                                    switch res {
+                                    case .dataset (let data):
+                                        
+                                        if data.count > 0 {
+                                            
+                                            // Populate schedule model to be used on schedule view
+                                            
+                                            for (_, item) in data.enumerated() {
+                                                
+                                                let monthName = item[self.constants.month_name] as? String ?? ""
+                                                let monthNumber = item[self.constants.month_number] as? String ?? ""
+                                                let dates = item[self.constants.dates] as? String ?? ""
+                                                let datesArray = dates.components(separatedBy: ",")
+                                                
+                                                let month = MonthModel()
+                                                month.name = monthName
+                                                month.number = monthNumber
+                                                
+                                                for day in datesArray {
+                                                    
+                                                    print("Date: \(day)")
+                                                    
+                                                    if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                                        
+                                                        let date = DateModel()
+                                                        date.date = Int(day) ?? 0
+                                                        
+                                                        if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
+                                                            month.dates.append(date)
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                scheduleForNotifications.months.append(month)
+                                                
+                                            }
+                                            
+                                            self.schedules.append(scheduleForNotifications)
+                                            
+                                        }
+                                    case .error (let err):
+                                        
+                                        self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                                        
+                                    }
+                                }
+                            }
+                            else {
+                                
+                                self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                                
+                            }
+                        case .error (let err):
+                            
+                            self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                            
+                        }
+                    }
+                }
+                else {
+                    
+                    self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                }
+            }
+            
+        }
+        
+    }
+    
+    func showSchedule(_ address: String) {
         
         self.schedule.months.removeAll()
         self.schedule.polygonCoordinates.removeAll()
@@ -265,8 +414,6 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                             self.navigationController?.pushViewController(destinationViewController, animated: true)
                                         }
                                         
-                                        //self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
-                                        
                                     }
                                 case .error (let err):
                                     
@@ -322,7 +469,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         print("Selected favorite: \(address)")
         
-        getSchedule(address)
+        showSchedule(address)
         
     }
     
