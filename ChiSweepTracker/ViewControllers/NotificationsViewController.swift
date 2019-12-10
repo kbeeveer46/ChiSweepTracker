@@ -2,18 +2,18 @@ import UIKit
 import UserNotifications
 import CoreLocation
 import CoreData
+import MapKit
 
-class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource/*, NotificationsModelDelegate*/ {
+class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate/*, NotificationsModelDelegate*/ {
     
     @IBOutlet weak var textNotificationSwitch: UISwitch!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emailNotificationSwitch: UISwitch!
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
     @IBOutlet weak var onPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
-    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var favoriteMapView: MKMapView!
     
     let current = UNUserNotificationCenter.current()
     let common = Common()
@@ -41,7 +41,18 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         self.tabBarController?.navigationItem.title = "Favorite"
         favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
-        addressLabel.text = favoriteAddress
+        //let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
+        //let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
+        //addressLabel.text = favoriteAddress
+        
+//        if !favoriteWard.isEmpty && !favoriteSection.isEmpty {
+//            wardSectionLabel.text = "Ward \(favoriteWard) - Sweep Section \(favoriteSection)"
+//        }
+//        else {
+//            wardSectionLabel.isHidden = true
+//        }
+        
+        loadFavoriteMap()
         
         if !favoriteAddress.isEmpty {
             
@@ -73,7 +84,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         else {
             
-            self.addressLabel.text = "Star an address to receive notifications"
+            //self.addressLabel.text = "Star an address to receive notifications"
+            //self.wardSectionLabel.text = ""
             self.pushNotificationsSwitch.isOn = false
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
             self.onPicker.isUserInteractionEnabled = false
@@ -82,6 +94,32 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         
     }
+    
+    func loadFavoriteMap() {
+        
+        favoriteMapView.delegate = self
+        
+        let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
+        let favoriteLatitude = defaults.double(forKey: "favoriteLatitude")
+        
+        if favoriteLongitude != 0 && favoriteLatitude != 0 {
+
+            let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
+
+            let annotation = MKPointAnnotation()
+            annotation.title = favoriteAddress
+            annotation.coordinate = location.coordinate
+
+            let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+
+            favoriteMapView.removeAnnotations(favoriteMapView.annotations)
+            favoriteMapView.addAnnotation(annotation)
+            favoriteMapView.setRegion(region, animated: true)
+        }
+        
+    }
+    
     
     @objc func removeFavorite() {
         
@@ -95,7 +133,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             self.defaults.set("", forKey: "favoriteAddress")
             self.favoriteAddress = ""
-            self.addressLabel.text = ""
+            //self.addressLabel.text = ""
+            //self.wardSectionLabel.text = ""
             self.pushNotificationsSwitch.isOn = false
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
             
@@ -166,7 +205,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 print(error.localizedDescription)
             }
             else {
-                print("Local notification added: \(identifier)")
+                print("Local test notification added: \(identifier)")
             }
         })
         
@@ -179,11 +218,47 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             print("Permission granted: \(granted)")
             
-            guard granted else { return }
+            guard granted else {
+                
+                // User's notifications are disabled in settings. Prompt them to open settings
+                DispatchQueue.main.async {
+                    
+                    self.pushNotificationsSwitch.isOn = false
+                
+                    let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and enable notifications?", preferredStyle: .alert)
+
+                    let settingsAction = UIAlertAction(title: "Yes", style: .default) { (_) -> Void in
+
+                        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                            return
+                        }
+
+                        if UIApplication.shared.canOpenURL(settingsUrl) {
+                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                //print("Settings opened: \(success)") // Prints true
+                            })
+                        }
+                    }
+                    alertController.addAction(settingsAction)
+                    let cancelAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
+                    alertController.addAction(cancelAction)
+
+                    self.present(alertController, animated: true, completion: nil)
+                
+                }
+                
+                return
+                
+            }
             
+            // User's notifications are enabled in settings
+            
+            // Clear current notifications and re-add them in case they changed
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
-            self.sendTestNotifications()
+            #if DEBUG
+                self.sendTestNotifications()
+            #endif
             
             print("Deleted user's local notifications")
             
