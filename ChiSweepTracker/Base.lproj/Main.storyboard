@@ -98,7 +98,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1276" y="437"/>
+            <point key="canvasLocation" x="1276" y="777"/>
         </scene>
         <!--Sweep Schedule-->
         <scene sceneID="3K6-sD-hJN">
@@ -179,7 +179,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2876" y="122"/>
+            <point key="canvasLocation" x="2687" y="777"/>
         </scene>
         <!--Select Sweep Section-->
         <scene sceneID="Ofh-FB-Cvn">
@@ -233,7 +233,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lNZ-pf-Vzg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2050" y="436"/>
+            <point key="canvasLocation" x="1956" y="777"/>
         </scene>
         <!--Enable Sweep Notifications-->
         <scene sceneID="XQY-3Z-30v">
@@ -244,14 +244,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="20" y="108" width="335" height="381"/>
+                                <rect key="frame" x="20" y="108" width="335" height="430"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Main St., Chicago, IL" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aiY-YZ-ci3">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="24"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="31"/>
+                                        <rect key="frame" x="0.0" y="49" width="335" height="31"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
                                                 <rect key="frame" x="0.0" y="0.0" width="286" height="31"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -268,7 +274,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ahp-LZ-3fe">
-                                        <rect key="frame" x="0.0" y="43.666666666666657" width="335" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="92.666666666666657" width="335" height="0.0"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35Z-58-SIO">
                                                 <rect key="frame" x="0.0" y="0.0" width="286" height="0.0"/>
@@ -289,7 +295,7 @@
                                         </constraints>
                                     </stackView>
                                     <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="(111) 222-3333" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nma-cm-Uxd">
-                                        <rect key="frame" x="0.0" y="43.666666666666657" width="335" height="55"/>
+                                        <rect key="frame" x="0.0" y="92.666666666666657" width="335" height="55"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="bYR-Ph-5po"/>
                                         </constraints>
@@ -297,7 +303,7 @@
                                         <textInputTraits key="textInputTraits" keyboardType="phonePad" smartDashesType="no" textContentType="tel"/>
                                     </textField>
                                     <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="CRt-9z-bwN">
-                                        <rect key="frame" x="0.0" y="43.666666666666657" width="335" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="92.666666666666657" width="335" height="0.0"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pDR-2G-1gp">
                                                 <rect key="frame" x="0.0" y="0.0" width="286" height="0.0"/>
@@ -318,7 +324,7 @@
                                         </constraints>
                                     </stackView>
                                     <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="JohnDoe@gmail.com" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="D9s-bz-j2H">
-                                        <rect key="frame" x="0.0" y="43.666666666666657" width="335" height="55"/>
+                                        <rect key="frame" x="0.0" y="92.666666666666657" width="335" height="55"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="g5l-d7-MOT"/>
                                         </constraints>
@@ -326,11 +332,11 @@
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" textContentType="email"/>
                                     </textField>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="56" width="335" height="150"/>
+                                        <rect key="frame" x="0.0" y="105" width="335" height="150"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
                                                 <rect key="frame" x="0.0" y="0.0" width="135" height="150"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -350,11 +356,11 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="231" width="335" height="150"/>
+                                        <rect key="frame" x="0.0" y="280" width="335" height="150"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
                                                 <rect key="frame" x="0.0" y="0.0" width="135" height="150"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -372,7 +378,7 @@
                                         </constraints>
                                     </stackView>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PuS-6X-GvQ">
-                                        <rect key="frame" x="0.0" y="381" width="335" height="65"/>
+                                        <rect key="frame" x="0.0" y="430" width="335" height="65"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="6VR-s8-xPy"/>
                                         </constraints>
@@ -383,7 +389,7 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwe-lA-94Z">
-                                        <rect key="frame" x="0.0" y="381" width="335" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="430" width="335" height="0.0"/>
                                         <state key="normal" title="Privacy Policy"/>
                                     </button>
                                 </subviews>
@@ -401,8 +407,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qWq-pT-RyA"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Favorite" image="star" id="WV3-iH-QOw"/>
                     <navigationItem key="navigationItem" title="Enable Sweep Notifications" id="zlF-Cz-MXS"/>
                     <connections>
+                        <outlet property="addressLabel" destination="aiY-YZ-ci3" id="c7s-dm-ILb"/>
                         <outlet property="emailNotificationSwitch" destination="BEh-Uc-Tzz" id="H8i-34-NU1"/>
                         <outlet property="emailTextField" destination="D9s-bz-j2H" id="I8r-uI-sDc"/>
                         <outlet property="onPicker" destination="LL0-f2-4jY" id="mlx-aQ-uua"/>
@@ -415,7 +423,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2876" y="-545"/>
+            <point key="canvasLocation" x="1186" y="80"/>
         </scene>
         <!--Favorites View Controller-->
         <scene sceneID="EnN-dt-ehy">
@@ -426,7 +434,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QXi-U5-xHD">
-                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoritesTableViewCell" rowHeight="60" id="gWD-q3-gYK">
@@ -493,7 +501,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuD-sq-9NS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1276" y="-247"/>
+            <point key="canvasLocation" x="1185" y="-599"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sXP-ht-gqy">
@@ -519,14 +527,14 @@
                 <tabBarController title="Chicago Sweep Tracker" automaticallyAdjustsScrollViewInsets="NO" id="3fW-bF-vxR" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Chicago Sweep Tracker" id="W89-O3-gLf"/>
-                    <tabBar key="tabBar" hidden="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wJU-WM-a0Z">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wJU-WM-a0Z">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="m9a-aF-K6k"/>
-                        <segue destination="QzM-TK-Pkh" kind="relationship" relationship="viewControllers" id="5Ab-8b-YMx"/>
+                        <segue destination="aNg-gl-cTZ" kind="relationship" relationship="viewControllers" id="lRu-XB-8Bj"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfT-z8-xpg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -538,7 +546,7 @@
         <image name="star" width="33.333332061767578" height="33.333332061767578"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="eEQ-YS-Bae"/>
-        <segue reference="eeu-aC-kNn"/>
+        <segue reference="lRu-XB-8Bj"/>
+        <segue reference="aU1-JL-7NV"/>
     </inferredMetricsTieBreakers>
 </document>

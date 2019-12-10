@@ -1,9 +1,11 @@
 import UIKit
+import CoreLocation
 
 class SelectSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var sectionTableView: UITableView!
     
+    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
     var schedule = ScheduleModel()
     let constants = Constants()
     let common = Common()
@@ -42,6 +44,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         print("Month name: \(monthName)")
                         print("Dates: \(datesArray)")
                         
+                        //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                         let month = MonthModel()
                         month.name = monthName
                         month.number = monthNumber
@@ -52,6 +55,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                             
                             if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                 
+                                //let date = DateModel(date: 0)
                                 let date = DateModel()
                                 date.date = Int(day) ?? 0
                                 

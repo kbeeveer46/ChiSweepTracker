@@ -6,6 +6,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet weak var favoritesTableView: UITableView!
     
+    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
     var schedule = ScheduleModel()
     var schedules = [ScheduleModel]()
     let common = Common()
@@ -78,7 +79,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
             
             getSchedules(favorites)
             
-            destinationViewController.schedules = self.schedules //self.schedule
+            destinationViewController.schedule = self.schedule
             self.navigationController?.pushViewController(destinationViewController, animated: true)
             
         }
@@ -142,6 +143,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         addresses.forEach { address in
             
+            //let scheduleForNotifications = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
             let scheduleForNotifications = ScheduleModel()
             
             scheduleForNotifications.address = address
@@ -229,6 +231,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                                 let dates = item[self.constants.dates] as? String ?? ""
                                                 let datesArray = dates.components(separatedBy: ",")
                                                 
+                                                //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                                                 let month = MonthModel()
                                                 month.name = monthName
                                                 month.number = monthNumber
@@ -239,6 +242,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                                     
                                                     if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                         
+                                                        //let date = DateModel(date: 0)
                                                         let date = DateModel()
                                                         date.date = Int(day) ?? 0
                                                         
@@ -386,6 +390,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                             print("Month name: \(monthName)")
                                             print("Dates: \(datesArray)")
                                             
+                                            //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                                             let month = MonthModel()
                                             month.name = monthName
                                             month.number = monthNumber
@@ -396,6 +401,7 @@ class FavoritesViewController: UIViewController, UITableViewDelegate, UITableVie
                                                 
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
+                                                    //let date = DateModel(date: 0)
                                                     let date = DateModel()
                                                     date.date = Int(day) ?? 0
                                                     

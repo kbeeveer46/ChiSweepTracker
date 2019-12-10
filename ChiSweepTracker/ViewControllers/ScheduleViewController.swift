@@ -10,19 +10,29 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     //@IBOutlet weak var addFavoriteButton: UIBarButtonItem!
     let constants = Constants()
+    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
     var schedule = ScheduleModel()
     let defaults = UserDefaults.standard
+    var addFavoriteButton = UIBarButtonItem()
+    var removeFavoriteButton = UIBarButtonItem()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let notificationButton = UIBarButtonItem(image: UIImage(named: "bell_circle"),
-                                                 landscapeImagePhone: nil, style: .plain,
-                                                 target: self, action: #selector(loadNotificationView))
-        
-        self.navigationItem.rightBarButtonItem = notificationButton
-    
         defaults.set(schedule.address, forKey: "defaultAddress")
+        let favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+        
+        addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
+        
+        removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+        
+        if favoriteAddress != schedule.address {
+            self.navigationItem.rightBarButtonItem = addFavoriteButton
+            
+        }
+        else {
+            self.navigationItem.rightBarButtonItem = removeFavoriteButton
+        }
         
         loadScheduleMap()
         
@@ -33,17 +43,87 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 
     }
     
-    @objc func loadNotificationView() {
+    @objc func addFavorite() {
         
-        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
-            
-            destinationViewController.schedule = self.schedule
-            self.navigationController?.pushViewController(destinationViewController, animated: true)
-            
-        }
+        defaults.set(schedule.address, forKey: "favoriteAddress")
+        defaults.set(schedule.section, forKey: "favoriteSection")
         
-        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
+        self.navigationItem.rightBarButtonItem = removeFavoriteButton
+        
+        let alert = UIAlertController(title: "Favorite saved", message: "Go to the favorite tab to set up push notifications", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+        //UserDefaults.standard.set(try? PropertyListEncoder().encode(schedule), forKey:"favoriteSchedule")
+        //let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: schedule)
+        //defaults.set(encodedData, forKey: "favoriteSchedule")
+        //defaults.synchronize()
+        
+        //As we know that container is set up in the AppDelegates so we need to refer that container.
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//        //We need to create a context from this container
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//
+//        //Prepare the request of type NSFetchRequest  for the entity
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Favorites")
+//
+//        do {
+//
+//            let result = try managedContext.fetch(fetchRequest)
+//
+//            if result.count == 0 {
+//
+//                print("Address added to favorites: \(self.schedule.address)")
+//
+//                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//
+//                let favorites = Favorites(context: context)
+//                favorites.address = self.schedule.address
+//
+//                // Search for address and only add it if it doesn't exist
+//
+//                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+//            }
+//
+//        } catch {
+//
+//            print("Could not retrieve favorites from Core Data")
+//        }
+        
     }
+    
+    @objc func removeFavorite() {
+        
+        let alert = UIAlertController(title: "Delete favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            self.defaults.set("", forKey: "favoriteAddress")
+            self.navigationItem.rightBarButtonItem = self.addFavoriteButton
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+//    @objc func loadNotificationView() {
+//
+//        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
+//
+//            destinationViewController.schedule = self.schedule
+//            self.navigationController?.pushViewController(destinationViewController, animated: true)
+//
+//        }
+//
+//        //self.performSegue(withIdentifier: "notificationsSegue", sender: self)
+//    }
     
 //    func addAddressToFavorites() {
 //
@@ -154,6 +234,41 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         scheduleMapView.addAnnotation(annotation)
         
     }
+    
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//        let identifier = "Address"
+//
+//        //if annotation is MKAnnotation {
+//            if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) {
+//                annotationView.annotation = annotation
+//                return annotationView
+//            } else {
+//                let annotationView = MKPinAnnotationView(annotation:annotation, reuseIdentifier:identifier)
+//                //annotationView.isEnabled = true
+//                annotationView.canShowCallout = true
+//                annotationView.isSelected = true
+//
+//                //let label = UILabel()
+//                //label.text = annotation.title!
+//                //label.font.pointSize = 10
+//
+//                //let title = annotation.title
+//
+//                let btn = UIButton(type: .contactAdd)
+//                btn.addTarget(self, action: #selector(saveAddressAsDefault), for: .touchUpInside)
+//                annotationView.rightCalloutAccessoryView = btn
+//                return annotationView
+//            }
+//        //}
+//
+//        //return nil
+//    }
+    
+//    @objc func saveAddressAsDefault() {
+//    
+//        print("Button in pin tapped")
+//        
+//    }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         

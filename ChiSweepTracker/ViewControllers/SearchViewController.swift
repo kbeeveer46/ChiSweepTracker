@@ -12,7 +12,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     
     
-    var schedule = ScheduleModel()
+    //var schedule = ScheduleModel(address: "", ward: "", section: "", months: [MonthModel](), locationCoordinate: CLLocationCoordinate2D(), polygonCoordinates: [CLLocationCoordinate2D]())
+    let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
     let constants = Constants()
     let common = Common()
@@ -255,6 +256,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             print("Month name: \(monthName)")
                                             print("Dates: \(datesArray)")
                                             
+                                            //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                                             let month = MonthModel()
                                             month.name = monthName
                                             month.number = monthNumber
@@ -265,6 +267,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                                 
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
+                                                    //let date = DateModel(date: 0)
                                                     let date = DateModel()
                                                     date.date = Int(day) ?? 0
                                                     
