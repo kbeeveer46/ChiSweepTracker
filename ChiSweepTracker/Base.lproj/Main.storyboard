@@ -235,7 +235,7 @@
             </objects>
             <point key="canvasLocation" x="1956" y="777"/>
         </scene>
-        <!--Enable Sweep Notifications-->
+        <!--Favorite Address-->
         <scene sceneID="XQY-3Z-30v">
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -246,7 +246,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
                                 <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="160" id="Xry-BK-glM"/>
@@ -399,7 +399,7 @@
                         <viewLayoutGuide key="safeArea" id="qWq-pT-RyA"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Favorite" image="star" id="WV3-iH-QOw"/>
-                    <navigationItem key="navigationItem" title="Enable Sweep Notifications" id="zlF-Cz-MXS"/>
+                    <navigationItem key="navigationItem" title="Favorite Address" id="zlF-Cz-MXS"/>
                     <connections>
                         <outlet property="emailNotificationSwitch" destination="BEh-Uc-Tzz" id="H8i-34-NU1"/>
                         <outlet property="emailTextField" destination="D9s-bz-j2H" id="I8r-uI-sDc"/>

@@ -11,20 +11,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Deprecated - use didReceive with completion handler
- //       let remoteNotif = launchOptions?[.localNotification] as? NSDictionary
-//
-//        if remoteNotif != nil {
-//
-//            let notifName = remoteNotif?["aps"] as! String
-//
-//            print("notifName: \(notifName)")
-//
-//        }
-        
         FirebaseApp.configure()
         
         Messaging.messaging().delegate = self
+        UNUserNotificationCenter.current().delegate = self
         
         application.registerForRemoteNotifications()
         
@@ -148,9 +138,12 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         // Print full message.
         //print(userInfo)
         
+        // TODO: Use the code below to send user to schedule page when opening notification
+        //NotificationCenter.default.post(name: Notification.Name(rawValue: "sentFromNotification"), object: nil)
+        
         // Not working!
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
 //        if  let conversationVC = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController,
 //            let tabBarController = self.window?.rootViewController as? UITabBarController,
 //            let navController = tabBarController.selectedViewController as? UINavigationController {
@@ -161,6 +154,18 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 //                // you can access custom data of the push notification by using userInfo property
 //                // response.notification.request.content.userInfo
 //                navController.pushViewController(conversationVC, animated: true)
+//        }
+        
+//        if let navController = self.navigationController, let viewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController{
+//            navController.pushViewController(viewController, animated: true)
+//        }
+        
+//        if let destinationViewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//            destinationViewController.sentFromNotification = true
+//
+//            let navigationController = application.windows[0].rootViewController as! UINavigationController
+//
+//            navigationController!.pushViewController(destinationViewController, animated: true)
 //        }
 
         completionHandler()

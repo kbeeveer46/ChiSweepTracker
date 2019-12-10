@@ -43,6 +43,17 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 
     }
     
+    // TODO: Use this to send user to schedule page when notification is opened
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//    }
+    
+//    @objc func catchIt() {
+//
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.catchIt), name: NSNotification.Name(rawValue: "sentFromNotification"), object: nil)
+//
+//    }
+    
     @objc func addFavorite() {
         
         // Set favorite address and section.

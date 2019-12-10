@@ -15,7 +15,6 @@
 		FA0EC391239C31CF00DD3127 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */; };
 		FA0EC394239D419E00DD3127 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0EC393239D419E00DD3127 /* UserModel.swift */; };
 		FA0EC396239D71CB00DD3127 /* NotificationsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0EC395239D71CB00DD3127 /* NotificationsModel.swift */; };
-		FA0EC398239E9A5200DD3127 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0EC397239E9A5200DD3127 /* FavoritesViewController.swift */; };
 		FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */; };
 		FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */; };
 		FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */; };
@@ -41,7 +40,6 @@
 		FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA0EC393239D419E00DD3127 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		FA0EC395239D71CB00DD3127 /* NotificationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsModel.swift; sourceTree = "<group>"; };
-		FA0EC397239E9A5200DD3127 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleModel.swift; sourceTree = "<group>"; };
@@ -99,7 +97,6 @@
 		FA184FA12398707C00AB2FF6 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				FA0EC397239E9A5200DD3127 /* FavoritesViewController.swift */,
 				FA184FA22398709100AB2FF6 /* NotificationsViewController.swift */,
 				FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */,
 				FA29464323985FE300A24FFC /* SearchViewController.swift */,
@@ -309,7 +306,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA0EC398239E9A5200DD3127 /* FavoritesViewController.swift in Sources */,
 				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
 				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,

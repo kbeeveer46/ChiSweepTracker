@@ -17,7 +17,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     let current = UNUserNotificationCenter.current()
     let common = Common()
-    //let constants = Constants()
     var schedule = ScheduleModel()
     var favoriteAddress = ""
     let defaults = UserDefaults.standard
@@ -39,18 +38,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
         
-        self.tabBarController?.navigationItem.title = "Favorite"
+        self.tabBarController?.navigationItem.title = "Favorite Address"
         favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
         //let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
         //let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
-        //addressLabel.text = favoriteAddress
-        
-//        if !favoriteWard.isEmpty && !favoriteSection.isEmpty {
-//            wardSectionLabel.text = "Ward \(favoriteWard) - Sweep Section \(favoriteSection)"
-//        }
-//        else {
-//            wardSectionLabel.isHidden = true
-//        }
         
         loadFavoriteMap()
         
@@ -60,7 +51,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             self.onPicker.isUserInteractionEnabled = true
             self.timePicker.isUserInteractionEnabled = true
             
+            // TODO: TabBar is nil when coming from schedule page so it's not adding this button
             self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+            
+            if self.tabBarController == nil {
+                
+                self.navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+                
+            }
             
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .notDetermined {
@@ -71,11 +69,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                     print("authorized")
                     
                     DispatchQueue.main.async {
-                        self.registerForPushNotifications()
-                        self.pushNotificationsSwitch.isOn = true
                         
                         let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
                         self.pushNotificationsSwitch.isOn = notificationsToggled
+                        
+                        if self.pushNotificationsSwitch.isOn {
+                            self.registerForPushNotifications()
+                        }
                         
                     }
                 }
@@ -83,21 +83,17 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
         }
         else {
-            
-            //self.addressLabel.text = "Star an address to receive notifications"
-            //self.wardSectionLabel.text = ""
             self.pushNotificationsSwitch.isOn = false
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
             self.onPicker.isUserInteractionEnabled = false
             self.timePicker.isUserInteractionEnabled = false
-            
         }
-        
     }
     
     func loadFavoriteMap() {
         
         favoriteMapView.delegate = self
+        favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
         let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
         let favoriteLatitude = defaults.double(forKey: "favoriteLatitude")
@@ -112,8 +108,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
             let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
-
-            favoriteMapView.removeAnnotations(favoriteMapView.annotations)
+            
             favoriteMapView.addAnnotation(annotation)
             favoriteMapView.setRegion(region, animated: true)
         }
@@ -132,15 +127,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             print("Deleted favorite address: \(self.favoriteAddress)")
             
             self.defaults.set("", forKey: "favoriteAddress")
+            self.defaults.set(0.0, forKey: "favoriteLongitude")
+            self.defaults.set(0.0, forKey: "favoriteLatitude")
             self.favoriteAddress = ""
-            //self.addressLabel.text = ""
-            //self.wardSectionLabel.text = ""
             self.pushNotificationsSwitch.isOn = false
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
             
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            
-            //UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
             
             print("Deleted user's local notifications")
             
@@ -190,7 +183,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
        
         let content = UNMutableNotificationContent()
         content.title = "Sweep Alert"
-        content.body = "Your section is being swept on 7/9. You may have to move your vehicle to avoid getting a ticket"
+        content.body = "Your section is being swept on 12/12"
         let soundName = UNNotificationSoundName("notification.m4r")
         content.sound = UNNotificationSound(named: soundName)
         content.badge = 1
@@ -218,7 +211,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             print("Permission granted: \(granted)")
             
-            guard granted else {
+            if granted == false {
                 
                 // User's notifications are disabled in settings. Prompt them to open settings
                 DispatchQueue.main.async {
@@ -246,238 +239,218 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                     self.present(alertController, animated: true, completion: nil)
                 
                 }
-                
-                return
-                
             }
+            else {
             
-            // User's notifications are enabled in settings
-            
-            // Clear current notifications and re-add them in case they changed
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            
-            #if DEBUG
-                self.sendTestNotifications()
-            #endif
-            
-            print("Deleted user's local notifications")
-            
-            self.schedule.months.removeAll()
-            //self.schedule.polygonCoordinates.removeAll()
-            
-            print("Address: \(self.favoriteAddress)")
-            
-            self.schedule.address = self.favoriteAddress
-            
-            // Get coordinates
-            
-            let geocoder = CLGeocoder()
-            
-            geocoder.geocodeAddressString(self.favoriteAddress) { placemarks, error in
+                // User's notifications are enabled in settings
                 
-                if error != nil {
-                    
-                    //self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
-                    print((error! as NSError).userInfo.debugDescription)
-                }
+                // Clear current notifications and re-add them in case they changed
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 
-                if placemarks != nil {
+                #if DEBUG
+                    self.sendTestNotifications()
+                #endif
                 
-                    let placemark = placemarks?.first
+                print("Deleted user's local notifications")
+                
+                self.schedule.months.removeAll()
+                //self.schedule.polygonCoordinates.removeAll()
+                
+                print("Address: \(self.favoriteAddress)")
+                
+                self.schedule.address = self.favoriteAddress
+                
+                // Get coordinates
+                
+                let geocoder = CLGeocoder()
+                
+                geocoder.geocodeAddressString(self.favoriteAddress) { placemarks, error in
                     
-                    var coordinates = CLLocationCoordinate2D()
-                    coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
-                    coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
-                    self.schedule.locationCoordinate = coordinates
+                    if error != nil {
+                        
+                        //self.common.showAlert(self.constants.errorTitle, (error! as NSError).userInfo.debugDescription)
+                        print((error! as NSError).userInfo.debugDescription)
+                    }
                     
-                    //self.defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
-                    //self.defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
+                    if placemarks != nil {
                     
-                    print("Latitude: \(self.schedule.locationCoordinate.latitude)")
-                    print("Longitude: \(self.schedule.locationCoordinate.longitude)")
-                    
-                    let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-                    
-                    // Get ward and section JSON from City of Chicago
-                    
-                    let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
-                        .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
-                    
-                    wardQuery.get { res in
-                        switch res {
-                        case .dataset (let data):
-                            
-                            if data.count > 0 {
+                        let placemark = placemarks?.first
+                        
+                        var coordinates = CLLocationCoordinate2D()
+                        coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                        coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                        self.schedule.locationCoordinate = coordinates
+                        
+                        print("Latitude: \(self.schedule.locationCoordinate.latitude)")
+                        print("Longitude: \(self.schedule.locationCoordinate.longitude)")
+                        
+                        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+                        
+                        // Get ward and section JSON from City of Chicago
+                        
+                        let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
+                            .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                        
+                        wardQuery.get { res in
+                            switch res {
+                            case .dataset (let data):
                                 
-                                let ward = data[0][self.common.constants.ward] as? String ?? ""
-                                let section = data[0][self.common.constants.section] as? String ?? ""
-                                //let the_geom = data[0][self.constants.the_geom] as? [String: Any] ?? [:]
-                                //let coordinatesWrapper = the_geom[self.constants.coordinates] as? NSMutableArray
-                                //let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
-                                
-//                                for(_, coordinate) in coordinatesArray!.enumerated() {
-//
-//                                    for item in coordinate {
-//
-//                                        var coordinate = CLLocationCoordinate2D()
-//                                        coordinate.longitude = item[0] as? Double ?? 0
-//                                        coordinate.latitude = item[1] as? Double ?? 0
-//
-//                                        self.schedule.polygonCoordinates.append(coordinate)
-//
-//                                    }
-//                                }
-                                
-                                print("Ward: \(ward)")
-                                print("Section: \(section)")
-                                
-                                self.schedule.ward = ward
-                                self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
-                                
-                                if self.schedule.section.isEmpty {
-                                    self.schedule.section = self.defaults.string(forKey: "favoriteSection") ?? ""
-                                }
-                                
-                                // Get schedule JSON from City of Chicago
-                                
-                                let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
-                                    .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
-                                
-                                scheduleQuery.get { res in
-                                    switch res {
-                                    case .dataset (let data):
-                                        
-                                        if data.count > 0 {
-                                            
-                                            // Populate schedule model to be used on schedule view
-                                            
-                                            for (_, item) in data.enumerated() {
-                                                
-                                                let monthName = item[self.common.constants.month_name] as? String ?? ""
-                                                let monthNumber = item[self.common.constants.month_number] as? String ?? ""
-                                                let dates = item[self.common.constants.dates] as? String ?? ""
-                                                let datesArray = dates.components(separatedBy: ",")
-                                                
-                                                print("Month name: \(monthName)")
-                                                print("Dates: \(datesArray)")
-                                                
-                                                //let month = MonthModel(name: "", number: "", dates: [DateModel]())
-                                                let month = MonthModel()
-                                                month.name = monthName
-                                                month.number = monthNumber
-                                                
-                                                for day in datesArray {
-                                                    
-                                                    print("Date: \(day)")
-                                                    
-                                                    if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                                                        
-                                                        //let date = DateModel(date: 0)
-                                                        let date = DateModel()
-                                                        date.date = Int(day) ?? 0
-                                                        
-                                                        if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
-                                                            month.dates.append(date)
-                                                        }
-                                                    }
-                                                }
-                                                
-                                                self.schedule.months.append(month)
-                                                
-                                            }
-                                            
-                                            let center = UNUserNotificationCenter.current()
-                                            
-                                            let calendar = Calendar.current
-                                            let currentYear = calendar.component(.year, from: Date())
-                                            
-                                            let time = self.timePicker.date
-                                            let comp = calendar.dateComponents([.hour, .minute], from: time)
-                                            let hour = comp.hour!
-                                            let minute = comp.minute!
-                                            let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
-                                            
-                                            for monthInSchedule in self.schedule.months {
-                                                
-                                                for dayInMonth in monthInSchedule.dates {
-                                                    
-                                                    let dateComponents = DateComponents(year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date)
-                                                    var date = calendar.date(from: dateComponents)
-                                                    
-                                                    switch when {
-                                                    case "1 Day Prior":
-                                                        date = calendar.date(byAdding: .day, value: -1, to: date!)
-                                                    case "2 Days Prior":
-                                                        date = calendar.date(byAdding: .day, value: -2, to: date!)
-                                                    case "3 Days Prior":
-                                                        date = calendar.date(byAdding: .day, value: -3, to: date!)
-                                                    case "4 Days Prior":
-                                                        date = calendar.date(byAdding: .day, value: -4, to: date!)
-                                                    case "5 Days Prior":
-                                                        date = calendar.date(byAdding: .day, value: -5, to: date!)
-                                                    case "6 Days Prior":
-                                                        date = calendar.date(byAdding: .day, value: -6, to: date!)
-                                                    case "7 Days Prior":
-                                                        date = calendar.date(byAdding: .day, value: -7, to: date!)
-                                                    default:
-                                                        break
-                                                    }
-                                                    
-                                                    date = calendar.date(bySetting: .hour, value: hour, of: date!)
-                                                    date = calendar.date(bySetting: .minute, value: minute, of: date!)
-                                                    
-                                                    let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: date!)
-                                                    let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
-                                                    
-                                                    let content = UNMutableNotificationContent()
-                                                    content.title = "Sweep Alert"
-                                                    content.body = "Your section is being swept on \(monthInSchedule.number)/\(dayInMonth.date). You may have to move your vehicle to avoid getting a ticket"
-                                                    content.sound = .default
-                                                    content.badge = 1
-                                                    
-                                                    let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
-                                                    
-                                                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-                                                    
-                                                    center.add(request, withCompletionHandler: { (error) in
-                                                        if let error = error {
-                                                            //self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
-                                                            print(error.localizedDescription)
-                                                        }
-                                                        else {
-                                                            print("Local notification added: \(identifier)")
-                                                        }
-                                                    })
-                                                }
-                                            }
+                                if data.count > 0 {
                                     
+                                    let ward = data[0][self.common.constants.ward] as? String ?? ""
+                                    let section = data[0][self.common.constants.section] as? String ?? ""
+                                    
+                                    print("Ward: \(ward)")
+                                    print("Section: \(section)")
+                                    
+                                    self.schedule.ward = ward
+                                    self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
+                                    
+                                    if self.schedule.section.isEmpty {
+                                        self.schedule.section = self.defaults.string(forKey: "favoriteSection") ?? ""
+                                    }
+                                    
+                                    // Get schedule JSON from City of Chicago
+                                    
+                                    let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+                                        .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
+                                    
+                                    scheduleQuery.get { res in
+                                        switch res {
+                                        case .dataset (let data):
+                                            
+                                            if data.count > 0 {
+                                                
+                                                // Populate schedule model to be used on schedule view
+                                                
+                                                for (_, item) in data.enumerated() {
+                                                    
+                                                    let monthName = item[self.common.constants.month_name] as? String ?? ""
+                                                    let monthNumber = item[self.common.constants.month_number] as? String ?? ""
+                                                    let dates = item[self.common.constants.dates] as? String ?? ""
+                                                    let datesArray = dates.components(separatedBy: ",")
+                                                    
+                                                    print("Month name: \(monthName)")
+                                                    print("Dates: \(datesArray)")
+                                                    
+                                                    //let month = MonthModel(name: "", number: "", dates: [DateModel]())
+                                                    let month = MonthModel()
+                                                    month.name = monthName
+                                                    month.number = monthNumber
+                                                    
+                                                    for day in datesArray {
+                                                        
+                                                        print("Date: \(day)")
+                                                        
+                                                        if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                                            
+                                                            //let date = DateModel(date: 0)
+                                                            let date = DateModel()
+                                                            date.date = Int(day) ?? 0
+                                                            
+                                                            if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
+                                                                month.dates.append(date)
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    self.schedule.months.append(month)
+                                                    
+                                                }
+                                                
+                                                let center = UNUserNotificationCenter.current()
+                                                
+                                                let calendar = Calendar.current
+                                                let currentYear = calendar.component(.year, from: Date())
+                                                
+                                                let time = self.timePicker.date
+                                                let comp = calendar.dateComponents([.hour, .minute], from: time)
+                                                let hour = comp.hour!
+                                                let minute = comp.minute!
+                                                let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
+                                                
+                                                for monthInSchedule in self.schedule.months {
+                                                    
+                                                    for dayInMonth in monthInSchedule.dates {
+                                                        
+                                                        let dateComponents = DateComponents(year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date)
+                                                        var date = calendar.date(from: dateComponents)
+                                                        
+                                                        switch when {
+                                                        case "1 Day Prior":
+                                                            date = calendar.date(byAdding: .day, value: -1, to: date!)
+                                                        case "2 Days Prior":
+                                                            date = calendar.date(byAdding: .day, value: -2, to: date!)
+                                                        case "3 Days Prior":
+                                                            date = calendar.date(byAdding: .day, value: -3, to: date!)
+                                                        case "4 Days Prior":
+                                                            date = calendar.date(byAdding: .day, value: -4, to: date!)
+                                                        case "5 Days Prior":
+                                                            date = calendar.date(byAdding: .day, value: -5, to: date!)
+                                                        case "6 Days Prior":
+                                                            date = calendar.date(byAdding: .day, value: -6, to: date!)
+                                                        case "7 Days Prior":
+                                                            date = calendar.date(byAdding: .day, value: -7, to: date!)
+                                                        default:
+                                                            break
+                                                        }
+                                                        
+                                                        date = calendar.date(bySetting: .hour, value: hour, of: date!)
+                                                        date = calendar.date(bySetting: .minute, value: minute, of: date!)
+                                                        
+                                                        let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: date!)
+                                                        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+                                                        
+                                                        let content = UNMutableNotificationContent()
+                                                        content.title = "Sweep Alert"
+                                                        content.body = "Your section is being swept on \(monthInSchedule.number)/\(dayInMonth.date)"
+                                                        content.sound = .default
+                                                        content.badge = 1
+                                                        
+                                                        let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
+                                                        
+                                                        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                                                        
+                                                        center.add(request, withCompletionHandler: { (error) in
+                                                            if let error = error {
+                                                                //self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
+                                                                print(error.localizedDescription)
+                                                            }
+                                                            else {
+                                                                print("Local notification added: \(identifier)")
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                        
+                                            }
+                                        case .error (let err):
+                                            
+                                            //self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                                            print((err as NSError).userInfo.debugDescription)
+                                            
                                         }
-                                    case .error (let err):
-                                        
-                                        //self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
-                                        print((err as NSError).userInfo.debugDescription)
-                                        
                                     }
                                 }
-                            }
-                            else {
+                                else {
+                                    
+                                    //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                                    print(self.common.constants.notFound)
+                                    
+                                }
+                            case .error (let err):
                                 
-                                //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
-                                print(self.common.constants.notFound)
+                                //self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+                                print((err as NSError).userInfo.debugDescription)
                                 
                             }
-                        case .error (let err):
-                            
-                            //self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
-                            print((err as NSError).userInfo.debugDescription)
-                            
                         }
                     }
-                }
-                else {
-                    
-                    //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
-                    print(self.common.constants.notFound)
+                    else {
+                        
+                        //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                        print(self.common.constants.notFound)
+                    }
                 }
             }
         }
@@ -514,12 +487,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     // MARK: Actions
     
-    //    @IBAction func pushNotificationMessageTapped(_ sender: Any) {
-    //
-    //        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-    //
-    //    }
-    
+
     
     
     //    @IBAction func emailNotificationTapped(_ sender: Any) {
@@ -626,32 +594,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     //        }
     //        else {
     //            emailNotificationSwitch.isOn = false
-    //        }
-    //
-    //    }
-    
-    
-    
-    
-    
-    //    func getNotificationSettings() {
-    //
-    //        UNUserNotificationCenter.current().getNotificationSettings { settings in
-    //
-    //            print("Notification settings: \(settings)")
-    //
-    //            if settings.authorizationStatus == .authorized {
-    //
-    //                DispatchQueue.main.async {
-    //
-    //                    UIApplication.shared.registerForRemoteNotifications()
-    //
-    //                }
-    //            }
-    //            else if settings.authorizationStatus == .denied {
-    //
-    //            }
-    //
     //        }
     //
     //    }
