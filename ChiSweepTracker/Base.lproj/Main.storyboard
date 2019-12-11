@@ -243,30 +243,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="143.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="235" id="WfC-nd-6GW"/>
+                                        </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="143.5" width="375" height="143.5"/>
+                                        <rect key="frame" x="0.0" y="235" width="375" height="76.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
-                                                <rect key="frame" x="20" y="68.5" width="40" height="33.5"/>
+                                                <rect key="frame" x="20" y="35" width="40" height="33.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="68Z-oZ-uTV"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
-                                                <rect key="frame" x="70" y="75" width="216" height="20.5"/>
+                                                <rect key="frame" x="70" y="41.5" width="216" height="20.5"/>
                                                 <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="296" y="70" width="61" height="31"/>
+                                                <rect key="frame" x="296" y="36.5" width="61" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -276,24 +279,24 @@
                                         <edgeInsets key="layoutMargins" top="35" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="287" width="375" height="143.5"/>
+                                        <rect key="frame" x="0.0" y="371" width="375" height="116"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
-                                                <rect key="frame" x="20" y="8" width="40" height="127.5"/>
+                                                <rect key="frame" x="20" y="8" width="40" height="100"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="guE-uh-qMy"/>
                                                 </constraints>
-                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
-                                                <rect key="frame" x="70" y="8" width="100" height="127.5"/>
+                                                <rect key="frame" x="70" y="8" width="100" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <pickerView contentMode="right" translatesAutoresizingMaskIntoConstraints="NO" id="LL0-f2-4jY">
-                                                <rect key="frame" x="180" y="8" width="175" height="127.5"/>
+                                                <rect key="frame" x="180" y="8" width="175" height="100"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="height" constant="100" id="HMA-bb-iMa"/>
                                                     <constraint firstAttribute="width" constant="175" id="YLF-yC-clf"/>
                                                 </constraints>
                                             </pickerView>
@@ -307,23 +310,24 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="430.5" width="375" height="143.5"/>
+                                        <rect key="frame" x="0.0" y="507" width="375" height="116"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
-                                                <rect key="frame" x="20" y="8" width="40" height="127.5"/>
+                                                <rect key="frame" x="20" y="8" width="40" height="100"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="n8w-t5-eu5"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
-                                                <rect key="frame" x="70" y="8" width="100" height="127.5"/>
+                                                <rect key="frame" x="70" y="8" width="100" height="100"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="luP-wW-qKV">
-                                                <rect key="frame" x="180" y="8" width="175" height="127.5"/>
+                                                <rect key="frame" x="180" y="8" width="175" height="100"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="height" constant="100" id="FN2-OG-r3Y"/>
                                                     <constraint firstAttribute="width" constant="175" id="ZLn-qs-lhp"/>
                                                 </constraints>
                                             </datePicker>
@@ -488,7 +492,7 @@
         <image name="time" width="33.5" height="33.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="lRu-XB-8Bj"/>
+        <segue reference="eEQ-YS-Bae"/>
         <segue reference="aU1-JL-7NV"/>
     </inferredMetricsTieBreakers>
 </document>
