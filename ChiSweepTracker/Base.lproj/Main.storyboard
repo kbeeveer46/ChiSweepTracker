@@ -249,20 +249,24 @@
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="143.5"/>
                                     </mapView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
                                         <rect key="frame" x="0.0" y="143.5" width="375" height="143.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
-                                                <rect key="frame" x="20" y="68.5" width="33.5" height="33.5"/>
+                                                <rect key="frame" x="20" y="68.5" width="40" height="33.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="40" id="68Z-oZ-uTV"/>
+                                                </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
-                                                <rect key="frame" x="114" y="75" width="139" height="20.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
+                                                <rect key="frame" x="70" y="75" width="216" height="20.5"/>
+                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="306" y="70" width="51" height="31"/>
+                                                <rect key="frame" x="296" y="70" width="61" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -271,7 +275,7 @@
                                         <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                         <edgeInsets key="layoutMargins" top="35" left="20" bottom="8" right="20"/>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
                                         <rect key="frame" x="0.0" y="287" width="375" height="143.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
@@ -279,17 +283,18 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="guE-uh-qMy"/>
                                                 </constraints>
+                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
-                                                <rect key="frame" x="60" y="8" width="145" height="127.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
+                                                <rect key="frame" x="70" y="8" width="100" height="127.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <pickerView contentMode="right" translatesAutoresizingMaskIntoConstraints="NO" id="LL0-f2-4jY">
-                                                <rect key="frame" x="205" y="8" width="150" height="127.5"/>
+                                                <rect key="frame" x="180" y="8" width="175" height="127.5"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="150" id="YLF-yC-clf"/>
+                                                    <constraint firstAttribute="width" constant="175" id="YLF-yC-clf"/>
                                                 </constraints>
                                             </pickerView>
                                         </subviews>
@@ -301,7 +306,7 @@
                                         </constraints>
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
                                         <rect key="frame" x="0.0" y="430.5" width="375" height="143.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
@@ -310,16 +315,16 @@
                                                     <constraint firstAttribute="width" constant="40" id="n8w-t5-eu5"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
-                                                <rect key="frame" x="60" y="8" width="145" height="127.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
+                                                <rect key="frame" x="70" y="8" width="100" height="127.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="luP-wW-qKV">
-                                                <rect key="frame" x="205" y="8" width="150" height="127.5"/>
+                                                <rect key="frame" x="180" y="8" width="175" height="127.5"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="150" id="ZLn-qs-lhp"/>
+                                                    <constraint firstAttribute="width" constant="175" id="ZLn-qs-lhp"/>
                                                 </constraints>
                                             </datePicker>
                                         </subviews>
@@ -333,8 +338,6 @@
                                 <constraints>
                                     <constraint firstItem="x1r-6W-RMh" firstAttribute="top" secondItem="O2H-e5-O3v" secondAttribute="top" id="6Q8-oS-hMR"/>
                                     <constraint firstAttribute="trailing" secondItem="x1r-6W-RMh" secondAttribute="trailing" id="Y6C-Da-DO8"/>
-                                    <constraint firstItem="DFD-zz-Rlg" firstAttribute="leading" secondItem="O2H-e5-O3v" secondAttribute="leading" id="cC4-A6-7dh"/>
-                                    <constraint firstAttribute="trailing" secondItem="DFD-zz-Rlg" secondAttribute="trailing" id="lkA-Bv-wJW"/>
                                     <constraint firstItem="x1r-6W-RMh" firstAttribute="leading" secondItem="O2H-e5-O3v" secondAttribute="leading" id="uNM-Ly-vU4"/>
                                 </constraints>
                             </stackView>
