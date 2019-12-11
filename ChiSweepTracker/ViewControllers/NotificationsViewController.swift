@@ -107,6 +107,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         favoriteMapView.delegate = self
         favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
+        let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
+        let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
         let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
         let favoriteLatitude = defaults.double(forKey: "favoriteLatitude")
         let favoriteCoordinatesArray = defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]]
@@ -132,6 +134,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
             let annotation = MKPointAnnotation()
             annotation.title = favoriteAddress
+            annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
             annotation.coordinate = location.coordinate
 
             let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
@@ -170,6 +173,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             print("Deleted favorite address: \(self.favoriteAddress)")
             
             self.defaults.set("", forKey: "favoriteAddress")
+            self.defaults.set("", forKey: "favoriteWard")
+            self.defaults.set("", forKey: "favoriteSection")
             self.defaults.set(0.0, forKey: "favoriteLongitude")
             self.defaults.set(0.0, forKey: "favoriteLatitude")
             self.defaults.set(nil, forKey: "favoriteCoordinatesArray")

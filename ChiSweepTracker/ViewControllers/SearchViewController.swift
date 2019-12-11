@@ -68,8 +68,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             if CLLocationManager.locationServicesEnabled() {
                  switch CLLocationManager.authorizationStatus() {
                     case .notDetermined, .restricted, .denied:
-                         showLocationDisabledPopup()
-                    
+                         //showLocationDisabledPopup()
+                        break
                     case .authorizedAlways, .authorizedWhenInUse:
                             
                         // Clear out address text field. It will be updated once device gets user's location

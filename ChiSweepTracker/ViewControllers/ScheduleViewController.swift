@@ -67,8 +67,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         // Set favorite address and section.
         // Section is used when creating location notifications that way we know the section in case there are multiple
         defaults.set(schedule.address, forKey: "favoriteAddress")
-        //defaults.set(schedule.ward, forKey: "favoriteWard")
-        //defaults.set(schedule.section, forKey: "favoriteSection")
+        defaults.set(schedule.ward, forKey: "favoriteWard")
+        defaults.set(schedule.section, forKey: "favoriteSection")
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
         defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
         self.defaults.set(false, forKey: "notificationsToggled")
@@ -107,6 +107,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             
             // Clear favorite from defaults
             self.defaults.set("", forKey: "favoriteAddress")
+            self.defaults.set("", forKey: "favoriteWard")
+            self.defaults.set("", forKey: "favoriteSection")
             self.defaults.set(0.0, forKey: "favoriteLatitude")
             self.defaults.set(0.0, forKey: "favoriteLongitude")
             self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
