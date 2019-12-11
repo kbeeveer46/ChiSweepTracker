@@ -40,10 +40,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // MARK: Actions
     
-//    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-//        print("Selected tab: \(item.title)")
-//    }
-    
     @IBAction func searchTypeTapped(_ sender: Any) {
         
         // Add haptic feedback
@@ -66,20 +62,30 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             locationManager.requestWhenInUseAuthorization()
             
             if CLLocationManager.locationServicesEnabled() {
-                
-                // Clear out address text field. It will be updated once device gets user's location
-                addressTextField.text = ""
-                
-                locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.startUpdatingLocation()
-            
+                 switch CLLocationManager.authorizationStatus() {
+                    case .notDetermined, .restricted, .denied:
+                         showLocationDisabledPopup()
+                    
+                    case .authorizedAlways, .authorizedWhenInUse:
+                            
+                        // Clear out address text field. It will be updated once device gets user's location
+                        addressTextField.text = ""
+                        
+                        locationManager.delegate = self
+                        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                        locationManager.startUpdatingLocation()
+                    
+                 @unknown default:
+                    print("Location services are not enabled")
+                }
+            }
+            else {
+                print("Location services are not enabled")
             }
         }
         else if searchTypeSegment.selectedSegmentIndex == 2 {
-            
+            // Stop updating location if user selects "enter address"
             locationManager.stopUpdatingLocation()
-
         }
     }
     
@@ -93,10 +99,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         if address.isEmpty {
-            
             self.common.showAlert(self.common.constants.errorTitle, "Please enter an address")
             return
-            
         }
         
         getSchedule(address)
@@ -139,18 +143,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // Prepare segue and pass data to view controllers
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "selectSectionSegue" {
             if let selectSectionViewController = segue.destination as? SelectSectionViewController {
                 selectSectionViewController.schedule = schedule
             }
         }
-//        else if segue.identifier == "viewScheduleSegue" {
-//
-//            if let viewScheduleViewController = segue.destination as? ScheduleViewController {
-//                viewScheduleViewController.schedule = schedule
-//            }
-//        }
     }
     
     // MARK: Methods
@@ -172,7 +169,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if error != nil {
                 
-                self.common.showAlert(self.common.constants.errorTitle, (error! as NSError).userInfo.description)
+                self.common.showAlert(self.common.constants.errorTitle, "Unable to get coordinats from Apple's servers")
                 return
             }
             
@@ -234,7 +231,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             if self.schedule.section.isEmpty {
-                                
                                 self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
                                 return
                             }
@@ -294,21 +290,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 
                                     }
                                 case .error (let err):
-                                    
-                                    self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
-                                    
+                                    print(err.localizedDescription)
+                                    self.common.showAlert(self.common.constants.errorTitle, "Unable to get schedule data from the City of Chicago")
                                 }
                             }
                         }
                         else {
-                            
                             self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
-                            
                         }
                     case .error (let err):
-                        
-                        self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
-                        
+                        print(err.localizedDescription)
+                        self.common.showAlert(self.common.constants.errorTitle, "Unable to get ward data from the City of Chicago")
                     }
                 }
             }

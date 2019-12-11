@@ -61,6 +61,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.prepare()
         generator.selectionChanged()
         
+        // Clear notifications created by previous favorite
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
         // Set favorite address and section.
         // Section is used when creating location notifications that way we know the section in case there are multiple
         defaults.set(schedule.address, forKey: "favoriteAddress")
@@ -68,22 +71,22 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //defaults.set(schedule.section, forKey: "favoriteSection")
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
         defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
+        self.defaults.set(false, forKey: "notificationsToggled")
         
         let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
         defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
-        //defaults.set(schedule.polygonCoordinates., forKey: "favoriteSectionCoordinates")
         
         // Set right bar button to remove now that a favorite has been set
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
         // Alert the user that their favorite has been set
         let alert = UIAlertController(title: "Favorite Saved", message: "Do you want to enable push notifications?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler:{ action in
+    
+            
+        }))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-            
-           self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
-            
+            self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
         }))
         
         self.present(alert, animated: true, completion: nil)

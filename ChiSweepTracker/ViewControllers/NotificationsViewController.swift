@@ -45,9 +45,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         if !favoriteAddress.isEmpty {
             
+            let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
             self.pushNotificationsSwitch.isUserInteractionEnabled = true
-            self.onPicker.isUserInteractionEnabled = true
-            self.timePicker.isUserInteractionEnabled = true
+            self.onPicker.isUserInteractionEnabled = notificationsToggled
+            self.timePicker.isUserInteractionEnabled = notificationsToggled
             
             // TODO: TabBar is nil when coming from schedule page so it's not adding this button
             self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
@@ -68,7 +69,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                     
                     DispatchQueue.main.async {
                         
-                        let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
+
                         self.pushNotificationsSwitch.isOn = notificationsToggled
                         
                         if self.pushNotificationsSwitch.isOn {
@@ -131,7 +132,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         else {
             
             favoriteMapView.isHidden = true
-            self.tabBarController?.navigationItem.title = "No Favorite Address"
+            self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
             
         }
         
@@ -149,7 +150,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
             // TODO: Change this button to add it they remove favorite
-            self.tabBarController?.navigationItem.rightBarButtonItem = nil
+            // No longer need to do this now that it's segueing to the seach tab bar
+            //self.tabBarController?.navigationItem.rightBarButtonItem = nil
             //self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
             
             print("Deleted favorite address: \(self.favoriteAddress)")
@@ -158,13 +160,16 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             self.defaults.set(0.0, forKey: "favoriteLongitude")
             self.defaults.set(0.0, forKey: "favoriteLatitude")
             self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
+            self.defaults.set(false, forKey: "notificationsToggled")
             self.favoriteAddress = ""
-            self.pushNotificationsSwitch.isOn = false
-            self.pushNotificationsSwitch.isUserInteractionEnabled = false
+            //self.pushNotificationsSwitch.isOn = false
+            //self.pushNotificationsSwitch.isUserInteractionEnabled = false
             
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
             print("Deleted user's local notifications")
+            
+            self.tabBarController?.selectedIndex = 0
             
         }))
         
@@ -189,6 +194,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             self.defaults.set(true, forKey: "notificationsToggled")
             
+            self.timePicker.isUserInteractionEnabled = true
+            self.onPicker.isUserInteractionEnabled = true
+            
             saveDefaultNotificationValues()
             
             registerForPushNotifications()
@@ -197,6 +205,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         else {
             
             self.defaults.set(false, forKey: "notificationsToggled")
+            
+            self.timePicker.isUserInteractionEnabled = false
+            self.onPicker.isUserInteractionEnabled = false
             
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
@@ -303,12 +314,20 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
                         if UIApplication.shared.canOpenURL(settingsUrl) {
                             UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                //print("Settings opened: \(success)") // Prints true
+                                // User opened the setting page
                             })
                         }
                     }
                     alertController.addAction(settingsAction)
-                    let cancelAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
+                    
+                    let cancelAction = UIAlertAction(title: "No", style: .cancel, handler:{ action in
+                        
+                        //self.pushNotificationsSwitch.isUserInteractionEnabled = false
+                        self.timePicker.isUserInteractionEnabled = false
+                        self.onPicker.isUserInteractionEnabled = false
+                        
+                        
+                    })
                     alertController.addAction(cancelAction)
 
                     self.present(alertController, animated: true, completion: nil)
@@ -356,8 +375,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                         coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                         self.schedule.locationCoordinate = coordinates
                         
-                        print("Latitude: \(self.schedule.locationCoordinate.latitude)")
-                        print("Longitude: \(self.schedule.locationCoordinate.longitude)")
+                        //print("Latitude: \(self.schedule.locationCoordinate.latitude)")
+                        //print("Longitude: \(self.schedule.locationCoordinate.longitude)")
                         
                         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                         
@@ -375,8 +394,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                     let ward = data[0][self.common.constants.ward] as? String ?? ""
                                     let section = data[0][self.common.constants.section] as? String ?? ""
                                     
-                                    print("Ward: \(ward)")
-                                    print("Section: \(section)")
+                                    //print("Ward: \(ward)")
+                                    //print("Section: \(section)")
                                     
                                     self.schedule.ward = ward
                                     self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
@@ -405,8 +424,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                     let dates = item[self.common.constants.dates] as? String ?? ""
                                                     let datesArray = dates.components(separatedBy: ",")
                                                     
-                                                    print("Month name: \(monthName)")
-                                                    print("Dates: \(datesArray)")
+                                                    //print("Month name: \(monthName)")
+                                                    //print("Dates: \(datesArray)")
                                                     
                                                     //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                                                     let month = MonthModel()
@@ -415,7 +434,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                     
                                                     for day in datesArray {
                                                         
-                                                        print("Date: \(day)")
+                                                        //print("Date: \(day)")
                                                         
                                                         if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                             
