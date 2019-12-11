@@ -10,6 +10,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchAddressButton: UIButton!
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
+    @IBOutlet weak var sweepStatusLabel: UILabel!
+    @IBOutlet weak var sweepStatusStackView: UIStackView!
     
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
@@ -30,6 +32,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         styleControls()
         
         getDefaults()
+        
+        getSweepingStatus()
         
         loadChicagoMap()
         
@@ -138,6 +142,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         super.viewWillAppear(animated)
 
         self.tabBarController?.navigationItem.rightBarButtonItem = nil
+        self.tabBarController?.navigationItem.leftBarButtonItem = nil
         self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
     }
     
@@ -151,6 +156,44 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     }
     
     // MARK: Methods
+    
+    func getSweepingStatus() {
+        
+        let currentMonthNumber = Calendar.current.component(.month, from: Date())
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+        
+        let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+            .limit(1)
+            .orderDescending("month_number")
+            .filter("month_number IS NOT NULL")
+        
+        wardQuery.get { res in
+        switch res {
+        case .dataset (let data):
+            
+            let month = data[0][self.common.constants.month_number] as? String ?? ""
+            let days = data[0][self.common.constants.dates] as? String ?? ""
+            print("Last sweep month: \(month)")
+            print("Last sweep days: \(days)")
+            
+            if !month.isEmpty {
+                if Int(month)! > 0 {
+                    if currentMonthNumber > Int(month)! {
+                        self.sweepStatusStackView.isHidden = false
+                        self.sweepStatusLabel.text = "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications"
+                    }
+                    else {
+                        self.sweepStatusStackView.isHidden = true
+                    }
+                }
+            }
+        case .error (let err):
+            print("Unable to get sweep status from the City of Chicago: \(err.localizedDescription)")
+            }
+        }
+        
+    }
     
     func getSchedule(_ address: String) {
         

@@ -51,7 +51,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             self.timePicker.isUserInteractionEnabled = notificationsToggled
             
             // TODO: TabBar is nil when coming from schedule page so it's not adding this button
+            //let removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+            self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
             self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+            
+            //self.tabBarController?.navigationItem.rightBarButtonItems = [viewScheduleButton, removeFavoriteButton]
             
 //            if self.tabBarController == nil {
 //
@@ -87,6 +91,15 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             self.onPicker.isUserInteractionEnabled = false
             self.timePicker.isUserInteractionEnabled = false
         }
+    }
+    
+    @objc func viewSchedule() {
+        
+        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+            destinationViewController.schedule = self.schedule
+            self.navigationController?.pushViewController(destinationViewController, animated: true)
+        }
+        
     }
     
     func loadFavoriteMap() {
@@ -227,7 +240,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
        
         let content = UNMutableNotificationContent()
         content.title = "Sweep Alert"
-        content.body = "Your section is being swept on 12/12"
+        content.body = "Your section is being swept on 12/12 between 9am and 2pm"
         let soundName = UNNotificationSoundName("notification.m4r")
         content.sound = UNNotificationSound(named: soundName)
         content.badge = 1
@@ -393,6 +406,25 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                     
                                     let ward = data[0][self.common.constants.ward] as? String ?? ""
                                     let section = data[0][self.common.constants.section] as? String ?? ""
+                                    let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
+                                    let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
+                                    let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                                    
+                                    //self.defaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
+                                    //self.defaults.synchronize()
+                                    
+                                    for(_, coordinate) in coordinatesArray!.enumerated() {
+                                        
+                                        for item in coordinate {
+                                            
+                                            var coordinate = CLLocationCoordinate2D()
+                                            coordinate.longitude = item[0] as? Double ?? 0
+                                            coordinate.latitude = item[1] as? Double ?? 0
+                                            
+                                            self.schedule.polygonCoordinates.append(coordinate)
+                                            
+                                        }
+                                    }
                                     
                                     //print("Ward: \(ward)")
                                     //print("Section: \(section)")
@@ -497,7 +529,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                         
                                                         let content = UNMutableNotificationContent()
                                                         content.title = "Sweep Alert"
-                                                        content.body = "Your section is being swept on \(monthInSchedule.number)/\(dayInMonth.date)"
+                                                        content.body = "Your area is being swept on \(monthInSchedule.number)/\(dayInMonth.date) between 9am and 2pm"
                                                         content.sound = .default
                                                         content.badge = 1
                                                         

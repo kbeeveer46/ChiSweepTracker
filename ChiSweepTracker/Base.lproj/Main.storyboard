@@ -23,7 +23,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="161"/>
+                                <rect key="frame" x="10" y="294" width="355" height="209.5"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
@@ -56,19 +56,36 @@
                                         </connections>
                                     </button>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s3f-Yb-UyJ">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="168.5" width="355" height="0.0"/>
                                         <string key="text">During street sweeping season (April - November) the Chicago Department of Streets and Sanitation uses mechanical street sweepers to remove debris and litter from streets, weather permitting.</string>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-5R-4jl">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="168.5" width="355" height="0.0"/>
                                         <string key="text">Bright orange temporary parking restrictions are posted at least 24 hours before sweeping service is scheduled to begin on any street to ensure curb-to-curb cleaning.  Some arterial streets have permanently posted signs that specify a once-per-week period when parking is prohibited for street sweeping. </string>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UVa-px-AgQ">
+                                        <rect key="frame" x="0.0" y="176" width="355" height="33.5"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle" translatesAutoresizingMaskIntoConstraints="NO" id="SDy-H7-HI8">
+                                                <rect key="frame" x="0.0" y="0.0" width="40" height="33.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="40" id="2fe-OM-5eJ"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sweep Schedule Ended Message" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AIW-w5-sHc">
+                                                <rect key="frame" x="50" y="0.0" width="305" height="33.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="iz5-fA-FV8" firstAttribute="centerX" secondItem="a0x-bJ-ZY7" secondAttribute="centerX" id="0ge-QB-cMx"/>
@@ -93,6 +110,8 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
+                        <outlet property="sweepStatusLabel" destination="AIW-w5-sHc" id="FGJ-aS-i7t"/>
+                        <outlet property="sweepStatusStackView" destination="UVa-px-AgQ" id="x0U-CQ-Cj3"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
                     </connections>
                 </viewController>
@@ -105,31 +124,31 @@
             <objects>
                 <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="160" id="Y6R-wb-aGO"/>
+                                            <constraint firstAttribute="height" constant="235" id="Y6R-wb-aGO"/>
                                         </constraints>
                                     </mapView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                        <rect key="frame" x="0.0" y="160" width="375" height="463"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="45" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
+                                        <rect key="frame" x="0.0" y="235" width="375" height="412"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" rowHeight="55" id="gue-Fp-3PN">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="55"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
+                                                <rect key="frame" x="0.0" y="28" width="375" height="45"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gue-Fp-3PN" id="Lge-eF-dGr">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="55"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
-                                                            <rect key="frame" x="10" y="17" width="150" height="21.5"/>
+                                                            <rect key="frame" x="10" y="12" width="150" height="21.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="4fh-Xl-nMF"/>
                                                             </constraints>
@@ -138,7 +157,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1  5  10  15  20  25  30" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
-                                                            <rect key="frame" x="95" y="18.5" width="270" height="18"/>
+                                                            <rect key="frame" x="95" y="13.5" width="270" height="18"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="HYZ-AV-YjT"/>
                                                             </constraints>
@@ -179,7 +198,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVl-Ol-uV1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2687" y="777"/>
+            <point key="canvasLocation" x="2689" y="81"/>
         </scene>
         <!--Select Sweep Section-->
         <scene sceneID="Ofh-FB-Cvn">
@@ -240,20 +259,20 @@
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" rotateEnabled="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="235" id="WfC-nd-6GW"/>
                                         </constraints>
                                     </mapView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="235" width="375" height="76.5"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
+                                        <rect key="frame" x="0.0" y="236.5" width="375" height="76.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
                                                 <rect key="frame" x="20" y="35" width="40" height="33.5"/>
@@ -269,7 +288,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="296" y="36.5" width="61" height="31"/>
+                                                <rect key="frame" x="296" y="36" width="61" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -278,10 +297,10 @@
                                         <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                         <edgeInsets key="layoutMargins" top="35" left="20" bottom="8" right="20"/>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="371" width="375" height="116"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
+                                        <rect key="frame" x="0.0" y="374" width="375" height="116"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
                                                 <rect key="frame" x="20" y="8" width="40" height="100"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="guE-uh-qMy"/>
@@ -310,7 +329,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="507" width="375" height="116"/>
+                                        <rect key="frame" x="0.0" y="531" width="375" height="116"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
                                                 <rect key="frame" x="20" y="8" width="40" height="100"/>
@@ -362,89 +381,12 @@
                         <outlet property="onPicker" destination="LL0-f2-4jY" id="mlx-aQ-uua"/>
                         <outlet property="pushNotificationsSwitch" destination="jk6-Wy-pyD" id="f6m-W1-H1h"/>
                         <outlet property="timePicker" destination="luP-wW-qKV" id="Evl-EH-OAz"/>
+                        <segue destination="Xr8-KD-z2R" kind="show" identifier="showScheduleFromNotificationsSegue" id="maw-XV-A0s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1184.8" y="79.610194902548727"/>
-        </scene>
-        <!--Favorites View Controller-->
-        <scene sceneID="EnN-dt-ehy">
-            <objects>
-                <viewController storyboardIdentifier="FavoritesViewController" id="QzM-TK-Pkh" customClass="FavoritesViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Bxe-an-x3q">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QXi-U5-xHD">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoritesTableViewCell" rowHeight="60" id="gWD-q3-gYK">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="60"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gWD-q3-gYK" id="S44-90-Faq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FZD-7C-uyB">
-                                                    <rect key="frame" x="10" y="0.0" width="350" height="60"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Main St, Chicago IL 60654" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDf-pm-KJJ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="290" height="60"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="LKk-RU-z7D"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jyb-yX-6cR">
-                                                            <rect key="frame" x="290" y="0.0" width="60" height="60"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="60" id="UPG-t2-5Eu"/>
-                                                                <constraint firstAttribute="width" constant="60" id="bw2-eT-ucx"/>
-                                                            </constraints>
-                                                            <state key="normal" image="star"/>
-                                                        </button>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="nDf-pm-KJJ" firstAttribute="centerY" secondItem="FZD-7C-uyB" secondAttribute="centerY" id="Rcm-ng-zY1"/>
-                                                        <constraint firstItem="Jyb-yX-6cR" firstAttribute="centerY" secondItem="FZD-7C-uyB" secondAttribute="centerY" id="wZK-tE-Xz7"/>
-                                                    </constraints>
-                                                </stackView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="FZD-7C-uyB" firstAttribute="top" secondItem="S44-90-Faq" secondAttribute="top" id="F7Y-UO-xPH"/>
-                                                <constraint firstItem="FZD-7C-uyB" firstAttribute="leading" secondItem="S44-90-Faq" secondAttribute="leading" constant="10" id="Xix-jQ-17N"/>
-                                                <constraint firstAttribute="bottom" secondItem="FZD-7C-uyB" secondAttribute="bottom" id="acL-Qn-V8g"/>
-                                                <constraint firstAttribute="trailing" secondItem="FZD-7C-uyB" secondAttribute="trailing" constant="15" id="czl-cT-3UW"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="U8j-Cl-Z7k" firstAttribute="bottom" secondItem="QXi-U5-xHD" secondAttribute="bottom" id="7GR-DG-yIx"/>
-                            <constraint firstItem="QXi-U5-xHD" firstAttribute="leading" secondItem="U8j-Cl-Z7k" secondAttribute="leading" id="ZkX-60-hfn"/>
-                            <constraint firstItem="U8j-Cl-Z7k" firstAttribute="trailing" secondItem="QXi-U5-xHD" secondAttribute="trailing" id="ufx-Fe-vZB"/>
-                            <constraint firstItem="QXi-U5-xHD" firstAttribute="top" secondItem="U8j-Cl-Z7k" secondAttribute="top" id="z9U-YO-F7V"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="U8j-Cl-Z7k"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="NmR-hu-ND7"/>
-                    <navigationItem key="navigationItem" id="hlL-9x-flN"/>
-                    <connections>
-                        <outlet property="favoritesTableView" destination="QXi-U5-xHD" id="yTM-Ps-QFJ"/>
-                        <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationSegue" id="Jfa-BP-tdE"/>
-                        <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleFromFavoritesSegue" id="eeu-aC-kNn"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FuD-sq-9NS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1185" y="-599"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sXP-ht-gqy">
@@ -486,13 +428,14 @@
         </scene>
     </scenes>
     <resources>
-        <image name="calendar" width="33.5" height="33.5"/>
+        <image name="calendar_day" width="33.5" height="33.5"/>
+        <image name="info_circle" width="33.5" height="33.5"/>
         <image name="phone" width="33.5" height="33.5"/>
         <image name="star" width="33.5" height="33.5"/>
         <image name="time" width="33.5" height="33.5"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="eEQ-YS-Bae"/>
-        <segue reference="aU1-JL-7NV"/>
+        <segue reference="maw-XV-A0s"/>
     </inferredMetricsTieBreakers>
 </document>
