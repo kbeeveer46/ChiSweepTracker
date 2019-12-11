@@ -68,6 +68,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //defaults.set(schedule.section, forKey: "favoriteSection")
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
         defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
+        
+        let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
+        defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
         //defaults.set(schedule.polygonCoordinates., forKey: "favoriteSectionCoordinates")
         
         // Set right bar button to remove now that a favorite has been set
@@ -103,6 +106,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             self.defaults.set("", forKey: "favoriteAddress")
             self.defaults.set(0.0, forKey: "favoriteLatitude")
             self.defaults.set(0.0, forKey: "favoriteLongitude")
+            self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
             
             // Set right bar button to add now that a favorite has been removed
             self.navigationItem.rightBarButtonItem = self.addFavoriteButton

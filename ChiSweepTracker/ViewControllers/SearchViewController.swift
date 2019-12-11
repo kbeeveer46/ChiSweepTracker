@@ -46,21 +46,29 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     @IBAction func searchTypeTapped(_ sender: Any) {
         
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        // Remove map annotations
         chicagoMapView.removeAnnotations(chicagoMapView.annotations)
         
         if searchTypeSegment.selectedSegmentIndex == 0 {
             
+            // Stop updating location if user selects "drop pin"
             locationManager.stopUpdatingLocation()
             
         }
         else if searchTypeSegment.selectedSegmentIndex == 1 {
             
-            addressTextField.text = ""
-            
             // Request location access
             locationManager.requestWhenInUseAuthorization()
             
             if CLLocationManager.locationServicesEnabled() {
+                
+                // Clear out address text field. It will be updated once device gets user's location
+                addressTextField.text = ""
                 
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -201,6 +209,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
                             let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                            
+                            //let coordinatesData = NSKeyedArchiver.archivedData(withRootObject: coordinatesArray as Any)
+                            self.defaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
+                            self.defaults.synchronize()
                             
                             for(_, coordinate) in coordinatesArray!.enumerated() {
                                 

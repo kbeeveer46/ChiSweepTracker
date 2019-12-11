@@ -52,11 +52,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             // TODO: TabBar is nil when coming from schedule page so it's not adding this button
             self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
             
-            if self.tabBarController == nil {
-                
-                self.navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
-                
-            }
+//            if self.tabBarController == nil {
+//
+//                self.navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+//
+//            }
             
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .notDetermined {
@@ -95,8 +95,24 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
         let favoriteLatitude = defaults.double(forKey: "favoriteLatitude")
+        let favoriteCoordinatesArray = defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]]
+        var mapOverlayCoordinates = [CLLocationCoordinate2D]()
         
         if favoriteLongitude != 0 && favoriteLatitude != 0 {
+            
+            if favoriteCoordinatesArray != nil {
+                for(_, coordinate) in favoriteCoordinatesArray!.enumerated() {
+                    for item in coordinate {
+                        var coordinate = CLLocationCoordinate2D()
+                        coordinate.longitude = item[0] as? Double ?? 0
+                        coordinate.latitude = item[1] as? Double ?? 0
+                        mapOverlayCoordinates.append(coordinate)
+                    }
+                }
+                let polygon = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
+                favoriteMapView.removeOverlays(favoriteMapView.overlays)
+                favoriteMapView.addOverlay(polygon)
+            }
 
             let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
 
@@ -104,11 +120,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             annotation.title = favoriteAddress
             annotation.coordinate = location.coordinate
 
-            let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+            let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             
             favoriteMapView.addAnnotation(annotation)
             favoriteMapView.setRegion(region, animated: true)
+            
+            favoriteMapView.isHidden = false
         }
         else {
             
@@ -122,17 +140,24 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     @objc func removeFavorite() {
         
-        let alert = UIAlertController(title: "Delete favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
+            // TODO: Change this button to add it they remove favorite
             self.tabBarController?.navigationItem.rightBarButtonItem = nil
+            //self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
             
             print("Deleted favorite address: \(self.favoriteAddress)")
             
             self.defaults.set("", forKey: "favoriteAddress")
             self.defaults.set(0.0, forKey: "favoriteLongitude")
             self.defaults.set(0.0, forKey: "favoriteLatitude")
+            self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
             self.favoriteAddress = ""
             self.pushNotificationsSwitch.isOn = false
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
@@ -534,6 +559,22 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         self.view.endEditing(true)
         return false
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        
+        if overlay is MKPolygon {
+            
+            if let pg = overlay as? MKPolygon {
+                
+                let pr = MKPolygonRenderer(polygon: pg)
+                pr.fillColor = .red
+                pr.alpha = 0.4
+                return pr
+            }
+        }
+        
+        return MKOverlayRenderer(overlay: overlay)
     }
 
     
