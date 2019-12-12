@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7B0EC987EB5B4567CAC7F11F /* Pods_ChiSweepTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99969CE76945B753DD567C6 /* Pods_ChiSweepTracker.framework */; };
+		FA03D6E823A19EA700FB2668 /* DatabaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03D6E723A19EA700FB2668 /* DatabaseModel.swift */; };
 		FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC34F239AFB2600DD3127 /* Assets.xcassets */; };
 		FA0EC353239B0BC600DD3127 /* icon-white.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC352239B0BC600DD3127 /* icon-white.png */; };
 		FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0EC355239B105F00DD3127 /* MapKit.framework */; };
@@ -32,6 +33,7 @@
 		BA3238BEB5A79E34C5F71659 /* Pods-ChiSweepTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.debug.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		C99969CE76945B753DD567C6 /* Pods_ChiSweepTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChiSweepTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF241862024D4CE31CA6E263 /* Pods-ChiSweepTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.release.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.release.xcconfig"; sourceTree = "<group>"; };
+		FA03D6E723A19EA700FB2668 /* DatabaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseModel.swift; sourceTree = "<group>"; };
 		FA0EC34F239AFB2600DD3127 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ChiSweepTracker/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		FA0EC352239B0BC600DD3127 /* icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-white.png"; sourceTree = "<group>"; };
 		FA0EC355239B105F00DD3127 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -108,9 +110,10 @@
 		FA184FA623987ADC00AB2FF6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FA03D6E723A19EA700FB2668 /* DatabaseModel.swift */,
+				FA0EC395239D71CB00DD3127 /* NotificationsModel.swift */,
 				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
 				FA0EC393239D419E00DD3127 /* UserModel.swift */,
-				FA0EC395239D71CB00DD3127 /* NotificationsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA03D6E823A19EA700FB2668 /* DatabaseModel.swift in Sources */,
 				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
 				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,

@@ -147,7 +147,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         else {
             
-            favoriteMapView.isHidden = true
+            let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+            let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+            let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+            favoriteMapView.setRegion(region, animated: true)
+            
             self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
             
         }
@@ -245,7 +249,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
        
         let content = UNMutableNotificationContent()
         content.title = "Sweep Alert"
-        content.body = "Your section is being swept on 12/12 between 9am and 2pm"
+        content.body = "Your section is being swept on 12/12 between 9 am and 2 pm"
         let soundName = UNNotificationSoundName("notification.m4r")
         content.sound = UNNotificationSound(named: soundName)
         content.badge = 1
@@ -534,7 +538,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                         
                                                         let content = UNMutableNotificationContent()
                                                         content.title = "Sweep Alert"
-                                                        content.body = "Your area is being swept on \(monthInSchedule.number)/\(dayInMonth.date) between 9am and 2pm"
+                                                        content.body = "Your area is being swept on \(monthInSchedule.number)/\(dayInMonth.date) between 9 am and 2 pm"
                                                         content.sound = .default
                                                         content.badge = 1
                                                         

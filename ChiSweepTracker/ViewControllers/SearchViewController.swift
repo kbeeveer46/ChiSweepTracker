@@ -24,10 +24,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     var longitudeFromDefaults = 0.0
     var latitudeFromDefaults = 0.0
     
+    let databaseModel = DatabaseModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //self.window = UIWindow()
+        
+        //databaseModel.officialWardDataSet()
         
         styleControls()
         
@@ -66,26 +70,40 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             locationManager.requestWhenInUseAuthorization()
             
             if CLLocationManager.locationServicesEnabled() {
-                 switch CLLocationManager.authorizationStatus() {
-                    case .notDetermined, .restricted, .denied:
-                         //showLocationDisabledPopup()
-                        break
-                    case .authorizedAlways, .authorizedWhenInUse:
-                            
-                        // Clear out address text field. It will be updated once device gets user's location
-                        addressTextField.text = ""
-                        
-                        locationManager.delegate = self
-                        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                        locationManager.startUpdatingLocation()
                     
-                 @unknown default:
-                    print("Location services are not enabled")
-                }
+                    addressTextField.text = ""
+                        
+                    locationManager.delegate = self
+                    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                    locationManager.startUpdatingLocation()
+                
             }
             else {
                 print("Location services are not enabled")
             }
+            
+//            if CLLocationManager.locationServicesEnabled() {
+//                 switch CLLocationManager.authorizationStatus() {
+//                    case .notDetermined, .restricted, .denied:
+//                         //showLocationDisabledPopup()
+//                        break
+//                    case .authorizedAlways, .authorizedWhenInUse:
+//
+//                        // Clear out address text field. It will be updated once device gets user's location
+//                        addressTextField.text = ""
+//
+//                        locationManager.delegate = self
+//                        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//                        locationManager.startUpdatingLocation()
+//
+//                 @unknown default:
+//                    print("Location services are not enabled")
+//                }
+//            }
+//            else {
+//                print("Location services are not enabled")
+//            }
+            
         }
         else if searchTypeSegment.selectedSegmentIndex == 2 {
             // Stop updating location if user selects "enter address"
