@@ -1,35 +1,38 @@
 import UIKit
 import Foundation
+import MapKit
 
-class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
    
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var MonthLabel: UILabel!
+    @IBOutlet weak var calendarMapView: MKMapView!
     
+    var schedule = ScheduleModel()
+    
+    let calendar = Foundation.Calendar.current
+    let date = Foundation.Date()
+    
+    
+    
+    // TODO: See what this needs to be the current month
+    lazy var month = Foundation.Calendar.current.component(.month, from: date) - 1
+    lazy var year = Foundation.Calendar.current.component(.year, from: date)
     var selectedMonth = 0
     var dates = ""
-    var weekday = 0
+    var weekDay = 0
+    var day = 0
     
     let Months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-    
     let DaysOfMonth = ["Monday","Thuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-    
     var DaysInMonths = [31,28,31,30,31,30,31,31,30,31,30,31]
-    
     var currentMonth = String()
-    
     var NumberOfEmptyBox = Int()
-    
     var NextNumberOfEmptyBox = Int()
-    
     var PreviousNumberOfEmptyBox = 0
-    
     var Direction = 0
-    
     var PositionIndex = 0
-    
     var LeapYearCounter = 2
-    
     var dayCounter = 0
     
     override func viewDidLoad() {
@@ -40,7 +43,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         //currentMonth = Months[month]
         currentMonth = Months[selectedMonth - 1]
         day = Int(dates.prefix(2).trimmingCharacters(in: .whitespaces))!
-        //MonthLabel.text = "\(currentMonth) \(year)"
+        MonthLabel.text = "\(currentMonth) \(year)"
         self.title = "\(currentMonth) Schedule"
         
         // Specify date components
@@ -58,11 +61,51 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 //        formatter.dateFormat = "M/dd/yyyy"
 //        let someDateTime = formatter.date(from: "\(selectedMonth - 1)/\(day)/\(year)")
         
-        weekday = Foundation.Calendar.current.component(.weekday, from: someDateTime!) - 1
-        if weekday == 0 {
-            weekday = 7
+        weekDay = Foundation.Calendar.current.component(.weekday, from: someDateTime!) - 1
+        if weekDay == 0 {
+            weekDay = 7
         }
         GetStartDateDayPosition()
+        
+        loadScheduleMap()
+    }
+    
+    func loadScheduleMap() {
+        
+        calendarMapView.delegate = self
+        
+        let coordinates = self.schedule.polygonCoordinates
+        let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
+        
+        let annotation = MKPointAnnotation()
+        annotation.title = "\(self.schedule.address)"
+        annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
+        annotation.coordinate = self.schedule.locationCoordinate
+        
+        let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+        let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
+        
+        calendarMapView.setRegion(region, animated: true)
+        calendarMapView.removeOverlays(calendarMapView.overlays)
+        calendarMapView.addOverlay(polygon)
+        calendarMapView.addAnnotation(annotation)
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        
+        if overlay is MKPolygon {
+            
+            if let pg = overlay as? MKPolygon {
+                
+                let pr = MKPolygonRenderer(polygon: pg)
+                pr.fillColor = .red
+                pr.alpha = 0.4
+                return pr
+            }
+        }
+        
+        return MKOverlayRenderer(overlay: overlay)
     }
     
 //-----------(Calculates the number of "empty" boxes at the start of every month")------------------------------------------------------
@@ -70,7 +113,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     func GetStartDateDayPosition() {
         switch Direction{
         case 0:                                     
-            NumberOfEmptyBox = weekday
+            NumberOfEmptyBox = weekDay
             dayCounter = day
             while dayCounter>0 {
                 NumberOfEmptyBox = NumberOfEmptyBox - 1
