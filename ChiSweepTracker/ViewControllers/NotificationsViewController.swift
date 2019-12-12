@@ -1,7 +1,7 @@
 import UIKit
 import UserNotifications
 import CoreLocation
-import CoreData
+//import CoreData
 import MapKit
 
 class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate/*, NotificationsModelDelegate*/ {

@@ -1,13 +1,14 @@
-
-
 import UIKit
+import Foundation
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
    
-    
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var MonthLabel: UILabel!
     
+    var selectedMonth = 0
+    var dates = ""
+    var weekday = 0
     
     let Months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     
@@ -34,8 +35,30 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        currentMonth = Months[month]
-        MonthLabel.text = "\(currentMonth) \(year)"
+        
+        // Old
+        //currentMonth = Months[month]
+        currentMonth = Months[selectedMonth - 1]
+        day = Int(dates.prefix(2).trimmingCharacters(in: .whitespaces))!
+        //MonthLabel.text = "\(currentMonth) \(year)"
+        self.title = "\(currentMonth) Schedule"
+        
+        // Specify date components
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = selectedMonth
+        dateComponents.day = day
+
+        // Create date from components
+        let userCalendar = Foundation.Calendar.current // user calendar
+        let someDateTime = userCalendar.date(from: dateComponents)
+        
+        
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "M/dd/yyyy"
+//        let someDateTime = formatter.date(from: "\(selectedMonth - 1)/\(day)/\(year)")
+        
+        weekday = Foundation.Calendar.current.component(.weekday, from: someDateTime!) - 1
         if weekday == 0 {
             weekday = 7
         }
@@ -173,6 +196,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Calendar", for: indexPath) as! DateCollectionViewCell
+        
+        
         cell.backgroundColor = UIColor.clear
 
         cell.DateLabel.textColor = UIColor.black
@@ -206,11 +231,28 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         default:
             break
         }
-        if currentMonth == Months[calendar.component(.month, from: date) - 1] && year == calendar.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
-            cell.Circle.isHidden = false
-            cell.DrawCircle()
+        
+        var datesArray = dates.components(separatedBy: " ")
+        datesArray = datesArray.filter {$0 != ""}
+        
+        for date in datesArray {
+            
+            // Old
+            //        if currentMonth == Months[calendar.component(.month, from: date) - 1] && year == calendar.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
+            if indexPath.row + 1 - NumberOfEmptyBox == Int(date) {
+                
+                cell.Circle.isHidden = false
+                cell.DrawCircle()
 
+            }
+            
         }
+        
+        
+  
+        
+        
+        
         return cell
     }
 }

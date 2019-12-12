@@ -137,12 +137,14 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        //let row = indexPath.row
-        //let cell = tableView.cellForRow(at: indexPath)!
-        print("Anything here? \(schedule.months[indexPath.row].name)")
+        let cell = tableView.cellForRow(at: indexPath)!
+        let daysLabel = cell.viewWithTag(2) as! UILabel
+        //print(daysLabel.text!.trimmingCharacters(in: .whitespaces))
+        let days = daysLabel.text!.trimmingCharacters(in: .whitespaces)
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
-            //destinationViewController.schedule = self.schedule
+            destinationViewController.selectedMonth = Int(schedule.months[indexPath.row].number) ?? 0
+            destinationViewController.dates = days
             self.navigationController?.pushViewController(destinationViewController, animated: true)
         }
         
