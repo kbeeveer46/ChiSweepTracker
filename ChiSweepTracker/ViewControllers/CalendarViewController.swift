@@ -1,5 +1,4 @@
 import UIKit
-import Foundation
 import MapKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
@@ -7,26 +6,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var MonthLabel: UILabel!
     @IBOutlet weak var calendarMapView: MKMapView!
-    
+
+    var currentYear = Foundation.Calendar.current.component(.year, from: Foundation.Date())
     var schedule = ScheduleModel()
+    var selectedMonthNumber = 0
+    var selectedMonthName = ""
+    var selectedDates = ""
     
-    let calendar = Foundation.Calendar.current
-    let date = Foundation.Date()
+    var firstDayOfSweepingInMonth = 0
+    var weekDayNumberOfFirstDayOfSweepingInMonth = 0
     
-    
-    
-    // TODO: See what this needs to be the current month
-    lazy var month = Foundation.Calendar.current.component(.month, from: date) - 1
-    lazy var year = Foundation.Calendar.current.component(.year, from: date)
-    var selectedMonth = 0
-    var dates = ""
-    var weekDay = 0
-    var day = 0
-    
-    let Months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     let DaysOfMonth = ["Monday","Thuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     var DaysInMonths = [31,28,31,30,31,30,31,31,30,31,30,31]
-    var currentMonth = String()
+
     var NumberOfEmptyBox = Int()
     var NextNumberOfEmptyBox = Int()
     var PreviousNumberOfEmptyBox = 0
@@ -38,34 +30,24 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "\(selectedMonthName) Schedule"
         
-        // Old
-        //currentMonth = Months[month]
-        currentMonth = Months[selectedMonth - 1]
-        day = Int(dates.prefix(2).trimmingCharacters(in: .whitespaces))!
-        MonthLabel.text = "\(currentMonth) \(year)"
-        self.title = "\(currentMonth) Schedule"
+        selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
+        firstDayOfSweepingInMonth = Int(selectedDates.prefix(2).trimmingCharacters(in: .whitespaces))!
         
         // Specify date components
         var dateComponents = DateComponents()
-        dateComponents.year = year
-        dateComponents.month = selectedMonth
-        dateComponents.day = day
-
-        // Create date from components
-        let userCalendar = Foundation.Calendar.current // user calendar
-        let someDateTime = userCalendar.date(from: dateComponents)
+        dateComponents.year = currentYear
+        dateComponents.month = selectedMonthNumber
+        dateComponents.day = firstDayOfSweepingInMonth
+        let firstDateOfSweepingInMonth = Foundation.Calendar.current.date(from: dateComponents)
         
-        
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "M/dd/yyyy"
-//        let someDateTime = formatter.date(from: "\(selectedMonth - 1)/\(day)/\(year)")
-        
-        weekDay = Foundation.Calendar.current.component(.weekday, from: someDateTime!) - 1
-        if weekDay == 0 {
-            weekDay = 7
+        weekDayNumberOfFirstDayOfSweepingInMonth = Foundation.Calendar.current.component(.weekday, from: firstDateOfSweepingInMonth!) - 1
+        if weekDayNumberOfFirstDayOfSweepingInMonth == 0 {
+            weekDayNumberOfFirstDayOfSweepingInMonth = 7
         }
-        GetStartDateDayPosition()
+        
+        getStartDateDayPosition()
         
         loadScheduleMap()
     }
@@ -108,13 +90,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return MKOverlayRenderer(overlay: overlay)
     }
     
-//-----------(Calculates the number of "empty" boxes at the start of every month")------------------------------------------------------
+    //Calculates the number of "empty" boxes at the start of every month
     
-    func GetStartDateDayPosition() {
+    func getStartDateDayPosition() {
         switch Direction{
         case 0:                                     
-            NumberOfEmptyBox = weekDay
-            dayCounter = day
+            NumberOfEmptyBox = weekDayNumberOfFirstDayOfSweepingInMonth
+            dayCounter = firstDayOfSweepingInMonth
             while dayCounter>0 {
                 NumberOfEmptyBox = NumberOfEmptyBox - 1
                 dayCounter = dayCounter - 1
@@ -127,11 +109,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             }
             PositionIndex = NumberOfEmptyBox
         case 1...:
-            NextNumberOfEmptyBox = (PositionIndex + DaysInMonths[month])%7
+            NextNumberOfEmptyBox = (PositionIndex + DaysInMonths[selectedMonthNumber])%7
             PositionIndex = NextNumberOfEmptyBox
             
         case -1:
-            PreviousNumberOfEmptyBox = (7 - (DaysInMonths[month] - PositionIndex)%7)
+            PreviousNumberOfEmptyBox = (7 - (DaysInMonths[selectedMonthNumber] - PositionIndex)%7)
             if PreviousNumberOfEmptyBox == 7 {
                 PreviousNumberOfEmptyBox = 0
             }
@@ -141,97 +123,14 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-//--------------------------------------------------(Next and back buttons)-------------------------------------------------------------
-
-    @IBAction func Next(_ sender: Any) {
-        switch currentMonth {
-        case "December":
-            Direction = 1
-
-            month = 0
-            year += 1
-            
-            if LeapYearCounter  < 5 {
-                LeapYearCounter += 1
-            }
-            
-            if LeapYearCounter == 4 {
-                DaysInMonths[1] = 29
-            }
-            
-            if LeapYearCounter == 5{
-                LeapYearCounter = 1
-                DaysInMonths[1] = 28
-            }
-            GetStartDateDayPosition()
-            
-            currentMonth = Months[month]
-            MonthLabel.text = "\(currentMonth) \(year)"
-            
-            Calendar.reloadData()
-        default:
-            Direction = 1
-            
-            GetStartDateDayPosition()
-            
-            month += 1
-
-            currentMonth = Months[month]
-            MonthLabel.text = "\(currentMonth) \(year)"
-          
-            Calendar.reloadData()
-        }
-    }
-    
-    @IBAction func Back(_ sender: Any) {
-        switch currentMonth {
-        case "January":
-            Direction = -1
-
-            month = 11
-            year -= 1
-            
-            if LeapYearCounter > 0{
-                LeapYearCounter -= 1
-            }
-            if LeapYearCounter == 0{
-                DaysInMonths[1] = 29
-                LeapYearCounter = 4
-            }else{
-                DaysInMonths[1] = 28
-            }
-            
-            GetStartDateDayPosition()
-            
-            currentMonth = Months[month]
-            MonthLabel.text = "\(currentMonth) \(year)"
-            Calendar.reloadData()
-            
-        default:
-            Direction = -1
-
-            month -= 1
-            
-            GetStartDateDayPosition()
-            
-            currentMonth = Months[month]
-            MonthLabel.text = "\(currentMonth) \(year)"
-            Calendar.reloadData()
-        }
-    }
-    
-   
-//----------------------------------(CollectionView)------------------------------------------------------------------------------------
-
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch Direction{
         case 0:
-            return DaysInMonths[month] + NumberOfEmptyBox
+            return DaysInMonths[selectedMonthNumber] + NumberOfEmptyBox
         case 1...:
-            return DaysInMonths[month] + NextNumberOfEmptyBox
+            return DaysInMonths[selectedMonthNumber] + NextNumberOfEmptyBox
         case -1:
-            return DaysInMonths[month] + PreviousNumberOfEmptyBox
+            return DaysInMonths[selectedMonthNumber] + PreviousNumberOfEmptyBox
         default:
             fatalError()
         }
@@ -240,11 +139,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Calendar", for: indexPath) as! DateCollectionViewCell
         
-        
         cell.backgroundColor = UIColor.clear
-
         cell.DateLabel.textColor = UIColor.black
-
         cell.Circle.isHidden = true
 
         if cell.isHidden{
@@ -275,28 +171,27 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             break
         }
         
-        var datesArray = dates.components(separatedBy: " ")
+        var datesArray = selectedDates.components(separatedBy: " ")
         datesArray = datesArray.filter {$0 != ""}
         
         for date in datesArray {
-            
-            // Old
-            //        if currentMonth == Months[calendar.component(.month, from: date) - 1] && year == calendar.component(.year, from: date) && indexPath.row + 1 - NumberOfEmptyBox == day{
             if indexPath.row + 1 - NumberOfEmptyBox == Int(date) {
-                
                 cell.Circle.isHidden = false
                 cell.DrawCircle()
-
             }
-            
         }
-        
-        
-  
-        
-        
-        
+
         return cell
+    }
+}
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
     }
 }
 

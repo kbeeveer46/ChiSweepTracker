@@ -143,8 +143,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let days = daysLabel.text!.trimmingCharacters(in: .whitespaces)
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
-            destinationViewController.selectedMonth = Int(schedule.months[indexPath.row].number) ?? 0
-            destinationViewController.dates = days
+            destinationViewController.selectedMonthNumber = Int(schedule.months[indexPath.row].number) ?? 0
+            destinationViewController.selectedMonthName = schedule.months[indexPath.row].name ?? ""
+            destinationViewController.selectedDates = days
             destinationViewController.schedule = self.schedule
             self.navigationController?.pushViewController(destinationViewController, animated: true)
         }

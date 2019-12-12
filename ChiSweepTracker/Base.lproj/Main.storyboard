@@ -492,34 +492,6 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
                                 <rect key="frame" x="37.5" y="310.5" width="300" height="336.5"/>
                                 <subviews>
-                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="zQr-lh-Wey">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="0.0"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oB2-n9-gBd">
-                                                <rect key="frame" x="0.0" y="0.0" width="50" height="0.0"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="u9U-JF-Uxy"/>
-                                                </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <connections>
-                                                    <action selector="Back:" destination="a8Y-hK-Ycy" eventType="touchUpInside" id="qYc-Xo-7xu"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aAg-vg-bkS">
-                                                <rect key="frame" x="131" y="0.0" width="42" height="0.0"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="riC-pl-pwp">
-                                                <rect key="frame" x="254" y="0.0" width="46" height="0.0"/>
-                                                <state key="normal" title="Button"/>
-                                                <connections>
-                                                    <action selector="Next:" destination="a8Y-hK-Ycy" eventType="touchUpInside" id="ZKr-eU-ud2"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="20.5"/>
                                         <subviews>
@@ -638,7 +610,6 @@
                     <navigationItem key="navigationItem" title="Calendar" id="f6a-i3-zQi"/>
                     <connections>
                         <outlet property="Calendar" destination="pG9-ck-JRR" id="yQY-VO-EZa"/>
-                        <outlet property="MonthLabel" destination="aAg-vg-bkS" id="mOu-gn-Ly1"/>
                         <outlet property="calendarMapView" destination="ZFy-60-zB9" id="8OS-o5-xov"/>
                     </connections>
                 </viewController>
