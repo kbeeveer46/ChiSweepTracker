@@ -337,9 +337,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     func getSchedule(_ registerForPushNotifications: Bool) {
         
-        self.schedule.months.removeAll()
-        //self.schedule.polygonCoordinates.removeAll()
-        
         print("Address: \(self.favoriteAddress)")
         
         self.schedule.address = self.favoriteAddress
@@ -387,6 +384,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
+                            self.schedule.polygonCoordinates.removeAll()
+                            
                             for(_, coordinate) in coordinatesArray!.enumerated() {
                                 
                                 for item in coordinate {
@@ -420,6 +419,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                 case .dataset (let data):
                                     
                                     if data.count > 0 {
+                                        
+                                        self.schedule.months.removeAll()
                                         
                                         // Populate schedule model to be used on schedule view
                                         

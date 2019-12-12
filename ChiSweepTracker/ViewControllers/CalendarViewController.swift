@@ -145,67 +145,73 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         generator.prepare()
         generator.selectionChanged()
         
-        let cell = collectionView.cellForItem(at: indexPath)
-        let dateLabel = cell!.viewWithTag(1) as! UILabel
+        let cell = collectionView.cellForItem(at: indexPath) as! DateCollectionViewCell
+        let dateLabel = cell.viewWithTag(1) as! UILabel
         let date = dateLabel.text
         
-        let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device", preferredStyle: .alert)
+        if cell.Circle.isHidden == false {
         
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device", preferredStyle: .alert)
             
-            let eventStore = EKEventStore()
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                
+                let eventStore = EKEventStore()
 
-            eventStore.requestAccess(to: .event) { (granted, error) in
+                eventStore.requestAccess(to: .event) { (granted, error) in
 
-                if (granted) && (error == nil) {
-                    print("Event access granted: \(granted)")
-                    //print("error \(error)")
+                    if (granted) && (error == nil) {
+                        print("Event access granted: \(granted)")
+                        //print("error \(error)")
 
-                    let event:EKEvent = EKEvent(eventStore: eventStore)
+                        let event:EKEvent = EKEvent(eventStore: eventStore)
 
-                    var startDateComponents = DateComponents()
-                    startDateComponents.year = self.currentYear
-                    startDateComponents.month = self.selectedMonthNumber
-                    startDateComponents.hour = 9
-                    startDateComponents.minute = 0
-                    startDateComponents.day = Int(date!)
-                    let startDate = Foundation.Calendar.current.date(from: startDateComponents)
-                    
-                    var endDateComponents = DateComponents()
-                    endDateComponents.year = self.currentYear
-                    endDateComponents.month = self.selectedMonthNumber
-                    endDateComponents.hour = 14
-                    endDateComponents.minute = 0
-                    endDateComponents.day = Int(date!)
-                    let endDate = Foundation.Calendar.current.date(from: endDateComponents)
-                    
-                    event.title = "Street Sweeping"
-                    event.startDate = startDate
-                    event.endDate = endDate
-                    event.notes = "City of Chicago street sweeping between 9 am and 2 pm."
-                    event.calendar = eventStore.defaultCalendarForNewEvents
-                    do {
-                        try eventStore.save(event, span: .thisEvent)
-                    } catch let error as NSError {
-                        print("failed to save event with error : \(error)")
+                        var startDateComponents = DateComponents()
+                        startDateComponents.year = self.currentYear
+                        startDateComponents.month = self.selectedMonthNumber
+                        startDateComponents.hour = 9
+                        startDateComponents.minute = 0
+                        startDateComponents.day = Int(date!)
+                        let startDate = Foundation.Calendar.current.date(from: startDateComponents)
+                        
+                        var endDateComponents = DateComponents()
+                        endDateComponents.year = self.currentYear
+                        endDateComponents.month = self.selectedMonthNumber
+                        endDateComponents.hour = 14
+                        endDateComponents.minute = 0
+                        endDateComponents.day = Int(date!)
+                        let endDate = Foundation.Calendar.current.date(from: endDateComponents)
+                        
+                        event.title = "Street Sweeping"
+                        event.startDate = startDate
+                        event.endDate = endDate
+                        event.notes = "City of Chicago street sweeping between 9 am and 2 pm."
+                        event.calendar = eventStore.defaultCalendarForNewEvents
+                        do {
+                            try eventStore.save(event, span: .thisEvent)
+                        } catch let error as NSError {
+                            print("failed to save event with error : \(error)")
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.common.showAlert("'Street Sweeping' Event Added To Calendar", "")
+                        }
+                        
+                        print("Saved Event")
                     }
-                    
-                    DispatchQueue.main.async {
-                        self.common.showAlert("Event Added To Calendar", "")
+                    else{
+                        if error != nil {
+                            print("Error adding event to calendar: \(error!)")
+                        }
                     }
-                    
-                    print("Saved Event")
                 }
-                else{
-                    print("failed to save event with error : \(error!) or access not granted")
-                }
-            }
+                
+            }))
             
-        }))
-        
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true, completion: nil)
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+            
+        }
         
     }
     
