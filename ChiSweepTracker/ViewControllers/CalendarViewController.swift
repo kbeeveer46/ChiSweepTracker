@@ -1,5 +1,6 @@
 import UIKit
 import MapKit
+import EventKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
    
@@ -8,6 +9,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var calendarMapView: MKMapView!
 
     var currentYear = Foundation.Calendar.current.component(.year, from: Foundation.Date())
+    let common = Common()
     var schedule = ScheduleModel()
     var selectedMonthNumber = 0
     var selectedMonthName = ""
@@ -134,6 +136,77 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         default:
             fatalError()
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        let cell = collectionView.cellForItem(at: indexPath)
+        let dateLabel = cell!.viewWithTag(1) as! UILabel
+        let date = dateLabel.text
+        
+        let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            
+            let eventStore = EKEventStore()
+
+            eventStore.requestAccess(to: .event) { (granted, error) in
+
+                if (granted) && (error == nil) {
+                    print("Event access granted: \(granted)")
+                    //print("error \(error)")
+
+                    let event:EKEvent = EKEvent(eventStore: eventStore)
+
+                    var startDateComponents = DateComponents()
+                    startDateComponents.year = self.currentYear
+                    startDateComponents.month = self.selectedMonthNumber
+                    startDateComponents.hour = 9
+                    startDateComponents.minute = 0
+                    startDateComponents.day = Int(date!)
+                    let startDate = Foundation.Calendar.current.date(from: startDateComponents)
+                    
+                    var endDateComponents = DateComponents()
+                    endDateComponents.year = self.currentYear
+                    endDateComponents.month = self.selectedMonthNumber
+                    endDateComponents.hour = 14
+                    endDateComponents.minute = 0
+                    endDateComponents.day = Int(date!)
+                    let endDate = Foundation.Calendar.current.date(from: endDateComponents)
+                    
+                    event.title = "Street Sweeping"
+                    event.startDate = startDate
+                    event.endDate = endDate
+                    event.notes = "City of Chicago street sweeping between 9 am and 2 pm."
+                    event.calendar = eventStore.defaultCalendarForNewEvents
+                    do {
+                        try eventStore.save(event, span: .thisEvent)
+                    } catch let error as NSError {
+                        print("failed to save event with error : \(error)")
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.common.showAlert("Event Added To Calendar", "")
+                    }
+                    
+                    print("Saved Event")
+                }
+                else{
+                    print("failed to save event with error : \(error!) or access not granted")
+                }
+            }
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

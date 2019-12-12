@@ -138,6 +138,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
         let cell = tableView.cellForRow(at: indexPath)!
         let daysLabel = cell.viewWithTag(2) as! UILabel
         let days = daysLabel.text!.trimmingCharacters(in: .whitespaces)

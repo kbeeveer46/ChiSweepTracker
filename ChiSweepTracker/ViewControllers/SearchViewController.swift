@@ -118,6 +118,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     // Search address button is tapped
     @IBAction func searchAddressTapped(_ sender: Any) {
         
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
         locationManager.stopUpdatingLocation()
         
         var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
