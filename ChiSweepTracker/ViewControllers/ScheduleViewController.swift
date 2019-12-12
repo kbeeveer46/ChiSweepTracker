@@ -87,6 +87,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
+            
+//            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
+//                destinationViewController.schedule = self.schedule
+//                self.navigationController?.pushViewController(destinationViewController, animated: true)
+//            }
+            
         }))
         
         self.present(alert, animated: true, completion: nil)

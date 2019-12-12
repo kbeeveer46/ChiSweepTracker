@@ -29,10 +29,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.window = UIWindow()
-        
-        //databaseModel.officialWardDataSet()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         styleControls()
         
         getDefaults()
@@ -44,6 +45,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         // Make enter key close keyboard
         self.addressTextField.delegate = self
         
+        self.tabBarController?.navigationItem.rightBarButtonItem = nil
+        self.tabBarController?.navigationItem.leftBarButtonItem = nil
+        self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
     }
     
     // MARK: Actions
@@ -121,7 +125,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         if address.isEmpty {
-            self.common.showAlert(self.common.constants.errorTitle, "Please enter an address")
+            self.common.showAlert("Please Enter An Address", "")
             return
         }
         
@@ -156,13 +160,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.tabBarController?.navigationItem.rightBarButtonItem = nil
-        self.tabBarController?.navigationItem.leftBarButtonItem = nil
-        self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
-    }
+    
     
     // Prepare segue and pass data to view controllers
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

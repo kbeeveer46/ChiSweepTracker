@@ -50,19 +50,16 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             self.onPicker.isUserInteractionEnabled = notificationsToggled
             self.timePicker.isUserInteractionEnabled = notificationsToggled
             
-            // TODO: TabBar is nil when coming from schedule page so it's not adding this button
-            //let removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
             self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
             self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
             
-            //self.tabBarController?.navigationItem.rightBarButtonItems = [viewScheduleButton, removeFavoriteButton]
             
 //            if self.tabBarController == nil {
 //
-//                self.navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+//                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
 //
 //            }
-            
+//            
             current.getNotificationSettings(completionHandler: { (settings) in
                 if settings.authorizationStatus == .notDetermined {
                     print("notDetermined")
@@ -90,6 +87,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             self.pushNotificationsSwitch.isUserInteractionEnabled = false
             self.onPicker.isUserInteractionEnabled = false
             self.timePicker.isUserInteractionEnabled = false
+            self.tabBarController?.navigationItem.leftBarButtonItem = nil
+            self.tabBarController?.navigationItem.rightBarButtonItem = nil
+            
+            if self.tabBarController == nil {
+                self.navigationItem.leftBarButtonItem = nil
+                self.navigationItem.rightBarButtonItem = nil
+            }
         }
     }
     
@@ -153,6 +157,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             favoriteMapView.setRegion(region, animated: true)
             
             self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
+//            if self.tabBarController == nil
+//            {
+//                self.navigationItem.title = "No Favorite Address Saved"
+//            }
             
         }
         
@@ -191,7 +199,18 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             print("Deleted user's local notifications")
             
+            // If on a view with a tab control then use it to go to the search view
             self.tabBarController?.selectedIndex = 0
+            
+            // If not on a view with a tab control, use navigation controller to go to search view
+            if self.tabBarController == nil {
+                
+                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+                    //destinationViewController.schedule = self.schedule
+                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                }
+                
+            }
             
         }))
         
@@ -448,7 +467,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                     // Get schedule JSON from City of Chicago
                                     
                                     let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
-                                        .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
+                                        .filter("ward = '\(ward)' AND section = '\(self.schedule.section)'")
                                     
                                     scheduleQuery.get { res in
                                         switch res {

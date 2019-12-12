@@ -51,17 +51,12 @@ class Common {
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
         
-        // MARK: Errors
+        // MARK: Alerts
         
         let successTitle = "Success"
         let errorTitle = "Something went wrong..."
-        let notFound = "Could not find sweep area."
-        
-        // MARK: Styling
-        
-        
+        let notFound = "Could not find sweep area. Address must reside in Chicago."
 
-        
     }
 
 }
@@ -75,11 +70,3 @@ public extension UIButton {
     }
 }
 
-
-extension String {
-    
-    var isValidEmail: Bool {
-        return NSPredicate(format: "SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}").evaluate(with: self)
-    }
-    
-}
