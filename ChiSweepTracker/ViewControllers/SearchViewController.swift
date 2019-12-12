@@ -12,6 +12,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     @IBOutlet weak var sweepStatusLabel: UILabel!
     @IBOutlet weak var sweepStatusStackView: UIStackView!
+    @IBOutlet weak var newScheduleButton: UIButton!
+    @IBOutlet weak var finishedScheduleButton: UIButton!
     
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
@@ -203,11 +205,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             if !month.isEmpty {
                 if Int(month)! > 0 {
                     if currentMonthNumber > Int(month)! {
-                        self.sweepStatusStackView.isHidden = false
-                        self.sweepStatusLabel.text = "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications"
+                        //self.sweepStatusStackView.isHidden = false
+                        //self.sweepStatusLabel.text = "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications"
                     }
                     else {
-                        self.sweepStatusStackView.isHidden = true
+                        //self.sweepStatusStackView.isHidden = true
                     }
                 }
             }
@@ -566,7 +568,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         // Style find sweep area button
-        self.common.styleButton(searchAddressButton, "search_circle")
+        self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
+        self.common.styleButton(newScheduleButton, "new", "1EA896")
+        self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
         
     }
 }
