@@ -40,7 +40,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         self.scheduleTableView.dataSource = self
         self.scheduleTableView.delegate = self
-        self.scheduleTableView.allowsSelection = false
+        //self.scheduleTableView.allowsSelection = false
         self.scheduleTableView.reloadData()
 
     }
@@ -132,6 +132,21 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return schedule.months.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        //let row = indexPath.row
+        //let cell = tableView.cellForRow(at: indexPath)!
+        print("Anything here? \(schedule.months[indexPath.row].name)")
+        
+        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
+            //destinationViewController.schedule = self.schedule
+            self.navigationController?.pushViewController(destinationViewController, animated: true)
+        }
+        
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
