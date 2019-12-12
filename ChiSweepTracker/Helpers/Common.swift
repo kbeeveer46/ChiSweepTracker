@@ -37,8 +37,8 @@ class Common {
         
         // MARK: SODA
         
-        let wardDataset = "eiv4-4c3n"
-        let scheduleDataset = "k737-xg34"
+        let wardDataset = "jqxt-c6gd" // Use this dataset to find ward and section based off coordinates
+        let scheduleDataset = "k737-xg34" // Use this dataset to find schedule based off ward and section
         
         let the_geom = "the_geom"
         let ward = "ward"

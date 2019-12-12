@@ -19,6 +19,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Sweep Schedule - \(Calendar.current.component(.year, from: Date()))"
+        
         // Set default address to be used when app is opened
         defaults.set(schedule.address, forKey: "defaultAddress")
         
@@ -40,7 +42,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         self.scheduleTableView.dataSource = self
         self.scheduleTableView.delegate = self
-        //self.scheduleTableView.allowsSelection = false
         self.scheduleTableView.reloadData()
 
     }
@@ -139,18 +140,15 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         let cell = tableView.cellForRow(at: indexPath)!
         let daysLabel = cell.viewWithTag(2) as! UILabel
-        //print(daysLabel.text!.trimmingCharacters(in: .whitespaces))
         let days = daysLabel.text!.trimmingCharacters(in: .whitespaces)
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
             destinationViewController.selectedMonthNumber = Int(schedule.months[indexPath.row].number) ?? 0
-            destinationViewController.selectedMonthName = schedule.months[indexPath.row].name ?? ""
+            destinationViewController.selectedMonthName = schedule.months[indexPath.row].name
             destinationViewController.selectedDates = days
             destinationViewController.schedule = self.schedule
             self.navigationController?.pushViewController(destinationViewController, animated: true)
         }
-        
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

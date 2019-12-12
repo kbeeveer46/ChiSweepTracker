@@ -35,8 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         db.collection("Schedules").whereField("year", isEqualTo: year)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
-                    print("Error getting documents: \(err)")
-                    self.defaults.set("eiv4-4c3n", forKey: "officialWardDataset")
+                    print("getOfficialChicagoDataForCurrentYear: \(err)")
+                    self.defaults.set("jqxt-c6gd", forKey: "officialWardDataset")
                     self.defaults.set("k737-xg34", forKey: "officialScheduleDataset")
                     self.defaults.set("coordinates", forKey: "officialCoordinatesTitle")
                     self.defaults.set("dates", forKey: "officialDatesTitle")

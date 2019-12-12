@@ -30,9 +30,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "\(selectedMonthName) Schedule"
-        
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
+        self.title = "\(selectedMonthName) Schedule - \(currentYear)"
+        
         firstDayOfSweepingInMonth = Int(selectedDates.prefix(2).trimmingCharacters(in: .whitespaces))!
         
         // Specify date components

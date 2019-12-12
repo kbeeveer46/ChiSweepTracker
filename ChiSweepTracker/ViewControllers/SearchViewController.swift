@@ -75,11 +75,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if CLLocationManager.locationServicesEnabled() {
                     
-                    addressTextField.text = ""
-                        
-                    locationManager.delegate = self
-                    locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                    locationManager.startUpdatingLocation()
+                addressTextField.text = ""
+                    
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                locationManager.startUpdatingLocation()
                 
             }
             else {
@@ -117,6 +117,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // Search address button is tapped
     @IBAction func searchAddressTapped(_ sender: Any) {
+        
+        locationManager.stopUpdatingLocation()
         
         var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         
@@ -445,7 +447,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
             
-            locationManager.stopUpdatingLocation()
+            //locationManager.stopUpdatingLocation()
             
         }
     }
