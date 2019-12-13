@@ -109,33 +109,64 @@
         <!--Info-->
         <scene sceneID="4ei-Ma-8ci">
             <objects>
-                <viewController id="Rwe-fk-VdI" sceneMemberID="viewController">
+                <viewController id="Rwe-fk-VdI" customClass="InfoViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="G20-ky-gbn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
-                                <rect key="frame" x="20" y="64" width="335" height="534"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
+                                <rect key="frame" x="15" y="59" width="345" height="485"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info about sweeping and ticket prices" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L3g-SX-wTd">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="534"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-gL-upq">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="130"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="130" id="caP-lb-bSu"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal">
+                                            <string key="title">On weekdays, from 9 am to 2 pm, during street sweeping season (April 1 to November 1) the Chicago Department of Streets and Sanitation uses mechanical street sweepers to remove debris and litter from streets, weather permitting.</string>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="qv8-r5-r5L">
+                                        <rect key="frame" x="0.0" y="145" width="345" height="160"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="160" id="UnY-L4-FDY"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal">
+                                            <string key="title">Bright orange temporary parking restrictions are posted at least 24 hours before sweeping service is scheduled to begin on any street to ensure curb-to-curb cleaning. Some arterial streets have permanently posted signs that specify a once-per-week period when parking is prohibited for street sweeping.</string>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="wp5-4g-axw">
+                                        <rect key="frame" x="0.0" y="320" width="345" height="165"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="165" id="4II-Rd-5gN"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal">
+                                            <string key="title">The City of Chicago will write a $60 street cleaning ticket if your vehicle is parked on a Chicago street scheduled for cleaning. Furthermore, tow trucks are authorized by the City of Chicago to tow your vehicle. An average towing fee is approximately $170 and $40 per day your vehicle stays in the towing lot.</string>
+                                        </state>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="yYl-5I-4u5" firstAttribute="top" secondItem="agh-8R-QJ3" secondAttribute="top" constant="20" id="8YK-cr-8c6"/>
-                            <constraint firstItem="yYl-5I-4u5" firstAttribute="leading" secondItem="agh-8R-QJ3" secondAttribute="leading" constant="20" id="DuV-v8-irB"/>
-                            <constraint firstItem="agh-8R-QJ3" firstAttribute="bottom" secondItem="yYl-5I-4u5" secondAttribute="bottom" constant="20" id="Yge-As-gk6"/>
-                            <constraint firstItem="agh-8R-QJ3" firstAttribute="trailing" secondItem="yYl-5I-4u5" secondAttribute="trailing" constant="20" id="jEj-L4-Fdw"/>
+                            <constraint firstItem="yYl-5I-4u5" firstAttribute="leading" secondItem="G20-ky-gbn" secondAttribute="leading" constant="15" id="Mua-uX-Epx"/>
+                            <constraint firstAttribute="trailing" secondItem="yYl-5I-4u5" secondAttribute="trailing" constant="15" id="m0j-4m-Ihe"/>
+                            <constraint firstItem="yYl-5I-4u5" firstAttribute="top" secondItem="agh-8R-QJ3" secondAttribute="top" constant="15" id="slR-ZS-1Ms"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="agh-8R-QJ3"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Info" image="info_circle" id="o9n-IO-1rG"/>
+                    <connections>
+                        <outlet property="infoButton" destination="gxI-gL-upq" id="mu1-f0-rKX"/>
+                        <outlet property="signsButton" destination="qv8-r5-r5L" id="mC5-0b-TXY"/>
+                        <outlet property="ticketButton" destination="wp5-4g-axw" id="CPx-mn-YkR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xdv-P9-ilq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -337,7 +368,7 @@
                                                     <constraint firstAttribute="width" constant="55" id="Nzu-nG-agp"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are based off the current schedule. The City of Chicago may change the schedule at any time" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPM-ke-G5B">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are based off the current schedule. The City of Chicago may change the schedule at any time." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPM-ke-G5B">
                                                 <rect key="frame" x="69" y="8" width="298" height="60"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="k5W-73-UJg"/>
