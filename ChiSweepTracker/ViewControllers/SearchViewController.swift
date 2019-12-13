@@ -34,6 +34,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        // Check if new datasets are available and show new schedule button.
+        // When user opens app save data set name
+        // Check data set name against one from database.
+        // If it doesn't match then they need to update their notifications.
+        // Show update button on search page and notification page?
+        // Only if they have notifications toggled
+        self.newScheduleButton.isHidden = false
+        let newButtonString = NSMutableAttributedString(string: "2020 sweep schedule available. Click here to set up your new notifications.")
+        self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
+        
         styleControls()
         
         getDefaults()
@@ -203,11 +213,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             if !month.isEmpty {
                 if Int(month)! > 0 {
                     if currentMonthNumber > Int(month)! {
-                        //self.sweepStatusStackView.isHidden = false
-                        //self.sweepStatusLabel.text = "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications"
+                        self.finishedScheduleButton.isHidden = false
+                        let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
+                        self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
                     }
                     else {
-                        //self.sweepStatusStackView.isHidden = true
+                        self.finishedScheduleButton.isHidden = true
                     }
                 }
             }

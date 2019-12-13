@@ -47,16 +47,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.defaults.set("section", forKey: "officialSectionTitle")
                 } else {
                     for document in querySnapshot!.documents {
-                        //print("\(document.documentID) => \(document.data())")
-                        self.defaults.set(document.data()["wardDataset"]!, forKey: "officialWardDataset")
-                        self.defaults.set(document.data()["scheduleDataset"]!, forKey: "officialScheduleDataset")
-                        self.defaults.set(document.data()["coordinatesTitle"]!, forKey: "officialCoordinatesTitle")
-                        self.defaults.set(document.data()["datesTitle"]!, forKey: "officialDatesTitle")
-                        self.defaults.set(document.data()["geomTitle"]!, forKey: "officialGeomTitle")
-                        self.defaults.set(document.data()["monthNameTitle"]!, forKey: "officialMonthNameTitle")
-                        self.defaults.set(document.data()["monthNumberTitle"]!, forKey: "officialMonthNumberTitle")
-                        self.defaults.set(document.data()["wardTitle"]!, forKey: "officialWardTitle")
-                        self.defaults.set(document.data()["sectionTitle"]!, forKey: "officialSectionTitle") 
+                        
+                        let currentYearScheduleDataset = document.data()["scheduleDataset"] as! String
+                        
+                        if !currentYearScheduleDataset.isEmpty {
+                          
+                            // Save current year values
+                           self.defaults.set(document.data()["wardDataset"]!, forKey: "officialWardDataset")
+                           self.defaults.set(document.data()["scheduleDataset"]!, forKey: "officialScheduleDataset")
+                           self.defaults.set(document.data()["coordinatesTitle"]!, forKey: "officialCoordinatesTitle")
+                           self.defaults.set(document.data()["datesTitle"]!, forKey: "officialDatesTitle")
+                           self.defaults.set(document.data()["geomTitle"]!, forKey: "officialGeomTitle")
+                           self.defaults.set(document.data()["monthNameTitle"]!, forKey: "officialMonthNameTitle")
+                           self.defaults.set(document.data()["monthNumberTitle"]!, forKey: "officialMonthNumberTitle")
+                           self.defaults.set(document.data()["wardTitle"]!, forKey: "officialWardTitle")
+                           self.defaults.set(document.data()["sectionTitle"]!, forKey: "officialSectionTitle")
+                            
+                        }
+                        else {
+                            
+                            // Save previous year values
+                            db.collection("Schedules").whereField("year", isEqualTo: year - 1)
+                                .getDocuments() { (querySnapshot, err) in
+                                    if let err = err {
+                                        print("getOfficialChicagoDataForCurrentYear: \(err)")
+                                        self.defaults.set("jqxt-c6gd", forKey: "officialWardDataset")
+                                        self.defaults.set("k737-xg34", forKey: "officialScheduleDataset")
+                                        self.defaults.set("coordinates", forKey: "officialCoordinatesTitle")
+                                        self.defaults.set("dates", forKey: "officialDatesTitle")
+                                        self.defaults.set("the_geom", forKey: "officialGeomTitle")
+                                        self.defaults.set("month_name", forKey: "officialMonthNameTitle")
+                                        self.defaults.set("month_number", forKey: "officialMonthNumberTitle")
+                                        self.defaults.set("ward", forKey: "officialWardTitle")
+                                        self.defaults.set("section", forKey: "officialSectionTitle")
+                                    } else {
+                                        for document in querySnapshot!.documents {
+                                           self.defaults.set(document.data()["wardDataset"]!, forKey: "officialWardDataset")
+                                           self.defaults.set(document.data()["scheduleDataset"]!, forKey: "officialScheduleDataset")
+                                           self.defaults.set(document.data()["coordinatesTitle"]!, forKey: "officialCoordinatesTitle")
+                                           self.defaults.set(document.data()["datesTitle"]!, forKey: "officialDatesTitle")
+                                           self.defaults.set(document.data()["geomTitle"]!, forKey: "officialGeomTitle")
+                                           self.defaults.set(document.data()["monthNameTitle"]!, forKey: "officialMonthNameTitle")
+                                           self.defaults.set(document.data()["monthNumberTitle"]!, forKey: "officialMonthNumberTitle")
+                                           self.defaults.set(document.data()["wardTitle"]!, forKey: "officialWardTitle")
+                                           self.defaults.set(document.data()["sectionTitle"]!, forKey: "officialSectionTitle")
+                                        }
+                                    }
+                            }
+                        }
                     }
                 }
         }
