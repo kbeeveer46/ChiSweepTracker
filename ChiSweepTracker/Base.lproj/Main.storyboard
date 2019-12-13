@@ -69,8 +69,8 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="YKk-qn-nWB"/>
                                         </constraints>
-                                        <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="New schedule available. Click here to enable notifications."/>
                                     </button>
                                 </subviews>
@@ -104,18 +104,53 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1170" y="400"/>
+            <point key="canvasLocation" x="1169" y="80"/>
+        </scene>
+        <!--Info-->
+        <scene sceneID="4ei-Ma-8ci">
+            <objects>
+                <viewController id="Rwe-fk-VdI" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="G20-ky-gbn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
+                                <rect key="frame" x="20" y="64" width="335" height="534"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info about sweeping and ticket prices" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L3g-SX-wTd">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="534"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="yYl-5I-4u5" firstAttribute="top" secondItem="agh-8R-QJ3" secondAttribute="top" constant="20" id="8YK-cr-8c6"/>
+                            <constraint firstItem="yYl-5I-4u5" firstAttribute="leading" secondItem="agh-8R-QJ3" secondAttribute="leading" constant="20" id="DuV-v8-irB"/>
+                            <constraint firstItem="agh-8R-QJ3" firstAttribute="bottom" secondItem="yYl-5I-4u5" secondAttribute="bottom" constant="20" id="Yge-As-gk6"/>
+                            <constraint firstItem="agh-8R-QJ3" firstAttribute="trailing" secondItem="yYl-5I-4u5" secondAttribute="trailing" constant="20" id="jEj-L4-Fdw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="agh-8R-QJ3"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Info" image="info_circle" id="o9n-IO-1rG"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xdv-P9-ilq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1169" y="778"/>
         </scene>
         <!--Sweep Schedule-->
         <scene sceneID="3K6-sD-hJN">
             <objects>
                 <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="622"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="598"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
@@ -124,7 +159,7 @@
                                         </constraints>
                                     </mapView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                        <rect key="frame" x="0.0" y="235" width="375" height="387"/>
+                                        <rect key="frame" x="0.0" y="235" width="375" height="363"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
@@ -176,7 +211,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="d9u-A5-GvW">
-                                <rect key="frame" x="10" y="617" width="355" height="30"/>
+                                <rect key="frame" x="10" y="637" width="355" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="DfJ-XG-5sS">
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
@@ -281,20 +316,20 @@
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
+                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="307.5"/>
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="235" id="45C-rY-kFz"/>
                                         </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="luh-bO-7AY">
-                                        <rect key="frame" x="0.0" y="307.5" width="375" height="76"/>
+                                        <rect key="frame" x="0.0" y="243" width="375" height="76"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="geu-nl-rwr">
                                                 <rect key="frame" x="8" y="8" width="55" height="60"/>
@@ -315,25 +350,25 @@
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="383.5" width="375" height="56.5"/>
+                                        <rect key="frame" x="0.0" y="327" width="375" height="49.5"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" verticalHuggingPriority="251" image="phone_green" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
-                                                <rect key="frame" x="20" y="11.5" width="40" height="33.5"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
+                                                <rect key="frame" x="20" y="8" width="40" height="33.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="68Z-oZ-uTV"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
-                                                <rect key="frame" x="70" y="8.5" width="226" height="40"/>
+                                                <rect key="frame" x="70" y="9.5" width="226" height="30"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="Fhg-bs-9kM"/>
+                                                    <constraint firstAttribute="height" constant="30" id="Fhg-bs-9kM"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="306" y="13" width="51" height="31"/>
+                                                <rect key="frame" x="306" y="9" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -343,7 +378,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="440" width="375" height="91"/>
+                                        <rect key="frame" x="0.0" y="384" width="375" height="91"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
                                                 <rect key="frame" x="20" y="8" width="40" height="75"/>
@@ -374,24 +409,24 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="531" width="375" height="116"/>
+                                        <rect key="frame" x="0.0" y="483" width="375" height="91"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time_black" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
-                                                <rect key="frame" x="20" y="8" width="40" height="100"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
+                                                <rect key="frame" x="20" y="8" width="40" height="75"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="n8w-t5-eu5"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
-                                                <rect key="frame" x="70" y="8" width="100" height="100"/>
+                                                <rect key="frame" x="70" y="8" width="100" height="75"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="luP-wW-qKV">
-                                                <rect key="frame" x="180" y="8" width="175" height="100"/>
+                                                <rect key="frame" x="180" y="8" width="175" height="75"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="100" id="FN2-OG-r3Y"/>
+                                                    <constraint firstAttribute="height" constant="75" id="FN2-OG-r3Y"/>
                                                     <constraint firstAttribute="width" constant="175" id="ZLn-qs-lhp"/>
                                                 </constraints>
                                             </datePicker>
@@ -431,7 +466,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1170" y="-301"/>
+            <point key="canvasLocation" x="1169" y="-613"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sXP-ht-gqy">
@@ -465,6 +500,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="m9a-aF-K6k"/>
                         <segue destination="aNg-gl-cTZ" kind="relationship" relationship="viewControllers" id="lRu-XB-8Bj"/>
+                        <segue destination="Rwe-fk-VdI" kind="relationship" relationship="viewControllers" id="uPs-7d-wtO"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfT-z8-xpg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -476,17 +512,17 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarViewController" id="a8Y-hK-Ycy" customClass="CalendarViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="izA-kT-NUo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZFy-60-zB9">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="3NZ-tU-kmZ"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                <rect key="frame" x="37.5" y="255" width="300" height="336.5"/>
+                                <rect key="frame" x="37.5" y="299" width="300" height="336.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="20.5"/>
@@ -593,7 +629,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ECZ-cJ-Q62">
-                                <rect key="frame" x="10" y="612" width="355" height="30"/>
+                                <rect key="frame" x="10" y="632" width="355" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="SSj-OQ-MRV">
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
@@ -643,13 +679,14 @@
     <resources>
         <image name="calendar" width="33.5" height="33.5"/>
         <image name="calendar_day" width="33.5" height="33.5"/>
+        <image name="info_circle" width="33.5" height="33.5"/>
         <image name="info_circle_red" width="33.5" height="33.5"/>
-        <image name="phone_green" width="33.5" height="33.5"/>
+        <image name="phone" width="33.5" height="33.5"/>
         <image name="star" width="33.5" height="33.5"/>
-        <image name="time_black" width="33.5" height="33.5"/>
+        <image name="time" width="33.5" height="33.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="eEQ-YS-Bae"/>
+        <segue reference="lRu-XB-8Bj"/>
         <segue reference="maw-XV-A0s"/>
     </inferredMetricsTieBreakers>
 </document>

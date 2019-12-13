@@ -32,6 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let year = Calendar.current.component(.year, from: Date())
         
+        // Use the year as a version number to know what year the user has last used
+        // Only set it once they use the app for the first time.
+        // If default app version doesn't match the current year then notify them to update their notifications
+        let defaultVersion = self.defaults.string(forKey: "defaultAppVersion") ?? ""
+        if defaultVersion.isEmpty {
+            self.defaults.set(year, forKey: "defaultAppVersion")
+        }
+        
         db.collection("Schedules").whereField("year", isEqualTo: year)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {

@@ -159,10 +159,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             favoriteMapView.setRegion(region, animated: true)
             
             self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
-//            if self.tabBarController == nil
-//            {
-//                self.navigationItem.title = "No Favorite Address Saved"
-//            }
             
         }
         

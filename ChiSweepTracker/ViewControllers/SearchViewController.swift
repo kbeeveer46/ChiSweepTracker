@@ -39,7 +39,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         // Check data set name against one from database.
         // If it doesn't match then they need to update their notifications.
         // Show update button on search page and notification page?
-        // Only if they have notifications toggled
+        // Only if they have notifications toggled and a favorite set
         self.newScheduleButton.isHidden = false
         let newButtonString = NSMutableAttributedString(string: "2020 sweep schedule available. Click here to set up your new notifications.")
         self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
