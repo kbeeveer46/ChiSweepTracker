@@ -10,8 +10,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchAddressButton: UIButton!
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
-    @IBOutlet weak var sweepStatusLabel: UILabel!
-    @IBOutlet weak var sweepStatusStackView: UIStackView!
     @IBOutlet weak var newScheduleButton: UIButton!
     @IBOutlet weak var finishedScheduleButton: UIButton!
     
