@@ -161,10 +161,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     func showNewScheduleButton() {
         
-		// User's app version is stored in constants file
+		// User's app version (year) is stored in constants file
 		// Pull the latest version (year) from the database and see if it matches user app version
 		// If it does not match that means the City of Chicago has released a new schedule and I put the values in Firebase
-		// If it does not match show new schedule button and direct them to the app store.
+		// If it does not match, show new schedule button and direct them to the app store.
 		// This requires a new record in Firebase at the exact same time the app is released
 		
         self.newScheduleButton.isHidden = true
@@ -237,9 +237,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			if !month.isEmpty {
 				if Int(month)! > 0 {
 					if (currentMonthNumber > Int(month)!) && isNewButtonVisible == false {
-						self.finishedScheduleButton.isHidden = false
 						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
 						self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
+						self.finishedScheduleButton.isHidden = false
 					}
 				}
 			}
@@ -265,7 +265,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         geocoder.geocodeAddressString(address) { placemarks, error in
             
             if error != nil {
-                self.common.showAlert(self.common.constants.errorTitle, "getSchedule: Unable to get coordinats from Apple's servers")
+                self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
                 return
             }
             
@@ -418,7 +418,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         geocoder.reverseGeocodeLocation(location, completionHandler:
             {(placemarks, error) in
                 if (error != nil) {
-                    self.common.showAlert(self.common.constants.errorTitle, error!.localizedDescription)
+					print("getAddressFromCoordinates error: \(error!.localizedDescription)")
+					// Stop updating location if user appears to be offline
+					self.locationManager.stopUpdatingLocation()
+                    self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
+					return
                 }
                 
                 if placemarks != nil {
