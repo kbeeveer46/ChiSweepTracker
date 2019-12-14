@@ -4,6 +4,7 @@ class Common {
     
     let constants = Constants()
 
+	// Alert with custom title and message
     public func showAlert(_ title: String, _ message: String) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -22,6 +23,7 @@ class Common {
         
     }
     
+	// Style button with image and background color
     public func styleButton(_ button: UIButton, _ image: String?,_ color: String?) {
         
         button.backgroundColor = .systemBlue
@@ -95,6 +97,7 @@ class Common {
 
 }
 
+// Enable the use of hex strings to color views
 extension UIColor {
     convenience init(hexString: String, alpha: CGFloat = 1.0) {
         let hexString: String = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -126,7 +129,7 @@ extension UIColor {
 
 public extension UIButton {
     
-    // Add image on left view
+    // Add image on left of button
     func leftImage(image: UIImage, name: String?) {
         
         if name == "finished" || name == "new" {
