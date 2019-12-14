@@ -19,9 +19,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     var schedule = ScheduleModel()
     var favoriteAddress = ""
     let defaults = UserDefaults.standard
-    
     var removeFavoriteButton = UIBarButtonItem()
-    
     let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     
     override func viewDidLoad() {
@@ -32,72 +30,50 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+		// Set the title or else the title is used from another tab
+		self.tabBarController?.navigationItem.title = "Favorite Address"
+		
+		// Set required properties for when picker
         self.onPicker.delegate = self
         self.onPicker.dataSource = self
         
         loadDefaultNotificationValues()
     
-        //let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
-        //let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
-        
         loadFavoriteMap()
         
         if !favoriteAddress.isEmpty {
-            
-            getSchedule(false)
-            
-            let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
-            self.pushNotificationsSwitch.isUserInteractionEnabled = true
-            self.onPicker.isUserInteractionEnabled = notificationsToggled
-            self.timePicker.isUserInteractionEnabled = notificationsToggled
-            
-            self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
-            self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
-            
-            
-//            if self.tabBarController == nil {
-//
-//                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
-//
-//            }
-//            
-            current.getNotificationSettings(completionHandler: { (settings) in
-                if settings.authorizationStatus == .notDetermined {
-                    print("notDetermined")
-                } else if settings.authorizationStatus == .denied {
-                    print("denied")
-                } else if settings.authorizationStatus == .authorized {
-                    print("authorized")
-                    
-                    DispatchQueue.main.async {
-                        
-
-                        self.pushNotificationsSwitch.isOn = notificationsToggled
-                        
-                        if self.pushNotificationsSwitch.isOn {
-                            //self.registerForPushNotifications()
-                            self.getSchedule(true)
-                        }
-                        
-                    }
-                }
-            })
-            
-        }
-        else {
-            self.pushNotificationsSwitch.isOn = false
-            self.pushNotificationsSwitch.isUserInteractionEnabled = false
-            self.onPicker.isUserInteractionEnabled = false
-            self.timePicker.isUserInteractionEnabled = false
-            self.tabBarController?.navigationItem.leftBarButtonItem = nil
-            self.tabBarController?.navigationItem.rightBarButtonItem = nil
-            
-            if self.tabBarController == nil {
-                self.navigationItem.leftBarButtonItem = nil
-                self.navigationItem.rightBarButtonItem = nil
-            }
+			
+			// Get schedule so we have the most update to date version
+			getSchedule(false)
+			
+			// Re-add local notifications in case the City of Chicago has changed the dates
+			addNotifications()
         }
     }
+	
+	func addNotifications() {
+		
+		current.getNotificationSettings(completionHandler: { (settings) in
+			if settings.authorizationStatus == .notDetermined {
+				print("notDetermined")
+			} else if settings.authorizationStatus == .denied {
+				print("denied")
+			} else if settings.authorizationStatus == .authorized {
+				//print("authorized")
+				
+				DispatchQueue.main.async {
+					
+					let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
+					self.pushNotificationsSwitch.isOn = notificationsToggled
+					
+					if self.pushNotificationsSwitch.isOn {
+						self.getSchedule(true)
+					}
+				}
+			}
+		})
+		
+	}
     
     @objc func viewSchedule() {
         
@@ -305,8 +281,32 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
         
-        self.tabBarController?.navigationItem.title = "Favorite Address"
         favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+		
+		if !favoriteAddress.isEmpty {
+			
+			let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
+			self.pushNotificationsSwitch.isUserInteractionEnabled = true
+			self.onPicker.isUserInteractionEnabled = notificationsToggled
+			self.timePicker.isUserInteractionEnabled = notificationsToggled
+			
+			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
+			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+			
+		}
+		else {
+			self.pushNotificationsSwitch.isOn = false
+			self.pushNotificationsSwitch.isUserInteractionEnabled = false
+			self.onPicker.isUserInteractionEnabled = false
+			self.timePicker.isUserInteractionEnabled = false
+			self.tabBarController?.navigationItem.leftBarButtonItem = nil
+			self.tabBarController?.navigationItem.rightBarButtonItem = nil
+			
+			if self.tabBarController == nil {
+				self.navigationItem.leftBarButtonItem = nil
+				self.navigationItem.rightBarButtonItem = nil
+			}
+		}
     }
     
     func saveDefaultNotificationValues() {

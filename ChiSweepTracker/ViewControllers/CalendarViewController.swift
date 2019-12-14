@@ -5,39 +5,41 @@ import EventKit
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
    
     @IBOutlet weak var Calendar: UICollectionView!
-    @IBOutlet weak var MonthLabel: UILabel!
     @IBOutlet weak var calendarMapView: MKMapView!
 
-    var currentYear = Foundation.Calendar.current.component(.year, from: Foundation.Date())
-    let common = Common()
-    var schedule = ScheduleModel()
+	let common = Common()
+	var schedule = ScheduleModel()
+	
+	var currentYear = 0
     var selectedMonthNumber = 0
     var selectedMonthName = ""
     var selectedDates = ""
     
+	// Used determine what month has been selected enable to calculate start day position
     var firstDayOfSweepingInMonth = 0
     var weekDayNumberOfFirstDayOfSweepingInMonth = 0
     
-    let DaysOfMonth = ["Monday","Thuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     var DaysInMonths = [31,28,31,30,31,30,31,31,30,31,30,31]
-
     var NumberOfEmptyBox = Int()
     var NextNumberOfEmptyBox = Int()
     var PreviousNumberOfEmptyBox = 0
     var Direction = 0
     var PositionIndex = 0
-    var LeapYearCounter = 2
     var dayCounter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+		
+		currentYear = Int(self.common.constants.appVersion)!
         
+		// Get selected month name from schedule view and set it as the title
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
         self.title = "\(selectedMonthName) Schedule - \(currentYear)"
         
+		// Get first day of sweeping month from string of days from the schedule view. Used to calculate start day position
         firstDayOfSweepingInMonth = Int(selectedDates.prefix(2).trimmingCharacters(in: .whitespaces))!
         
-        // Specify date components
+        // Create date for first day of sweeping. Used to calculate start day position
         var dateComponents = DateComponents()
         dateComponents.year = currentYear
         dateComponents.month = selectedMonthNumber
@@ -49,12 +51,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             weekDayNumberOfFirstDayOfSweepingInMonth = 7
         }
         
-        getStartDateDayPosition()
+        calculateStartDateDayPosition()
         
-        loadScheduleMap()
+        loadCalendarMap()
     }
     
-    func loadScheduleMap() {
+	// Load calendar map with annotation and polygons
+    func loadCalendarMap() {
         
         calendarMapView.delegate = self
         
@@ -76,6 +79,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
+	// Required method to add polygons to calendar map
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         if overlay is MKPolygon {
@@ -92,9 +96,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return MKOverlayRenderer(overlay: overlay)
     }
     
-    //Calculates the number of "empty" boxes at the start of every month
-    
-    func getStartDateDayPosition() {
+    // Calculates the number of "empty" boxes at the start of every month
+    func calculateStartDateDayPosition() {
         switch Direction{
         case 0:                                     
             NumberOfEmptyBox = weekDayNumberOfFirstDayOfSweepingInMonth
@@ -125,6 +128,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
+	// Required method for calendar collection view
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch Direction{
         case 0:
@@ -134,10 +138,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         case -1:
             return DaysInMonths[selectedMonthNumber] + PreviousNumberOfEmptyBox
         default:
-            fatalError()
+			return 0
+            //fatalError()
         }
     }
     
+	// If user clicks on a sweep date then prompt them to add an event to their calendar
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         // Add haptic feedback
@@ -149,10 +155,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let dateLabel = cell.viewWithTag(1) as! UILabel
         let date = dateLabel.text
         
+		// Only allow user to create ane event on a sweep day
         if cell.Circle.isHidden == false {
         
             let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device", preferredStyle: .alert)
-            
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
                 let eventStore = EKEventStore()
@@ -161,10 +167,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
                     if (granted) && (error == nil) {
                         print("Event access granted: \(granted)")
-                        //print("error \(error)")
 
                         let event:EKEvent = EKEvent(eventStore: eventStore)
 
+						// Create begin and end dates (9am and 2pm)
                         var startDateComponents = DateComponents()
                         startDateComponents.year = self.currentYear
                         startDateComponents.month = self.selectedMonthNumber
@@ -184,7 +190,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         event.title = "Street Sweeping"
                         event.startDate = startDate
                         event.endDate = endDate
-                        event.notes = "City of Chicago street sweeping between 9 am and 2 pm."
+                        event.notes = "Street sweeping in your neighborhood between 9 am and 2 pm."
                         event.calendar = eventStore.defaultCalendarForNewEvents
                         do {
                             try eventStore.save(event, span: .thisEvent)
@@ -212,9 +218,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             self.present(alert, animated: true, completion: nil)
             
         }
-        
     }
     
+	// Required method for calendar collection view to populate view
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Calendar", for: indexPath) as! DateCollectionViewCell
         
@@ -226,7 +232,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             cell.isHidden = false
         }
 
-        switch Direction {      //the first cells that needs to be hidden (if needed) will be negative or zero so we can hide them
+		// The first cells that need to be hidden (if needed) will be negative or zero so we can hide them
+        switch Direction {
         case 0:
             cell.DateLabel.text = "\(indexPath.row + 1 - NumberOfEmptyBox)"
         case 1:
@@ -237,11 +244,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             fatalError()
         }
 
-        if Int(cell.DateLabel.text!)! < 1{ //here we hide the negative numbers or zero
+		// Hide the negative numbers or zero
+        if Int(cell.DateLabel.text!)! < 1{
             cell.isHidden = true
         }
 
-        switch indexPath.row { //weekend days color
+		// Set weekend days color to light gray
+        switch indexPath.row {
         case 5,6,12,13,19,20,26,27,33,34:
             if Int(cell.DateLabel.text!)! > 0 {
                 cell.DateLabel.textColor = UIColor.lightGray
@@ -250,6 +259,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             break
         }
         
+		// Add circles to dates that are being swept in the selected month
         var datesArray = selectedDates.components(separatedBy: " ")
         datesArray = datesArray.filter {$0 != ""}
         

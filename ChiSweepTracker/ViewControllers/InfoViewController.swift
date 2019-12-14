@@ -1,11 +1,3 @@
-//
-//  InfoViewController.swift
-//  ChiSweepTracker
-//
-//  Created by Macbook on 12/12/19.
-//  Copyright © 2019 Kyle Beverforden. All rights reserved.
-//
-
 import UIKit
 
 class InfoViewController: UIViewController {

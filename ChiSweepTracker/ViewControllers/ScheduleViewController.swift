@@ -17,23 +17,14 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+		// Set title using current app version (year)
 		self.title = "Sweep Schedule - \(self.common.constants.appVersion)"
         
         // Set default address to be used when app is re-opened
         defaults.set(schedule.address, forKey: "defaultAddress")
         
-        // If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
-        let favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
-        addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
-        removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
-        
-        if favoriteAddress != schedule.address {
-            self.navigationItem.rightBarButtonItem = addFavoriteButton
-        }
-        else {
-            self.navigationItem.rightBarButtonItem = removeFavoriteButton
-        }
-        //
+		// Show add or remove favorite button
+		setAddRemoveFavoriteButton()
         
         // Load map with annotations and overlays
         loadScheduleMap()
@@ -45,6 +36,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 
     }
     
+	// Method is called when user chooses yes to add a favorite
     @objc func addFavorite() {
         
 		// Add haptic feedback
@@ -55,18 +47,18 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         // Set user favorites
-        // Section is used when creating location notifications that way we know the section in case there are multiple
         defaults.set(schedule.address, forKey: "favoriteAddress")
         defaults.set(schedule.ward, forKey: "favoriteWard")
-        defaults.set(schedule.section, forKey: "favoriteSection")
+        defaults.set(schedule.section, forKey: "favoriteSection") // Used when creating location notifications so we know the section in case there are multiple
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
         defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
-		// Toggled off notifications when user adds a new favorite
-        self.defaults.set(false, forKey: "notificationsToggled")
-        
+		
 		// defaultCoordinatesArray is set when user searches. Use its value for user's favorite
-        let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
-        defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
+		let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
+		defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
+		
+		// Toggled off notifications when user adds a new favorite
+        defaults.set(false, forKey: "notificationsToggled")
         
         // Set right bar button to remove now that a favorite has been set
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
@@ -75,6 +67,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let alert = UIAlertController(title: "Favorite Saved", message: "Do you want to enable push notifications?", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+			// Segue to notifications view if they select yes
             self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
         }))
         
@@ -113,6 +106,21 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //
         
     }
+	
+	func setAddRemoveFavoriteButton() {
+		
+		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
+		let favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+		addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
+		removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+		
+		if favoriteAddress != schedule.address {
+			self.navigationItem.rightBarButtonItem = addFavoriteButton
+		}
+		else {
+			self.navigationItem.rightBarButtonItem = removeFavoriteButton
+		}
+	}
 
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
