@@ -55,6 +55,15 @@
                                             <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
                                         </connections>
                                     </button>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="6qs-Ls-QDx">
+                                        <rect key="frame" x="0.0" y="161" width="355" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="YKk-qn-nWB"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <state key="normal" title="New schedule available. Click here to enable notifications."/>
+                                    </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
                                         <rect key="frame" x="0.0" y="161" width="355" height="70"/>
                                         <constraints>
@@ -63,15 +72,6 @@
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Sweep Schedule Finished"/>
-                                    </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="6qs-Ls-QDx">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="YKk-qn-nWB"/>
-                                        </constraints>
-                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
-                                        <state key="normal" title="New schedule available. Click here to enable notifications."/>
                                     </button>
                                 </subviews>
                                 <constraints>

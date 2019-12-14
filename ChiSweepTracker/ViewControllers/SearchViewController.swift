@@ -23,8 +23,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     var longitudeFromDefaults = 0.0
     var latitudeFromDefaults = 0.0
     
-    let databaseModel = DatabaseModel()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Not everything I want loads in viewDidLoad so I put it in viewWillAppear
@@ -35,9 +33,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 
 		// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
         showNewScheduleButton()
-        
-		// Show finished schedule button if current month is greater than last sweep month
-		showFinishedScheduleButton()
 		
 		// Style controls
         styleControls()
@@ -193,12 +188,18 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         if userAppVersion < latestAppVersion {
                             
 							// TODO: Change this string to include app id to go directly to app in store
-                            let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store.")
+                            let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store and update.")
                             self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
                             self.newScheduleButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
                             self.newScheduleButton.isHidden = false
                             
                         }
+						else {
+							
+							// Only show finished button if the new button is not shown
+							self.showFinishedScheduleButton()
+							
+						}
                     }
                 }
         }
@@ -216,6 +217,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		self.finishedScheduleButton.isHidden = true
 		
+		let isNewButtonVisible = !self.newScheduleButton.isHidden
         let currentMonthNumber = Calendar.current.component(.month, from: Date())
 		let currentYear = Int(self.common.constants.appVersion)! // Year
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
@@ -234,7 +236,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			if !month.isEmpty {
 				if Int(month)! > 0 {
-					if currentMonthNumber > Int(month)! {
+					if (currentMonthNumber > Int(month)!) && isNewButtonVisible == false {
 						self.finishedScheduleButton.isHidden = false
 						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
 						self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
