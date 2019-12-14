@@ -1,10 +1,9 @@
 import UIKit
 import CoreLocation
 import MapKit
+import Firebase
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
-    
-    var window: UIWindow?
     
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchAddressButton: UIButton!
@@ -28,40 +27,35 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // Not everything I want loads in viewDidLoad so I put it in viewWillAppear
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Check if new datasets are available and show new schedule button.
-        // When user opens app save data set name
-        // Check data set name against one from database.
-        // If it doesn't match then they need to update their notifications.
-        // Show update button on search page and notification page?
-        // Only if they have notifications toggled and a favorite set
-        self.newScheduleButton.isHidden = false
-        let newButtonString = NSMutableAttributedString(string: "2020 sweep schedule available. Click here to set up your new notifications.")
-        self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
+		// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
+        showNewScheduleButton()
         
+		// Show finished schedule button if current month is greater than last sweep month
+		showFinishedScheduleButton()
+		
+		// Style controls
         styleControls()
         
+		// Get default address, lat, and long
         getDefaults()
         
-        getSweepingStatus()
-        
-        loadChicagoMap()
+		// Load map of Chicago or use default lat and long
+        loadSearchMap()
         
         // Make enter key close keyboard
         self.addressTextField.delegate = self
         
-        self.tabBarController?.navigationItem.rightBarButtonItem = nil
-        self.tabBarController?.navigationItem.leftBarButtonItem = nil
-        self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
     }
     
     // MARK: Actions
     
+	// Search for sweep schedule button clicked
     @IBAction func searchTypeTapped(_ sender: Any) {
         
         // Add haptic feedback
@@ -80,12 +74,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         else if searchTypeSegment.selectedSegmentIndex == 1 {
             
-            // Request location access
+            // Request location access. If access granted, start updating location and update map
             locationManager.requestWhenInUseAuthorization()
             
             if CLLocationManager.locationServicesEnabled() {
-                    
-                addressTextField.text = ""
                     
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -95,28 +87,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             else {
                 print("Location services are not enabled")
             }
-            
-//            if CLLocationManager.locationServicesEnabled() {
-//                 switch CLLocationManager.authorizationStatus() {
-//                    case .notDetermined, .restricted, .denied:
-//                         //showLocationDisabledPopup()
-//                        break
-//                    case .authorizedAlways, .authorizedWhenInUse:
-//
-//                        // Clear out address text field. It will be updated once device gets user's location
-//                        addressTextField.text = ""
-//
-//                        locationManager.delegate = self
-//                        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//                        locationManager.startUpdatingLocation()
-//
-//                 @unknown default:
-//                    print("Location services are not enabled")
-//                }
-//            }
-//            else {
-//                print("Location services are not enabled")
-//            }
             
         }
         else if searchTypeSegment.selectedSegmentIndex == 2 {
@@ -133,51 +103,30 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         generator.prepare()
         generator.selectionChanged()
         
+		// Stop updating user's location to save battery
         locationManager.stopUpdatingLocation()
         
+		// Get address from text field for searching
         var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         
+		// Add "Chicago" to address if it doesn't contain it to help find address
         if !address.lowercased().contains("chicago") && !address.isEmpty {
             address = address + " Chicago"
         }
         
+		// Alert user if they didn't enter an address
         if address.isEmpty {
             self.common.showAlert("Please Enter An Address", "")
             return
         }
         
+		// Find address and go to select section view or schedule view
         getSchedule(address)
-        //getSchedule("750 N Dearborn St Chicago, IL")
-        //getSchedule("1601 North Clark Street, Chicago, IL, USA")
+		
+		// Test addresses
+        //getSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
     
     }
-    
-    // Add annotation when Chicago map is tapped
-    @objc func addDroppedPin(gesture: UIGestureRecognizer) {
-        
-        if gesture.state == .ended {
-            
-            let point = gesture.location(in: chicagoMapView)
-            let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
-            
-            let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            
-            self.defaults.set(coordinate.latitude, forKey: "defaultLatitude")
-            self.defaults.set(coordinate.longitude, forKey: "defaultLongitude")
-            
-            getAddressFromCoordinates(location)
-            addressTextField.text = addressFromCoordinates
-            
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            
-            chicagoMapView.removeAnnotations(chicagoMapView.annotations)
-            chicagoMapView.addAnnotation(annotation)
-
-        }
-    }
-    
-    
     
     // Prepare segue and pass data to view controllers
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -189,44 +138,113 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     }
     
     // MARK: Methods
+	
+	// Add annotation when Chicago map is tapped
+	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
+		
+		if gesture.state == .ended {
+			
+			let point = gesture.location(in: chicagoMapView)
+			let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
+			
+			let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+			
+			// Save default lat and long to be use when user re-opens app
+			self.defaults.set(coordinate.latitude, forKey: "defaultLatitude")
+			self.defaults.set(coordinate.longitude, forKey: "defaultLongitude")
+			
+			getAddressFromCoordinates(location)
+			
+			let annotation = MKPointAnnotation()
+			annotation.coordinate = coordinate
+			
+			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+			chicagoMapView.addAnnotation(annotation)
+			
+		}
+	}
     
-    func getSweepingStatus() {
+    func showNewScheduleButton() {
         
+		// User's app version is stored in constants file
+		// Pull the latest version (year) from the database and see if it matches user app version
+		// If it does not match that means the City of Chicago has released a new schedule and I put the values in Firebase
+		// If it does not match show new schedule button and direct them to the app store.
+		// This requires a new record in Firebase at the exact same time the app is released
+		
+        self.newScheduleButton.isHidden = true
+        let userAppVersion = Int(self.common.constants.appVersion)! // Year
+        
+        let db = Firestore.firestore()
+        db.collection("Schedules")
+            .order(by: "year", descending: true)
+            .limit(to: 1)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Could not get showNewScheduleButton data from Firebase: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+
+                        let latestAppVersion = document.data()["year"] as! Int
+                        
+						print("userAppVersion: \(userAppVersion)")
+						print("latestAppVersion: \(latestAppVersion)")
+						
+                        if userAppVersion < latestAppVersion {
+                            
+							// TODO: Change this string to include app id to go directly to app in store
+                            let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store.")
+                            self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
+                            self.newScheduleButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+                            self.newScheduleButton.isHidden = false
+                            
+                        }
+                    }
+                }
+        }
+    }
+    
+    @objc func refreshNotifications() {
+        
+		// Send user to app store to update app
+        
+    }
+    
+    func showFinishedScheduleButton() {
+        
+		// Show finished schedule button if the current month is greater than the last month of sweeping
+		
+		self.finishedScheduleButton.isHidden = true
+		
         let currentMonthNumber = Calendar.current.component(.month, from: Date())
-        let currentYear = Calendar.current.component(.year, from: Date())
+		let currentYear = Int(self.common.constants.appVersion)! // Year
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
         let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
-            .limit(1)
-            .orderDescending("month_number")
-            .filter("month_number IS NOT NULL")
-        
-        wardQuery.get { res in
-        switch res {
-        case .dataset (let data):
-            
-            let month = data[0][self.common.constants.month_number] as? String ?? ""
-            let days = data[0][self.common.constants.dates] as? String ?? ""
-            print("Last sweep month: \(month)")
-            print("Last sweep days: \(days)")
-            
-            if !month.isEmpty {
-                if Int(month)! > 0 {
-                    if currentMonthNumber > Int(month)! {
-                        self.finishedScheduleButton.isHidden = false
-                        let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
-                        self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
-                    }
-                    else {
-                        self.finishedScheduleButton.isHidden = true
-                    }
-                }
-            }
-        case .error (let err):
-            print("Unable to get sweep status from the City of Chicago: \(err.localizedDescription)")
-            }
-        }
-        
+			.limit(1)
+			.orderDescending("month_number")
+			.filter("month_number IS NOT NULL")
+		
+		wardQuery.get { res in
+		switch res {
+		case .dataset (let data):
+			
+			let month = data[0][self.common.constants.month_number] as? String ?? ""
+			print("Last sweep month: \(month)")
+			
+			if !month.isEmpty {
+				if Int(month)! > 0 {
+					if currentMonthNumber > Int(month)! {
+						self.finishedScheduleButton.isHidden = false
+						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
+						self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
+					}
+				}
+			}
+		case .error (let err):
+			print("Unable to get getSweepingStatus data from the City of Chicago: \(err.localizedDescription)")
+			}
+		}
     }
     
     func getSchedule(_ address: String) {
@@ -234,7 +252,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.schedule.months.removeAll()
         self.schedule.polygonCoordinates.removeAll()
         
-        print("Address: \(address)")
+        print("getSchedule address: \(address)")
         
         self.schedule.address = address
         
@@ -245,8 +263,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         geocoder.geocodeAddressString(address) { placemarks, error in
             
             if error != nil {
-                
-                self.common.showAlert(self.common.constants.errorTitle, "Unable to get coordinats from Apple's servers")
+                self.common.showAlert(self.common.constants.errorTitle, "getSchedule: Unable to get coordinats from Apple's servers")
                 return
             }
             
@@ -259,11 +276,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                 self.schedule.locationCoordinate = coordinates
                 
+				// Set default lat and long to be used when user re-opens the app
                 self.defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
                 self.defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
                 
-                print("Latitude: \(self.schedule.locationCoordinate.latitude)")
-                print("Longitude: \(self.schedule.locationCoordinate.longitude)")
+				// Save default lat and long to be use when user re-opens app
+                print("getSchedule latitude: \(self.schedule.locationCoordinate.latitude)")
+                print("getSchedule longitude: \(self.schedule.locationCoordinate.longitude)")
                 
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
@@ -284,9 +303,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
-                            //let coordinatesData = NSKeyedArchiver.archivedData(withRootObject: coordinatesArray as Any)
+							// Set default polygon array to be used on all the views
                             self.defaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
-                            self.defaults.synchronize()
+                            //self.defaults.synchronize()
                             
                             for(_, coordinate) in coordinatesArray!.enumerated() {
                                 
@@ -301,12 +320,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 }
                             }
                             
-                            print("Ward: \(ward)")
-                            print("Section: \(section)")
+                            print("getSchedule ward: \(ward)")
+                            print("getSchedule section: \(section)")
                             
                             self.schedule.ward = ward
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
+							// If there are multiple sections then segue to select section view
                             if self.schedule.section.isEmpty {
                                 self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
                                 return
@@ -332,21 +352,19 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             let dates = item[self.common.constants.dates] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
-                                            print("Month name: \(monthName)")
-                                            print("Dates: \(datesArray)")
+                                            print("getSchedule month name: \(monthName)")
+                                            print("getSchedule dates: \(datesArray)")
                                             
-                                            //let month = MonthModel(name: "", number: "", dates: [DateModel]())
                                             let month = MonthModel()
                                             month.name = monthName
                                             month.number = monthNumber
                                             
                                             for day in datesArray {
                                                 
-                                                print("Date: \(day)")
+                                                print("getSchedule date: \(day)")
                                                 
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
-                                                    //let date = DateModel(date: 0)
                                                     let date = DateModel()
                                                     date.date = Int(day) ?? 0
                                                     
@@ -360,6 +378,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             
                                         }
                                         
+										// Segue to schedule view
                                         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
                                             destinationViewController.schedule = self.schedule
                                             self.navigationController?.pushViewController(destinationViewController, animated: true)
@@ -367,7 +386,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 
                                     }
                                 case .error (let err):
-                                    print(err.localizedDescription)
+                                    print("getSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
                                     self.common.showAlert(self.common.constants.errorTitle, "Unable to get schedule data from the City of Chicago")
                                 }
                             }
@@ -376,13 +395,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                         }
                     case .error (let err):
-                        print(err.localizedDescription)
+                        print("getSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
                         self.common.showAlert(self.common.constants.errorTitle, "Unable to get ward data from the City of Chicago")
                     }
                 }
             }
             else {
-                
                 self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
             }
         }
@@ -392,13 +410,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     func getAddressFromCoordinates(_ location: CLLocation) {
         
         var address = ""
-        let ceo = CLGeocoder()
-        let loc = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let geocoder = CLGeocoder()
+        let location = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         
-        ceo.reverseGeocodeLocation(loc, completionHandler:
+        geocoder.reverseGeocodeLocation(location, completionHandler:
             {(placemarks, error) in
-                if (error != nil)
-                {
+                if (error != nil) {
                     self.common.showAlert(self.common.constants.errorTitle, error!.localizedDescription)
                 }
                 
@@ -406,27 +423,29 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                     
                     if placemarks!.count > 0 {
                         
-                        let pm = placemarks! as [CLPlacemark]
+                        let placemark = placemarks! as [CLPlacemark]
                         
-                        if pm.count > 0 {
+                        if placemark.count > 0 {
                             
-                            let pm = placemarks![0]
+                            let mark = placemarks![0]
                             
-                            if pm.subThoroughfare != nil {
-                                address = address + pm.subThoroughfare! + " "
+                            if mark.subThoroughfare != nil {
+                                address = address + mark.subThoroughfare! + " "
                             }
-                            if pm.thoroughfare != nil {
-                                address = address + pm.thoroughfare! + ", "
+                            if mark.thoroughfare != nil {
+                                address = address + mark.thoroughfare! + ", "
                             }
-                            if pm.locality != nil {
-                                address = address + pm.locality! + " "
+                            if mark.locality != nil {
+                                address = address + mark.locality! + " "
                             }
-                            if pm.postalCode != nil {
-                                address = address + pm.postalCode! + " "
+                            if mark.postalCode != nil {
+                                address = address + mark.postalCode! + " "
                             }
                             
                             self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
                             self.addressTextField.text = self.addressFromCoordinates
+							
+							// Save default address to be use when user re-opens app
                             self.defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
                             
                             print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
@@ -444,43 +463,42 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         if let location = locations.last {
             
+			// Set default lat and long to be used when user re-opens app
             self.defaults.set(location.coordinate.latitude, forKey: "defaultLatitude")
             self.defaults.set(location.coordinate.longitude, forKey: "defaultLongitude")
             
+			// Get address from coordinates to be used to fill in address text field and for schedule model
             getAddressFromCoordinates(location)
             
             var coordinates = CLLocationCoordinate2D()
             coordinates.latitude = location.coordinate.latitude
             coordinates.longitude = location.coordinate.longitude
             
+			let annotation = MKPointAnnotation()
+			annotation.coordinate = coordinates
+			
             let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
             let region = MKCoordinateRegion(center: coordinates, span: span)
             
             chicagoMapView.setRegion(region, animated: true)
-            
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinates
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
             
-            //locationManager.stopUpdatingLocation()
-            
         }
     }
     
-    
+    // If user denies location access then show location disabled alert
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         if status == CLAuthorizationStatus.denied {
-            
-            showLocationDisabledPopup()
-            
+            showLocationDisabledAlert()
         }
     }
     
-    func showLocationDisabledPopup() {
+	// If user disables location access prompt them to open the settings page to re-enable it
+    func showLocationDisabledAlert() {
         
-        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin or enter your address", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin on the map or enter your address", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
@@ -502,6 +520,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.present(alertController, animated: true, completion: nil)
     }
     
+	// Get default lat, long, and address to populate the map and address text field
     func getDefaults() {
         
         addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
@@ -516,7 +535,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
     }
     
-    func loadChicagoMap() {
+	// Load map using use default values or a generic map of Chicago
+    func loadSearchMap() {
         
         chicagoMapView.delegate = self
         
@@ -544,13 +564,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         else {
             
             let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
-            
             let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
-            
             let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
             
             chicagoMapView.setRegion(region, animated: true)
-            
+
         }
 
     }
@@ -566,6 +584,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     func styleControls() {
         
+		// Navigation items in tab bar are the same for every tab so they need to be set to nil when not needed
+		self.tabBarController?.navigationItem.rightBarButtonItem = nil
+		self.tabBarController?.navigationItem.leftBarButtonItem = nil
+		
+		// Set the title or else the title is used from another tab
+		self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
+		
         // Style segmented search type control
         if #available(iOS 13.0, *) {
             
@@ -576,7 +601,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
         }
         
-        // Style find sweep area button
+        // Style and add images to buttons
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
         self.common.styleButton(newScheduleButton, "new", "1EA896")
         self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")

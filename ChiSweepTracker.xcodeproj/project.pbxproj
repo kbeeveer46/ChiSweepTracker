@@ -29,6 +29,7 @@
 		FA6AFEE323A1E11D00F7E177 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */; };
 		FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */; };
 		FAD25E2923A325F5004FD3B9 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */; };
+		FAD25E2B23A44F89004FD3B9 /* ChicagoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD25E2A23A44F88004FD3B9 /* ChicagoModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 		FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		FAD25E2A23A44F88004FD3B9 /* ChicagoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChicagoModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				FA03D6E723A19EA700FB2668 /* DatabaseModel.swift */,
 				FA0EC395239D71CB00DD3127 /* NotificationsModel.swift */,
 				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
+				FAD25E2A23A44F88004FD3B9 /* ChicagoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				FA03D6E823A19EA700FB2668 /* DatabaseModel.swift in Sources */,
 				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
 				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
+				FAD25E2B23A44F89004FD3B9 /* ChicagoModel.swift in Sources */,
 				FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,

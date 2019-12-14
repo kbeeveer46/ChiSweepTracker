@@ -16,7 +16,50 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         getSections()
             
     }
+	
+	func getSections() {
+		
+		// Use Chicago data portal API to get sweep sections from user's ward
+		
+		sections.removeAll()
+		
+		let ward = self.schedule.ward
+		
+		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+		
+		let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+			.filter("\(self.common.constants.ward) = '\(ward)'")
+		
+		scheduleQuery.get { res in
+			switch res {
+			case .dataset (let data):
+				
+				if data.count > 0 {
+					
+					for (_, item) in data.enumerated() {
+						
+						let section = item[self.common.constants.section] as? String ?? ""
+						
+						if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+							
+							if !self.sections.contains(where: { $0 == section}) {
+								self.sections.append(section)
+							}
+						}
+					}
+					
+					self.sectionTableView.dataSource = self
+					self.sectionTableView.delegate = self
+					self.sectionTableView.reloadData()
+				}
+			case .error (let err):
+				
+				self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+			}
+		}
+	}
     
+	// Get schedule after user selects a section
     func getSchedule() {
         
         schedule.months.removeAll()
@@ -39,8 +82,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         let dates = item[self.common.constants.dates] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",")
                         
-                        print("Month name: \(monthName)")
-                        print("Dates: \(datesArray)")
+                        print("getSchedule month name: \(monthName)")
+                        print("getSchedule dates: \(datesArray)")
                         
                         let month = MonthModel()
                         month.name = monthName
@@ -48,7 +91,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         
                         for day in datesArray {
                             
-                            print("Date: \(day)")
+                            print("getSchedule date: \(day)")
                             
                             if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                 
@@ -70,55 +113,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
             
                 }
             case .error (let err):
-                
-                self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
-                
-            }
-        }
-        
-    }
-    
-    func getSections() {
-        
-        // Use Chicago data portal API to get sweep sections in a ward
-        
-        sections.removeAll()
-        
-        let ward = self.schedule.ward
-        
-        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-        
-        let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
-            .filter("\(self.common.constants.ward) = '\(ward)'")
-        
-        scheduleQuery.get { res in
-            switch res {
-            case .dataset (let data):
-                
-                if data.count > 0 {
-                    
-                    for (_, item) in data.enumerated() {
-                        
-                        let section = item[self.common.constants.section] as? String ?? ""
-                        
-                        if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                            
-                            if !self.sections.contains(where: { $0 == section}) {
-                                 self.sections.append(section)
-                            }
-                        }
-                    }
-                    
-                    self.sectionTableView.dataSource = self
-                    self.sectionTableView.delegate = self
-                    self.sectionTableView.reloadData()
-                }
-            case .error (let err):
-                
                 self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
             }
         }
-        
     }
     
     // Section table view methods
@@ -133,7 +130,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         sectionLabel.text = "Ward \(schedule.ward) - Section \(self.sections[indexPath.row])"
         
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

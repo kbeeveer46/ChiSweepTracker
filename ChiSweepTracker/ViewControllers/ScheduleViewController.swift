@@ -1,7 +1,6 @@
 import UIKit
 import CoreLocation
 import MapKit
-import CoreData
 
 class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
@@ -9,19 +8,18 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     @IBOutlet weak var scheduleTableView: UITableView!
     
     let generator = UISelectionFeedbackGenerator()
-    
+	let common = Common()
     var schedule = ScheduleModel()
     let defaults = UserDefaults.standard
     var addFavoriteButton = UIBarButtonItem()
     var removeFavoriteButton = UIBarButtonItem()
-    var sentFromNotification = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Sweep Schedule - \(Calendar.current.component(.year, from: Date()))"
+		self.title = "Sweep Schedule - \(self.common.constants.appVersion)"
         
-        // Set default address to be used when app is opened
+        // Set default address to be used when app is re-opened
         defaults.set(schedule.address, forKey: "defaultAddress")
         
         // If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
@@ -40,60 +38,44 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         // Load map with annotations and overlays
         loadScheduleMap()
         
+		// Set required properties for schedule table view
         self.scheduleTableView.dataSource = self
         self.scheduleTableView.delegate = self
         self.scheduleTableView.reloadData()
 
     }
     
-    // TODO: Use this to send user to schedule page when notification is opened
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//    }
-    
-//    @objc func catchIt() {
-//
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.catchIt), name: NSNotification.Name(rawValue: "sentFromNotification"), object: nil)
-//
-//    }
-    
     @objc func addFavorite() {
         
+		// Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
         
         // Clear notifications created by previous favorite
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
-        // Set favorite address and section.
+        // Set user favorites
         // Section is used when creating location notifications that way we know the section in case there are multiple
         defaults.set(schedule.address, forKey: "favoriteAddress")
         defaults.set(schedule.ward, forKey: "favoriteWard")
         defaults.set(schedule.section, forKey: "favoriteSection")
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
         defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
+		// Toggled off notifications when user adds a new favorite
         self.defaults.set(false, forKey: "notificationsToggled")
         
+		// defaultCoordinatesArray is set when user searches. Use its value for user's favorite
         let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
         defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
         
         // Set right bar button to remove now that a favorite has been set
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
-        // Alert the user that their favorite has been set
+        // Alert the user that their favorite has been set and prompt them to enable notifications
         let alert = UIAlertController(title: "Favorite Saved", message: "Do you want to enable push notifications?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler:{ action in
-    
-            
-        }))
+		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
-            
-//            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
-//                destinationViewController.schedule = self.schedule
-//                self.navigationController?.pushViewController(destinationViewController, animated: true)
-//            }
-            
         }))
         
         self.present(alert, animated: true, completion: nil)
@@ -102,23 +84,25 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     @objc func removeFavorite() {
         
+		// Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
         
-        // Prompt the user  if they want to delete their favorite.
+        // Prompt the user  if they want to delete their favorite because they will no longer receive notifications
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
-            // Remove any notifications set for their previous favorite
+            // Remove any notifications set from their previous favorite
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
-            // Clear favorite from defaults
+            // Clear favorites from defaults
             self.defaults.set("", forKey: "favoriteAddress")
             self.defaults.set("", forKey: "favoriteWard")
             self.defaults.set("", forKey: "favoriteSection")
             self.defaults.set(0.0, forKey: "favoriteLatitude")
             self.defaults.set(0.0, forKey: "favoriteLongitude")
             self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
+			self.defaults.set(false, forKey: "notificationsToggled")
             
             // Set right bar button to add now that a favorite has been removed
             self.navigationItem.rightBarButtonItem = self.addFavoriteButton
@@ -139,10 +123,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         tableView.deselectRow(at: indexPath, animated: true)
         
         // Add haptic feedback
-        let generator = UISelectionFeedbackGenerator()
         generator.prepare()
         generator.selectionChanged()
         
+		// Get selected month and send user to calendar view
         let cell = tableView.cellForRow(at: indexPath)!
         let daysLabel = cell.viewWithTag(2) as! UILabel
         let days = daysLabel.text!.trimmingCharacters(in: .whitespaces)
@@ -185,6 +169,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
     }
     
+	// Load schedule map with annotation and polygons
     func loadScheduleMap() {
         
         scheduleMapView.delegate = self
@@ -207,6 +192,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
     }
     
+	// Method required to add polygons to schedule map
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         if overlay is MKPolygon {
