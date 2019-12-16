@@ -23,7 +23,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="161"/>
+                                <rect key="frame" x="10" y="294" width="355" height="236"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
@@ -56,7 +56,7 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="6qs-Ls-QDx">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="100"/>
+                                        <rect key="frame" x="0.0" y="168.5" width="355" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="YKk-qn-nWB"/>
                                         </constraints>
@@ -65,13 +65,22 @@
                                         <state key="normal" title="New schedule available. Click here to enable notifications."/>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="70"/>
+                                        <rect key="frame" x="0.0" y="168.5" width="355" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Sweep Schedule Finished"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="IKH-OP-ArB">
+                                        <rect key="frame" x="0.0" y="176" width="355" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="PBO-V4-uPC"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <state key="normal" title="Your app is up-to-date! Click here to enable notifications for the new schedule"/>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -97,9 +106,11 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
                         <outlet property="newScheduleButton" destination="6qs-Ls-QDx" id="Xb0-4j-fSY"/>
+                        <outlet property="refreshNotificationsButton" destination="IKH-OP-ArB" id="LcN-ey-T7P"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
+                        <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleFromSearchSegue" id="nuK-lD-YCG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -177,11 +188,11 @@
             <objects>
                 <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="622"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="598"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
@@ -190,7 +201,7 @@
                                         </constraints>
                                     </mapView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                        <rect key="frame" x="0.0" y="235" width="375" height="387"/>
+                                        <rect key="frame" x="0.0" y="235" width="375" height="363"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
@@ -246,7 +257,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="d9u-A5-GvW">
-                                <rect key="frame" x="10" y="617" width="355" height="30"/>
+                                <rect key="frame" x="10" y="637" width="355" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="DfJ-XG-5sS">
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
@@ -351,11 +362,11 @@
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
@@ -364,7 +375,7 @@
                                         </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="luh-bO-7AY">
-                                        <rect key="frame" x="0.0" y="261" width="375" height="76"/>
+                                        <rect key="frame" x="0.0" y="255" width="375" height="76"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="geu-nl-rwr">
                                                 <rect key="frame" x="8" y="8" width="55" height="60"/>
@@ -372,7 +383,7 @@
                                                     <constraint firstAttribute="width" constant="55" id="Nzu-nG-agp"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are based off the current schedule. The City of Chicago may change the schedule at any time." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPM-ke-G5B">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are based off the current sweep schedule. The City of Chicago may change the schedule at any time." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPM-ke-G5B">
                                                 <rect key="frame" x="69" y="8" width="298" height="60"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="k5W-73-UJg"/>
@@ -385,7 +396,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="363.5" width="375" height="49.5"/>
+                                        <rect key="frame" x="0.0" y="351.5" width="375" height="49.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
                                                 <rect key="frame" x="20" y="8" width="40" height="33.5"/>
@@ -413,7 +424,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="439" width="375" height="91"/>
+                                        <rect key="frame" x="0.0" y="421" width="375" height="91"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
                                                 <rect key="frame" x="20" y="8" width="40" height="75"/>
@@ -444,7 +455,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="556" width="375" height="91"/>
+                                        <rect key="frame" x="0.0" y="532" width="375" height="91"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
                                                 <rect key="frame" x="20" y="8" width="40" height="75"/>
@@ -547,17 +558,17 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarViewController" id="a8Y-hK-Ycy" customClass="CalendarViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="izA-kT-NUo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZFy-60-zB9">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="3NZ-tU-kmZ"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                <rect key="frame" x="37.5" y="255" width="300" height="336.5"/>
+                                <rect key="frame" x="37.5" y="299" width="300" height="336.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="20.5"/>
@@ -664,7 +675,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ECZ-cJ-Q62">
-                                <rect key="frame" x="10" y="612" width="355" height="30"/>
+                                <rect key="frame" x="10" y="632" width="355" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="SSj-OQ-MRV">
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
@@ -722,6 +733,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="eEQ-YS-Bae"/>
-        <segue reference="maw-XV-A0s"/>
+        <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
 </document>

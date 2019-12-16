@@ -41,11 +41,19 @@ class Common {
     class Constants {
         
         let defaults = UserDefaults.standard
-        
+	
+		let appStoreId = "1490793712"
+
+		#if DEBUG
+		let database = "Schedules_Dev"
+		#else
+		let database = "Schedules"
+		#endif
+		        
         // MARK: SODA
         
-		let schedulesTable = "Schedules"
-        let appVersion = "2019"
+		// UPDATE THESE VALUES WITH NEW APP VERSION //
+		let appVersion = "2019"
         let wardDataset = "jqxt-c6gd" // Use this dataset to find ward and section based off coordinates
         let scheduleDataset = "k737-xg34" // Use this dataset to find schedule based off ward and section
         let the_geom = "the_geom"
@@ -55,7 +63,27 @@ class Common {
         let month_name = "month_name"
         let month_number = "month_number"
         let dates = "dates"
+		
+//		func appVersionInt() -> Int {
+//			return Int(appVersion)!
+//		}
         
+		func favoriteAddress() -> String {
+			return self.defaults.string(forKey: "favoriteAddress") ?? ""
+		}
+		
+		func notificationsToggled() -> Bool {
+			return self.defaults.bool(forKey: "notificationsToggled") 
+		}
+		
+		func hasUserRefreshedNotifications() -> Bool {
+			return self.defaults.bool(forKey: "hasUserRefreshedNotifications")
+		}
+		
+		func lastYearUserRefreshedNotifications() -> Int {
+			return self.defaults.integer(forKey: "lastYearUserRefreshedNotifications")
+		}
+		
 //        func wardDataset() -> String {
 //            return self.defaults.string(forKey: "officialWardDataset") ?? ""
 //        }

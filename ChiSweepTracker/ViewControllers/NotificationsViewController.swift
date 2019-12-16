@@ -21,7 +21,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     let defaults = UserDefaults.standard
     var removeFavoriteButton = UIBarButtonItem()
     let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
-    
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,7 +81,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             destinationViewController.schedule = self.schedule
             self.navigationController?.pushViewController(destinationViewController, animated: true)
         }
-        
     }
     
     func loadFavoriteMap() {
@@ -199,7 +198,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         saveDefaultNotificationValues()
         
         if self.pushNotificationsSwitch.isOn {
-            //self.registerForPushNotifications()
             self.getSchedule(true)
         }
     }
@@ -331,17 +329,19 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 //
 //    }
     
-    func getSchedule(_ registerForPushNotifications: Bool) {
+	func getSchedule(_ registerForPushNotifications: Bool,
+					 _ useDefaultNotificationValues: Bool = false,
+					 _ showNotificationsRefreshedAlert: Bool = false) {
         
-        print("Address: \(self.favoriteAddress)")
-        
-        self.schedule.address = self.favoriteAddress
+		self.schedule.address = self.common.constants.favoriteAddress() //self.favoriteAddress
+		
+        print("Address: \(self.schedule.address)")
         
         // Get coordinates
         
         let geocoder = CLGeocoder()
         
-        geocoder.geocodeAddressString(self.favoriteAddress) { placemarks, error in
+        geocoder.geocodeAddressString(self.schedule.address) { placemarks, error in
             
             if error != nil {
                 
@@ -525,12 +525,27 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                         let calendar = Calendar.current
                                                         let currentYear = calendar.component(.year, from: Date())
                                                         
-                                                        let time = self.timePicker.date
-                                                        let comp = calendar.dateComponents([.hour, .minute], from: time)
-                                                        let hour = comp.hour!
-                                                        let minute = comp.minute!
-                                                        let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
-                                                        
+														let notificationWhenDefault = self.defaults.object(forKey: "notificationWhen") as? String ?? ""
+														let notificationHourDefault = self.defaults.integer(forKey: "notificationHour")
+														let notificationMinuteDefault = self.defaults.integer(forKey: "notificationMinute")
+														
+														var hour = 0
+														var minute = 0
+														var when = ""
+														
+														if useDefaultNotificationValues == true {
+															hour = notificationHourDefault
+															minute = notificationMinuteDefault
+															when = notificationWhenDefault
+														}
+														else {
+															let time = self.timePicker.date
+															let comp = calendar.dateComponents([.hour, .minute], from: time)
+															hour = comp.hour!
+															minute = comp.minute!
+															when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
+														}
+														
                                                         for monthInSchedule in self.schedule.months {
                                                             
                                                             for dayInMonth in monthInSchedule.dates {
@@ -584,7 +599,30 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 })
                                                             }
                                                         }
-                                                    }
+													
+														if showNotificationsRefreshedAlert == true {
+															
+															// Prompt the user if they want to view the new schedule details
+															
+															self.common.showAlert("Notifications Updated!", "")
+															
+															
+															// Segue not working!!
+															// Prompt the user if they want to view the new schedule details
+//															let alert = UIAlertController(title: "Notifications Updated", message: "Would you like to view the new schedule?", preferredStyle: .alert)
+//															alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+//
+//																if let destinationViewController = UIApplication.shared.keyWindow?.rootViewController?.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//																	destinationViewController.schedule = self.schedule
+//																	UIApplication.shared.keyWindow?.rootViewController?.navigationController?.pushViewController(destinationViewController, animated: true)
+//																}
+//
+//															}))
+//															alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+//															UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+															//
+														}
+													}
                                                 }
                                             }
                                         }

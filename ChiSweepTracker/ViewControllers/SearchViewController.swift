@@ -11,7 +11,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     @IBOutlet weak var newScheduleButton: UIButton!
     @IBOutlet weak var finishedScheduleButton: UIButton!
-    
+	@IBOutlet weak var refreshNotificationsButton: UIButton!
+	
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
     let common = Common()
@@ -39,6 +40,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
 		// Get default address, lat, and long
         getDefaults()
+		
+		// Test only. Remove this when done
+		self.defaults.set(false, forKey: "hasUserRefreshedNotifications")
+		self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
+		self.showRefreshNotificationsButton(Int(self.common.constants.appVersion)!)
         
 		// Load map of Chicago or use default lat and long
         loadSearchMap()
@@ -171,7 +177,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         let userAppVersion = Int(self.common.constants.appVersion)! // Year
         
         let db = Firestore.firestore()
-        db.collection("Schedules")
+		db.collection(self.common.constants.database)
             .order(by: "year", descending: true)
             .limit(to: 1)
             .getDocuments() { (querySnapshot, err) in
@@ -187,31 +193,87 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						
                         if userAppVersion < latestAppVersion {
                             
-							// TODO: Change this string to include app id to go directly to app in store
                             let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store and update.")
                             self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
-                            self.newScheduleButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+                            self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
                             self.newScheduleButton.isHidden = false
                             
                         }
 						else {
 							
 							// Only show finished button if the new button is not shown
-							self.showFinishedScheduleButton()
+							self.showFinishedScheduleButton(latestAppVersion)
 							
 						}
                     }
                 }
         }
     }
+	
+	func showRefreshNotificationsButton(_ latestAppVersion: Int) {
+		
+		self.refreshNotificationsButton.isHidden = true
+		
+		let favoriteAddress = self.common.constants.favoriteAddress()
+		let notificationsToggled = self.common.constants.notificationsToggled()
+		let hasUserRefreshedNotifications = self.common.constants.hasUserRefreshedNotifications()
+		let lastYearUserRefreshedNotifications = self.common.constants.lastYearUserRefreshedNotifications()
+		let appVersion = Int(self.common.constants.appVersion)!
+		
+		if !favoriteAddress.isEmpty &&
+			notificationsToggled == true &&
+			appVersion == latestAppVersion &&
+			hasUserRefreshedNotifications == false &&
+			(lastYearUserRefreshedNotifications == 0 || lastYearUserRefreshedNotifications < appVersion) {
+			
+			self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+			self.refreshNotificationsButton.isHidden = false
+			
+		}
+		
+	}
     
-    @objc func refreshNotifications() {
+	@objc func refreshNotifications() {
+		
+		let notificationViewController = NotificationsViewController()
+		notificationViewController.getSchedule(true, true, true)
+		
+		//self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
+		//self.defaults.set(true, forKey: "hasUserRefreshedNotifications")
+		
+		// Can't do this because schedule isn't populated
+		// Prompt the user if they want to view the new schedule details
+//		let alert = UIAlertController(title: "Notifications Updated", message: "Would you like to view the new schedule?", preferredStyle: .alert)
+//		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+//
+//			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//				destinationViewController.schedule = self.schedule
+//				self.navigationController?.pushViewController(destinationViewController, animated: true)
+//			}
+//
+//		}))
+//		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+//		UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+		//
+		
+	}
+	
+    @objc func openAppStore() {
         
 		// Send user to app store to update app
-        
+		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.common.constants.appStoreId)"),
+			UIApplication.shared.canOpenURL(url){
+			UIApplication.shared.open(url, options: [:]) { (opened) in
+				if(opened){
+					print("App Store Opened")
+				}
+			}
+		} else {
+			print("Can't Open URL on Simulator")
+		}
     }
     
-    func showFinishedScheduleButton() {
+	func showFinishedScheduleButton(_ latestAppVersion: Int) {
         
 		// Show finished schedule button if the current month is greater than the last month of sweeping
 		
@@ -240,6 +302,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
 						self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
 						self.finishedScheduleButton.isHidden = false
+					}
+					else {
+						
+						// Only show refresh notifications button if schedule isn't finished
+						self.showRefreshNotificationsButton(latestAppVersion)
 					}
 				}
 			}
@@ -461,6 +528,84 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 }
         })
     }
+	
+	// If user disables location access prompt them to open the settings page to re-enable it
+	func showLocationDisabledAlert() {
+		
+		let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin on the map or enter your address", preferredStyle: .alert)
+		
+		let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+		alertController.addAction(cancelAction)
+		
+		if #available(iOS 10.0, *) {
+			
+			let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+				
+				if let url = URL(string: UIApplication.openSettingsURLString) {
+					
+					UIApplication.shared.open(url, options: [:], completionHandler: nil)
+					
+				}
+			}
+			
+			alertController.addAction(openAction)
+		}
+		
+		self.present(alertController, animated: true, completion: nil)
+	}
+	
+	// Get default lat, long, and address to populate the map and address text field
+	func getDefaults() {
+		
+		addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
+		longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
+		latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
+		
+		print("Default address: \(addressFromDefaults)")
+		print("Default longitude: \(longitudeFromDefaults)")
+		print("Default latitude: \(latitudeFromDefaults)")
+		
+		addressTextField.text = addressFromDefaults
+		
+	}
+	
+	// Load map using use default values or a generic map of Chicago
+	func loadSearchMap() {
+		
+		chicagoMapView.delegate = self
+		
+		// Add tap gesture to allow user to tap on map to drop a pin
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addDroppedPin(gesture:)))
+		chicagoMapView.addGestureRecognizer(tapGesture)
+		
+		// If user has previously searched for an address use those defaults to load the map
+		// Load default map of the entire city of Chicago if no defaults are set
+		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
+			
+			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
+			
+			let annotation = MKPointAnnotation()
+			annotation.title = addressFromDefaults
+			annotation.coordinate = location.coordinate
+			
+			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+			let region = MKCoordinateRegion(center: location.coordinate, span: span)
+			
+			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+			chicagoMapView.addAnnotation(annotation)
+			chicagoMapView.setRegion(region, animated: true)
+		}
+		else {
+			
+			let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+			let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+			let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+			
+			chicagoMapView.setRegion(region, animated: true)
+			
+		}
+		
+	}
     
     // MARK: Location Manager
     
@@ -501,83 +646,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
     }
     
-	// If user disables location access prompt them to open the settings page to re-enable it
-    func showLocationDisabledAlert() {
-        
-        let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin on the map or enter your address", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        if #available(iOS 10.0, *) {
-            
-            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
-                
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                                        
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                    
-                }
-            }
-            
-            alertController.addAction(openAction)
-        }
-
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-	// Get default lat, long, and address to populate the map and address text field
-    func getDefaults() {
-        
-        addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
-        longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
-        latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
-        
-        print("Default address: \(addressFromDefaults)")
-        print("Default longitude: \(longitudeFromDefaults)")
-        print("Default latitude: \(latitudeFromDefaults)")
-        
-        addressTextField.text = addressFromDefaults
-        
-    }
-    
-	// Load map using use default values or a generic map of Chicago
-    func loadSearchMap() {
-        
-        chicagoMapView.delegate = self
-        
-        // Add tap gesture to allow user to tap on map to drop a pin
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addDroppedPin(gesture:)))
-        chicagoMapView.addGestureRecognizer(tapGesture)
-        
-        // If user has previously searched for an address use those defaults to load the map
-        // Load default map of the entire city of Chicago if no defaults are set
-        if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
-
-            let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
-
-            let annotation = MKPointAnnotation()
-            annotation.title = addressFromDefaults
-            annotation.coordinate = location.coordinate
-
-            let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
-            let region = MKCoordinateRegion(center: location.coordinate, span: span)
-
-            chicagoMapView.removeAnnotations(chicagoMapView.annotations)
-            chicagoMapView.addAnnotation(annotation)
-            chicagoMapView.setRegion(region, animated: true)
-        }
-        else {
-            
-            let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
-            let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
-            let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
-            
-            chicagoMapView.setRegion(region, animated: true)
-
-        }
-
-    }
+	
     
     // MARK: Helpers
     
@@ -611,7 +680,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
         self.common.styleButton(newScheduleButton, "new", "1EA896")
         self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
-        
+		self.common.styleButton(refreshNotificationsButton, "phone_white", "863D96")
+
     }
 }
 
