@@ -12,6 +12,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var newScheduleButton: UIButton!
     @IBOutlet weak var finishedScheduleButton: UIButton!
 	@IBOutlet weak var refreshNotificationsButton: UIButton!
+	@IBOutlet weak var refreshNotificationsAfterNewDatasetButton: UIButton!
 	
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
@@ -23,6 +24,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     var addressFromDefaults = ""
     var longitudeFromDefaults = 0.0
     var latitudeFromDefaults = 0.0
+	var latestDatasetVersionGlobal = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +38,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
 			self.showNewScheduleButton()
+			
+			self.showRefreshNotificationsButton()
+			self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
+			self.defaults.set(false, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
+			self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
 			
 		})
 		
@@ -139,13 +146,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	func getCityOfChicagoValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
 		
 		let db = Firestore.firestore()
-		db.collection(self.common.constants.databaseName)
+		db.collection(self.common.constants.schedulesDatabaseName)
 			.order(by: "year", descending: true)
 			.limit(to: 1)
 			.getDocuments() { (querySnapshot, err) in
 				if let err = err {
 					//print("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
-					fatalError("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
+					fatalError("Could not get getCityOfChicagoValuesFromDatabase default data from Firebase: \(err)")
 				} else {
 					for document in querySnapshot!.documents {
 						
@@ -175,10 +182,64 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				}
 		}
 		
+		let docRef = db.collection(self.common.constants.updatesDatabaseName)
+			.document(self.common.constants.appVersion)
+		
+		// Check to see if there's an update to the schedule/data set
+		docRef.getDocument { (document, error) in
+			if let document = document, document.exists {
+				
+				let data = document.data()
+				
+				let latestDatasetVersion = data!["version"] as! Int
+				let userDatasetVersion = self.common.constants.userDatasetVersion()
+				//let hasUserRefreshedNotificationsAfterNewDataset = self.common.constants.hasUserRefreshedNotificationsAfterNewDataset()
+				//let lastVersionUserRefreshedNewDatasetNotifications = self.common.constants.lastVersionUserRefreshedNewDatasetNotifications()
+				
+				print("Latest dataset version: \(latestDatasetVersion)")
+				print("User dataset version: \(userDatasetVersion)")
+				//print("User has updated: \(hasUserRefreshedNotificationsAfterNewDataset)")
+				//print("Last dataset version user has updated: \(lastVersionUserRefreshedNewDatasetNotifications)")
+				
+				self.refreshNotificationsAfterNewDatasetButton.isHidden = true
+				self.latestDatasetVersionGlobal = latestDatasetVersion
+				
+				if userDatasetVersion == 0 {
+					// Set userDatasetVersion default to the latest data set version if this is the first time they opened the app
+					self.defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+				}
+				else if userDatasetVersion > 0 &&
+					    userDatasetVersion < latestDatasetVersion //&&
+					    //hasUserRefreshedNotificationsAfterNewDataset == false &&
+					    //(lastVersionUserRefreshedNewDatasetNotifications == 0 || (lastVersionUserRefreshedNewDatasetNotifications < latestDatasetVersion))
+				{
+					// Show update data set button
+					self.showUpdatedDatasetButton()
+				}
+				
+				
+			} else {
+				print("Updates database record does not exist for \(self.common.constants.appVersion)")
+			}
+		}
+		
 		completion("Finished calling getCityOfChicagoValuesFromDatabase")
 	}
 	
-	
+	func showUpdatedDatasetButton() {
+
+		let favoriteAddress = self.common.constants.favoriteAddress()
+		let notificationsToggled = self.common.constants.notificationsToggled()
+		
+		if !favoriteAddress.isEmpty &&
+			notificationsToggled == true {
+		
+			self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+			self.refreshNotificationsAfterNewDatasetButton.isHidden = false
+			
+		}
+	}
+
 	// Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
 		
@@ -215,14 +276,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.newScheduleButton.isHidden = true
 		
         let userAppVersion = Int(self.common.constants.appVersion)! // Year
-		let latestAppVersion = defaults.integer(forKey: "latestAppVersion")
+		let latestAppVersion = self.common.constants.latestAppVersion() //defaults.integer(forKey: "latestAppVersion")
 
 		print("userAppVersion: \(userAppVersion)")
 		print("latestAppVersion: \(latestAppVersion)")
 
 		if userAppVersion < latestAppVersion {
 
-			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store and update.")
+			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available! You must update this app to see the new schedule and set up your notifications. Click here to visit the App Store.")
 			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
 			self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
 			self.newScheduleButton.isHidden = false
@@ -242,7 +303,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		let favoriteAddress = self.common.constants.favoriteAddress()
 		let notificationsToggled = self.common.constants.notificationsToggled()
-		let hasUserRefreshedNotifications = self.common.constants.hasUserRefreshedNotifications()
+		let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
 		let lastYearUserRefreshedNotifications = self.common.constants.lastYearUserRefreshedNotifications()
 		let appVersion = Int(self.common.constants.appVersion)!
 		let latestAppVersion = Int(self.common.constants.latestAppVersion())
@@ -250,7 +311,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		if !favoriteAddress.isEmpty &&
 			notificationsToggled == true &&
 			appVersion == latestAppVersion &&
-			hasUserRefreshedNotifications == false &&
+			hasUserRefreshedNotificationsAfterNewVersion == false &&
 			(lastYearUserRefreshedNotifications == 0 || lastYearUserRefreshedNotifications < appVersion) {
 			
 			self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
@@ -261,11 +322,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
 	@objc func refreshNotifications() {
 		
+		// Call getSchedule in the notification controller because that function also adds notifications
 		let notificationViewController = NotificationsViewController()
 		notificationViewController.getSchedule(true, true, true)
+
+		// Hide button after notifications are refreshed
+		self.refreshNotificationsButton.isHidden = true
 		
-		//self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
-		//self.defaults.set(true, forKey: "hasUserRefreshedNotifications")
+		defaults.set(latestDatasetVersionGlobal, forKey: "userDatasetVersion")
 		
 	}
 	
@@ -689,6 +753,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.common.styleButton(newScheduleButton, "new", "1EA896")
         self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
 		self.common.styleButton(refreshNotificationsButton, "phone_white", "863D96")
+		self.common.styleButton(refreshNotificationsAfterNewDatasetButton, "ended", "1EA896")
 
     }
 }

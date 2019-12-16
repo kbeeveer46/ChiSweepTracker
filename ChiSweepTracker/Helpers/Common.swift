@@ -45,24 +45,21 @@ class Common {
 		let appStoreId = "1490793712"
 
 		#if DEBUG
-		let databaseName = "Schedules_Dev"
+		let schedulesDatabaseName = "Schedules_Dev"
+		let updatesDatabaseName = "Updates_Dev"
 		#else
-		let databaseName = "Schedules"
+		let schedulesDatabaseName = "Schedules"
+		let updatesDatabaseName = "Updates"
 		#endif
 		        
         // MARK: SODA
         
 		// UPDATE THESE VALUES WITH NEW APP VERSION //
 		let appVersion = "2019"
-        //let wardDataset = "jqxt-c6gd" // Use this dataset to find ward and section based off coordinates
-        //let scheduleDataset = "k737-xg34" // Use this dataset to find schedule based off ward and section
-        //let the_geom = "the_geom"
-        //let ward = "ward"
-        //let section = "section"
-        //let coordinates = "coordinates"
-        //let month_name = "month_name"
-        //let month_number = "month_number"
-        //let dates = "dates"
+
+		func userDatasetVersion() -> Int {
+			return self.defaults.integer(forKey: "userDatasetVersion")
+		}
 		
 		func latestAppVersion() -> Int {
 			return self.defaults.integer(forKey: "latestAppVersion")
@@ -112,12 +109,20 @@ class Common {
 			return self.defaults.bool(forKey: "notificationsToggled") 
 		}
 		
-		func hasUserRefreshedNotifications() -> Bool {
-			return self.defaults.bool(forKey: "hasUserRefreshedNotifications")
+		func hasUserRefreshedNotificationsAfterNewVersion() -> Bool {
+			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewVersion")
 		}
 		
 		func lastYearUserRefreshedNotifications() -> Int {
 			return self.defaults.integer(forKey: "lastYearUserRefreshedNotifications")
+		}
+		
+		func hasUserRefreshedNotificationsAfterNewDataset() -> Bool {
+			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewDataset")
+		}
+		
+		func lastVersionUserRefreshedNewDatasetNotifications() -> Int {
+			return self.defaults.integer(forKey: "lastVersionUserRefreshedNewDatasetNotifications")
 		}
         
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"

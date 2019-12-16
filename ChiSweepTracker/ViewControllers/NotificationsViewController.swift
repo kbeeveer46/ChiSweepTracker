@@ -604,6 +604,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 															
 															self.common.showAlert("Notifications Updated!", "")
 															
+															self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
+															self.defaults.set(true, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
+															
 															// Segue not working!!
 															// Prompt the user if they want to view the new schedule details
 //															let alert = UIAlertController(title: "Notifications Updated", message: "Would you like to view the new schedule?", preferredStyle: .alert)

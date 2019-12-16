@@ -23,7 +23,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="236"/>
+                                <rect key="frame" x="10" y="294" width="355" height="311"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
@@ -56,9 +56,9 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="6qs-Ls-QDx">
-                                        <rect key="frame" x="0.0" y="168.5" width="355" height="100"/>
+                                        <rect key="frame" x="0.0" y="168.5" width="355" height="95"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="YKk-qn-nWB"/>
+                                            <constraint firstAttribute="height" constant="95" id="YKk-qn-nWB"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
@@ -80,7 +80,16 @@
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                        <state key="normal" title="Your app is up-to-date! Click here to enable notifications for the new schedule"/>
+                                        <state key="normal" title="Your app is up-to-date! Click here to update your notifications for the new schedule"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="iQ9-MB-6Fw">
+                                        <rect key="frame" x="0.0" y="251" width="355" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="zGs-KA-be5"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Chicago has updated the sweep schedule which may affect your notifications. Click here to update your notifications."/>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -106,7 +115,7 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
                         <outlet property="newScheduleButton" destination="6qs-Ls-QDx" id="Xb0-4j-fSY"/>
-                        <outlet property="refreshNotificationsButton" destination="IKH-OP-ArB" id="LcN-ey-T7P"/>
+                        <outlet property="refreshNotificationsAfterNewDatasetButton" destination="iQ9-MB-6Fw" id="4aF-c0-ZFV"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
@@ -375,19 +384,20 @@
                                         </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="luh-bO-7AY">
-                                        <rect key="frame" x="0.0" y="255" width="375" height="76"/>
+                                        <rect key="frame" x="0.0" y="247.5" width="375" height="106"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_circle_red" translatesAutoresizingMaskIntoConstraints="NO" id="geu-nl-rwr">
-                                                <rect key="frame" x="8" y="8" width="55" height="60"/>
+                                                <rect key="frame" x="8" y="8" width="55" height="90"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="55" id="Nzu-nG-agp"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications are based off the current sweep schedule. The City of Chicago may change the schedule at any time." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPM-ke-G5B">
-                                                <rect key="frame" x="69" y="8" width="298" height="60"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPM-ke-G5B">
+                                                <rect key="frame" x="69" y="8" width="298" height="90"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="k5W-73-UJg"/>
+                                                    <constraint firstAttribute="height" constant="90" id="k5W-73-UJg"/>
                                                 </constraints>
+                                                <string key="text">Notifications are based off your current sweep schedule. Chicago may update the schedule at any time. All schedule updates will be posted on the search page.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -396,7 +406,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="351.5" width="375" height="49.5"/>
+                                        <rect key="frame" x="0.0" y="366.5" width="375" height="49.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
                                                 <rect key="frame" x="20" y="8" width="40" height="33.5"/>
@@ -424,7 +434,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="20" bottom="8" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="421" width="375" height="91"/>
+                                        <rect key="frame" x="0.0" y="428.5" width="375" height="91"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
                                                 <rect key="frame" x="20" y="8" width="40" height="75"/>
@@ -733,6 +743,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="eEQ-YS-Bae"/>
-        <segue reference="aU1-JL-7NV"/>
+        <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
 </document>
