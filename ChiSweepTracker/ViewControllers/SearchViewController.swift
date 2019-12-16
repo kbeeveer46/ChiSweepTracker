@@ -34,10 +34,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+		//self.defaults.set(1, forKey: "userDatasetVersion")
+		
 		getCityOfChicagoValuesFromDatabase(completion: { message in
-			
-			// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
-			self.showNewScheduleButton()
 			
 			//self.showRefreshNotificationsButton()
 			//self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
@@ -57,88 +56,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Make enter key close keyboard
 		self.addressTextField.delegate = self
         
-    }
-    
-    // MARK: Actions
-    
-	// Search type segmented control option changed event
-    @IBAction func searchTypeTapped(_ sender: Any) {
-        
-        // Add haptic feedback
-        let generator = UISelectionFeedbackGenerator()
-        generator.prepare()
-        generator.selectionChanged()
-        
-        // Remove map annotations
-        chicagoMapView.removeAnnotations(chicagoMapView.annotations)
-        
-        if searchTypeSegment.selectedSegmentIndex == 0 {
-            
-            // Stop updating location if user selects "drop pin"
-            locationManager.stopUpdatingLocation()
-            
-        }
-        else if searchTypeSegment.selectedSegmentIndex == 1 {
-            
-            // Request location access. If access granted, start updating location and update map
-            locationManager.requestWhenInUseAuthorization()
-            
-            if CLLocationManager.locationServicesEnabled() {
-                locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.startUpdatingLocation()
-            }
-            else {
-                print("Location services are not enabled")
-            }
-            
-        }
-        else if searchTypeSegment.selectedSegmentIndex == 2 {
-            // Stop updating location if user selects "enter address"
-            locationManager.stopUpdatingLocation()
-        }
-    }
-    
-    // Search address button is tapped
-    @IBAction func searchAddressTapped(_ sender: Any) {
-        
-        // Add haptic feedback
-        let generator = UISelectionFeedbackGenerator()
-        generator.prepare()
-        generator.selectionChanged()
-        
-		// Stop updating user's location to save battery
-        locationManager.stopUpdatingLocation()
-        
-		// Get address from text field for searching
-        var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        
-		// Add "Chicago" to address if it doesn't contain it to help find address
-        if !address.lowercased().contains("chicago") && !address.isEmpty {
-            address = address + " Chicago"
-        }
-        
-		// Alert user if they didn't enter an address
-        if address.isEmpty {
-            self.common.showAlert("Please Enter An Address", "")
-            return
-        }
-        
-		// Find address and go to select section view or schedule view
-        getSchedule(address)
-		
-		// Test addresses
-        //getSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
-    
-    }
-    
-    // Prepare segue and pass data to view controllers
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "selectSectionSegue" {
-            if let selectSectionViewController = segue.destination as? SelectSectionViewController {
-                selectSectionViewController.schedule = schedule
-            }
-        }
     }
     
     // MARK: Methods
@@ -178,14 +95,135 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						self.defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
 						self.defaults.set(sectionTitle, forKey: "sectionTitle")
 						self.defaults.set(wardTitle, forKey: "wardTitle")
+						
+						// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
+						self.showNewScheduleButton()
 					}
 				}
 		}
 		
+		completion("Finished calling getCityOfChicagoValuesFromDatabase")
+	}
+	
+	func showNewScheduleButton() {
+		
+		// User's app version (year) is stored in constants file
+		// Pull the latest version (year) from the database and see if it matches user app version
+		// If it does not match that means the City of Chicago has released a new schedule and I put the values in Firebase
+		// If it does not match, show new schedule button and direct them to the app store.
+		// This requires a new record in Firebase at the exact same time the app is released
+		
+		self.newScheduleButton.isHidden = true
+		
+		let userAppVersion = self.common.constants.appVersion // Year
+		let latestAppVersion = self.common.constants.latestAppVersion()
+		
+		print("Latest App Version: \(latestAppVersion)")
+		print("User App Version: \(userAppVersion)")
+		
+		if userAppVersion < latestAppVersion {
+			
+			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available! You must update this app to see the new schedule and set up your notifications. Click here to visit the App Store.")
+			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
+			self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
+			self.newScheduleButton.isHidden = false
+			
+		}
+		else {
+			
+			// Only show finished button if the new button is not shown
+			self.showFinishedScheduleButton()
+			
+		}
+	}
+	
+	func showFinishedScheduleButton() {
+		
+		// Show finished schedule button if the current month is greater than the last month of sweeping
+		
+		self.finishedScheduleButton.isHidden = true
+		
+		let currentMonthNumber = 11 //Calendar.current.component(.month, from: Date())
+		let appVersion = self.common.constants.appVersion // Year
+		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+		
+		let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
+			.limit(1)
+			.orderDescending("month_number")
+			.filter("month_number IS NOT NULL")
+		
+		wardQuery.get { res in
+			switch res {
+			case .dataset (let data):
+				
+				let month = data[0][self.common.constants.month_number()] as? String ?? ""
+				print("Last sweep month: \(month)")
+				print("Current month: \(currentMonthNumber)")
+				
+				if !month.isEmpty {
+					if Int(month)! > 0 {
+						if currentMonthNumber > Int(month)!{
+							let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(appVersion). Check back next spring for the new schedule and to set up your notifications.")
+							self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
+							self.finishedScheduleButton.isHidden = false
+						}
+						else {
+							// Only show "new version" refresh notifications button if schedule isn't finished
+							self.showRefreshNotificationsAfterNewVersionButton()
+							
+							// Only show "new dataset" refresh notifications button if schedule isn't finished
+							self.showRefreshNoticationsAfterDatasetUpdateButton()
+						}
+					}
+				}
+			case .error (let err):
+				print("Unable to get showFinishedScheduleButton data from the City of Chicago: \(err.localizedDescription)")
+			}
+		}
+	}
+	
+	func showRefreshNotificationsAfterNewVersionButton() {
+		
+		// Show "new version" refresh notifications button after users updates the app
+		// Just get notifications automatically?
+		//
+		
+		self.refreshNotificationsAfterUpdateButton.isHidden = true
+		
+		let favoriteAddress = self.common.constants.favoriteAddress()
+		let notificationsToggled = self.common.constants.notificationsToggled()
+		let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
+		let lastYearUserRefreshedNotificationsAfterNewVersion = self.common.constants.lastYearUserRefreshedNotifications()
+		let appVersion = self.common.constants.appVersion
+		let latestAppVersion = Int(self.common.constants.latestAppVersion())
+		
+		if !favoriteAddress.isEmpty &&
+			notificationsToggled == true &&
+			appVersion == latestAppVersion &&
+			hasUserRefreshedNotificationsAfterNewVersion == false &&
+			(lastYearUserRefreshedNotificationsAfterNewVersion == 0 || lastYearUserRefreshedNotificationsAfterNewVersion < appVersion) {
+			
+			// This runs when it shouldn't!!
+			// Need to figure out how to tell the difference between a new and updated install
+			self.refreshNotifications()
+			
+			//self.refreshNotificationsAfterUpdateButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+			//self.refreshNotificationsAfterUpdateButton.isHidden = false
+			
+		}
+	
+	}
+	
+	func showRefreshNoticationsAfterDatasetUpdateButton() {
+		
+		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
+		
+		let db = Firestore.firestore()
 		let docRef = db.collection(self.common.constants.updatesDatabaseName)
-			.document(self.common.constants.appVersion)
+			.document(String(self.common.constants.appVersion))
 		
 		// Check to see if Chicago has updated the schedule/data set
+		// This means that I updated the "version" field by 1 in the Updates table
 		docRef.getDocument { (document, error) in
 			if let document = document, document.exists {
 				
@@ -193,6 +231,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				
 				let latestDatasetVersion = data!["version"] as! Int
 				let userDatasetVersion = self.common.constants.userDatasetVersion()
+				let favoriteAddress = self.common.constants.favoriteAddress()
+				let notificationsToggled = self.common.constants.notificationsToggled()
 				//let hasUserRefreshedNotificationsAfterNewDataset = self.common.constants.hasUserRefreshedNotificationsAfterNewDataset()
 				//let lastVersionUserRefreshedNewDatasetNotifications = self.common.constants.lastVersionUserRefreshedNewDatasetNotifications()
 				
@@ -201,7 +241,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				//print("User has updated: \(hasUserRefreshedNotificationsAfterNewDataset)")
 				//print("Last dataset version user has updated: \(lastVersionUserRefreshedNewDatasetNotifications)")
 				
-				self.refreshNotificationsAfterNewDatasetButton.isHidden = true
+				// Set this value globally so I can set it in their defaults when they click on the button
+				// I don't have access to the latestDataset in the button tapped event so I had to set it here
 				self.latestDatasetVersionGlobal = latestDatasetVersion
 				
 				if userDatasetVersion == 0 {
@@ -209,34 +250,19 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					self.defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
 				}
 				else if userDatasetVersion > 0 &&
-					    userDatasetVersion < latestDatasetVersion //&&
-					    //hasUserRefreshedNotificationsAfterNewDataset == false &&
-					    //(lastVersionUserRefreshedNewDatasetNotifications == 0 || (lastVersionUserRefreshedNewDatasetNotifications < latestDatasetVersion))
+					    userDatasetVersion < latestDatasetVersion &&
+					    !favoriteAddress.isEmpty &&
+					    notificationsToggled == true //&&
+					//hasUserRefreshedNotificationsAfterNewDataset == false &&
+					//(lastVersionUserRefreshedNewDatasetNotifications == 0 || (lastVersionUserRefreshedNewDatasetNotifications < latestDatasetVersion))
 				{
-					// Show update data set button
-					self.showUpdatedDatasetButton()
+					// Show refresh notifications after a new dataset button
+					self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+					self.refreshNotificationsAfterNewDatasetButton.isHidden = false
 				}
-				
-				
 			} else {
 				print("Updates database record does not exist for \(self.common.constants.appVersion)")
 			}
-		}
-		
-		completion("Finished calling getCityOfChicagoValuesFromDatabase")
-	}
-	
-	func showUpdatedDatasetButton() {
-
-		let favoriteAddress = self.common.constants.favoriteAddress()
-		let notificationsToggled = self.common.constants.notificationsToggled()
-		
-		if !favoriteAddress.isEmpty &&
-			notificationsToggled == true {
-		
-			self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
-			self.refreshNotificationsAfterNewDatasetButton.isHidden = false
-			
 		}
 	}
 
@@ -261,61 +287,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
 			chicagoMapView.addAnnotation(annotation)
-			
-		}
-	}
-    
-    func showNewScheduleButton() {
-        
-		// User's app version (year) is stored in constants file
-		// Pull the latest version (year) from the database and see if it matches user app version
-		// If it does not match that means the City of Chicago has released a new schedule and I put the values in Firebase
-		// If it does not match, show new schedule button and direct them to the app store.
-		// This requires a new record in Firebase at the exact same time the app is released
-		
-        self.newScheduleButton.isHidden = true
-		
-        let userAppVersion = Int(self.common.constants.appVersion)! // Year
-		let latestAppVersion = self.common.constants.latestAppVersion() //defaults.integer(forKey: "latestAppVersion")
-
-		print("Latest App Version: \(latestAppVersion)")
-		print("User App Version: \(userAppVersion)")
-
-		if userAppVersion < latestAppVersion {
-
-			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available! You must update this app to see the new schedule and set up your notifications. Click here to visit the App Store.")
-			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
-			self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
-			self.newScheduleButton.isHidden = false
-
-		}
-		else {
-
-			// Only show finished button if the new button is not shown
-			self.showFinishedScheduleButton()
-
-		}
-    }
-	
-	func showRefreshNotificationsButton() {
-		
-		self.refreshNotificationsAfterUpdateButton.isHidden = true
-		
-		let favoriteAddress = self.common.constants.favoriteAddress()
-		let notificationsToggled = self.common.constants.notificationsToggled()
-		let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
-		let lastYearUserRefreshedNotifications = self.common.constants.lastYearUserRefreshedNotifications()
-		let appVersion = Int(self.common.constants.appVersion)!
-		let latestAppVersion = Int(self.common.constants.latestAppVersion())
-		
-		if !favoriteAddress.isEmpty &&
-			notificationsToggled == true &&
-			appVersion == latestAppVersion &&
-			hasUserRefreshedNotificationsAfterNewVersion == false &&
-			(lastYearUserRefreshedNotifications == 0 || lastYearUserRefreshedNotifications < appVersion) {
-			
-			self.refreshNotificationsAfterUpdateButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
-			self.refreshNotificationsAfterUpdateButton.isHidden = false
 			
 		}
 	}
@@ -348,47 +319,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
     }
     
-	func showFinishedScheduleButton() {
-        
-		// Show finished schedule button if the current month is greater than the last month of sweeping
-		
-		self.finishedScheduleButton.isHidden = true
-		
-		let isNewButtonVisible = !self.newScheduleButton.isHidden
-        let currentMonthNumber = Calendar.current.component(.month, from: Date())
-		let appVersion = Int(self.common.constants.appVersion)! // Year
-        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-        
-        let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
-			.limit(1)
-			.orderDescending("month_number")
-			.filter("month_number IS NOT NULL")
-		
-		wardQuery.get { res in
-		switch res {
-		case .dataset (let data):
-			
-			let month = data[0][self.common.constants.month_number()] as? String ?? ""
-			print("Last sweep month: \(month)")
-			
-			if !month.isEmpty {
-				if Int(month)! > 0 {
-					if (currentMonthNumber > Int(month)!) && isNewButtonVisible == false {
-						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(appVersion). Check back next spring for the new schedule and to set up your notifications.")
-						self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
-						self.finishedScheduleButton.isHidden = false
-					}
-					else {
-						// Only show refresh notifications button if schedule isn't finished
-						self.showRefreshNotificationsButton()
-					}
-				}
-			}
-		case .error (let err):
-			print("Unable to get showFinishedScheduleButton data from the City of Chicago: \(err.localizedDescription)")
-		}
-		}
-    }
+	
     
     func getSchedule(_ address: String) {
         
@@ -683,6 +614,88 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 		
 	}
+	
+	// MARK: Actions
+	
+	// Search type segmented control option changed event
+	@IBAction func searchTypeTapped(_ sender: Any) {
+		
+		// Add haptic feedback
+		let generator = UISelectionFeedbackGenerator()
+		generator.prepare()
+		generator.selectionChanged()
+		
+		// Remove map annotations
+		chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+		
+		if searchTypeSegment.selectedSegmentIndex == 0 {
+			
+			// Stop updating location if user selects "drop pin"
+			locationManager.stopUpdatingLocation()
+			
+		}
+		else if searchTypeSegment.selectedSegmentIndex == 1 {
+			
+			// Request location access. If access granted, start updating location and update map
+			locationManager.requestWhenInUseAuthorization()
+			
+			if CLLocationManager.locationServicesEnabled() {
+				locationManager.delegate = self
+				locationManager.desiredAccuracy = kCLLocationAccuracyBest
+				locationManager.startUpdatingLocation()
+			}
+			else {
+				print("Location services are not enabled")
+			}
+			
+		}
+		else if searchTypeSegment.selectedSegmentIndex == 2 {
+			// Stop updating location if user selects "enter address"
+			locationManager.stopUpdatingLocation()
+		}
+	}
+	
+	// Search address button is tapped
+	@IBAction func searchAddressTapped(_ sender: Any) {
+		
+		// Add haptic feedback
+		let generator = UISelectionFeedbackGenerator()
+		generator.prepare()
+		generator.selectionChanged()
+		
+		// Stop updating user's location to save battery
+		locationManager.stopUpdatingLocation()
+		
+		// Get address from text field for searching
+		var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+		
+		// Add "Chicago" to address if it doesn't contain it to help find address
+		if !address.lowercased().contains("chicago") && !address.isEmpty {
+			address = address + " Chicago"
+		}
+		
+		// Alert user if they didn't enter an address
+		if address.isEmpty {
+			self.common.showAlert("Please Enter An Address", "")
+			return
+		}
+		
+		// Find address and go to select section view or schedule view
+		getSchedule(address)
+		
+		// Test addresses
+		//getSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
+		
+	}
+	
+	// Prepare segue and pass data to view controllers
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "selectSectionSegue" {
+			if let selectSectionViewController = segue.destination as? SelectSectionViewController {
+				selectSectionViewController.schedule = schedule
+			}
+		}
+	}
     
     // MARK: Location Manager
     
@@ -753,7 +766,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.common.styleButton(newScheduleButton, "new", "1EA896")
         self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
 		self.common.styleButton(refreshNotificationsAfterUpdateButton, "phone_white", "863D96")
-		self.common.styleButton(refreshNotificationsAfterNewDatasetButton, "ended", "1EA896")
+		self.common.styleButton(refreshNotificationsAfterNewDatasetButton, "ended", "BF1A2F")
 
     }
 }

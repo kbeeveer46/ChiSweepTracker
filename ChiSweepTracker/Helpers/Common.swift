@@ -55,7 +55,7 @@ class Common {
         // MARK: SODA
         
 		// UPDATE THESE VALUES WITH NEW APP VERSION //
-		let appVersion = "2019"
+		let appVersion = 2020 //"2019"
 
 		func userDatasetVersion() -> Int {
 			return self.defaults.integer(forKey: "userDatasetVersion")
@@ -117,13 +117,13 @@ class Common {
 			return self.defaults.integer(forKey: "lastYearUserRefreshedNotifications")
 		}
 		
-		func hasUserRefreshedNotificationsAfterNewDataset() -> Bool {
-			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewDataset")
-		}
-		
-		func lastVersionUserRefreshedNewDatasetNotifications() -> Int {
-			return self.defaults.integer(forKey: "lastVersionUserRefreshedNewDatasetNotifications")
-		}
+//		func hasUserRefreshedNotificationsAfterNewDataset() -> Bool {
+//			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewDataset")
+//		}
+//		
+//		func lastVersionUserRefreshedNewDatasetNotifications() -> Int {
+//			return self.defaults.integer(forKey: "lastVersionUserRefreshedNewDatasetNotifications")
+//		}
         
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"

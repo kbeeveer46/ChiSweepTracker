@@ -331,7 +331,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
 	func getSchedule(_ registerForPushNotifications: Bool,
 					 _ useDefaultNotificationValues: Bool = false,
-					 _ showNotificationsRefreshedAlert: Bool = false) {
+					 _ notificationsUpdatedAfterNewVersionOrUpdate: Bool = false) {
         
 		self.schedule.address = self.common.constants.favoriteAddress() //self.favoriteAddress
 		
@@ -600,9 +600,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                             }
                                                         }
 													
-														if showNotificationsRefreshedAlert == true {
+														if notificationsUpdatedAfterNewVersionOrUpdate == true {
 															
-															self.common.showAlert("Notifications Updated!", "")
+															//self.common.showAlert("Notifications Updated For \(self.common.constants.appVersion)!", "")
 															
 															self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
 															self.defaults.set(true, forKey: "hasUserRefreshedNotificationsAfterNewVersion")

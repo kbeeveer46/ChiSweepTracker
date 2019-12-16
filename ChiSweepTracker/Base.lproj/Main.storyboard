@@ -74,18 +74,18 @@
                                         <state key="normal" title="Sweep Schedule Finished"/>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="IKH-OP-ArB">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="60"/>
+                                        <rect key="frame" x="0.0" y="161" width="355" height="65"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="PBO-V4-uPC"/>
+                                            <constraint firstAttribute="height" constant="65" id="PBO-V4-uPC"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="6" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Your app is up-to-date! Click here to update your notifications for the new schedule"/>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="iQ9-MB-6Fw">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="60"/>
+                                        <rect key="frame" x="0.0" y="161" width="355" height="70"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="zGs-KA-be5"/>
+                                            <constraint firstAttribute="height" constant="70" id="zGs-KA-be5"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
