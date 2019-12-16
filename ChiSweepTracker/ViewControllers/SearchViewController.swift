@@ -125,7 +125,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available! You must update this app to see the new schedule and set up your notifications. Click here to visit the App Store.")
 			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
-			self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
+			self.newScheduleButton.addTarget(nil, action: #selector(self.common.openAppStore), for: .touchUpInside)
 			self.newScheduleButton.isHidden = false
 			
 		}
@@ -185,14 +185,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	func showRefreshNotificationsAfterNewVersionButton() {
 		
 		// Show "new version" refresh notifications button after users updates the app
-		// Just get notifications automatically?
-		//
 		
 		self.refreshNotificationsAfterUpdateButton.isHidden = true
 		
 		let favoriteAddress = self.common.constants.favoriteAddress()
 		let notificationsToggled = self.common.constants.notificationsToggled()
-		let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
+		//let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
 		let lastYearUserRefreshedNotificationsAfterNewVersion = self.common.constants.lastYearUserRefreshedNotifications()
 		let appVersion = self.common.constants.appVersion
 		let latestAppVersion = Int(self.common.constants.latestAppVersion())
@@ -200,12 +198,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		if !favoriteAddress.isEmpty &&
 			notificationsToggled == true &&
 			appVersion == latestAppVersion &&
-			hasUserRefreshedNotificationsAfterNewVersion == false &&
+			//hasUserRefreshedNotificationsAfterNewVersion == false &&
 			(lastYearUserRefreshedNotificationsAfterNewVersion == 0 || lastYearUserRefreshedNotificationsAfterNewVersion < appVersion) {
 			
 			// This runs when it shouldn't!!
 			// Need to figure out how to tell the difference between a new and updated install
-			self.refreshNotifications()
+			self.refreshNotificationsAfterNewVersion()
 			
 			//self.refreshNotificationsAfterUpdateButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
 			//self.refreshNotificationsAfterUpdateButton.isHidden = false
@@ -214,6 +212,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	
 	}
 	
+	// Check to see if Chicago has updated the schedule/data set
+	// This means that I updated the "version" field by 1 in the Updates table
 	func showRefreshNoticationsAfterDatasetUpdateButton() {
 		
 		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
@@ -222,8 +222,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		let docRef = db.collection(self.common.constants.updatesDatabaseName)
 			.document(String(self.common.constants.appVersion))
 		
-		// Check to see if Chicago has updated the schedule/data set
-		// This means that I updated the "version" field by 1 in the Updates table
 		docRef.getDocument { (document, error) in
 			if let document = document, document.exists {
 				
@@ -257,13 +255,38 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					//(lastVersionUserRefreshedNewDatasetNotifications == 0 || (lastVersionUserRefreshedNewDatasetNotifications < latestDatasetVersion))
 				{
 					// Show refresh notifications after a new dataset button
-					self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+					self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotificationsAfterNewDataset), for: .touchUpInside)
 					self.refreshNotificationsAfterNewDatasetButton.isHidden = false
 				}
 			} else {
 				print("Updates database record does not exist for \(self.common.constants.appVersion)")
 			}
 		}
+	}
+	
+	@objc func refreshNotificationsAfterNewDataset() {
+		
+		// Call getSchedule in the notification controller because that function also adds notifications
+		let notificationViewController = NotificationsViewController()
+		notificationViewController.getSchedule(true, true, false)
+		
+		// Hide button after notifications are refreshed
+		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
+		
+		// Set users data set version to the newest now that they updated
+		// I wish I could set this in the notification controller getSchedule call but I don't have access to latestDatasetVersion
+		defaults.set(latestDatasetVersionGlobal, forKey: "userDatasetVersion")
+		
+	}
+	
+	@objc func refreshNotificationsAfterNewVersion() {
+		
+		// Call getSchedule in the notification controller because that function also adds notifications
+		let notificationViewController = NotificationsViewController()
+		notificationViewController.getSchedule(true, true, true)
+		
+		// Hide button after notifications are refreshed
+		self.refreshNotificationsAfterUpdateButton.isHidden = true
 	}
 
 	// Add annotation when Chicago map is tapped
@@ -290,36 +313,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 		}
 	}
-    
-	@objc func refreshNotifications() {
-		
-		// Call getSchedule in the notification controller because that function also adds notifications
-		let notificationViewController = NotificationsViewController()
-		notificationViewController.getSchedule(true, true, true)
-
-		// Hide button after notifications are refreshed
-		self.refreshNotificationsAfterUpdateButton.isHidden = true
-		
-		defaults.set(latestDatasetVersionGlobal, forKey: "userDatasetVersion")
-		
-	}
-	
-    @objc func openAppStore() {
-        
-		// Send user to app store to update app
-		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.common.constants.appStoreId)"),
-			UIApplication.shared.canOpenURL(url){
-			UIApplication.shared.open(url, options: [:]) { (opened) in
-				if(opened){
-					print("App Store Opened")
-				}
-			}
-		} else {
-			print("Can't Open URL on Simulator")
-		}
-    }
-    
-	
     
     func getSchedule(_ address: String) {
         
@@ -546,13 +539,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		alertController.addAction(cancelAction)
 		
 		if #available(iOS 10.0, *) {
-			
 			let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
-				
 				if let url = URL(string: UIApplication.openSettingsURLString) {
-					
 					UIApplication.shared.open(url, options: [:], completionHandler: nil)
-					
 				}
 			}
 			
@@ -610,9 +599,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
 			
 			chicagoMapView.setRegion(region, animated: true)
-			
 		}
-		
 	}
 	
 	// MARK: Actions
@@ -734,8 +721,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             showLocationDisabledAlert()
         }
     }
-    
-	
     
     // MARK: Helpers
     

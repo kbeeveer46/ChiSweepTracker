@@ -331,7 +331,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
 	func getSchedule(_ registerForPushNotifications: Bool,
 					 _ useDefaultNotificationValues: Bool = false,
-					 _ notificationsUpdatedAfterNewVersionOrUpdate: Bool = false) {
+					 _ notificationsUpdatedAfterNewVersion: Bool = false) {
         
 		self.schedule.address = self.common.constants.favoriteAddress() //self.favoriteAddress
 		
@@ -600,28 +600,15 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                             }
                                                         }
 													
-														if notificationsUpdatedAfterNewVersionOrUpdate == true {
+														if notificationsUpdatedAfterNewVersion == true {
 															
 															//self.common.showAlert("Notifications Updated For \(self.common.constants.appVersion)!", "")
 															
 															self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
-															self.defaults.set(true, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
+															//self.defaults.set(true, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
 															
-															// Segue not working!!
-															// Prompt the user if they want to view the new schedule details
-//															let alert = UIAlertController(title: "Notifications Updated", message: "Would you like to view the new schedule?", preferredStyle: .alert)
-//															alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-//
-//																if let destinationViewController = UIApplication.shared.keyWindow?.rootViewController?.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-//																	destinationViewController.schedule = self.schedule
-//																	UIApplication.shared.keyWindow?.rootViewController?.navigationController?.pushViewController(destinationViewController, animated: true)
-//																}
-//
-//															}))
-//															alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-//															UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-															//
 														}
+														
 													}
                                                 }
                                             }

@@ -1,8 +1,26 @@
 import UIKit
 
+// TODO: Try to use a global schedule varible
+//var schedule = ScheduleModel()
+
 class Common {
     
     let constants = Constants()
+	
+	@objc func openAppStore() {
+		
+		// Send user to app store to update app
+		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.constants.appStoreId)"),
+			UIApplication.shared.canOpenURL(url){
+			UIApplication.shared.open(url, options: [:]) { (opened) in
+				if(opened){
+					print("App Store Opened")
+				}
+			}
+		} else {
+			print("Can't Open URL on Simulator")
+		}
+	}
 
 	// Alert with custom title and message
     public func showAlert(_ title: String, _ message: String) {
@@ -51,11 +69,9 @@ class Common {
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
 		#endif
-		        
-        // MARK: SODA
         
-		// UPDATE THESE VALUES WITH NEW APP VERSION //
-		let appVersion = 2020 //"2019"
+		// UPDATE THIS VALUE WITH NEW APP VERSION //
+		let appVersion = 2020
 
 		func userDatasetVersion() -> Int {
 			return self.defaults.integer(forKey: "userDatasetVersion")
@@ -109,9 +125,9 @@ class Common {
 			return self.defaults.bool(forKey: "notificationsToggled") 
 		}
 		
-		func hasUserRefreshedNotificationsAfterNewVersion() -> Bool {
-			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewVersion")
-		}
+//		func hasUserRefreshedNotificationsAfterNewVersion() -> Bool {
+//			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewVersion")
+//		}
 		
 		func lastYearUserRefreshedNotifications() -> Int {
 			return self.defaults.integer(forKey: "lastYearUserRefreshedNotifications")
