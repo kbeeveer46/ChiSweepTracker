@@ -11,7 +11,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     @IBOutlet weak var newScheduleButton: UIButton!
     @IBOutlet weak var finishedScheduleButton: UIButton!
-	@IBOutlet weak var refreshNotificationsButton: UIButton!
+	@IBOutlet weak var refreshNotificationsAfterUpdateButton: UIButton!
 	@IBOutlet weak var refreshNotificationsAfterNewDatasetButton: UIButton!
 	
     let schedule = ScheduleModel()
@@ -39,15 +39,15 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
 			self.showNewScheduleButton()
 			
-			self.showRefreshNotificationsButton()
-			self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
-			self.defaults.set(false, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
-			self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+			//self.showRefreshNotificationsButton()
+			//self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
+			//self.defaults.set(false, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
+			//self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
 			
 		})
 		
 		// Get default address, lat, and long. Must load before loadSearchMap
-		self.getDefaults()
+		self.getDefaultsForMap()
 		
 		self.loadSearchMap()
 		
@@ -61,7 +61,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // MARK: Actions
     
-	// Search for sweep schedule button clicked
+	// Search type segmented control option changed event
     @IBAction func searchTypeTapped(_ sender: Any) {
         
         // Add haptic feedback
@@ -185,7 +185,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		let docRef = db.collection(self.common.constants.updatesDatabaseName)
 			.document(self.common.constants.appVersion)
 		
-		// Check to see if there's an update to the schedule/data set
+		// Check to see if Chicago has updated the schedule/data set
 		docRef.getDocument { (document, error) in
 			if let document = document, document.exists {
 				
@@ -278,8 +278,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         let userAppVersion = Int(self.common.constants.appVersion)! // Year
 		let latestAppVersion = self.common.constants.latestAppVersion() //defaults.integer(forKey: "latestAppVersion")
 
-		print("userAppVersion: \(userAppVersion)")
-		print("latestAppVersion: \(latestAppVersion)")
+		print("Latest App Version: \(latestAppVersion)")
+		print("User App Version: \(userAppVersion)")
 
 		if userAppVersion < latestAppVersion {
 
@@ -299,7 +299,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	
 	func showRefreshNotificationsButton() {
 		
-		self.refreshNotificationsButton.isHidden = true
+		self.refreshNotificationsAfterUpdateButton.isHidden = true
 		
 		let favoriteAddress = self.common.constants.favoriteAddress()
 		let notificationsToggled = self.common.constants.notificationsToggled()
@@ -314,8 +314,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			hasUserRefreshedNotificationsAfterNewVersion == false &&
 			(lastYearUserRefreshedNotifications == 0 || lastYearUserRefreshedNotifications < appVersion) {
 			
-			self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
-			self.refreshNotificationsButton.isHidden = false
+			self.refreshNotificationsAfterUpdateButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+			self.refreshNotificationsAfterUpdateButton.isHidden = false
 			
 		}
 	}
@@ -327,7 +327,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		notificationViewController.getSchedule(true, true, true)
 
 		// Hide button after notifications are refreshed
-		self.refreshNotificationsButton.isHidden = true
+		self.refreshNotificationsAfterUpdateButton.isHidden = true
 		
 		defaults.set(latestDatasetVersionGlobal, forKey: "userDatasetVersion")
 		
@@ -632,7 +632,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
 	
 	// Get default lat, long, and address to populate the map and address text field
-	func getDefaults() {
+	func getDefaultsForMap() {
 		
 		addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
 		longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
@@ -752,7 +752,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
         self.common.styleButton(newScheduleButton, "new", "1EA896")
         self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
-		self.common.styleButton(refreshNotificationsButton, "phone_white", "863D96")
+		self.common.styleButton(refreshNotificationsAfterUpdateButton, "phone_white", "863D96")
 		self.common.styleButton(refreshNotificationsAfterNewDatasetButton, "ended", "1EA896")
 
     }

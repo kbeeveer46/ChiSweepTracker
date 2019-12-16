@@ -23,7 +23,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="311"/>
+                                <rect key="frame" x="10" y="294" width="355" height="161"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
@@ -56,7 +56,7 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="6qs-Ls-QDx">
-                                        <rect key="frame" x="0.0" y="168.5" width="355" height="95"/>
+                                        <rect key="frame" x="0.0" y="161" width="355" height="95"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="95" id="YKk-qn-nWB"/>
                                         </constraints>
@@ -65,7 +65,7 @@
                                         <state key="normal" title="New schedule available. Click here to enable notifications."/>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
-                                        <rect key="frame" x="0.0" y="168.5" width="355" height="70"/>
+                                        <rect key="frame" x="0.0" y="161" width="355" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
@@ -73,8 +73,8 @@
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Sweep Schedule Finished"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="IKH-OP-ArB">
-                                        <rect key="frame" x="0.0" y="176" width="355" height="60"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="IKH-OP-ArB">
+                                        <rect key="frame" x="0.0" y="161" width="355" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="PBO-V4-uPC"/>
                                         </constraints>
@@ -82,8 +82,8 @@
                                         <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Your app is up-to-date! Click here to update your notifications for the new schedule"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="iQ9-MB-6Fw">
-                                        <rect key="frame" x="0.0" y="251" width="355" height="60"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="iQ9-MB-6Fw">
+                                        <rect key="frame" x="0.0" y="161" width="355" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="zGs-KA-be5"/>
                                         </constraints>
@@ -116,6 +116,7 @@
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
                         <outlet property="newScheduleButton" destination="6qs-Ls-QDx" id="Xb0-4j-fSY"/>
                         <outlet property="refreshNotificationsAfterNewDatasetButton" destination="iQ9-MB-6Fw" id="4aF-c0-ZFV"/>
+                        <outlet property="refreshNotificationsAfterUpdateButton" destination="IKH-OP-ArB" id="zF9-BV-VQ0"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
