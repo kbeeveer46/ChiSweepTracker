@@ -369,8 +369,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 
                 // Get ward and section JSON from City of Chicago
                 
-                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
-                    .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset())
+                    .filter("intersects(\(self.common.constants.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                 
                 wardQuery.get { res in
                     switch res {
@@ -378,10 +378,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.common.constants.ward] as? String ?? ""
-                            let section = data[0][self.common.constants.section] as? String ?? ""
-                            let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
+                            let ward = data[0][self.common.constants.ward()] as? String ?? ""
+                            let section = data[0][self.common.constants.section()] as? String ?? ""
+                            let the_geom = data[0][self.common.constants.the_geom()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.constants.coordinates()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             self.schedule.polygonCoordinates.removeAll()
@@ -411,7 +411,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             
                             // Get schedule JSON from City of Chicago
                             
-                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
                                 .filter("ward = '\(ward)' AND section = '\(self.schedule.section)'")
                             
                             scheduleQuery.get { res in
@@ -426,9 +426,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.common.constants.month_name] as? String ?? ""
-                                            let monthNumber = item[self.common.constants.month_number] as? String ?? ""
-                                            let dates = item[self.common.constants.dates] as? String ?? ""
+                                            let monthName = item[self.common.constants.month_name()] as? String ?? ""
+                                            let monthNumber = item[self.common.constants.month_number()] as? String ?? ""
+                                            let dates = item[self.common.constants.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
                                             //print("Month name: \(monthName)")
@@ -468,7 +468,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                                             
                                             #if DEBUG
-                                                self.sendTestNotifications()
+                                                //self.sendTestNotifications()
                                             #endif
                                             
                                             print("Deleted user's local notifications")
@@ -495,7 +495,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
                                                             if UIApplication.shared.canOpenURL(settingsUrl) {
                                                                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                                                    // User opened the setting page
+                                                                    print("User opened the setting page")
                                                                 })
                                                             }
                                                         }
@@ -506,7 +506,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                             //self.pushNotificationsSwitch.isUserInteractionEnabled = false
                                                             self.timePicker.isUserInteractionEnabled = false
                                                             self.onPicker.isUserInteractionEnabled = false
-                                                            
+                                                            self.defaults.set(false, forKey: "notificationsToggled")
                                                             
                                                         })
                                                         alertController.addAction(cancelAction)
@@ -602,10 +602,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 													
 														if showNotificationsRefreshedAlert == true {
 															
-															// Prompt the user if they want to view the new schedule details
-															
 															self.common.showAlert("Notifications Updated!", "")
-															
 															
 															// Segue not working!!
 															// Prompt the user if they want to view the new schedule details

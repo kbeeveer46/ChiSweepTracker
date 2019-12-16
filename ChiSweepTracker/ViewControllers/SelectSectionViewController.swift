@@ -27,8 +27,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 		
-		let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
-			.filter("\(self.common.constants.ward) = '\(ward)'")
+		let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
+			.filter("\(self.common.constants.ward()) = '\(ward)'")
 		
 		scheduleQuery.get { res in
 			switch res {
@@ -38,7 +38,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					
 					for (_, item) in data.enumerated() {
 						
-						let section = item[self.common.constants.section] as? String ?? ""
+						let section = item[self.common.constants.section()] as? String ?? ""
 						
 						if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
 							
@@ -66,8 +66,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
-        let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
-            .filter("\(self.common.constants.ward) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.constants.section) = '\(self.schedule.section)'" : "") ")
+        let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
+            .filter("\(self.common.constants.ward()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.constants.section()) = '\(self.schedule.section)'" : "") ")
         
         scheduleQuery.get { res in
             switch res {
@@ -77,9 +77,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     for (_, item) in data.enumerated() {
                         
-                        let monthName = item[self.common.constants.month_name] as? String ?? ""
-                        let monthNumber = item[self.common.constants.month_number] as? String ?? ""
-                        let dates = item[self.common.constants.dates] as? String ?? ""
+                        let monthName = item[self.common.constants.month_name()] as? String ?? ""
+                        let monthNumber = item[self.common.constants.month_number()] as? String ?? ""
+                        let dates = item[self.common.constants.dates()] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",")
                         
                         print("getSchedule month name: \(monthName)")

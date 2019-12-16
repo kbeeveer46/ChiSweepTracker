@@ -45,28 +45,64 @@ class Common {
 		let appStoreId = "1490793712"
 
 		#if DEBUG
-		let database = "Schedules_Dev"
+		let databaseName = "Schedules_Dev"
 		#else
-		let database = "Schedules"
+		let databaseName = "Schedules"
 		#endif
 		        
         // MARK: SODA
         
 		// UPDATE THESE VALUES WITH NEW APP VERSION //
 		let appVersion = "2019"
-        let wardDataset = "jqxt-c6gd" // Use this dataset to find ward and section based off coordinates
-        let scheduleDataset = "k737-xg34" // Use this dataset to find schedule based off ward and section
-        let the_geom = "the_geom"
-        let ward = "ward"
-        let section = "section"
-        let coordinates = "coordinates"
-        let month_name = "month_name"
-        let month_number = "month_number"
-        let dates = "dates"
+        //let wardDataset = "jqxt-c6gd" // Use this dataset to find ward and section based off coordinates
+        //let scheduleDataset = "k737-xg34" // Use this dataset to find schedule based off ward and section
+        //let the_geom = "the_geom"
+        //let ward = "ward"
+        //let section = "section"
+        //let coordinates = "coordinates"
+        //let month_name = "month_name"
+        //let month_number = "month_number"
+        //let dates = "dates"
 		
-//		func appVersionInt() -> Int {
-//			return Int(appVersion)!
-//		}
+		func latestAppVersion() -> Int {
+			return self.defaults.integer(forKey: "latestAppVersion")
+		}
+		
+		func dates() -> String {
+			return self.defaults.string(forKey: "datesTitle") ?? ""
+		}
+		
+		func month_number() -> String {
+			return self.defaults.string(forKey: "monthNumberTitle") ?? ""
+		}
+		
+		func month_name() -> String {
+			return self.defaults.string(forKey: "monthNameTitle") ?? ""
+		}
+		
+		func coordinates() -> String {
+			return self.defaults.string(forKey: "coordinatesTitle") ?? ""
+		}
+		
+		func section() -> String {
+			return self.defaults.string(forKey: "sectionTitle") ?? ""
+		}
+		
+		func ward() -> String {
+			return self.defaults.string(forKey: "wardTitle") ?? ""
+		}
+		
+		func the_geom() -> String {
+			return self.defaults.string(forKey: "geomTitle") ?? ""
+		}
+		
+		func scheduleDataset() -> String {
+			return self.defaults.string(forKey: "scheduleDataset") ?? ""
+		}
+		
+		func wardDataset() -> String {
+			return self.defaults.string(forKey: "wardDataset") ?? ""
+		}
         
 		func favoriteAddress() -> String {
 			return self.defaults.string(forKey: "favoriteAddress") ?? ""
@@ -83,34 +119,6 @@ class Common {
 		func lastYearUserRefreshedNotifications() -> Int {
 			return self.defaults.integer(forKey: "lastYearUserRefreshedNotifications")
 		}
-		
-//        func wardDataset() -> String {
-//            return self.defaults.string(forKey: "officialWardDataset") ?? ""
-//        }
-//        func scheduleDataset() -> String {
-//            return self.defaults.string(forKey: "officialScheduleDataset") ?? ""
-//        }
-//        func the_geom() -> String {
-//            return self.defaults.string(forKey: "geomTitle") ?? ""
-//        }
-//        func ward() -> String {
-//            return self.defaults.string(forKey: "wardTitle") ?? ""
-//        }
-//        func section() -> String {
-//            return self.defaults.string(forKey: "sectionTitle") ?? ""
-//        }
-//        func coordinates() -> String {
-//            return self.defaults.string(forKey: "coordinatesTitle") ?? ""
-//        }
-//        func month_name() -> String {
-//            return self.defaults.string(forKey: "monthNameTitle") ?? ""
-//        }
-//        func month_number() -> String {
-//            return self.defaults.string(forKey: "monthNumberTitle") ?? ""
-//        }
-//        func dates() -> String {
-//            return self.defaults.string(forKey: "datesTitle") ?? ""
-//        }
         
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"

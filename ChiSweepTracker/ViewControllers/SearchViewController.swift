@@ -32,25 +32,23 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-		// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
-        showNewScheduleButton()
+		getCityOfChicagoValuesFromDatabase(completion: { message in
+			
+			// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
+			self.showNewScheduleButton()
+			
+		})
+		
+		// Get default address, lat, and long. Must load before loadSearchMap
+		self.getDefaults()
+		
+		self.loadSearchMap()
 		
 		// Style controls
-        styleControls()
-        
-		// Get default address, lat, and long
-        getDefaults()
+		self.styleControls()
 		
-		// Test only. Remove this when done
-		self.defaults.set(false, forKey: "hasUserRefreshedNotifications")
-		self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
-		self.showRefreshNotificationsButton(Int(self.common.constants.appVersion)!)
-        
-		// Load map of Chicago or use default lat and long
-        loadSearchMap()
-        
-        // Make enter key close keyboard
-        self.addressTextField.delegate = self
+		// Make enter key close keyboard
+		self.addressTextField.delegate = self
         
     }
     
@@ -79,11 +77,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             locationManager.requestWhenInUseAuthorization()
             
             if CLLocationManager.locationServicesEnabled() {
-                    
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBest
                 locationManager.startUpdatingLocation()
-                
             }
             else {
                 print("Location services are not enabled")
@@ -140,6 +136,49 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // MARK: Methods
 	
+	func getCityOfChicagoValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
+		
+		let db = Firestore.firestore()
+		db.collection(self.common.constants.databaseName)
+			.order(by: "year", descending: true)
+			.limit(to: 1)
+			.getDocuments() { (querySnapshot, err) in
+				if let err = err {
+					//print("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
+					fatalError("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
+				} else {
+					for document in querySnapshot!.documents {
+						
+						let data = document.data()
+						let latestAppVersion = data["year"] as! Int
+						let wardDataset = data["wardDataset"] as! String
+						let scheduleDataset = data["scheduleDataset"] as! String
+						let coordinatesTitle = data["coordinatesTitle"] as! String
+						let datesTitle = data["datesTitle"] as! String
+						let geomTitle = data["geomTitle"] as! String
+						let monthNameTitle = data["monthNameTitle"] as! String
+						let monthNumberTitle = data["monthNumberTitle"] as! String
+						let sectionTitle = data["sectionTitle"] as! String
+						let wardTitle = data["wardTitle"] as! String
+						
+						self.defaults.set(latestAppVersion, forKey: "latestAppVersion")
+						self.defaults.set(wardDataset, forKey: "wardDataset")
+						self.defaults.set(scheduleDataset, forKey: "scheduleDataset")
+						self.defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
+						self.defaults.set(datesTitle, forKey: "datesTitle")
+						self.defaults.set(geomTitle, forKey: "geomTitle")
+						self.defaults.set(monthNameTitle, forKey: "monthNameTitle")
+						self.defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
+						self.defaults.set(sectionTitle, forKey: "sectionTitle")
+						self.defaults.set(wardTitle, forKey: "wardTitle")
+					}
+				}
+		}
+		
+		completion("Finished calling getCityOfChicagoValuesFromDatabase")
+	}
+	
+	
 	// Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
 		
@@ -174,43 +213,30 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// This requires a new record in Firebase at the exact same time the app is released
 		
         self.newScheduleButton.isHidden = true
+		
         let userAppVersion = Int(self.common.constants.appVersion)! // Year
-        
-        let db = Firestore.firestore()
-		db.collection(self.common.constants.database)
-            .order(by: "year", descending: true)
-            .limit(to: 1)
-            .getDocuments() { (querySnapshot, err) in
-                if let err = err {
-                    print("Could not get showNewScheduleButton data from Firebase: \(err)")
-                } else {
-                    for document in querySnapshot!.documents {
+		let latestAppVersion = defaults.integer(forKey: "latestAppVersion")
 
-                        let latestAppVersion = document.data()["year"] as! Int
-                        
-						print("userAppVersion: \(userAppVersion)")
-						print("latestAppVersion: \(latestAppVersion)")
-						
-                        if userAppVersion < latestAppVersion {
-                            
-                            let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store and update.")
-                            self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
-                            self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
-                            self.newScheduleButton.isHidden = false
-                            
-                        }
-						else {
-							
-							// Only show finished button if the new button is not shown
-							self.showFinishedScheduleButton(latestAppVersion)
-							
-						}
-                    }
-                }
-        }
+		print("userAppVersion: \(userAppVersion)")
+		print("latestAppVersion: \(latestAppVersion)")
+
+		if userAppVersion < latestAppVersion {
+
+			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available. You must update this app to view the new schedule and set up your notifications. Click here to visit the App Store and update.")
+			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
+			self.newScheduleButton.addTarget(nil, action: #selector(self.openAppStore), for: .touchUpInside)
+			self.newScheduleButton.isHidden = false
+
+		}
+		else {
+
+			// Only show finished button if the new button is not shown
+			self.showFinishedScheduleButton()
+
+		}
     }
 	
-	func showRefreshNotificationsButton(_ latestAppVersion: Int) {
+	func showRefreshNotificationsButton() {
 		
 		self.refreshNotificationsButton.isHidden = true
 		
@@ -219,6 +245,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		let hasUserRefreshedNotifications = self.common.constants.hasUserRefreshedNotifications()
 		let lastYearUserRefreshedNotifications = self.common.constants.lastYearUserRefreshedNotifications()
 		let appVersion = Int(self.common.constants.appVersion)!
+		let latestAppVersion = Int(self.common.constants.latestAppVersion())
 		
 		if !favoriteAddress.isEmpty &&
 			notificationsToggled == true &&
@@ -230,7 +257,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.refreshNotificationsButton.isHidden = false
 			
 		}
-		
 	}
     
 	@objc func refreshNotifications() {
@@ -240,21 +266,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		//self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
 		//self.defaults.set(true, forKey: "hasUserRefreshedNotifications")
-		
-		// Can't do this because schedule isn't populated
-		// Prompt the user if they want to view the new schedule details
-//		let alert = UIAlertController(title: "Notifications Updated", message: "Would you like to view the new schedule?", preferredStyle: .alert)
-//		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-//
-//			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-//				destinationViewController.schedule = self.schedule
-//				self.navigationController?.pushViewController(destinationViewController, animated: true)
-//			}
-//
-//		}))
-//		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-//		UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-		//
 		
 	}
 	
@@ -273,7 +284,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
     }
     
-	func showFinishedScheduleButton(_ latestAppVersion: Int) {
+	func showFinishedScheduleButton() {
         
 		// Show finished schedule button if the current month is greater than the last month of sweeping
 		
@@ -281,10 +292,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		let isNewButtonVisible = !self.newScheduleButton.isHidden
         let currentMonthNumber = Calendar.current.component(.month, from: Date())
-		let currentYear = Int(self.common.constants.appVersion)! // Year
+		let appVersion = Int(self.common.constants.appVersion)! // Year
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
-        let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+        let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
 			.limit(1)
 			.orderDescending("month_number")
 			.filter("month_number IS NOT NULL")
@@ -293,26 +304,25 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		switch res {
 		case .dataset (let data):
 			
-			let month = data[0][self.common.constants.month_number] as? String ?? ""
+			let month = data[0][self.common.constants.month_number()] as? String ?? ""
 			print("Last sweep month: \(month)")
 			
 			if !month.isEmpty {
 				if Int(month)! > 0 {
 					if (currentMonthNumber > Int(month)!) && isNewButtonVisible == false {
-						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
+						let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(appVersion). Check back next spring for the new schedule and to set up your notifications.")
 						self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
 						self.finishedScheduleButton.isHidden = false
 					}
 					else {
-						
 						// Only show refresh notifications button if schedule isn't finished
-						self.showRefreshNotificationsButton(latestAppVersion)
+						self.showRefreshNotificationsButton()
 					}
 				}
 			}
 		case .error (let err):
-			print("Unable to get getSweepingStatus data from the City of Chicago: \(err.localizedDescription)")
-			}
+			print("Unable to get showFinishedScheduleButton data from the City of Chicago: \(err.localizedDescription)")
+		}
 		}
     }
     
@@ -357,8 +367,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
                 // Get ward and section JSON from City of Chicago
                 
-                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset)
-                    .filter("intersects(\(self.common.constants.the_geom),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+				print("geom: \(self.common.constants.the_geom())")
+				print("ward dataset: \(self.common.constants.wardDataset())")
+				
+                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset())
+                    .filter("intersects(\(self.common.constants.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                 
                 wardQuery.get { res in
                     switch res {
@@ -366,10 +379,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.common.constants.ward] as? String ?? ""
-                            let section = data[0][self.common.constants.section] as? String ?? ""
-                            let the_geom = data[0][self.common.constants.the_geom] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.constants.coordinates] as? NSMutableArray
+                            let ward = data[0][self.common.constants.ward()] as? String ?? ""
+                            let section = data[0][self.common.constants.section()] as? String ?? ""
+                            let the_geom = data[0][self.common.constants.the_geom()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.constants.coordinates()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
 							// Set default polygon array to be used on all the views
@@ -403,7 +416,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             // Get schedule JSON from City of Chicago
                             
-                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset)
+                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
                                 .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
@@ -416,9 +429,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.common.constants.month_name] as? String ?? ""
-                                            let monthNumber = item[self.common.constants.month_number] as? String ?? ""
-                                            let dates = item[self.common.constants.dates] as? String ?? ""
+                                            let monthName = item[self.common.constants.month_name()] as? String ?? ""
+                                            let monthNumber = item[self.common.constants.month_number()] as? String ?? ""
+                                            let dates = item[self.common.constants.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
                                             print("getSchedule month name: \(monthName)")
@@ -640,7 +653,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // If user denies location access then show location disabled alert
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
         if status == CLAuthorizationStatus.denied {
             showLocationDisabledAlert()
         }
@@ -652,7 +664,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     // Make enter key close keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
         self.view.endEditing(true)
         return false
     }
@@ -668,11 +679,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
         // Style segmented search type control
         if #available(iOS 13.0, *) {
-            
             self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
-            
             let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
             searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
         }
         
