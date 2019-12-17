@@ -21,9 +21,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
     var addressFromTextField = ""
     var addressFromCoordinates = ""
-    var addressFromDefaults = ""
-    var longitudeFromDefaults = 0.0
-    var latitudeFromDefaults = 0.0
 	//var latestDatasetVersionGlobal = 1
     
     override func viewDidLoad() {
@@ -36,17 +33,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 
 		//self.defaults.set(1, forKey: "userDatasetVersion")
 		
-		self.setNotifications()
+		//self.updateNotifications()
 		
 		self.showFinishedScheduleButton()
 		
-		self.getCityOfChicagoValuesFromDatabase(completion: { message in
-	
-			
-		})
-		
-		// Get default address, lat, and long. Must load before loadSearchMap
-		self.getDefaultsForMap()
+//		self.getCityOfChicagoValuesFromDatabase(completion: { message in
+//	
+//			
+//		})
 		
 		self.loadSearchMap()
 		
@@ -59,64 +53,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     }
     
     // MARK: Methods
-	
-	func getCityOfChicagoValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
-		
-		let db = Firestore.firestore()
-		db.collection(self.common.constants.schedulesDatabaseName)
-			.order(by: "year", descending: true)
-			.limit(to: 1)
-			.getDocuments() { (querySnapshot, err) in
-				if let err = err {
-					//print("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
-					fatalError("Could not get getCityOfChicagoValuesFromDatabase default data from Firebase: \(err)")
-				} else {
-					for document in querySnapshot!.documents {
-						
-						let data = document.data()
-						let latestAppVersion = data["year"] as! Int
-						let wardDataset = data["wardDataset"] as! String
-						let scheduleDataset = data["scheduleDataset"] as! String
-						let coordinatesTitle = data["coordinatesTitle"] as! String
-						let datesTitle = data["datesTitle"] as! String
-						let geomTitle = data["geomTitle"] as! String
-						let monthNameTitle = data["monthNameTitle"] as! String
-						let monthNumberTitle = data["monthNumberTitle"] as! String
-						let sectionTitle = data["sectionTitle"] as! String
-						let wardTitle = data["wardTitle"] as! String
-						
-						self.defaults.set(latestAppVersion, forKey: "latestAppVersion")
-						self.defaults.set(wardDataset, forKey: "wardDataset")
-						self.defaults.set(scheduleDataset, forKey: "scheduleDataset")
-						self.defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
-						self.defaults.set(datesTitle, forKey: "datesTitle")
-						self.defaults.set(geomTitle, forKey: "geomTitle")
-						self.defaults.set(monthNameTitle, forKey: "monthNameTitle")
-						self.defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
-						self.defaults.set(sectionTitle, forKey: "sectionTitle")
-						self.defaults.set(wardTitle, forKey: "wardTitle")
-					
-						// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
-						//self.showNewScheduleButton()
-					}
-				}
-		}
-		
-		completion("Finished calling getCityOfChicagoValuesFromDatabase")
-	}
-	
-	func setNotifications() {
-		
-		let favoriteAddress = self.common.constants.favoriteAddress()
-		let notificationsToggled = self.common.constants.notificationsToggled()
-
-		if !favoriteAddress.isEmpty && notificationsToggled == true {
-
-			let notificationViewController = NotificationsViewController()
-			notificationViewController.getSchedule(true, true)
-
-		}
-	}
 	
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showFinishedScheduleButton() {
@@ -197,7 +133,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 //		}
 //	}
 //
-
 	
 //	func showRefreshNotificationsAfterNewVersionButton() {
 //
@@ -568,25 +503,20 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		self.present(alertController, animated: true, completion: nil)
 	}
 	
-	// Get default lat, long, and address to populate the map and address text field
-	func getDefaultsForMap() {
+	// Load map using use default values or a generic map of Chicago
+	func loadSearchMap() {
 		
-		addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
-		longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
-		latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
+		chicagoMapView.delegate = self
+		
+		let addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
+		let longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
+		let latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
 		
 		print("Default address: \(addressFromDefaults)")
 		print("Default longitude: \(longitudeFromDefaults)")
 		print("Default latitude: \(latitudeFromDefaults)")
 		
 		addressTextField.text = addressFromDefaults
-		
-	}
-	
-	// Load map using use default values or a generic map of Chicago
-	func loadSearchMap() {
-		
-		chicagoMapView.delegate = self
 		
 		// Add tap gesture to allow user to tap on map to drop a pin
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addDroppedPin(gesture:)))

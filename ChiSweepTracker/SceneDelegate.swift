@@ -2,8 +2,9 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+	// This line is required or the screen is black
     var window: UIWindow?
-
+	let common = Common()
 
     @available(iOS 13.0, *)
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -25,7 +26,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+		
+	    // Clear badge number
         UIApplication.shared.applicationIconBadgeNumber = 0;
+		
+		// Get the latest schedule from Chicago and update notifications
+		self.common.getCityOfChicagoValuesFromDatabase(completion: { message in })
     }
 
     @available(iOS 13.0, *)
@@ -38,7 +44,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        UIApplication.shared.applicationIconBadgeNumber = 0;
     }
 
     @available(iOS 13.0, *)
@@ -47,7 +52,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 

@@ -18,7 +18,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     let common = Common()
     var schedule = ScheduleModel()
     var favoriteAddress = ""
-    let defaults = UserDefaults.standard
+    //let defaults = UserDefaults.standard
     var removeFavoriteButton = UIBarButtonItem()
     let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	
@@ -30,13 +30,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-		// Set the title or else the title is used from another tab
-		self.tabBarController?.navigationItem.title = "Favorite Address"
-		
-		// Set required properties for when picker
-        self.onPicker.delegate = self
-        self.onPicker.dataSource = self
-        
         loadDefaultNotificationValues()
     
         loadFavoriteMap()
@@ -44,36 +37,37 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         if !favoriteAddress.isEmpty {
 			
 			// Get schedule so we have the most update to date version
+			// Used to pass schedule model to schedule view
 			getSchedule(false)
 			
 			// Re-add local notifications in case the City of Chicago has changed the dates
-			addNotifications()
+			//addNotifications()
         }
     }
 	
-	func addNotifications() {
-		
-		current.getNotificationSettings(completionHandler: { (settings) in
-			if settings.authorizationStatus == .notDetermined {
-				print("notDetermined")
-			} else if settings.authorizationStatus == .denied {
-				print("denied")
-			} else if settings.authorizationStatus == .authorized {
-				//print("authorized")
-				
-				DispatchQueue.main.async {
-					
-					let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
-					self.pushNotificationsSwitch.isOn = notificationsToggled
-					
-					if self.pushNotificationsSwitch.isOn {
-						self.getSchedule(true)
-					}
-				}
-			}
-		})
-		
-	}
+//	func addNotifications() {
+//
+//		current.getNotificationSettings(completionHandler: { (settings) in
+//			if settings.authorizationStatus == .notDetermined {
+//				print("notDetermined")
+//			} else if settings.authorizationStatus == .denied {
+//				print("denied")
+//			} else if settings.authorizationStatus == .authorized {
+//				//print("authorized")
+//
+//				DispatchQueue.main.async {
+//
+//					let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
+//					self.pushNotificationsSwitch.isOn = notificationsToggled
+//
+//					if self.pushNotificationsSwitch.isOn {
+//						self.getSchedule(true)
+//					}
+//				}
+//			}
+//		})
+//
+//	}
     
     @objc func viewSchedule() {
         
@@ -156,13 +150,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
             print("Deleted favorite address: \(self.favoriteAddress)")
             
-            self.defaults.set("", forKey: "favoriteAddress")
-            self.defaults.set("", forKey: "favoriteWard")
-            self.defaults.set("", forKey: "favoriteSection")
-            self.defaults.set(0.0, forKey: "favoriteLongitude")
-            self.defaults.set(0.0, forKey: "favoriteLatitude")
-            self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
-            self.defaults.set(false, forKey: "notificationsToggled")
+            defaults.set("", forKey: "favoriteAddress")
+            defaults.set("", forKey: "favoriteWard")
+            defaults.set("", forKey: "favoriteSection")
+            defaults.set(0.0, forKey: "favoriteLongitude")
+            defaults.set(0.0, forKey: "favoriteLatitude")
+            defaults.set(nil, forKey: "favoriteCoordinatesArray")
+            defaults.set(false, forKey: "notificationsToggled")
             self.favoriteAddress = ""
             //self.pushNotificationsSwitch.isOn = false
             //self.pushNotificationsSwitch.isUserInteractionEnabled = false
@@ -205,7 +199,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         if pushNotificationsSwitch.isOn == true {
             
-            self.defaults.set(true, forKey: "notificationsToggled")
+            defaults.set(true, forKey: "notificationsToggled")
             
             self.timePicker.isUserInteractionEnabled = true
             self.onPicker.isUserInteractionEnabled = true
@@ -218,7 +212,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
         else {
             
-            self.defaults.set(false, forKey: "notificationsToggled")
+            defaults.set(false, forKey: "notificationsToggled")
             
             self.timePicker.isUserInteractionEnabled = false
             self.onPicker.isUserInteractionEnabled = false
@@ -264,10 +258,17 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     func loadDefaultNotificationValues() {
         
-        let when = self.defaults.object(forKey: "notificationWhen") as? String ?? ""
+		// Set the title or else the title is used from another tab
+		self.tabBarController?.navigationItem.title = "Favorite Address"
+		
+		// Set required properties for when picker
+		self.onPicker.delegate = self
+		self.onPicker.dataSource = self
+		
+        let when = defaults.object(forKey: "notificationWhen") as? String ?? ""
         let index = whenData.firstIndex(of: when) ?? 0
-        let hour = self.defaults.integer(forKey: "notificationHour")
-        let minute = self.defaults.integer(forKey: "notificationMinute")
+        let hour = defaults.integer(forKey: "notificationHour")
+        let minute = defaults.integer(forKey: "notificationMinute")
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat =  "HH:mm"
@@ -282,7 +283,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		if !favoriteAddress.isEmpty {
 			
-			let notificationsToggled = self.defaults.bool(forKey: "notificationsToggled")
+			let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
+			self.pushNotificationsSwitch.isOn = notificationsToggled
 			self.pushNotificationsSwitch.isUserInteractionEnabled = true
 			self.onPicker.isUserInteractionEnabled = notificationsToggled
 			self.timePicker.isUserInteractionEnabled = notificationsToggled
@@ -314,9 +316,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         let minute = comp.minute!
         let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
         
-        self.defaults.set(when, forKey: "notificationWhen")
-        self.defaults.set(hour, forKey: "notificationHour")
-        self.defaults.set(minute, forKey: "notificationMinute")
+        defaults.set(when, forKey: "notificationWhen")
+        defaults.set(hour, forKey: "notificationHour")
+        defaults.set(minute, forKey: "notificationMinute")
         
     }
     
@@ -396,7 +398,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             if self.schedule.section.isEmpty {
-                                self.schedule.section = self.defaults.string(forKey: "favoriteSection") ?? ""
+                                self.schedule.section = defaults.string(forKey: "favoriteSection") ?? ""
                             }
                             
                             // Get schedule JSON from City of Chicago
@@ -496,7 +498,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                             //self.pushNotificationsSwitch.isUserInteractionEnabled = false
                                                             self.timePicker.isUserInteractionEnabled = false
                                                             self.onPicker.isUserInteractionEnabled = false
-                                                            self.defaults.set(false, forKey: "notificationsToggled")
+                                                            defaults.set(false, forKey: "notificationsToggled")
                                                             
                                                         })
                                                         alertController.addAction(cancelAction)
@@ -511,13 +513,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                      DispatchQueue.main.async {
                                                     
                                                         let center = UNUserNotificationCenter.current()
-                                                        
                                                         let calendar = Calendar.current
                                                         let currentYear = calendar.component(.year, from: Date())
-                                                        
-														let notificationWhenDefault = self.defaults.object(forKey: "notificationWhen") as? String ?? ""
-														let notificationHourDefault = self.defaults.integer(forKey: "notificationHour")
-														let notificationMinuteDefault = self.defaults.integer(forKey: "notificationMinute")
+														let notificationWhenDefault = defaults.object(forKey: "notificationWhen") as? String ?? ""
+														let notificationHourDefault = defaults.integer(forKey: "notificationHour")
+														let notificationMinuteDefault = defaults.integer(forKey: "notificationMinute")
 														
 														var hour = 0
 														var minute = 0
@@ -589,6 +589,15 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 })
                                                             }
                                                         }
+														
+														// Set the last year notifications were updated.
+														// Then use that value to alert them if they loaded the app after a new year came out
+														let notificationsYear = self.common.constants.notificationsYear()
+														let latestAppVersion = self.common.constants.latestAppVersion()
+														if notificationsYear > 0 && notificationsYear < latestAppVersion {
+															self.common.showAlert("Notifications Updated", "Your push notifications have been updated to reflect the \(latestAppVersion) schedule")
+														}
+														defaults.set(latestAppVersion, forKey: "notificationsYear")
 													}
                                                 }
                                             }
@@ -640,7 +649,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         saveDefaultNotificationValues()
         
         if self.pushNotificationsSwitch.isOn {
-            //self.registerForPushNotifications()
             self.getSchedule(true)
         }
     }
@@ -656,6 +664,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         return false
     }
     
+	// Required to load polygons on favorites map
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         if overlay is MKPolygon {

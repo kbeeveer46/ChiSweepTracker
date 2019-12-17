@@ -6,100 +6,36 @@ import FirebaseMessaging
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+	// This line is required or the screen is black on iPhone 8
     var window: UIWindow?
+	
+	// Required for Firebase remote notifications
     let gcmMessageIDKey = "gcm.message_id"
-    let defaults = UserDefaults.standard
-    
+	
+    let common = Common()
+	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+		// Configure Firebase
         FirebaseApp.configure()
-        
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-        
         application.registerForRemoteNotifications()
-        
-        UIApplication.shared.applicationIconBadgeNumber = 0
-        
-        //getOfficialChicagoDataForCurrentYear()
         
         return true
     }
     
-//    func getOfficialChicagoDataForCurrentYear() {
-//
-//        let db = Firestore.firestore()
-//
-//        let year = Calendar.current.component(.year, from: Date())
-//
-//        db.collection("Schedules").whereField("year", isEqualTo: year)
-//            .getDocuments() { (querySnapshot, err) in
-//                if let err = err {
-//                    fatalError("Could not get data from Firebase: \(err)")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//
-//                        let currentYearScheduleDataset = document.data()["scheduleDataset"] as! String
-//
-//                        if !currentYearScheduleDataset.isEmpty {
-//                            // Save current year values
-//                            self.defaults.set(document.data()["year"]!, forKey: "latestAppVersion")
-//                            self.defaults.set(document.data()["wardDataset"]!, forKey: "officialWardDataset")
-//                            self.defaults.set(document.data()["scheduleDataset"]!, forKey: "officialScheduleDataset")
-//                            self.defaults.set(document.data()["coordinatesTitle"]!, forKey: "officialCoordinatesTitle")
-//                            self.defaults.set(document.data()["datesTitle"]!, forKey: "officialDatesTitle")
-//                            self.defaults.set(document.data()["geomTitle"]!, forKey: "officialGeomTitle")
-//                            self.defaults.set(document.data()["monthNameTitle"]!, forKey: "officialMonthNameTitle")
-//                            self.defaults.set(document.data()["monthNumberTitle"]!, forKey: "officialMonthNumberTitle")
-//                            self.defaults.set(document.data()["wardTitle"]!, forKey: "officialWardTitle")
-//                            self.defaults.set(document.data()["sectionTitle"]!, forKey: "officialSectionTitle")
-//                        }
-//                        else {
-//
-//                            // Save previous year values
-//                            db.collection("Schedules").whereField("year", isEqualTo: year - 1)
-//                                .getDocuments() { (querySnapshot, err) in
-//                                    if let err = err {
-//                                        fatalError("Could not get data from Firebase: \(err)")
-//                                    } else {
-//                                        for document in querySnapshot!.documents {
-//                                            self.defaults.set(document.data()["year"]!, forKey: "latestAppVersion")
-//                                            self.defaults.set(document.data()["wardDataset"]!, forKey: "officialWardDataset")
-//                                            self.defaults.set(document.data()["scheduleDataset"]!, forKey: "officialScheduleDataset")
-//                                            self.defaults.set(document.data()["coordinatesTitle"]!, forKey: "officialCoordinatesTitle")
-//                                            self.defaults.set(document.data()["datesTitle"]!, forKey: "officialDatesTitle")
-//                                            self.defaults.set(document.data()["geomTitle"]!, forKey: "officialGeomTitle")
-//                                            self.defaults.set(document.data()["monthNameTitle"]!, forKey: "officialMonthNameTitle")
-//                                            self.defaults.set(document.data()["monthNumberTitle"]!, forKey: "officialMonthNumberTitle")
-//                                            self.defaults.set(document.data()["wardTitle"]!, forKey: "officialWardTitle")
-//                                            self.defaults.set(document.data()["sectionTitle"]!, forKey: "officialSectionTitle")
-//                                        }
-//                                    }
-//                            }
-//                        }
-//                    }
-//                }
-//        }
-//
-//        // Use the year as a version number to know what year the user has last used
-//        // Only set it once they use the app for the first time.
-//        // If default app version doesn't match the current year then notify them to update their notifications
-//        let defaultVersion = self.defaults.string(forKey: "defaultAppVersion") ?? ""
-//        if defaultVersion.isEmpty {
-//            self.defaults.set(year, forKey: "defaultAppVersion")
-//        }
-//    }
-    
     func applicationWillEnterForeground(_ application: UIApplication) {
-        application.applicationIconBadgeNumber = 0
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
+		// Clear badge number
         application.applicationIconBadgeNumber = 0
+		// Get the latest schedule from Chicago and update notifications
+		self.common.getCityOfChicagoValuesFromDatabase(completion: { message in })
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        application.applicationIconBadgeNumber = 0
     }
     
     func application(_ application: UIApplication,

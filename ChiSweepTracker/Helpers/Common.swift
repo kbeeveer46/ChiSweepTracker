@@ -1,7 +1,10 @@
 import UIKit
+import Firebase
 
 // TODO: Try to use a global schedule varible
 //var schedule = ScheduleModel()
+
+let defaults = UserDefaults.standard
 
 class Common {
     
@@ -9,8 +12,6 @@ class Common {
     
     class Constants {
         
-        let defaults = UserDefaults.standard
-	
 		// UPDATE THIS VALUE WITH NEW APP VERSION //
 		//let appVersion = 2020
 		
@@ -33,68 +34,73 @@ class Common {
 //		}
 //		
 		func latestAppVersion() -> Int {
-			return self.defaults.integer(forKey: "latestAppVersion")
+			return defaults.integer(forKey: "latestAppVersion")
 		}
 		
 		func dates() -> String {
-			return self.defaults.string(forKey: "datesTitle") ?? ""
+			return defaults.string(forKey: "datesTitle") ?? ""
 		}
 		
 		func month_number() -> String {
-			return self.defaults.string(forKey: "monthNumberTitle") ?? ""
+			return defaults.string(forKey: "monthNumberTitle") ?? ""
 		}
 		
 		func month_name() -> String {
-			return self.defaults.string(forKey: "monthNameTitle") ?? ""
+			return defaults.string(forKey: "monthNameTitle") ?? ""
 		}
 		
 		func coordinates() -> String {
-			return self.defaults.string(forKey: "coordinatesTitle") ?? ""
+			return defaults.string(forKey: "coordinatesTitle") ?? ""
 		}
 		
 		func section() -> String {
-			return self.defaults.string(forKey: "sectionTitle") ?? ""
+			return defaults.string(forKey: "sectionTitle") ?? ""
 		}
 		
 		func ward() -> String {
-			return self.defaults.string(forKey: "wardTitle") ?? ""
+			return defaults.string(forKey: "wardTitle") ?? ""
 		}
 		
 		func the_geom() -> String {
-			return self.defaults.string(forKey: "geomTitle") ?? ""
+			return defaults.string(forKey: "geomTitle") ?? ""
 		}
 		
 		func scheduleDataset() -> String {
-			return self.defaults.string(forKey: "scheduleDataset") ?? ""
+			return defaults.string(forKey: "scheduleDataset") ?? ""
 		}
 		
 		func wardDataset() -> String {
-			return self.defaults.string(forKey: "wardDataset") ?? ""
+			return defaults.string(forKey: "wardDataset") ?? ""
 		}
         
 		func favoriteAddress() -> String {
-			return self.defaults.string(forKey: "favoriteAddress") ?? ""
+			return defaults.string(forKey: "favoriteAddress") ?? ""
 		}
 		
 		func notificationsToggled() -> Bool {
-			return self.defaults.bool(forKey: "notificationsToggled") 
+			return defaults.bool(forKey: "notificationsToggled")
 		}
 		
-//		func hasUserRefreshedNotificationsAfterNewVersion() -> Bool {
-//			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewVersion")
-//		}
-		
-		func lastYearUserRefreshedNotifications() -> Int {
-			return self.defaults.integer(forKey: "lastYearUserRefreshedNotifications")
+		func notificationsYear() -> Int {
+			return defaults.integer(forKey: "notificationsYear")
 		}
 		
-//		func hasUserRefreshedNotificationsAfterNewDataset() -> Bool {
-//			return self.defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewDataset")
-//		}
-//		
-//		func lastVersionUserRefreshedNewDatasetNotifications() -> Int {
-//			return self.defaults.integer(forKey: "lastVersionUserRefreshedNewDatasetNotifications")
-//		}
+		//		func hasUserRefreshedNotificationsAfterNewVersion() -> Bool {
+		//			return defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewVersion")
+		//		}
+		
+		//		func lastYearUserRefreshedNotifications() -> Int {
+		//			return defaults.integer(forKey: "lastYearUserRefreshedNotifications")
+		//		}
+		
+		//		func hasUserRefreshedNotificationsAfterNewDataset() -> Bool {
+		//			return defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewDataset")
+		//		}
+		//
+		//		func lastVersionUserRefreshedNewDatasetNotifications() -> Int {
+		//			return defaults.integer(forKey: "lastVersionUserRefreshedNewDatasetNotifications")
+		//		}
+		
         
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
@@ -106,6 +112,63 @@ class Common {
         let notFound = "Could not find sweep area. Address must reside in Chicago."
 
     }
+	
+	func getCityOfChicagoValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
+		
+		let db = Firestore.firestore()
+		db.collection(self.constants.schedulesDatabaseName)
+			.order(by: "year", descending: true)
+			.limit(to: 1)
+			.getDocuments() { (querySnapshot, err) in
+				if let err = err {
+					//print("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
+					fatalError("Could not get getCityOfChicagoValuesFromDatabase default data from Firebase: \(err)")
+				} else {
+					for document in querySnapshot!.documents {
+						
+						let data = document.data()
+						let latestAppVersion = data["year"] as! Int
+						let wardDataset = data["wardDataset"] as! String
+						let scheduleDataset = data["scheduleDataset"] as! String
+						let coordinatesTitle = data["coordinatesTitle"] as! String
+						let datesTitle = data["datesTitle"] as! String
+						let geomTitle = data["geomTitle"] as! String
+						let monthNameTitle = data["monthNameTitle"] as! String
+						let monthNumberTitle = data["monthNumberTitle"] as! String
+						let sectionTitle = data["sectionTitle"] as! String
+						let wardTitle = data["wardTitle"] as! String
+						
+						defaults.set(latestAppVersion, forKey: "latestAppVersion")
+						defaults.set(wardDataset, forKey: "wardDataset")
+						defaults.set(scheduleDataset, forKey: "scheduleDataset")
+						defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
+						defaults.set(datesTitle, forKey: "datesTitle")
+						defaults.set(geomTitle, forKey: "geomTitle")
+						defaults.set(monthNameTitle, forKey: "monthNameTitle")
+						defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
+						defaults.set(sectionTitle, forKey: "sectionTitle")
+						defaults.set(wardTitle, forKey: "wardTitle")
+						
+						self.updateNotifications()
+					}
+				}
+		}
+		
+		completion("Finished calling getCityOfChicagoValuesFromDatabase")
+	}
+	
+	func updateNotifications() {
+		
+		let favoriteAddress = self.constants.favoriteAddress()
+		let notificationsToggled = self.constants.notificationsToggled()
+		
+		if !favoriteAddress.isEmpty && notificationsToggled == true {
+			
+			let notificationViewController = NotificationsViewController()
+			notificationViewController.getSchedule(true, true)
+			
+		}
+	}
 	
 	@objc func openAppStore() {
 		
