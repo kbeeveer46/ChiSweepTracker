@@ -114,9 +114,6 @@
                         <outlet property="addressTextField" destination="iz5-fA-FV8" id="tRP-VG-G6b"/>
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
-                        <outlet property="newScheduleButton" destination="6qs-Ls-QDx" id="Xb0-4j-fSY"/>
-                        <outlet property="refreshNotificationsAfterNewDatasetButton" destination="iQ9-MB-6Fw" id="4aF-c0-ZFV"/>
-                        <outlet property="refreshNotificationsAfterUpdateButton" destination="IKH-OP-ArB" id="zF9-BV-VQ0"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>

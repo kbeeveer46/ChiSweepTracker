@@ -37,6 +37,14 @@ class Common {
 			return defaults.integer(forKey: "latestAppVersion")
 		}
 		
+		func latestDatasetVersion() -> Int {
+			return defaults.integer(forKey: "latestDatasetVersion")
+		}
+		
+		func userDatasetVersion() -> Int {
+			return defaults.integer(forKey: "userDatasetVersion")
+		}
+		
 		func dates() -> String {
 			return defaults.string(forKey: "datesTitle") ?? ""
 		}
@@ -149,10 +157,26 @@ class Common {
 						defaults.set(sectionTitle, forKey: "sectionTitle")
 						defaults.set(wardTitle, forKey: "wardTitle")
 						
+						let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.constants.latestAppVersion()))
+						
+						docRef.getDocument { (document, error) in
+							if let document = document, document.exists {
+								let data = document.data()
+								let latestDatasetVersion = data!["version"]!
+								print("Latest dataset version: \(latestDatasetVersion)")
+								print("User dataset version: \(self.constants.userDatasetVersion())")
+								defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
+							} else {
+								print("Cannot get dataset version from Firebase")
+							}
+						}
+						
 						self.updateNotifications()
 					}
 				}
 		}
+		
+		
 		
 		completion("Finished calling getCityOfChicagoValuesFromDatabase")
 	}
