@@ -24,7 +24,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     var addressFromDefaults = ""
     var longitudeFromDefaults = 0.0
     var latitudeFromDefaults = 0.0
-	var latestDatasetVersionGlobal = 1
+	//var latestDatasetVersionGlobal = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,12 +36,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 
 		//self.defaults.set(1, forKey: "userDatasetVersion")
 		
-		getCityOfChicagoValuesFromDatabase(completion: { message in
-			
-			//self.showRefreshNotificationsButton()
-			//self.defaults.set(0, forKey: "lastYearUserRefreshedNotifications")
-			//self.defaults.set(false, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
-			//self.refreshNotificationsButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+		self.setNotifications()
+		
+		self.showFinishedScheduleButton()
+		
+		self.getCityOfChicagoValuesFromDatabase(completion: { message in
+	
 			
 		})
 		
@@ -95,9 +95,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						self.defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
 						self.defaults.set(sectionTitle, forKey: "sectionTitle")
 						self.defaults.set(wardTitle, forKey: "wardTitle")
-						
+					
 						// Show new schedule button if userAppVersion doesn't match latest appVersion (year) in Firestore
-						self.showNewScheduleButton()
+						//self.showNewScheduleButton()
 					}
 				}
 		}
@@ -105,189 +105,206 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		completion("Finished calling getCityOfChicagoValuesFromDatabase")
 	}
 	
-	func showNewScheduleButton() {
-		
-		// User's app version (year) is stored in constants file
-		// Pull the latest version (year) from the database and see if it matches user app version
-		// If it does not match that means the City of Chicago has released a new schedule and I put the values in Firebase
-		// If it does not match, show new schedule button and direct them to the app store.
-		// This requires a new record in Firebase at the exact same time the app is released
-		
-		self.newScheduleButton.isHidden = true
-		
-		let userAppVersion = self.common.constants.appVersion // Year
-		let latestAppVersion = self.common.constants.latestAppVersion()
-		
-		print("Latest App Version: \(latestAppVersion)")
-		print("User App Version: \(userAppVersion)")
-		
-		if userAppVersion < latestAppVersion {
-			
-			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available! You must update this app to see the new schedule and set up your notifications. Click here to visit the App Store.")
-			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
-			self.newScheduleButton.addTarget(nil, action: #selector(self.common.openAppStore), for: .touchUpInside)
-			self.newScheduleButton.isHidden = false
-			
-		}
-		else {
-			
-			// Only show finished button if the new button is not shown
-			self.showFinishedScheduleButton()
-			
-		}
-	}
-	
-	func showFinishedScheduleButton() {
-		
-		// Show finished schedule button if the current month is greater than the last month of sweeping
-		
-		self.finishedScheduleButton.isHidden = true
-		
-		let currentMonthNumber = 11 //Calendar.current.component(.month, from: Date())
-		let appVersion = self.common.constants.appVersion // Year
-		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-		
-		let wardQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
-			.limit(1)
-			.orderDescending("month_number")
-			.filter("month_number IS NOT NULL")
-		
-		wardQuery.get { res in
-			switch res {
-			case .dataset (let data):
-				
-				let month = data[0][self.common.constants.month_number()] as? String ?? ""
-				print("Last sweep month: \(month)")
-				print("Current month: \(currentMonthNumber)")
-				
-				if !month.isEmpty {
-					if Int(month)! > 0 {
-						if currentMonthNumber > Int(month)!{
-							let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(appVersion). Check back next spring for the new schedule and to set up your notifications.")
-							self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
-							self.finishedScheduleButton.isHidden = false
-						}
-						else {
-							// Only show "new version" refresh notifications button if schedule isn't finished
-							self.showRefreshNotificationsAfterNewVersionButton()
-							
-							// Only show "new dataset" refresh notifications button if schedule isn't finished
-							self.showRefreshNoticationsAfterDatasetUpdateButton()
-						}
-					}
-				}
-			case .error (let err):
-				print("Unable to get showFinishedScheduleButton data from the City of Chicago: \(err.localizedDescription)")
-			}
-		}
-	}
-	
-	func showRefreshNotificationsAfterNewVersionButton() {
-		
-		// Show "new version" refresh notifications button after users updates the app
-		
-		self.refreshNotificationsAfterUpdateButton.isHidden = true
+	func setNotifications() {
 		
 		let favoriteAddress = self.common.constants.favoriteAddress()
 		let notificationsToggled = self.common.constants.notificationsToggled()
-		//let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
-		let lastYearUserRefreshedNotificationsAfterNewVersion = self.common.constants.lastYearUserRefreshedNotifications()
-		let appVersion = self.common.constants.appVersion
-		let latestAppVersion = Int(self.common.constants.latestAppVersion())
-		
-		if !favoriteAddress.isEmpty &&
-			notificationsToggled == true &&
-			appVersion == latestAppVersion &&
-			//hasUserRefreshedNotificationsAfterNewVersion == false &&
-			(lastYearUserRefreshedNotificationsAfterNewVersion == 0 || lastYearUserRefreshedNotificationsAfterNewVersion < appVersion) {
-			
-			// This runs when it shouldn't!!
-			// Need to figure out how to tell the difference between a new and updated install
-			self.refreshNotificationsAfterNewVersion()
-			
-			//self.refreshNotificationsAfterUpdateButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
-			//self.refreshNotificationsAfterUpdateButton.isHidden = false
-			
+
+		if !favoriteAddress.isEmpty && notificationsToggled == true {
+
+			let notificationViewController = NotificationsViewController()
+			notificationViewController.getSchedule(true, true)
+
 		}
-	
 	}
+	
+	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
+	func showFinishedScheduleButton() {
+		
+		let currentMonthNumber = Calendar.current.component(.month, from: Date())
+		var currentYear = Calendar.current.component(.year, from: Date())
+		if (currentMonthNumber < 4) {
+			currentYear = currentYear - 1
+		}
+		
+		self.finishedScheduleButton.isHidden = true
+		
+		if currentMonthNumber < 4 || currentMonthNumber > 11
+		{
+			let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
+			self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
+			self.finishedScheduleButton.isHidden = false
+		}
+	}
+	
+//	func addNotificationsForLatestDatasetVersion() {
+//
+//		let favoriteAddress = self.common.constants.favoriteAddress()
+//		let notificationsToggled = self.common.constants.notificationsToggled()
+//
+//		if !favoriteAddress.isEmpty && notificationsToggled == true {
+//
+//
+//
+//		}
+//
+//
+//	}
+//
+//
+//	func addNotificationsForLatestAppVersion() {
+//
+//		let favoriteAddress = self.common.constants.favoriteAddress()
+//		let notificationsToggled = self.common.constants.notificationsToggled()
+//
+//		if !favoriteAddress.isEmpty && notificationsToggled == true {
+//
+//
+//
+//		}
+//
+//	}
+//
+//	func showNewScheduleButton() {
+//
+//		// User's app version (year) is stored in constants file
+//		// Pull the latest version (year) from the database and see if it matches user app version
+//		// If it does not match that means the City of Chicago has released a new schedule and I put the values in Firebase
+//		// If it does not match, show new schedule button and direct them to the app store.
+//		// This requires a new record in Firebase at the exact same time the app is released
+//
+//		self.newScheduleButton.isHidden = true
+//
+//		let userAppVersion = self.common.constants.appVersion // Year
+//		let latestAppVersion = self.common.constants.latestAppVersion()
+//
+//		print("Latest App Version: \(latestAppVersion)")
+//		print("User App Version: \(userAppVersion)")
+//
+//		if userAppVersion < latestAppVersion {
+//
+//			let newButtonString = NSMutableAttributedString(string: "\(latestAppVersion) sweep schedule is now available! You must update this app to see the new schedule and set up your notifications. Click here to visit the App Store.")
+//			self.newScheduleButton.setAttributedTitle(newButtonString, for: .normal)
+//			self.newScheduleButton.addTarget(nil, action: #selector(self.common.openAppStore), for: .touchUpInside)
+//			self.newScheduleButton.isHidden = false
+//
+//		}
+//		else {
+//
+//			// Only show finished button if the new button is not shown
+//			self.showFinishedScheduleButton()
+//
+//		}
+//	}
+//
+
+	
+//	func showRefreshNotificationsAfterNewVersionButton() {
+//
+//		// Show "new version" refresh notifications button after users updates the app
+//
+//		self.refreshNotificationsAfterUpdateButton.isHidden = true
+//
+//		let favoriteAddress = self.common.constants.favoriteAddress()
+//		let notificationsToggled = self.common.constants.notificationsToggled()
+//		//let hasUserRefreshedNotificationsAfterNewVersion = self.common.constants.hasUserRefreshedNotificationsAfterNewVersion()
+//		let lastYearUserRefreshedNotificationsAfterNewVersion = self.common.constants.lastYearUserRefreshedNotifications()
+//		let appVersion = self.common.constants.appVersion
+//		let latestAppVersion = Int(self.common.constants.latestAppVersion())
+//
+//		if !favoriteAddress.isEmpty &&
+//			notificationsToggled == true &&
+//			appVersion == latestAppVersion &&
+//			//hasUserRefreshedNotificationsAfterNewVersion == false &&
+//			(lastYearUserRefreshedNotificationsAfterNewVersion == 0 || lastYearUserRefreshedNotificationsAfterNewVersion < appVersion) {
+//
+//			// This runs when it shouldn't!!
+//			// Need to figure out how to tell the difference between a new and updated install
+//			self.refreshNotificationsAfterNewVersion()
+//
+//			//self.refreshNotificationsAfterUpdateButton.addTarget(nil, action: #selector(self.refreshNotifications), for: .touchUpInside)
+//			//self.refreshNotificationsAfterUpdateButton.isHidden = false
+//
+//		}
+//
+//	}
 	
 	// Check to see if Chicago has updated the schedule/data set
 	// This means that I updated the "version" field by 1 in the Updates table
-	func showRefreshNoticationsAfterDatasetUpdateButton() {
-		
-		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
-		
-		let db = Firestore.firestore()
-		let docRef = db.collection(self.common.constants.updatesDatabaseName)
-			.document(String(self.common.constants.appVersion))
-		
-		docRef.getDocument { (document, error) in
-			if let document = document, document.exists {
-				
-				let data = document.data()
-				
-				let latestDatasetVersion = data!["version"] as! Int
-				let userDatasetVersion = self.common.constants.userDatasetVersion()
-				let favoriteAddress = self.common.constants.favoriteAddress()
-				let notificationsToggled = self.common.constants.notificationsToggled()
-				//let hasUserRefreshedNotificationsAfterNewDataset = self.common.constants.hasUserRefreshedNotificationsAfterNewDataset()
-				//let lastVersionUserRefreshedNewDatasetNotifications = self.common.constants.lastVersionUserRefreshedNewDatasetNotifications()
-				
-				print("Latest dataset version: \(latestDatasetVersion)")
-				print("User dataset version: \(userDatasetVersion)")
-				//print("User has updated: \(hasUserRefreshedNotificationsAfterNewDataset)")
-				//print("Last dataset version user has updated: \(lastVersionUserRefreshedNewDatasetNotifications)")
-				
-				// Set this value globally so I can set it in their defaults when they click on the button
-				// I don't have access to the latestDataset in the button tapped event so I had to set it here
-				self.latestDatasetVersionGlobal = latestDatasetVersion
-				
-				if userDatasetVersion == 0 {
-					// Set userDatasetVersion default to the latest data set version if this is the first time they opened the app
-					self.defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
-				}
-				else if userDatasetVersion > 0 &&
-					    userDatasetVersion < latestDatasetVersion &&
-					    !favoriteAddress.isEmpty &&
-					    notificationsToggled == true //&&
-					//hasUserRefreshedNotificationsAfterNewDataset == false &&
-					//(lastVersionUserRefreshedNewDatasetNotifications == 0 || (lastVersionUserRefreshedNewDatasetNotifications < latestDatasetVersion))
-				{
-					// Show refresh notifications after a new dataset button
-					self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotificationsAfterNewDataset), for: .touchUpInside)
-					self.refreshNotificationsAfterNewDatasetButton.isHidden = false
-				}
-			} else {
-				print("Updates database record does not exist for \(self.common.constants.appVersion)")
-			}
-		}
-	}
+//	func showRefreshNoticationsAfterDatasetUpdateButton() {
+//
+//		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
+//
+//		let db = Firestore.firestore()
+//		let docRef = db.collection(self.common.constants.updatesDatabaseName)
+//			.document(String(self.common.constants.appVersion))
+//
+//		docRef.getDocument { (document, error) in
+//			if let document = document, document.exists {
+//
+//				let data = document.data()
+//
+//				let latestDatasetVersion = data!["version"] as! Int
+//				let userDatasetVersion = self.common.constants.userDatasetVersion()
+//				let favoriteAddress = self.common.constants.favoriteAddress()
+//				let notificationsToggled = self.common.constants.notificationsToggled()
+//				//let hasUserRefreshedNotificationsAfterNewDataset = self.common.constants.hasUserRefreshedNotificationsAfterNewDataset()
+//				//let lastVersionUserRefreshedNewDatasetNotifications = self.common.constants.lastVersionUserRefreshedNewDatasetNotifications()
+//
+//				print("Latest dataset version: \(latestDatasetVersion)")
+//				print("User dataset version: \(userDatasetVersion)")
+//				//print("User has updated: \(hasUserRefreshedNotificationsAfterNewDataset)")
+//				//print("Last dataset version user has updated: \(lastVersionUserRefreshedNewDatasetNotifications)")
+//
+//				// Set this value globally so I can set it in their defaults when they click on the button
+//				// I don't have access to the latestDataset in the button tapped event so I had to set it here
+//				self.latestDatasetVersionGlobal = latestDatasetVersion
+//
+//				if userDatasetVersion == 0 {
+//					// Set userDatasetVersion default to the latest data set version if this is the first time they opened the app
+//					self.defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+//				}
+//				else if userDatasetVersion > 0 &&
+//					    userDatasetVersion < latestDatasetVersion &&
+//					    !favoriteAddress.isEmpty &&
+//					    notificationsToggled == true //&&
+//					//hasUserRefreshedNotificationsAfterNewDataset == false &&
+//					//(lastVersionUserRefreshedNewDatasetNotifications == 0 || (lastVersionUserRefreshedNewDatasetNotifications < latestDatasetVersion))
+//				{
+//					// Show refresh notifications after a new dataset button
+//					self.refreshNotificationsAfterNewDatasetButton.addTarget(nil, action: #selector(self.refreshNotificationsAfterNewDataset), for: .touchUpInside)
+//					self.refreshNotificationsAfterNewDatasetButton.isHidden = false
+//				}
+//			} else {
+//				print("Updates database record does not exist for \(self.common.constants.appVersion)")
+//			}
+//		}
+//	}
 	
-	@objc func refreshNotificationsAfterNewDataset() {
-		
-		// Call getSchedule in the notification controller because that function also adds notifications
-		let notificationViewController = NotificationsViewController()
-		notificationViewController.getSchedule(true, true, false)
-		
-		// Hide button after notifications are refreshed
-		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
-		
-		// Set users data set version to the newest now that they updated
-		// I wish I could set this in the notification controller getSchedule call but I don't have access to latestDatasetVersion
-		defaults.set(latestDatasetVersionGlobal, forKey: "userDatasetVersion")
-		
-	}
-	
-	@objc func refreshNotificationsAfterNewVersion() {
-		
-		// Call getSchedule in the notification controller because that function also adds notifications
-		let notificationViewController = NotificationsViewController()
-		notificationViewController.getSchedule(true, true, true)
-		
-		// Hide button after notifications are refreshed
-		self.refreshNotificationsAfterUpdateButton.isHidden = true
-	}
+//	@objc func refreshNotificationsAfterNewDataset() {
+//		
+//		// Call getSchedule in the notification controller because that function also adds notifications
+//		let notificationViewController = NotificationsViewController()
+//		notificationViewController.getSchedule(true, true)
+//		
+//		// Hide button after notifications are refreshed
+//		self.refreshNotificationsAfterNewDatasetButton.isHidden = true
+//		
+//		// Set users data set version to the newest now that they updated
+//		// I wish I could set this in the notification controller getSchedule call but I don't have access to latestDatasetVersion
+//		defaults.set(latestDatasetVersionGlobal, forKey: "userDatasetVersion")
+//		
+//	}
+//	
+//	@objc func refreshNotificationsAfterNewVersion() {
+//		
+//		// Call getSchedule in the notification controller because that function also adds notifications
+//		let notificationViewController = NotificationsViewController()
+//		notificationViewController.getSchedule(true, true)
+//		
+//		// Hide button after notifications are refreshed
+//		self.refreshNotificationsAfterUpdateButton.isHidden = true
+//	}
 
 	// Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
@@ -314,7 +331,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
     
-    func getSchedule(_ address: String) {
+    func searchForSchedule(_ address: String) {
         
         self.schedule.months.removeAll()
         self.schedule.polygonCoordinates.removeAll()
@@ -668,10 +685,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 		
 		// Find address and go to select section view or schedule view
-		getSchedule(address)
+		self.searchForSchedule(address)
 		
 		// Test addresses
-		//getSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
+		//self.searchForSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
 		
 	}
 	

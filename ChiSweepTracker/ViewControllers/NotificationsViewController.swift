@@ -139,7 +139,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
     }
     
-    
     @objc func removeFavorite() {
         
         let generator = UISelectionFeedbackGenerator()
@@ -321,17 +320,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
     }
     
-//    func removeDefaultNotificationValues() {
-//
-//        self.defaults.set("", forKey: "notificationWhen")
-//        self.defaults.set(0, forKey: "notificationHour")
-//        self.defaults.set(0, forKey: "notificationMinute")
-//
-//    }
-    
 	func getSchedule(_ registerForPushNotifications: Bool,
-					 _ useDefaultNotificationValues: Bool = false,
-					 _ notificationsUpdatedAfterNewVersion: Bool = false) {
+					 _ useDefaultNotificationValues: Bool = false) {
         
 		self.schedule.address = self.common.constants.favoriteAddress() //self.favoriteAddress
 		
@@ -599,16 +589,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 })
                                                             }
                                                         }
-													
-														if notificationsUpdatedAfterNewVersion == true {
-															
-															//self.common.showAlert("Notifications Updated For \(self.common.constants.appVersion)!", "")
-															
-															self.defaults.set(self.common.constants.appVersion, forKey: "lastYearUserRefreshedNotifications")
-															//self.defaults.set(true, forKey: "hasUserRefreshedNotificationsAfterNewVersion")
-															
-														}
-														
 													}
                                                 }
                                             }

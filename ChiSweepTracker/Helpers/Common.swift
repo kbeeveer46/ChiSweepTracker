@@ -6,60 +6,14 @@ import UIKit
 class Common {
     
     let constants = Constants()
-	
-	@objc func openAppStore() {
-		
-		// Send user to app store to update app
-		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.constants.appStoreId)"),
-			UIApplication.shared.canOpenURL(url){
-			UIApplication.shared.open(url, options: [:]) { (opened) in
-				if(opened){
-					print("App Store Opened")
-				}
-			}
-		} else {
-			print("Can't Open URL on Simulator")
-		}
-	}
-
-	// Alert with custom title and message
-    public func showAlert(_ title: String, _ message: String) {
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-
-        var rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        
-        if let navigationController = rootViewController as? UINavigationController {
-            rootViewController = navigationController.viewControllers.first
-        }
-        
-        rootViewController?.present(alert, animated: true, completion: nil)
-        
-        return
-        
-    }
-    
-	// Style button with image and background color
-    public func styleButton(_ button: UIButton, _ image: String?,_ color: String?) {
-        
-        button.backgroundColor = .systemBlue
-        if color != nil {
-            button.backgroundColor = UIColor(hexString: "#\(color!)")
-        }
-        button.layer.cornerRadius = 7.0
-        button.tintColor = .white
-        
-        if image != nil {
-            button.leftImage(image: UIImage(named: image!)!, name: image)
-        }
-    }
     
     class Constants {
         
         let defaults = UserDefaults.standard
 	
+		// UPDATE THIS VALUE WITH NEW APP VERSION //
+		//let appVersion = 2020
+		
 		let appStoreId = "1490793712"
 
 		#if DEBUG
@@ -69,14 +23,15 @@ class Common {
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
 		#endif
-        
-		// UPDATE THIS VALUE WITH NEW APP VERSION //
-		let appVersion = 2020
 
-		func userDatasetVersion() -> Int {
-			return self.defaults.integer(forKey: "userDatasetVersion")
-		}
+//		func initialAppVersion() -> Int {
+//			return self.defaults.integer(forKey: "initialAppVersion")
+//		}
 		
+//		func userDatasetVersion() -> Int {
+//			return self.defaults.integer(forKey: "userDatasetVersion")
+//		}
+//		
 		func latestAppVersion() -> Int {
 			return self.defaults.integer(forKey: "latestAppVersion")
 		}
@@ -151,6 +106,55 @@ class Common {
         let notFound = "Could not find sweep area. Address must reside in Chicago."
 
     }
+	
+	@objc func openAppStore() {
+		
+		// Send user to app store to update app
+		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.constants.appStoreId)"),
+			UIApplication.shared.canOpenURL(url){
+			UIApplication.shared.open(url, options: [:]) { (opened) in
+				if(opened){
+					print("App Store Opened")
+				}
+			}
+		} else {
+			print("Can't Open URL on Simulator")
+		}
+	}
+	
+	// Alert with custom title and message
+	public func showAlert(_ title: String, _ message: String) {
+		
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+		
+		alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+		
+		var rootViewController = UIApplication.shared.keyWindow?.rootViewController
+		
+		if let navigationController = rootViewController as? UINavigationController {
+			rootViewController = navigationController.viewControllers.first
+		}
+		
+		rootViewController?.present(alert, animated: true, completion: nil)
+		
+		return
+		
+	}
+	
+	// Style button with image and background color
+	public func styleButton(_ button: UIButton, _ image: String?,_ color: String?) {
+		
+		button.backgroundColor = .systemBlue
+		if color != nil {
+			button.backgroundColor = UIColor(hexString: "#\(color!)")
+		}
+		button.layer.cornerRadius = 7.0
+		button.tintColor = .white
+		
+		if image != nil {
+			button.leftImage(image: UIImage(named: image!)!, name: image)
+		}
+	}
 
 }
 

@@ -30,7 +30,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		currentYear = self.common.constants.appVersion
+		currentYear = self.common.constants.latestAppVersion() //self.common.constants.appVersion
         
 		// Get selected month name from schedule view and set it as the title
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
