@@ -10,7 +10,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
     
-    let current = UNUserNotificationCenter.current()
+    //let current = UNUserNotificationCenter.current()
     let common = Common()
     var schedule = ScheduleModel()
     var favoriteAddress = ""
@@ -40,6 +40,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	
 	// MARK: Methods
 	
+	// Go to schedule page when schedule button is clicked
     @objc func viewSchedule() {
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
@@ -48,6 +49,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
     }
     
+	// Load map with default lat, long, and polygon coordinates or load Chicago map
     func loadFavoriteMap() {
         
         favoriteMapView.delegate = self
@@ -113,9 +115,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		// Alert user if they want to delete their favorite because they will no longer receive push notifications
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
         
+		// Add Yes button option
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-            
-            print("Deleted favorite address: \(self.favoriteAddress)")
             
             defaults.set("", forKey: "favoriteAddress")
             defaults.set("", forKey: "favoriteWard")
@@ -125,6 +126,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             defaults.set(nil, forKey: "favoriteCoordinatesArray")
             defaults.set(false, forKey: "notificationsToggled")
             self.favoriteAddress = ""
+			
+			print("Deleted favorite address: \(self.favoriteAddress)")
             
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
@@ -143,16 +146,20 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             }
         }))
         
+		// Add No button option
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         
+		// Present alert
         self.present(alert, animated: true, completion: nil)
         
     }
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
+		// Save form values to defaults
         saveDefaultNotificationValues()
         
+		// Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
             self.getSchedule(true)
         }
@@ -167,6 +174,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		self.onPicker.delegate = self
 		self.onPicker.dataSource = self
 		
+		// Set values for when and time pickers
         let when = defaults.object(forKey: "notificationWhen") as? String ?? ""
         let index = whenData.firstIndex(of: when) ?? 0
         let hour = defaults.integer(forKey: "notificationHour")
@@ -181,25 +189,25 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
         
+		// Turn form on or off depending if they have notifications toggled on or off
         favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+		let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
 		
 		if !favoriteAddress.isEmpty {
-			
-			let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
 			self.pushNotificationsSwitch.isOn = notificationsToggled
-			self.pushNotificationsSwitch.isUserInteractionEnabled = true
+			self.pushNotificationsSwitch.isUserInteractionEnabled = notificationsToggled
 			self.onPicker.isUserInteractionEnabled = notificationsToggled
 			self.timePicker.isUserInteractionEnabled = notificationsToggled
 			
 			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
-			
 		}
 		else {
 			self.pushNotificationsSwitch.isOn = false
 			self.pushNotificationsSwitch.isUserInteractionEnabled = false
 			self.onPicker.isUserInteractionEnabled = false
 			self.timePicker.isUserInteractionEnabled = false
+			
 			self.tabBarController?.navigationItem.leftBarButtonItem = nil
 			self.tabBarController?.navigationItem.rightBarButtonItem = nil
 			
@@ -210,6 +218,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
     }
     
+	// Save form values to defaults
     func saveDefaultNotificationValues() {
         
         let time = self.timePicker.date
@@ -224,21 +233,19 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
     }
     
+	// Populate schedule model and add notifications if applicable
+	// useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
 	func getSchedule(_ registerForPushNotifications: Bool, _ useDefaultNotificationValues: Bool = false) {
         
-		self.schedule.address = self.common.constants.favoriteAddress() //self.favoriteAddress
+		self.schedule.address = self.common.constants.favoriteAddress()
 		
-        //print("Address: \(self.schedule.address)")
-        
-        // Get coordinates
-        
         let geocoder = CLGeocoder()
         
         geocoder.geocodeAddressString(self.schedule.address) { placemarks, error in
             
             if error != nil {
                 
-				print("getSchedule error: \((error! as NSError).userInfo.debugDescription)")
+				print("getSchedule geocode error: \((error! as NSError).userInfo.debugDescription)")
 				
 				// Remove schedule button in the top left if there's an error getting the coordinates
 				// If there's an error getting the coornidates then the schedule won't be populated correctly
@@ -255,12 +262,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                 self.schedule.locationCoordinate = coordinates
                 
-                //print("Latitude: \(self.schedule.locationCoordinate.latitude)")
-                //print("Longitude: \(self.schedule.locationCoordinate.longitude)")
-                
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-                
-                // Get ward and section JSON from City of Chicago
                 
                 let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset())
                     .filter("intersects(\(self.common.constants.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
@@ -292,9 +294,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                 }
                             }
                             
-                            //print("Ward: \(ward)")
-                            //print("Section: \(section)")
-                            
                             self.schedule.ward = ward
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
@@ -302,10 +301,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                 self.schedule.section = defaults.string(forKey: "favoriteSection") ?? ""
                             }
                             
-                            // Get schedule JSON from City of Chicago
-                            
                             let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
-                                .filter("ward = '\(ward)' AND section = '\(self.schedule.section)'")
+								.filter("\(self.common.constants.ward()) = '\(ward)' AND \(self.common.constants.section()) = '\(self.schedule.section)'")
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -315,8 +312,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                         
                                         self.schedule.months.removeAll()
                                         
-                                        // Populate schedule model to be used on schedule view
-                                        
                                         for (_, item) in data.enumerated() {
                                             
                                             let monthName = item[self.common.constants.month_name()] as? String ?? ""
@@ -324,21 +319,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                             let dates = item[self.common.constants.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
-                                            //print("Month name: \(monthName)")
-                                            //print("Dates: \(datesArray)")
-                                            
-                                            //let month = MonthModel(name: "", number: "", dates: [DateModel]())
-                                            let month = MonthModel()
+											let month = MonthModel()
                                             month.name = monthName
                                             month.number = monthNumber
                                             
                                             for day in datesArray {
                                                 
-                                                //print("Date: \(day)")
-                                                
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
-                                                    //let date = DateModel(date: 0)
                                                     let date = DateModel()
                                                     date.date = Int(day) ?? 0
                                                     
@@ -360,23 +348,23 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                             // Clear current notifications and re-add them in case they changed
                                             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                                             
+											print("Deleted user's local notifications")
+											
                                             #if DEBUG
                                                 //self.sendTestNotifications()
                                             #endif
                                             
-                                            print("Deleted user's local notifications")
-                                            
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                                             granted, error in
                                             
-                                                print("Permission granted: \(granted)")
+                                                print("requestAuthorization granted: \(granted)")
                                                 
                                                 if granted == false {
                                                     
                                                     // User's notifications are disabled in settings. Prompt them to open settings
                                                     DispatchQueue.main.async {
                                                     
-                                                        let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and enable notifications?", preferredStyle: .alert)
+                                                        let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and notifications back on?", preferredStyle: .alert)
 
                                                         let settingsAction = UIAlertAction(title: "Yes", style: .default) { (_) -> Void in
 
@@ -386,7 +374,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
                                                             if UIApplication.shared.canOpenURL(settingsUrl) {
                                                                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                                                    print("User opened the setting page")
+                                                                    print("User opened the settings page")
                                                                 })
                                                             }
                                                         }
@@ -394,8 +382,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                         
                                                         let cancelAction = UIAlertAction(title: "No", style: .cancel, handler:{ action in
                                                             
-                                                            //self.pushNotificationsSwitch.isUserInteractionEnabled = false
-															self.pushNotificationsSwitch.isOn = false
+															print("User declined to go to settings page")
+															
+                                                            self.pushNotificationsSwitch.isOn = false
                                                             self.timePicker.isUserInteractionEnabled = false
                                                             self.onPicker.isUserInteractionEnabled = false
                                                             defaults.set(false, forKey: "notificationsToggled")
@@ -404,21 +393,19 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                         alertController.addAction(cancelAction)
 
                                                         self.present(alertController, animated: true, completion: nil)
-                                                    
                                                     }
-                                                    
                                                 }
                                                 else {
                                                     
+													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
                                                     
                                                         let center = UNUserNotificationCenter.current()
 														let calendar = Calendar.current
-														let currentYear = self.common.constants.latestAppVersion() //calendar.component(.year, from: Date())
+														let currentYear = self.common.constants.latestAppVersion() 
 														let notificationWhenDefault = defaults.object(forKey: "notificationWhen") as? String ?? ""
 														let notificationHourDefault = defaults.integer(forKey: "notificationHour")
 														let notificationMinuteDefault = defaults.integer(forKey: "notificationMinute")
-														
 														var hour = 0
 														var minute = 0
 														var when = ""
@@ -430,9 +417,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 														}
 														else {
 															let time = self.timePicker.date
-															let comp = calendar.dateComponents([.hour, .minute], from: time)
-															hour = comp.hour!
-															minute = comp.minute!
+															let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+															hour = timeComponents.hour!
+															minute = timeComponents.minute!
 															when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
 														}
 														
@@ -462,24 +449,28 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                     break
                                                                 }
 																
+																// Create notificaton trigger
 																let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.timeZone], from: date!)
                                                                 let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
                                                                 
+																// Create notification contents
                                                                 let content = UNMutableNotificationContent()
                                                                 content.title = "Sweep Alert"
                                                                 content.body = "Your area is being swept on \(monthInSchedule.number)/\(dayInMonth.date) between 9 am and 2 pm"
                                                                 let soundName = UNNotificationSoundName("notification.m4r")
 																content.sound = UNNotificationSound(named: soundName)
                                                                 content.badge = 1
-                                                                
+
+																// Create notificaton identifier
                                                                 let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
 
+																// Create notification request
                                                                 let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                                                                 
-                                                                center.add(request, withCompletionHandler: { (error) in
+																// Add notification
+																center.add(request, withCompletionHandler: { (error) in
                                                                     if let error = error {
-                                                                        //self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
-																		print("Error adding notification: \(error.localizedDescription)")
+                                                                        print("Error adding notification: \(error.localizedDescription)")
                                                                     }
                                                                     else {
                                                                         print("Local notification added: \(date!.description(with: Locale.current))")
@@ -511,26 +502,22 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                         }
                                     }
                                 case .error (let err):
-                                    //self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                                     print((err as NSError).userInfo.debugDescription)
 									self.tabBarController?.navigationItem.leftBarButtonItem = nil
                                 }
                             }
                         }
                         else {
-                            //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
                             print(self.common.constants.notFound)
 							self.tabBarController?.navigationItem.leftBarButtonItem = nil
                         }
                     case .error (let err):
-                        //self.common.showAlert(self.constants.errorTitle, (err as NSError).userInfo.debugDescription)
                         print((err as NSError).userInfo.debugDescription)
 						self.tabBarController?.navigationItem.leftBarButtonItem = nil
                     }
                 }
             }
             else {
-                //self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
                 print(self.common.constants.notFound)
 				self.tabBarController?.navigationItem.leftBarButtonItem = nil
             }
@@ -571,6 +558,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
 	//MARK: Actions
 	
+	// Push notifications toggle switch event
 	@IBAction func pushNotificationsTapped(_ sender: Any) {
 		
 		if pushNotificationsSwitch.isOn == true {
@@ -610,8 +598,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
+		// Save default notification form values when picker is changed
         saveDefaultNotificationValues()
         
+		// Update notifications after picker is changed
         if self.pushNotificationsSwitch.isOn {
             self.getSchedule(true)
         }
