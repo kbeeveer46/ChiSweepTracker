@@ -1,9 +1,6 @@
 import UIKit
 import Firebase
 
-// TODO: Try to use a global schedule varible
-//var schedule = ScheduleModel()
-
 let defaults = UserDefaults.standard
 
 class Common {
@@ -12,11 +9,6 @@ class Common {
     
     class Constants {
         
-		// UPDATE THIS VALUE WITH NEW APP VERSION //
-		//let appVersion = 2020
-		
-		let appStoreId = "1490793712"
-
 		#if DEBUG
 		let schedulesDatabaseName = "Schedules_Dev"
 		let updatesDatabaseName = "Updates_Dev"
@@ -24,15 +16,7 @@ class Common {
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
 		#endif
-
-//		func initialAppVersion() -> Int {
-//			return self.defaults.integer(forKey: "initialAppVersion")
-//		}
-		
-//		func userDatasetVersion() -> Int {
-//			return self.defaults.integer(forKey: "userDatasetVersion")
-//		}
-//		
+	
 		func latestAppVersion() -> Int {
 			return defaults.integer(forKey: "latestAppVersion")
 		}
@@ -93,23 +77,6 @@ class Common {
 			return defaults.integer(forKey: "notificationsYear")
 		}
 		
-		//		func hasUserRefreshedNotificationsAfterNewVersion() -> Bool {
-		//			return defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewVersion")
-		//		}
-		
-		//		func lastYearUserRefreshedNotifications() -> Int {
-		//			return defaults.integer(forKey: "lastYearUserRefreshedNotifications")
-		//		}
-		
-		//		func hasUserRefreshedNotificationsAfterNewDataset() -> Bool {
-		//			return defaults.bool(forKey: "hasUserRefreshedNotificationsAfterNewDataset")
-		//		}
-		//
-		//		func lastVersionUserRefreshedNewDatasetNotifications() -> Int {
-		//			return defaults.integer(forKey: "lastVersionUserRefreshedNewDatasetNotifications")
-		//		}
-		
-        
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
         
@@ -187,8 +154,6 @@ class Common {
 				}
 		}
 		
-		
-		
 		completion("Finished calling getCityOfChicagoValuesFromDatabase")
 	}
 	
@@ -198,27 +163,26 @@ class Common {
 		let notificationsToggled = self.constants.notificationsToggled()
 		
 		if !favoriteAddress.isEmpty && notificationsToggled == true {
-			
 			let notificationViewController = NotificationsViewController()
 			notificationViewController.getSchedule(true, true)
-			
 		}
 	}
 	
-	@objc func openAppStore() {
-		
-		// Send user to app store to update app
-		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.constants.appStoreId)"),
-			UIApplication.shared.canOpenURL(url){
-			UIApplication.shared.open(url, options: [:]) { (opened) in
-				if(opened){
-					print("App Store Opened")
-				}
-			}
-		} else {
-			print("Can't Open URL on Simulator")
-		}
-	}
+//	@objc func openAppStore() {
+//		let appStoreId = "1490793712"
+//
+//		// Send user to app store to update app
+//		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.constants.appStoreId)"),
+//			UIApplication.shared.canOpenURL(url){
+//			UIApplication.shared.open(url, options: [:]) { (opened) in
+//				if(opened){
+//					print("App Store Opened")
+//				}
+//			}
+//		} else {
+//			print("Can't Open URL on Simulator")
+//		}
+//	}
 	
 	// Alert with custom title and message
 	public func showAlert(_ title: String, _ message: String) {

@@ -254,10 +254,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
-            landmarkName = "leftImage(image:name:)"
-            landmarkType = "7">
+            startingLineNumber = "258"
+            endingLineNumber = "258">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -430,8 +428,8 @@
             filePath = "ChiSweepTracker/ViewControllers/CalendarViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "collectionView(_:numberOfItemsInSection:)"
             landmarkType = "7">
             <Locations>

@@ -25,17 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
-    }
-    
     func applicationDidBecomeActive(_ application: UIApplication) {
 		// Clear badge number
         application.applicationIconBadgeNumber = 0
 		// Get the latest schedule from Chicago and update notifications
 		self.common.getCityOfChicagoValuesFromDatabase(completion: { message in })
-    }
-    
-    func applicationWillResignActive(_ application: UIApplication) {
     }
     
     func application(_ application: UIApplication,
@@ -151,36 +145,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         // Print full message.
         //print(userInfo)
         
-        // TODO: Use the code below to send user to schedule page when opening notification
-        //NotificationCenter.default.post(name: Notification.Name(rawValue: "sentFromNotification"), object: nil)
-        
-        // Not working!
-        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        //        if  let conversationVC = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController,
-        //            let tabBarController = self.window?.rootViewController as? UITabBarController,
-        //            let navController = tabBarController.selectedViewController as? UINavigationController {
-        //
-        //                // we can modify variable of the new view controller using notification data
-        //                // (eg: title of notification)
-        //                conversationVC.sentFromNotification = true
-        //                // you can access custom data of the push notification by using userInfo property
-        //                // response.notification.request.content.userInfo
-        //                navController.pushViewController(conversationVC, animated: true)
-        //        }
-        
-        //        if let navController = self.navigationController, let viewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController{
-        //            navController.pushViewController(viewController, animated: true)
-        //        }
-        
-        //        if let destinationViewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-        //            destinationViewController.sentFromNotification = true
-        //
-        //            let navigationController = application.windows[0].rootViewController as! UINavigationController
-        //
-        //            navigationController!.pushViewController(destinationViewController, animated: true)
-        //        }
-        
         completionHandler()
         
     }
@@ -206,5 +170,4 @@ extension AppDelegate: MessagingDelegate {
         print("Message data: \(remoteMessage.appData)")
         
     }
-    
 }

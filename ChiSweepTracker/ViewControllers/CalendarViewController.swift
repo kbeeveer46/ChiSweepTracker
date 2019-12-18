@@ -124,7 +124,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             }
             PositionIndex = PreviousNumberOfEmptyBox
         default:
-            fatalError()
+			return
+            //fatalError()
         }
     }
 
@@ -228,7 +229,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         cell.DateLabel.textColor = UIColor.black
         cell.Circle.isHidden = true
 
-        if cell.isHidden{
+        if cell.isHidden {
             cell.isHidden = false
         }
 
@@ -241,11 +242,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         case -1:
             cell.DateLabel.text = "\(indexPath.row + 1 - PreviousNumberOfEmptyBox)"
         default:
-            fatalError()
+			cell.DateLabel.text = ""
         }
 
 		// Hide the negative numbers or zero
-        if Int(cell.DateLabel.text!)! < 1{
+        if Int(cell.DateLabel.text!)! < 1 {
             cell.isHidden = true
         }
 
