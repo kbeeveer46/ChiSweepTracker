@@ -8,11 +8,6 @@ class InfoViewController: UIViewController {
     
     let common = Common()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         
         self.tabBarController?.navigationItem.title = "Sweeping Info"

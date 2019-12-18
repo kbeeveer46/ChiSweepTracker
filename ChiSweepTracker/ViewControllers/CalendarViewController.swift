@@ -159,7 +159,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		// Only allow user to create ane event on a sweep day
         if cell.Circle.isHidden == false {
         
-            let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
                 let eventStore = EKEventStore()

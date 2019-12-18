@@ -10,17 +10,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
     
-    //let current = UNUserNotificationCenter.current()
     let common = Common()
     var schedule = ScheduleModel()
-    var favoriteAddress = ""
+    //var favoriteAddress = ""
     let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
-		// Not everything I want loads in viewDidLoad so I put it in viewWillAppear
-    }
-    
+	// MARK: Methods
+	
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -30,15 +26,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		// Load map using user favorite lat, long, and polygon coorndinates
         loadFavoriteMap()
         
-        if !favoriteAddress.isEmpty {
-			
-			// Get schedule so we have the most update to date version
-			// Used to pass schedule model to schedule view
-			getSchedule(false)
-        }
     }
-	
-	// MARK: Methods
 	
 	// Go to schedule page when schedule button is clicked
     @objc func viewSchedule() {
@@ -55,6 +43,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         favoriteMapView.delegate = self
         favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
+		let favoriteAddress = self.common.constants.favoriteAddress()
         let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
         let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
         let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
@@ -118,6 +107,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		// Add Yes button option
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
+			print("Deleted favorite address: \(self.common.constants.favoriteAddress())")
+			
             defaults.set("", forKey: "favoriteAddress")
             defaults.set("", forKey: "favoriteWard")
             defaults.set("", forKey: "favoriteSection")
@@ -125,11 +116,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             defaults.set(0.0, forKey: "favoriteLatitude")
             defaults.set(nil, forKey: "favoriteCoordinatesArray")
             defaults.set(false, forKey: "notificationsToggled")
-            self.favoriteAddress = ""
-			
-			print("Deleted favorite address: \(self.favoriteAddress)")
             
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
             print("Deleted user's local notifications")
             
@@ -190,10 +178,15 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
         
 		// Turn form on or off depending if they have notifications toggled on or off
-        favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+		let favoriteAddress = self.common.constants.favoriteAddress()
 		let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
 		
 		if !favoriteAddress.isEmpty {
+			
+			// Get schedule so we have the most update to date version
+			// Used to pass schedule model to schedule view
+			self.getSchedule(false)
+			
 			self.pushNotificationsSwitch.isOn = notificationsToggled
 			self.pushNotificationsSwitch.isUserInteractionEnabled = true
 			self.onPicker.isUserInteractionEnabled = notificationsToggled
@@ -351,7 +344,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 											print("Deleted user's local notifications")
 											
                                             #if DEBUG
-                                                //self.sendTestNotifications()
+                                                self.sendTestNotifications()
                                             #endif
                                             
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
@@ -455,8 +448,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 
 																// Create notification contents
                                                                 let content = UNMutableNotificationContent()
-                                                                content.title = "Sweep Alert"
-                                                                content.body = "Your area is being swept on \(monthInSchedule.number)/\(dayInMonth.date) between 9 am and 2 pm"
+                                                                content.title = "Sweep Alert For \(monthInSchedule.number)/\(dayInMonth.date)"
+                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
                                                                 let soundName = UNNotificationSoundName("notification.m4r")
 																content.sound = UNNotificationSound(named: soundName)
                                                                 content.badge = 1
@@ -484,7 +477,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 														let notificationsYear = self.common.constants.notificationsYear()
 														let latestAppVersion = self.common.constants.latestAppVersion()
 														if notificationsYear > 0 && notificationsYear < latestAppVersion {
-															self.common.showAlert("Notifications Updated", "Your push notifications have been updated to reflect the \(latestAppVersion) schedule.")
+															self.common.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
 														}
 														defaults.set(latestAppVersion, forKey: "notificationsYear")
 														
@@ -528,14 +521,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		let center = UNUserNotificationCenter.current()
 		let calendar = Calendar.current
-		let earlyDate = calendar.date(byAdding: .minute, value: 1,to: Date())
+		let notificationDate = calendar.date(byAdding: .minute, value: 1,to: Date())
 		
-		let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute], from: earlyDate!)
+		let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.timeZone], from: notificationDate!)
 		let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
 		
 		let content = UNMutableNotificationContent()
-		content.title = "Sweep Alert"
-		content.body = "Your section is being swept on 12/12 between 9 am and 2 pm"
+		content.title = "Sweep Alert For 7/9"
+		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
 		let soundName = UNNotificationSoundName("notification.m4r")
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
@@ -546,7 +539,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		center.add(request, withCompletionHandler: { (error) in
 			if let error = error {
-				//self.common.showAlert(self.constants.errorTitle, error.localizedDescription)
 				print(error.localizedDescription)
 			}
 			else {

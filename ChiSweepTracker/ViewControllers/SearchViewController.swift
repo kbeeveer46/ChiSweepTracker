@@ -18,11 +18,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     var addressFromTextField = ""
     var addressFromCoordinates = ""
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Not everything I want loads in viewDidLoad so I put it in viewWillAppear
-    }
-    
+	// MARK: Methods
+	
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 		
@@ -36,8 +33,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		self.styleControls()
         
     }
-    
-    // MARK: Methods
 	
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showFinishedScheduleButton() {

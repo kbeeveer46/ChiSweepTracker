@@ -13,12 +13,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     var addFavoriteButton = UIBarButtonItem()
     var removeFavoriteButton = UIBarButtonItem()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-		// Not everything I want loads in viewDidLoad so I put it in viewWillAppear
-    }
+	// MARK: Methods
 	
-	override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
 		
 		// Set title using latest app version (year)
 		self.title = "Sweep Schedule - \(self.common.constants.latestAppVersion())"
