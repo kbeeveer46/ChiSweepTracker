@@ -146,6 +146,17 @@ class Common {
 						let sectionTitle = data["sectionTitle"] as! String
 						let wardTitle = data["wardTitle"] as! String
 						
+						print("latestAppVersion: \(latestAppVersion)")
+						print("wardDataset: \(wardDataset)")
+						print("scheduleDataset: \(scheduleDataset)")
+						print("coordinatesTitle: \(coordinatesTitle)")
+						print("datesTitle: \(datesTitle)")
+						print("geomTitle: \(geomTitle)")
+						print("monthNameTitle: \(monthNameTitle)")
+						print("monthNumberTitle: \(monthNumberTitle)")
+						print("sectionTitle: \(sectionTitle)")
+						print("wardTitle: \(wardTitle)")
+						
 						defaults.set(latestAppVersion, forKey: "latestAppVersion")
 						defaults.set(wardDataset, forKey: "wardDataset")
 						defaults.set(scheduleDataset, forKey: "scheduleDataset")

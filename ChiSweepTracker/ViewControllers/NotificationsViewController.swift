@@ -195,9 +195,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		if !favoriteAddress.isEmpty {
 			self.pushNotificationsSwitch.isOn = notificationsToggled
-			self.pushNotificationsSwitch.isUserInteractionEnabled = notificationsToggled
-			self.onPicker.isUserInteractionEnabled = notificationsToggled
-			self.timePicker.isUserInteractionEnabled = notificationsToggled
+			self.pushNotificationsSwitch.isUserInteractionEnabled = true
+			self.onPicker.isUserInteractionEnabled = true
+			self.timePicker.isUserInteractionEnabled = true
 			
 			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))

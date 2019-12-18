@@ -384,23 +384,32 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Stop updating location if user selects "drop pin"
 			locationManager.stopUpdatingLocation()
 			
+			print("Drop pin selected and stopped updating location")
+			
 		}
 		else if searchTypeSegment.selectedSegmentIndex == 1 {
 			
+			print("Use my location selected")
+			
 			// Request location access. If access granted, start updating location and update map
 			locationManager.requestWhenInUseAuthorization()
+			
+			print("Requested location access")
 			
 			if CLLocationManager.locationServicesEnabled() {
 				locationManager.delegate = self
 				locationManager.desiredAccuracy = kCLLocationAccuracyBest
 				locationManager.startUpdatingLocation()
+				print("Location services enabled and started updating location")
 			}
 			else {
 				print("Location services are not enabled")
 			}
-			
 		}
 		else if searchTypeSegment.selectedSegmentIndex == 2 {
+			
+			print("Enter address selected and stopped updating location")
+			
 			// Stop updating location if user selects "enter address"
 			locationManager.stopUpdatingLocation()
 		}
@@ -409,6 +418,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Search address button is tapped
 	@IBAction func searchAddressTapped(_ sender: Any) {
 		
+		print("Find schedule pressed")
+
 		// Add haptic feedback
 		let generator = UISelectionFeedbackGenerator()
 		generator.prepare()
@@ -416,6 +427,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Stop updating user's location to save battery
 		locationManager.stopUpdatingLocation()
+		
+		print("Stopped updating location")
 		
 		// Get address from text field for searching
 		var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
@@ -430,6 +443,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.common.showAlert("Please Enter An Address", "")
 			return
 		}
+		
+		// Set default address to be used when app is re-opened
+		defaults.set(address, forKey: "defaultAddress")
 		
 		// Find address and go to select section view or schedule view
 		self.searchForSchedule(address)

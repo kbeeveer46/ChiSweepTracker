@@ -20,9 +20,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Set title using current app version (year)
 		self.title = "Sweep Schedule - \(self.common.constants.latestAppVersion())"
         
-        // Set default address to be used when app is re-opened
-        defaults.set(schedule.address, forKey: "defaultAddress")
-        
 		// Show add or remove favorite button
 		setAddRemoveFavoriteButton()
         
