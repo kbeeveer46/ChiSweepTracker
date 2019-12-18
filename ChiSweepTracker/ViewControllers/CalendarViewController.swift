@@ -132,11 +132,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch Direction{
         case 0:
-            return DaysInMonths[selectedMonthNumber] + NumberOfEmptyBox
+            return DaysInMonths[selectedMonthNumber - 1] + NumberOfEmptyBox
         case 1...:
-            return DaysInMonths[selectedMonthNumber] + NextNumberOfEmptyBox
+            return DaysInMonths[selectedMonthNumber - 1] + NextNumberOfEmptyBox
         case -1:
-            return DaysInMonths[selectedMonthNumber] + PreviousNumberOfEmptyBox
+            return DaysInMonths[selectedMonthNumber - 1] + PreviousNumberOfEmptyBox
         default:
 			return 0
             //fatalError()
@@ -274,6 +274,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 }
 
+// Capitalize first lett of month name
 extension String {
     func capitalizingFirstLetter() -> String {
         return prefix(1).capitalized + dropFirst()
