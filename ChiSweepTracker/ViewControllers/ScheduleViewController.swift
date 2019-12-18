@@ -10,28 +10,30 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     let generator = UISelectionFeedbackGenerator()
 	let common = Common()
     var schedule = ScheduleModel()
-    let defaults = UserDefaults.standard
     var addFavoriteButton = UIBarButtonItem()
     var removeFavoriteButton = UIBarButtonItem()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-		// Set title using current app version (year)
+		// Not everything I want loads in viewDidLoad so I put it in viewWillAppear
+    }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		
+		// Set title using latest app version (year)
 		self.title = "Sweep Schedule - \(self.common.constants.latestAppVersion())"
-        
+		
 		// Show add or remove favorite button
 		setAddRemoveFavoriteButton()
-        
-        // Load map with annotations and overlays
-        loadScheduleMap()
-        
+		
+		// Load map with annotations and overlays
+		loadScheduleMap()
+		
 		// Set required properties for schedule table view
-        self.scheduleTableView.dataSource = self
-        self.scheduleTableView.delegate = self
-        self.scheduleTableView.reloadData()
-
-    }
+		self.scheduleTableView.dataSource = self
+		self.scheduleTableView.delegate = self
+		self.scheduleTableView.reloadData()
+	}
     
 	// Method is called when user chooses yes to add a favorite
     @objc func addFavorite() {
@@ -72,6 +74,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
     }
     
+	// Method is called when user chooses yes to remove a favorite
     @objc func removeFavorite() {
         
 		// Add haptic feedback
@@ -86,13 +89,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
             // Clear favorites from defaults
-            self.defaults.set("", forKey: "favoriteAddress")
-            self.defaults.set("", forKey: "favoriteWard")
-            self.defaults.set("", forKey: "favoriteSection")
-            self.defaults.set(0.0, forKey: "favoriteLatitude")
-            self.defaults.set(0.0, forKey: "favoriteLongitude")
-            self.defaults.set(nil, forKey: "favoriteCoordinatesArray")
-			self.defaults.set(false, forKey: "notificationsToggled")
+            defaults.set("", forKey: "favoriteAddress")
+            defaults.set("", forKey: "favoriteWard")
+            defaults.set("", forKey: "favoriteSection")
+            defaults.set(0.0, forKey: "favoriteLatitude")
+            defaults.set(0.0, forKey: "favoriteLongitude")
+            defaults.set(nil, forKey: "favoriteCoordinatesArray")
+			defaults.set(false, forKey: "notificationsToggled")
             
             // Set right bar button to add now that a favorite has been removed
             self.navigationItem.rightBarButtonItem = self.addFavoriteButton
@@ -100,14 +103,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }))
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        //
         
     }
 	
 	func setAddRemoveFavoriteButton() {
 		
 		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
-		let favoriteAddress = defaults.string(forKey: "favoriteAddress") ?? ""
+		let favoriteAddress = self.common.constants.favoriteAddress() //defaults.string(forKey: "favoriteAddress") ?? ""
 		addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
 		removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
 		

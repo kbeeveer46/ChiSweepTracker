@@ -1,10 +1,12 @@
 import UIKit
 import CoreLocation
+import MapKit
 
-class SelectSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SelectSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MKMapViewDelegate {
 
     @IBOutlet weak var sectionTableView: UITableView!
-    
+	@IBOutlet weak var selectSectionMap: MKMapView!
+	
     var schedule = ScheduleModel()
     let common = Common()
     var sections: [String] = []
@@ -13,7 +15,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
 
         // Get all sections in ward so user can select a section before going to the schedule view
-        getSections()
+		self.getSections()
+		
+		self.loadSelectSectionMap()
             
     }
 	
@@ -53,7 +57,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					self.sectionTableView.reloadData()
 				}
 			case .error (let err):
-				
 				self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
 			}
 		}
@@ -117,6 +120,42 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
             }
         }
     }
+	
+	// Load map using use default values or a generic map of Chicago
+	func loadSelectSectionMap() {
+		
+		selectSectionMap.delegate = self
+		
+		let addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
+		let longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
+		let latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
+		
+		// If user has previously searched for an address use those defaults to load the map
+		// Load default map of the entire city of Chicago if no defaults are set
+		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
+			
+			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
+			
+			let annotation = MKPointAnnotation()
+			annotation.title = addressFromDefaults
+			annotation.coordinate = location.coordinate
+			
+			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+			let region = MKCoordinateRegion(center: location.coordinate, span: span)
+			
+			selectSectionMap.removeAnnotations(selectSectionMap.annotations)
+			selectSectionMap.addAnnotation(annotation)
+			selectSectionMap.setRegion(region, animated: true)
+		}
+		else {
+			
+			let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+			let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+			let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+			
+			selectSectionMap.setRegion(region, animated: true)
+		}
+	}
     
     // Section table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
