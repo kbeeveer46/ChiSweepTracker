@@ -196,8 +196,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		if !favoriteAddress.isEmpty {
 			self.pushNotificationsSwitch.isOn = notificationsToggled
 			self.pushNotificationsSwitch.isUserInteractionEnabled = true
-			self.onPicker.isUserInteractionEnabled = true
-			self.timePicker.isUserInteractionEnabled = true
+			self.onPicker.isUserInteractionEnabled = notificationsToggled
+			self.timePicker.isUserInteractionEnabled = notificationsToggled
 			
 			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
@@ -364,7 +364,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                     // User's notifications are disabled in settings. Prompt them to open settings
                                                     DispatchQueue.main.async {
                                                     
-                                                        let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and notifications back on?", preferredStyle: .alert)
+                                                        let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and turn notifications back on?", preferredStyle: .alert)
 
                                                         let settingsAction = UIAlertAction(title: "Yes", style: .default) { (_) -> Void in
 

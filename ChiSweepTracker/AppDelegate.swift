@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
         
-        print("Failed to register: \(error)")
+        print("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
     }
     
     // MARK: UISceneSession Lifecycle
