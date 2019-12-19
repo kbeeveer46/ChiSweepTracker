@@ -133,40 +133,52 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
-                                <rect key="frame" x="15" y="59" width="345" height="485"/>
+                                <rect key="frame" x="15" y="59" width="345" height="510"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-gL-upq">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-gL-upq">
                                         <rect key="frame" x="0.0" y="0.0" width="345" height="130"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="130" id="caP-lb-bSu"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
                                         <state key="normal">
                                             <string key="title">On weekdays, from 9 am to 2 pm, during street sweeping season (April through November) the Chicago Department of Streets and Sanitation uses mechanical street sweepers to remove debris and litter from streets, weather permitting.</string>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="qv8-r5-r5L">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="qv8-r5-r5L">
                                         <rect key="frame" x="0.0" y="145" width="345" height="160"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="160" id="UnY-L4-FDY"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
                                         <state key="normal">
                                             <string key="title">Bright orange temporary parking restrictions are posted at least 24 hours before sweeping service is scheduled to begin on any street to ensure curb-to-curb cleaning. Some arterial streets have permanently posted signs that specify a once-per-week period when parking is prohibited for street sweeping.</string>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="wp5-4g-axw">
-                                        <rect key="frame" x="0.0" y="320" width="345" height="165"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="wp5-4g-axw">
+                                        <rect key="frame" x="0.0" y="320" width="345" height="115"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="165" id="4II-Rd-5gN"/>
+                                            <constraint firstAttribute="height" constant="115" id="4II-Rd-5gN"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
                                         <state key="normal">
-                                            <string key="title">The City of Chicago will write a $60 street cleaning ticket if your vehicle is parked on a Chicago street scheduled for cleaning. Furthermore, tow trucks are authorized by the City of Chicago to tow your vehicle. An average towing fee is approximately $170 and $40 per day your vehicle stays in the towing lot.</string>
+                                            <string key="title">The City of Chicago will write a $60 street cleaning ticket if your vehicle is parked on a Chicago street scheduled for cleaning. Furthermore, tow trucks are authorized by the City of Chicago to tow your vehicle. </string>
                                         </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="uz5-ux-x00">
+                                        <rect key="frame" x="0.0" y="450" width="345" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="1b4-Uj-pvT"/>
+                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal" title="Click here to contact Sweep Tracker with any issues, comments, or suggestions."/>
+                                        <connections>
+                                            <action selector="contactButtonTapped:" destination="Rwe-fk-VdI" eventType="touchUpInside" id="aq7-kM-SZf"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -181,6 +193,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Info" image="info_circle" id="o9n-IO-1rG"/>
                     <connections>
+                        <outlet property="contactButton" destination="uz5-ux-x00" id="o1I-XO-7G8"/>
                         <outlet property="infoButton" destination="gxI-gL-upq" id="mu1-f0-rKX"/>
                         <outlet property="signsButton" destination="qv8-r5-r5L" id="mC5-0b-TXY"/>
                         <outlet property="ticketButton" destination="wp5-4g-axw" id="CPx-mn-YkR"/>
