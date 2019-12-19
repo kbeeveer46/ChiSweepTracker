@@ -7,6 +7,70 @@ class Common {
     
     let constants = Constants()
     
+	//MARK: Defaults
+	
+	func latestAppVersion() -> Int {
+		return defaults.integer(forKey: "latestAppVersion")
+	}
+	
+	func latestDatasetVersion() -> Int {
+		return defaults.integer(forKey: "latestDatasetVersion")
+	}
+	
+	func userDatasetVersion() -> Int {
+		return defaults.integer(forKey: "userDatasetVersion")
+	}
+	
+	func dates() -> String {
+		return defaults.string(forKey: "datesTitle") ?? ""
+	}
+	
+	func month_number() -> String {
+		return defaults.string(forKey: "monthNumberTitle") ?? ""
+	}
+	
+	func month_name() -> String {
+		return defaults.string(forKey: "monthNameTitle") ?? ""
+	}
+	
+	func coordinates() -> String {
+		return defaults.string(forKey: "coordinatesTitle") ?? ""
+	}
+	
+	func section() -> String {
+		return defaults.string(forKey: "sectionTitle") ?? ""
+	}
+	
+	func ward() -> String {
+		return defaults.string(forKey: "wardTitle") ?? ""
+	}
+	
+	func the_geom() -> String {
+		return defaults.string(forKey: "geomTitle") ?? ""
+	}
+	
+	func scheduleDataset() -> String {
+		return defaults.string(forKey: "scheduleDataset") ?? ""
+	}
+	
+	func wardDataset() -> String {
+		return defaults.string(forKey: "wardDataset") ?? ""
+	}
+	
+	func favoriteAddress() -> String {
+		return defaults.string(forKey: "favoriteAddress") ?? ""
+	}
+	
+	func notificationsToggled() -> Bool {
+		return defaults.bool(forKey: "notificationsToggled")
+	}
+	
+	func notificationsYear() -> Int {
+		return defaults.integer(forKey: "notificationsYear")
+	}
+	
+	//MARK: Constants
+	
     class Constants {
         
 		#if DEBUG
@@ -17,76 +81,19 @@ class Common {
 		let updatesDatabaseName = "Updates"
 		#endif
 	
-		func latestAppVersion() -> Int {
-			return defaults.integer(forKey: "latestAppVersion")
-		}
-		
-		func latestDatasetVersion() -> Int {
-			return defaults.integer(forKey: "latestDatasetVersion")
-		}
-		
-		func userDatasetVersion() -> Int {
-			return defaults.integer(forKey: "userDatasetVersion")
-		}
-		
-		func dates() -> String {
-			return defaults.string(forKey: "datesTitle") ?? ""
-		}
-		
-		func month_number() -> String {
-			return defaults.string(forKey: "monthNumberTitle") ?? ""
-		}
-		
-		func month_name() -> String {
-			return defaults.string(forKey: "monthNameTitle") ?? ""
-		}
-		
-		func coordinates() -> String {
-			return defaults.string(forKey: "coordinatesTitle") ?? ""
-		}
-		
-		func section() -> String {
-			return defaults.string(forKey: "sectionTitle") ?? ""
-		}
-		
-		func ward() -> String {
-			return defaults.string(forKey: "wardTitle") ?? ""
-		}
-		
-		func the_geom() -> String {
-			return defaults.string(forKey: "geomTitle") ?? ""
-		}
-		
-		func scheduleDataset() -> String {
-			return defaults.string(forKey: "scheduleDataset") ?? ""
-		}
-		
-		func wardDataset() -> String {
-			return defaults.string(forKey: "wardDataset") ?? ""
-		}
-        
-		func favoriteAddress() -> String {
-			return defaults.string(forKey: "favoriteAddress") ?? ""
-		}
-		
-		func notificationsToggled() -> Bool {
-			return defaults.bool(forKey: "notificationsToggled")
-		}
-		
-		func notificationsYear() -> Int {
-			return defaults.integer(forKey: "notificationsYear")
-		}
-		
-        let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
+		let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
         
-        // MARK: Alerts
-        
+		let streetSweepingBeginHour = 9
+		let streetSweepingEndHour = 2
+		
         let successTitle = "Success"
         let errorTitle = "Something went wrong..."
-        let notFound = "Could not find sweep area. Address must reside in Chicago."
+        let notFound = "Could not find sweep schedule. Address must reside in Chicago."
 
     }
+	
+	//MARK: Methods
 	
 	func getCityOfChicagoValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
 		
@@ -135,14 +142,14 @@ class Common {
 						defaults.set(sectionTitle, forKey: "sectionTitle")
 						defaults.set(wardTitle, forKey: "wardTitle")
 						
-						let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.constants.latestAppVersion()))
+						let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.latestAppVersion()))
 						
 						docRef.getDocument { (document, error) in
 							if let document = document, document.exists {
 								let data = document.data()
 								let latestDatasetVersion = data!["version"]!
 								print("Latest dataset version: \(latestDatasetVersion)")
-								print("User dataset version: \(self.constants.userDatasetVersion())")
+								print("User dataset version: \(self.userDatasetVersion())")
 								defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
 							} else {
 								print("Cannot get dataset version from Firebase")
@@ -159,8 +166,8 @@ class Common {
 	
 	func updateNotifications() {
 		
-		let favoriteAddress = self.constants.favoriteAddress()
-		let notificationsToggled = self.constants.notificationsToggled()
+		let favoriteAddress = self.favoriteAddress()
+		let notificationsToggled = self.notificationsToggled()
 		
 		if !favoriteAddress.isEmpty && notificationsToggled == true {
 			let notificationViewController = NotificationsViewController()
@@ -168,24 +175,8 @@ class Common {
 		}
 	}
 	
-//	@objc func openAppStore() {
-//		let appStoreId = "1490793712"
-//
-//		// Send user to app store to update app
-//		if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(self.constants.appStoreId)"),
-//			UIApplication.shared.canOpenURL(url){
-//			UIApplication.shared.open(url, options: [:]) { (opened) in
-//				if(opened){
-//					print("App Store Opened")
-//				}
-//			}
-//		} else {
-//			print("Can't Open URL on Simulator")
-//		}
-//	}
-	
 	// Alert with custom title and message
-	public func showAlert(_ title: String, _ message: String) {
+	func showAlert(_ title: String, _ message: String) {
 		
 		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		
@@ -204,7 +195,7 @@ class Common {
 	}
 	
 	// Style button with image and background color
-	public func styleButton(_ button: UIButton, _ image: String?,_ color: String?) {
+	func styleButton(_ button: UIButton, _ image: String?,_ color: String?) {
 		
 		button.backgroundColor = .systemBlue
 		if color != nil {
@@ -254,13 +245,7 @@ public extension UIButton {
     
     // Add image on left of button
     func leftImage(image: UIImage, name: String?) {
-        
-        if name == "finished" || name == "new" {
-            self.setImage(image, for: .normal)
-        } else {
-            self.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-        }
-        
+        self.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
         self.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: image.size.width)
     }
 }

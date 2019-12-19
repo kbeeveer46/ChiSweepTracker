@@ -120,11 +120,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
                 // Get ward and section JSON from City of Chicago
                 
-				print("searchForSchedule geom: \(self.common.constants.the_geom())")
-				print("searchForSchedule ward dataset: \(self.common.constants.wardDataset())")
+				print("searchForSchedule geom: \(self.common.the_geom())")
+				print("searchForSchedule ward dataset: \(self.common.wardDataset())")
 				
-                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset())
-                    .filter("intersects(\(self.common.constants.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.common.wardDataset())
+                    .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                 
                 wardQuery.get { res in
                     switch res {
@@ -132,10 +132,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.common.constants.ward()] as? String ?? ""
-                            let section = data[0][self.common.constants.section()] as? String ?? ""
-                            let the_geom = data[0][self.common.constants.the_geom()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.constants.coordinates()] as? NSMutableArray
+                            let ward = data[0][self.common.ward()] as? String ?? ""
+                            let section = data[0][self.common.section()] as? String ?? ""
+                            let the_geom = data[0][self.common.the_geom()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.coordinates()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
 							// Set default polygon array to be used on all the views
@@ -168,7 +168,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             // Get schedule JSON from City of Chicago
                             
-                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
+                            let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
                                 .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
@@ -181,9 +181,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.common.constants.month_name()] as? String ?? ""
-                                            let monthNumber = item[self.common.constants.month_number()] as? String ?? ""
-                                            let dates = item[self.common.constants.dates()] as? String ?? ""
+                                            let monthName = item[self.common.month_name()] as? String ?? ""
+                                            let monthNumber = item[self.common.month_number()] as? String ?? ""
+                                            let dates = item[self.common.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
                                             print("searchForSchedule month name: \(monthName)")

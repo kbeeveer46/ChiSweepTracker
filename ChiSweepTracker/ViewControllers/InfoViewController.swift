@@ -32,7 +32,7 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 			mail.setSubject("Chicago Sweep Tracker")
 			present(mail, animated: true)
 		} else {
-			self.common.showAlert(self.common.constants.errorTitle, "Unable to find email app")
+			self.common.showAlert(self.common.constants.errorTitle, "Unable to find email app to send message")
 		}
 	}
 	

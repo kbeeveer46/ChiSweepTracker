@@ -43,7 +43,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         favoriteMapView.delegate = self
         favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
-		let favoriteAddress = self.common.constants.favoriteAddress()
+		let favoriteAddress = self.common.favoriteAddress()
         let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
         let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
         let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
@@ -107,7 +107,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		// Add Yes button option
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
-			print("Deleted favorite address: \(self.common.constants.favoriteAddress())")
+			print("Deleted favorite address: \(self.common.favoriteAddress())")
 			
             defaults.set("", forKey: "favoriteAddress")
             defaults.set("", forKey: "favoriteWard")
@@ -178,7 +178,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
         
 		// Turn form on or off depending if they have notifications toggled on or off
-		let favoriteAddress = self.common.constants.favoriteAddress()
+		let favoriteAddress = self.common.favoriteAddress()
 		let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
 		
 		if !favoriteAddress.isEmpty {
@@ -230,7 +230,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	// useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
 	func getSchedule(_ registerForPushNotifications: Bool, _ useDefaultNotificationValues: Bool = false) {
         
-		self.schedule.address = self.common.constants.favoriteAddress()
+		self.schedule.address = self.common.favoriteAddress()
 		
         let geocoder = CLGeocoder()
         
@@ -257,8 +257,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
-                let wardQuery = wardClient.query(dataset: self.common.constants.wardDataset())
-                    .filter("intersects(\(self.common.constants.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.common.wardDataset())
+                    .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                 
                 wardQuery.get { res in
                     switch res {
@@ -266,10 +266,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.common.constants.ward()] as? String ?? ""
-                            let section = data[0][self.common.constants.section()] as? String ?? ""
-                            let the_geom = data[0][self.common.constants.the_geom()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.constants.coordinates()] as? NSMutableArray
+                            let ward = data[0][self.common.ward()] as? String ?? ""
+                            let section = data[0][self.common.section()] as? String ?? ""
+                            let the_geom = data[0][self.common.the_geom()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.coordinates()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             self.schedule.polygonCoordinates.removeAll()
@@ -294,8 +294,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                 self.schedule.section = defaults.string(forKey: "favoriteSection") ?? ""
                             }
                             
-                            let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
-								.filter("\(self.common.constants.ward()) = '\(ward)' AND \(self.common.constants.section()) = '\(self.schedule.section)'")
+                            let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
+								.filter("\(self.common.ward()) = '\(ward)' AND \(self.common.section()) = '\(self.schedule.section)'")
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -307,9 +307,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.common.constants.month_name()] as? String ?? ""
-                                            let monthNumber = item[self.common.constants.month_number()] as? String ?? ""
-                                            let dates = item[self.common.constants.dates()] as? String ?? ""
+                                            let monthName = item[self.common.month_name()] as? String ?? ""
+                                            let monthNumber = item[self.common.month_number()] as? String ?? ""
+                                            let dates = item[self.common.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             
 											let month = MonthModel()
@@ -395,7 +395,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                     
                                                         let center = UNUserNotificationCenter.current()
 														let calendar = Calendar.current
-														let currentYear = self.common.constants.latestAppVersion() 
+														let currentYear = self.common.latestAppVersion() 
 														let notificationWhenDefault = defaults.object(forKey: "notificationWhen") as? String ?? ""
 														let notificationHourDefault = defaults.integer(forKey: "notificationHour")
 														let notificationMinuteDefault = defaults.integer(forKey: "notificationMinute")
@@ -466,7 +466,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                         print("Error adding notification: \(error.localizedDescription)")
                                                                     }
                                                                     else {
-                                                                        print("Local notification added: \(date!.description(with: Locale.current))")
+                                                                        print("Notification added: \(date!.description(with: Locale.current))")
                                                                     }
                                                                 })
                                                             }
@@ -474,8 +474,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 														
 														// Set the last year when notifications were updated.
 														// Use the value to alert them if they loaded the app after a new year came out
-														let notificationsYear = self.common.constants.notificationsYear()
-														let latestAppVersion = self.common.constants.latestAppVersion()
+														let notificationsYear = self.common.notificationsYear()
+														let latestAppVersion = self.common.latestAppVersion()
 														if notificationsYear > 0 && notificationsYear < latestAppVersion {
 															self.common.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
 														}
@@ -483,8 +483,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 														
 														// Set the latest dataset version when notifications were updated
 														// Use the value to alert them if they loaded the app after Chicago changed the schedule
-														let latestDatasetVersion = self.common.constants.latestDatasetVersion()
-														let userDatasetVersion = self.common.constants.userDatasetVersion()
+														let latestDatasetVersion = self.common.latestDatasetVersion()
+														let userDatasetVersion = self.common.userDatasetVersion()
 														if userDatasetVersion > 0 && userDatasetVersion < latestDatasetVersion {
 															self.common.showAlert("Notifications Updated", "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
 														}
@@ -542,7 +542,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 				print(error.localizedDescription)
 			}
 			else {
-				print("Local test notification added: \(identifier)")
+				print("Test notification added: \(identifier)")
 			}
 		})
 		

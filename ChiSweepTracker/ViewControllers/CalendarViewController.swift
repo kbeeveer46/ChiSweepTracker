@@ -30,7 +30,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		currentYear = self.common.constants.latestAppVersion() //self.common.constants.appVersion
+		currentYear = self.common.latestAppVersion() //self.common.constants.appVersion
         
 		// Get selected month name from schedule view and set it as the title
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
@@ -183,7 +183,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         var endDateComponents = DateComponents()
                         endDateComponents.year = self.currentYear
                         endDateComponents.month = self.selectedMonthNumber
-                        endDateComponents.hour = 14
+                        endDateComponents.hour = 14 // 2 pm
                         endDateComponents.minute = 0
                         endDateComponents.day = Int(date!)
                         let endDate = Foundation.Calendar.current.date(from: endDateComponents)
@@ -191,23 +191,26 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         event.title = "Street Sweeping"
                         event.startDate = startDate
                         event.endDate = endDate
-                        event.notes = "Street sweeping in your neighborhood between 9 am and 2 pm."
+                        event.notes = "Street sweeping in your neighborhood between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
                         event.calendar = eventStore.defaultCalendarForNewEvents
-                        do {
+                        
+						do {
                             try eventStore.save(event, span: .thisEvent)
                         } catch let error as NSError {
-                            print("failed to save event with error : \(error)")
+							print("Failed to add event with error: \(error.localizedDescription)")
+							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to calendar")
                         }
                         
                         DispatchQueue.main.async {
-                            self.common.showAlert("'Street Sweeping' Event Added To Calendar", "")
+							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar")
                         }
                         
-                        print("Saved Event")
+                        print("Added event")
                     }
                     else{
                         if error != nil {
                             print("Error adding event to calendar: \(error!)")
+							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to your calendar")
                         }
                     }
                 }

@@ -18,7 +18,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
 		
 		// Set title using latest app version (year)
-		self.title = "Sweep Schedule - \(self.common.constants.latestAppVersion())"
+		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
 		// Show add or remove favorite button
 		setAddRemoveFavoriteButton()
@@ -41,7 +41,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         // Clear notifications created by previous favorite
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
+		
+		print("Deleted user's local notifications")
+		
         // Set user favorites
         defaults.set(schedule.address, forKey: "favoriteAddress")
         defaults.set(schedule.ward, forKey: "favoriteWard")
@@ -55,6 +57,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Toggled off notifications when user adds a new favorite
         defaults.set(false, forKey: "notificationsToggled")
+		
+		print("Added favorite address: \(self.common.favoriteAddress())")
         
         // Set right bar button to remove now that a favorite has been set
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
@@ -68,7 +72,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }))
         
         self.present(alert, animated: true, completion: nil)
-        
     }
     
 	// Method is called when user chooses yes to remove a favorite
@@ -82,17 +85,21 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
+			print("Deleted favorite address: \(self.common.favoriteAddress())")
+			
+			// Clear favorites from defaults
+			defaults.set("", forKey: "favoriteAddress")
+			defaults.set("", forKey: "favoriteWard")
+			defaults.set("", forKey: "favoriteSection")
+			defaults.set(0.0, forKey: "favoriteLatitude")
+			defaults.set(0.0, forKey: "favoriteLongitude")
+			defaults.set(nil, forKey: "favoriteCoordinatesArray")
+			defaults.set(false, forKey: "notificationsToggled")
+			
             // Remove any notifications set from their previous favorite
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            
-            // Clear favorites from defaults
-            defaults.set("", forKey: "favoriteAddress")
-            defaults.set("", forKey: "favoriteWard")
-            defaults.set("", forKey: "favoriteSection")
-            defaults.set(0.0, forKey: "favoriteLatitude")
-            defaults.set(0.0, forKey: "favoriteLongitude")
-            defaults.set(nil, forKey: "favoriteCoordinatesArray")
-			defaults.set(false, forKey: "notificationsToggled")
+			
+			print("Deleted user's local notifications")
             
             // Set right bar button to add now that a favorite has been removed
             self.navigationItem.rightBarButtonItem = self.addFavoriteButton
@@ -106,7 +113,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	func setAddRemoveFavoriteButton() {
 		
 		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
-		let favoriteAddress = self.common.constants.favoriteAddress() //defaults.string(forKey: "favoriteAddress") ?? ""
+		let favoriteAddress = self.common.favoriteAddress() //defaults.string(forKey: "favoriteAddress") ?? ""
 		addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
 		removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
 		

@@ -17,6 +17,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         // Get all sections in ward so user can select a section before going to the schedule view
 		self.getSections()
 		
+		// Load map with default lat and long from search
 		self.loadSelectSectionMap()
             
     }
@@ -31,8 +32,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 		
-		let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
-			.filter("\(self.common.constants.ward()) = '\(ward)'")
+		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
+			.filter("\(self.common.ward()) = '\(ward)'")
 		
 		scheduleQuery.get { res in
 			switch res {
@@ -42,7 +43,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					
 					for (_, item) in data.enumerated() {
 						
-						let section = item[self.common.constants.section()] as? String ?? ""
+						let section = item[self.common.section()] as? String ?? ""
 						
 						if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
 							
@@ -57,7 +58,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					self.sectionTableView.reloadData()
 				}
 			case .error (let err):
-				self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+				print("Could not get sections from ward: \((err as NSError).userInfo.debugDescription)")
+				self.common.showAlert(self.common.constants.errorTitle, "Unble to get sweep section data for ward \(ward) from the City of Chicago")
 			}
 		}
 	}
@@ -69,8 +71,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
-        let scheduleQuery = wardClient.query(dataset: self.common.constants.scheduleDataset())
-            .filter("\(self.common.constants.ward()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.constants.section()) = '\(self.schedule.section)'" : "") ")
+        let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
+            .filter("\(self.common.ward()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.section()) = '\(self.schedule.section)'" : "") ")
         
         scheduleQuery.get { res in
             switch res {
@@ -80,9 +82,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     for (_, item) in data.enumerated() {
                         
-                        let monthName = item[self.common.constants.month_name()] as? String ?? ""
-                        let monthNumber = item[self.common.constants.month_number()] as? String ?? ""
-                        let dates = item[self.common.constants.dates()] as? String ?? ""
+                        let monthName = item[self.common.month_name()] as? String ?? ""
+                        let monthNumber = item[self.common.month_number()] as? String ?? ""
+                        let dates = item[self.common.dates()] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",")
                         
                         print("getSchedule month name: \(monthName)")
@@ -116,12 +118,13 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
             
                 }
             case .error (let err):
-                self.common.showAlert(self.common.constants.errorTitle, (err as NSError).userInfo.debugDescription)
+				print("Unable to get schedule data from getSchedule with error: \((err as NSError).userInfo.debugDescription)")
+                self.common.showAlert(self.common.constants.errorTitle, "Unable to get sweep schedule data from the City of Chicago")
             }
         }
     }
 	
-	// Load map using use default values or a generic map of Chicago
+	// Load map using use default values from search
 	func loadSelectSectionMap() {
 		
 		selectSectionMap.delegate = self
@@ -130,8 +133,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		let longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
 		let latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
 		
-		// If user has previously searched for an address use those defaults to load the map
-		// Load default map of the entire city of Chicago if no defaults are set
 		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
 			
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
@@ -145,14 +146,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			
 			selectSectionMap.removeAnnotations(selectSectionMap.annotations)
 			selectSectionMap.addAnnotation(annotation)
-			selectSectionMap.setRegion(region, animated: true)
-		}
-		else {
-			
-			let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
-			let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
-			let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
-			
 			selectSectionMap.setRegion(region, animated: true)
 		}
 	}
