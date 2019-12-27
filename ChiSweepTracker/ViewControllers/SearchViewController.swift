@@ -112,7 +112,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
                 defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
                 
-				// Save default lat and long to be use when user re-opens app
                 print("searchForSchedule latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("searchForSchedule longitude: \(self.schedule.locationCoordinate.longitude)")
                 
@@ -125,6 +124,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				
                 let wardQuery = wardClient.query(dataset: self.common.wardDataset())
                     .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+					.limit(1)
                 
                 wardQuery.get { res in
                     switch res {
