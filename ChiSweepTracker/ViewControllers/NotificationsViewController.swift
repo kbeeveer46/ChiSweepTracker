@@ -521,13 +521,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		let center = UNUserNotificationCenter.current()
 		let calendar = Calendar.current
-		let notificationDate = calendar.date(byAdding: .minute, value: 1,to: Date())
+		let notificationDate = calendar.date(byAdding: .minute, value: 5,to: Date())
 		
 		let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.timeZone], from: notificationDate!)
 		let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
 		
 		let content = UNMutableNotificationContent()
-		content.title = "Sweep Alert For 7/9"
+		content.title = "Sweep Alert Test"
 		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
 		let soundName = UNNotificationSoundName("notification.m4r")
 		content.sound = UNNotificationSound(named: soundName)
