@@ -78,9 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
-		// This token is used for sending test messages in Firebase Cloud Messaging
-		
-        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+		let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
         let token = tokenParts.joined()
         
@@ -90,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
         
-        print("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
+        print("didFailToRegisterForRemoteNotificationsWithError: \(error)")
     }
     
     // MARK: UISceneSession Lifecycle
@@ -140,12 +138,12 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         
-        let userInfo = response.notification.request.content.userInfo
+        //let userInfo = response.notification.request.content.userInfo
         
         // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-            print("Message ID: \(messageID)")
-        }
+//        if let messageID = userInfo[gcmMessageIDKey] {
+//            print("Message ID: \(messageID)")
+//        }
         
         // Print full message.
         //print(userInfo)

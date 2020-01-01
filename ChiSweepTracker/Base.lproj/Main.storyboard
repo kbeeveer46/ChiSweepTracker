@@ -359,14 +359,14 @@
                                         </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-aH-Zkq">
-                                        <rect key="frame" x="0.0" y="253" width="375" height="83"/>
+                                        <rect key="frame" x="0.0" y="245.5" width="375" height="83"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYR-QR-hEk">
                                                 <rect key="frame" x="22" y="8" width="345" height="75"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="75" id="bDu-l0-4Dh"/>
                                                 </constraints>
-                                                <string key="text">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the schedule is released and when any changes are made to the schedule.</string>
+                                                <string key="text">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the schedule is released and when the City of Chicago makes any changes to the schedule.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -375,7 +375,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="0.0" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="354.5" width="375" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="339.5" width="375" height="33.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="xsQ-kE-RuZ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="33.5"/>
@@ -403,25 +403,25 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="406" width="375" height="75"/>
+                                        <rect key="frame" x="0.0" y="383.5" width="375" height="90"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-Tc-noJ">
-                                                <rect key="frame" x="20" y="0.0" width="25" height="75"/>
+                                                <rect key="frame" x="20" y="0.0" width="25" height="90"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="25" id="UGz-XO-IgL"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
-                                                <rect key="frame" x="55" y="0.0" width="115" height="75"/>
+                                                <rect key="frame" x="55" y="0.0" width="90" height="90"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <pickerView contentMode="right" translatesAutoresizingMaskIntoConstraints="NO" id="LL0-f2-4jY">
-                                                <rect key="frame" x="180" y="0.0" width="175" height="75"/>
+                                                <rect key="frame" x="155" y="0.0" width="200" height="90"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="75" id="HMA-bb-iMa"/>
-                                                    <constraint firstAttribute="width" constant="175" id="YLF-yC-clf"/>
+                                                    <constraint firstAttribute="height" constant="90" id="HMA-bb-iMa"/>
+                                                    <constraint firstAttribute="width" constant="200" id="YLF-yC-clf"/>
                                                 </constraints>
                                             </pickerView>
                                         </subviews>
@@ -434,25 +434,25 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="499" width="375" height="75"/>
+                                        <rect key="frame" x="0.0" y="484" width="375" height="90"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="ECS-GF-Q2t">
-                                                <rect key="frame" x="20" y="0.0" width="25" height="75"/>
+                                                <rect key="frame" x="20" y="0.0" width="25" height="90"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="25" id="aPh-sX-vh2"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
-                                                <rect key="frame" x="55" y="0.0" width="115" height="75"/>
+                                                <rect key="frame" x="55" y="0.0" width="90" height="90"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="luP-wW-qKV">
-                                                <rect key="frame" x="180" y="0.0" width="175" height="75"/>
+                                                <rect key="frame" x="155" y="0.0" width="200" height="90"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="75" id="FN2-OG-r3Y"/>
-                                                    <constraint firstAttribute="width" constant="175" id="ZLn-qs-lhp"/>
+                                                    <constraint firstAttribute="height" constant="90" id="FN2-OG-r3Y"/>
+                                                    <constraint firstAttribute="width" constant="200" id="ZLn-qs-lhp"/>
                                                 </constraints>
                                             </datePicker>
                                         </subviews>
