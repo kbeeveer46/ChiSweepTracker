@@ -16,35 +16,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        FirebaseApp.configure()
+		// Configure Firebase
+		FirebaseApp.configure()
 		
-		// Configure Firebase cloud messaging
-		// Remote messages only works on phyisical devices and not emulators
-		if #available(iOS 10.0, *) {
-			
-			// For iOS 10 display notification (sent via APNS)
-			UNUserNotificationCenter.current().delegate = self
-			
-			let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-			UNUserNotificationCenter.current().requestAuthorization(
-				options: authOptions,
-				completionHandler: {_, _ in })
-		}
-		else {
-			
-			let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-			application.registerUserNotificationSettings(settings)
-		}
-		
-        Messaging.messaging().delegate = self
-        application.registerForRemoteNotifications()
+		// Initialize Firebase Cloud Messaging
+		Messaging.messaging().delegate = self
+		UNUserNotificationCenter.current().delegate = self
+		application.registerForRemoteNotifications()
         
         return true
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
+		
 		// Clear badge number
         application.applicationIconBadgeNumber = 0
+		
 		// Get the latest schedule from Chicago and update notifications
 		self.common.getCityOfChicagoValuesFromDatabase(completion: { message in })
     }
