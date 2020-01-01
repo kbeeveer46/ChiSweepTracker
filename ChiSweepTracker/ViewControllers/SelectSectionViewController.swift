@@ -73,7 +73,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
         let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
             .filter("\(self.common.ward()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.section()) = '\(self.schedule.section)'" : "") ")
-			.limit(1)
 		
         scheduleQuery.get { res in
             switch res {

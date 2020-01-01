@@ -16,10 +16,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-		// Configure Firebase
         FirebaseApp.configure()
+		
+		// Configure Firebase cloud messaging
+		// Remote messages only works on phyisical devices and not emulators
+		if #available(iOS 10.0, *) {
+			
+			// For iOS 10 display notification (sent via APNS)
+			UNUserNotificationCenter.current().delegate = self
+			
+			let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+			UNUserNotificationCenter.current().requestAuthorization(
+				options: authOptions,
+				completionHandler: {_, _ in })
+		}
+		else {
+			
+			let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+			application.registerUserNotificationSettings(settings)
+		}
+		
         Messaging.messaging().delegate = self
-        UNUserNotificationCenter.current().delegate = self
         application.registerForRemoteNotifications()
         
         return true
@@ -75,11 +92,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
-        //let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+		// This token is used for sending test messages in Firebase Cloud Messaging
+		
+        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
-        //let token = tokenParts.joined()
+        let token = tokenParts.joined()
         
-        //print("Device Token: \(token)")
+        print("Device Token: \(token)")
     }
     
     func application(_ application: UIApplication,
@@ -156,13 +175,14 @@ extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging,
                    didReceiveRegistrationToken fcmToken: String) {
         
-        //print("Firebase registration token: \(fcmToken)")
+		// This callback is fired at each app startup and whenever a new token is generated.
+		
+        print("Firebase registration token: \(fcmToken)")
         
         let dataDict:[String: String] = ["token": fcmToken]
         
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-        // TODO: If necessary send token to application server.
-        // Note: This callback is fired at each app startup and whenever a new token is generated.
+  
     }
     
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {

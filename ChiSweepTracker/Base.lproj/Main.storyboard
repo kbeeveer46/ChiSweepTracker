@@ -330,7 +330,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lNZ-pf-Vzg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1876" y="81"/>
+            <point key="canvasLocation" x="1876" y="80.50974512743629"/>
         </scene>
         <!--Favorite Address-->
         <scene sceneID="XQY-3Z-30v">
@@ -521,8 +521,14 @@
                                     <constraint firstAttribute="height" constant="235" id="3NZ-tU-kmZ"/>
                                 </constraints>
                             </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on sweep day to add calendar event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSJ-e6-OHu">
+                                <rect key="frame" x="8" y="287" width="359" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                <rect key="frame" x="37.5" y="299" width="300" height="336.5"/>
+                                <rect key="frame" x="37.5" y="339" width="300" height="336.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="20.5"/>
@@ -631,11 +637,14 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="sSJ-e6-OHu" secondAttribute="trailing" constant="8" id="6K2-yJ-c0I"/>
+                            <constraint firstItem="sSJ-e6-OHu" firstAttribute="top" secondItem="ZFy-60-zB9" secondAttribute="bottom" constant="8" id="7e3-C1-j47"/>
                             <constraint firstItem="kdT-I5-zNl" firstAttribute="trailing" secondItem="ZFy-60-zB9" secondAttribute="trailing" id="Q2k-ZT-gxP"/>
-                            <constraint firstItem="441-DP-RR8" firstAttribute="top" secondItem="ZFy-60-zB9" secondAttribute="bottom" constant="20" id="RAd-gE-3MT"/>
+                            <constraint firstItem="441-DP-RR8" firstAttribute="top" secondItem="ZFy-60-zB9" secondAttribute="bottom" constant="60" id="RAd-gE-3MT"/>
                             <constraint firstItem="ZFy-60-zB9" firstAttribute="top" secondItem="kdT-I5-zNl" secondAttribute="top" id="TV8-sM-8Tg"/>
                             <constraint firstItem="ZFy-60-zB9" firstAttribute="leading" secondItem="kdT-I5-zNl" secondAttribute="leading" id="g9K-QD-i95"/>
                             <constraint firstItem="441-DP-RR8" firstAttribute="centerX" secondItem="izA-kT-NUo" secondAttribute="centerX" id="nbw-U0-h7V"/>
+                            <constraint firstItem="sSJ-e6-OHu" firstAttribute="leading" secondItem="kdT-I5-zNl" secondAttribute="leading" constant="8" id="rS4-bY-ogW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kdT-I5-zNl"/>
                     </view>

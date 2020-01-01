@@ -259,7 +259,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 
                 let wardQuery = wardClient.query(dataset: self.common.wardDataset())
                     .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
-                
+					.limit(1)
+				
                 wardQuery.get { res in
                     switch res {
                     case .dataset (let data):
