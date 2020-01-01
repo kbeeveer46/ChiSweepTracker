@@ -6,7 +6,6 @@ import MapKit
 class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
-	@IBOutlet weak var updateNotificationSwitch: UISwitch!
 	@IBOutlet weak var onPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
@@ -118,7 +117,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             defaults.set(nil, forKey: "favoriteCoordinatesArray")
             defaults.set(false, forKey: "notificationsToggled")
             
+			// Delete future local iOS notifications
 			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+			
+			// Unregister from Firebase Cloud Messaging notifications
+			UIApplication.shared.unregisterForRemoteNotifications()
             
             print("Deleted user's local notifications")
             
@@ -177,11 +180,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         self.timePicker.date = date!
         
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
-        
-		// Turn form on or off depending if they have notifications toggled on or off
+
 		let favoriteAddress = self.common.favoriteAddress()
 		let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
 		
+		// Disable form depending if they have notifications toggled on or off
 		if !favoriteAddress.isEmpty {
 			
 			// Get schedule so we have the most update to date version
@@ -552,54 +555,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 
 	//MARK: Actions
 	
-	@IBAction func updateNotificationsTapped(_ sender: Any) {
-	
-		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-			granted, error in
-			
-			print("requestAuthorization granted: \(granted)")
-			
-			if granted == false {
-				
-				// User's notifications are disabled in settings. Prompt them to open settings
-				DispatchQueue.main.async {
-					
-					let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and turn notifications back on?", preferredStyle: .alert)
-					
-					let settingsAction = UIAlertAction(title: "Yes", style: .default) { (_) -> Void in
-						
-						guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-							return
-						}
-						
-						if UIApplication.shared.canOpenURL(settingsUrl) {
-							UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-								print("User opened the settings page")
-							})
-						}
-					}
-					alertController.addAction(settingsAction)
-					
-					let cancelAction = UIAlertAction(title: "No", style: .cancel, handler:{ action in
-						
-						print("User declined to go to settings page")
-						
-						self.updateNotificationSwitch.isOn = false
-						defaults.set(false, forKey: "updateNotificationsToggled")
-						
-					})
-					alertController.addAction(cancelAction)
-					
-					self.present(alertController, animated: true, completion: nil)
-				}
-			}
-			else {
-				
-				
-			}
-		}
-	}
-	
 	// Push notifications toggle switch event
 	@IBAction func pushNotificationsTapped(_ sender: Any) {
 		
@@ -614,6 +569,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			
 			self.getSchedule(true)
 			
+			// Register for Firebase Cloud Messaging notifications
+			UIApplication.shared.registerForRemoteNotifications()
+			
 		}
 		else {
 			
@@ -622,7 +580,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			self.timePicker.isUserInteractionEnabled = false
 			self.onPicker.isUserInteractionEnabled = false
 			
+			// Delete all location iOS notifications
 			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+			
+			// Unregister from Firebase Cloud Messaging notifications
+			UIApplication.shared.unregisterForRemoteNotifications()
 			
 			print("Deleted user's local notifications")
 			

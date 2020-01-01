@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Initialize Firebase Cloud Messaging
 		Messaging.messaging().delegate = self
 		UNUserNotificationCenter.current().delegate = self
-		application.registerForRemoteNotifications()
         
         return true
     }

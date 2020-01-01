@@ -42,6 +42,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         // Clear notifications created by previous favorite
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 		
+		// Unregister from Firebase Cloud Messaging notifications
+		UIApplication.shared.unregisterForRemoteNotifications()
+		
 		print("Deleted user's local notifications")
 		
         // Set user favorites
@@ -98,6 +101,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			
             // Remove any notifications set from their previous favorite
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+			
+			// Unregister from Firebase Cloud Messaging notifications
+			UIApplication.shared.unregisterForRemoteNotifications()
 			
 			print("Deleted user's local notifications")
             
