@@ -6,10 +6,11 @@ import MapKit
 class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
-    @IBOutlet weak var onPicker: UIPickerView!
+	@IBOutlet weak var updateNotificationSwitch: UISwitch!
+	@IBOutlet weak var onPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
-    
+	
     let common = Common()
     var schedule = ScheduleModel()
     //var favoriteAddress = ""
@@ -550,6 +551,54 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	}
 
 	//MARK: Actions
+	
+	@IBAction func updateNotificationsTapped(_ sender: Any) {
+	
+		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+			granted, error in
+			
+			print("requestAuthorization granted: \(granted)")
+			
+			if granted == false {
+				
+				// User's notifications are disabled in settings. Prompt them to open settings
+				DispatchQueue.main.async {
+					
+					let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and turn notifications back on?", preferredStyle: .alert)
+					
+					let settingsAction = UIAlertAction(title: "Yes", style: .default) { (_) -> Void in
+						
+						guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+							return
+						}
+						
+						if UIApplication.shared.canOpenURL(settingsUrl) {
+							UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+								print("User opened the settings page")
+							})
+						}
+					}
+					alertController.addAction(settingsAction)
+					
+					let cancelAction = UIAlertAction(title: "No", style: .cancel, handler:{ action in
+						
+						print("User declined to go to settings page")
+						
+						self.updateNotificationSwitch.isOn = false
+						defaults.set(false, forKey: "updateNotificationsToggled")
+						
+					})
+					alertController.addAction(cancelAction)
+					
+					self.present(alertController, animated: true, completion: nil)
+				}
+			}
+			else {
+				
+				
+			}
+		}
+	}
 	
 	// Push notifications toggle switch event
 	@IBAction func pushNotificationsTapped(_ sender: Any) {
