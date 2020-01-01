@@ -359,7 +359,7 @@
                                         </constraints>
                                     </mapView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Avoid tickets by enabling schedule notifications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYR-QR-hEk">
-                                        <rect key="frame" x="0.0" y="255" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="251.5" width="375" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="bDu-l0-4Dh"/>
                                         </constraints>
@@ -368,7 +368,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="305" width="375" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="298.5" width="375" height="33.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="sAv-uu-BdV">
                                                 <rect key="frame" x="20" y="0.0" width="40" height="33.5"/>
@@ -377,7 +377,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Schedule Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
-                                                <rect key="frame" x="70" y="2" width="226" height="30"/>
+                                                <rect key="frame" x="70" y="1.5" width="226" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="Fhg-bs-9kM"/>
                                                 </constraints>
@@ -386,7 +386,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="306" y="1.5" width="51" height="31"/>
+                                                <rect key="frame" x="306" y="1" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -396,7 +396,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="358.5" width="375" height="75"/>
+                                        <rect key="frame" x="0.0" y="348.5" width="375" height="75"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="OGp-lR-O5o">
                                                 <rect key="frame" x="20" y="0.0" width="40" height="75"/>
@@ -427,7 +427,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="453.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="440" width="375" height="50"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="CEG-gv-2yQ">
                                                 <rect key="frame" x="20" y="0.0" width="40" height="50"/>
@@ -456,11 +456,12 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Be alerted for new or updated schedules by enabling update notifications" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ojr-vt-cLd">
-                                        <rect key="frame" x="0.0" y="523.5" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="507" width="375" height="50"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="VHP-dm-hdM"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="VHP-dm-hdM"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
