@@ -22,11 +22,17 @@
                                     <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="294" width="355" height="161"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
+                                <rect key="frame" x="10" y="284" width="355" height="169.5"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use one of the following options to find your sweep schedule" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jad-zx-64x">
+                                        <rect key="frame" x="0.0" y="0.0" width="355" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
-                                        <rect key="frame" x="0.0" y="0.0" width="355" height="32"/>
+                                        <rect key="frame" x="0.0" y="22.5" width="355" height="32"/>
                                         <segments>
                                             <segment title="Drop Pin"/>
                                             <segment title="Use My Location"/>
@@ -37,7 +43,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <textField opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123 Main St. Chicago, IL" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iz5-fA-FV8">
-                                        <rect key="frame" x="0.0" y="46" width="355" height="40"/>
+                                        <rect key="frame" x="0.0" y="61.5" width="355" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="yRh-DP-wdK"/>
                                         </constraints>
@@ -45,7 +51,7 @@
                                         <textInputTraits key="textInputTraits" textContentType="street-address"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
-                                        <rect key="frame" x="0.0" y="101" width="355" height="60"/>
+                                        <rect key="frame" x="0.0" y="109.5" width="355" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
@@ -56,7 +62,7 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
-                                        <rect key="frame" x="0.0" y="161" width="355" height="70"/>
+                                        <rect key="frame" x="0.0" y="169.5" width="355" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
@@ -76,7 +82,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a0x-bJ-ZY7" secondAttribute="trailing" constant="10" id="OkW-un-m0k"/>
                             <constraint firstItem="l5K-mm-59I" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fdT-W4-34u"/>
                             <constraint firstItem="l5K-mm-59I" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="mox-SX-2uH"/>
-                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="top" secondItem="l5K-mm-59I" secondAttribute="bottom" constant="15" id="sS0-5g-cEm"/>
+                            <constraint firstItem="a0x-bJ-ZY7" firstAttribute="top" secondItem="l5K-mm-59I" secondAttribute="bottom" constant="5" id="sS0-5g-cEm"/>
                             <constraint firstItem="l5K-mm-59I" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uBz-cO-qw5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -95,7 +101,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1169" y="80"/>
+            <point key="canvasLocation" x="1168.8" y="79.610194902548727"/>
         </scene>
         <!--Info-->
         <scene sceneID="4ei-Ma-8ci">
@@ -350,7 +356,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="44" width="375" height="574"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
@@ -359,7 +365,7 @@
                                         </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-aH-Zkq">
-                                        <rect key="frame" x="0.0" y="245.5" width="375" height="83"/>
+                                        <rect key="frame" x="0.0" y="258" width="375" height="83"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYR-QR-hEk">
                                                 <rect key="frame" x="22" y="8" width="345" height="75"/>
@@ -375,7 +381,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="0.0" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="339.5" width="375" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="364" width="375" height="33.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="xsQ-kE-RuZ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="33.5"/>
@@ -403,7 +409,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="383.5" width="375" height="90"/>
+                                        <rect key="frame" x="0.0" y="420" width="375" height="90"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-Tc-noJ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="90"/>
@@ -434,7 +440,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="484" width="375" height="90"/>
+                                        <rect key="frame" x="0.0" y="533" width="375" height="90"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="ECS-GF-Q2t">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="90"/>
@@ -693,7 +699,7 @@
         <image name="time" width="33.5" height="33.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="lRu-XB-8Bj"/>
-        <segue reference="maw-XV-A0s"/>
+        <segue reference="eEQ-YS-Bae"/>
+        <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
 </document>
