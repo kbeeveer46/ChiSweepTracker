@@ -10,6 +10,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
 	
+	let toast = Toast()
     let common = Common()
     var schedule = ScheduleModel()
     //var favoriteAddress = ""
@@ -88,10 +89,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
             favoriteMapView.setRegion(region, animated: true)
             
-            self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
-            
         }
-        
     }
     
     @objc func removeFavorite() {
@@ -102,7 +100,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         generator.selectionChanged()
         
 		// Alert user if they want to delete their favorite because they will no longer receive push notifications
-        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
         
 		// Add Yes button option
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -148,6 +146,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
+		toast.toast("Notification time updated")
+		
 		// Save form values to defaults
         saveDefaultNotificationValues()
         
@@ -200,6 +200,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
 		}
 		else {
+			
+			self.tabBarController?.navigationItem.title = ""
+			 self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
+			
 			self.pushNotificationsSwitch.isOn = false
 			self.pushNotificationsSwitch.isUserInteractionEnabled = false
 			self.onPicker.isUserInteractionEnabled = false
@@ -560,6 +564,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		if pushNotificationsSwitch.isOn == true {
 			
+			toast.toast("Notifications enabled")
+			
 			defaults.set(true, forKey: "notificationsToggled")
 			
 			self.timePicker.isUserInteractionEnabled = true
@@ -574,6 +580,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			
 		}
 		else {
+			
+			toast.toast("Notifications disabled")
 			
 			defaults.set(false, forKey: "notificationsToggled")
 			
@@ -602,6 +610,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
+		toast.toast("Notification day updated")
+		
 		// Save default notification form values when picker is changed
         saveDefaultNotificationValues()
         

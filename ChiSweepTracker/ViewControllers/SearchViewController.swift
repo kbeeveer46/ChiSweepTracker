@@ -14,6 +14,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
     let common = Common()
+	let toast = Toast()
     
     var addressFromTextField = ""
     var addressFromCoordinates = ""
@@ -435,7 +436,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Alert user if they didn't enter an address
 		if address.isEmpty {
-			self.common.showAlert("Please Enter An Address", "")
+			//self.common.showAlert("Please Enter An Address", "")
+			toast.toast("Address cannot be blank")
 			return
 		}
 		

@@ -9,6 +9,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
 	let common = Common()
 	var schedule = ScheduleModel()
+	let toast = Toast()
 	
 	var currentYear = 0
     var selectedMonthNumber = 0
@@ -159,7 +160,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		// Only allow user to create ane event on a sweep day
         if cell.Circle.isHidden == false {
         
-            let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)", preferredStyle: .alert)
+			let alert = UIAlertController(title: "Add calendar event on \(self.selectedMonthNumber)/\(date!)?", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
                 let eventStore = EKEventStore()
@@ -202,7 +203,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         }
                         
                         DispatchQueue.main.async {
-							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar")
+							//self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar")
+							self.toast.toast("Event was added to your calendar on \(self.selectedMonthNumber)/\(date!)")
                         }
                         
                         print("Added event")

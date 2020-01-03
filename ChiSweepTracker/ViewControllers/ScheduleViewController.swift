@@ -67,7 +67,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
         // Alert the user that their favorite has been set and prompt them to enable notifications
-        let alert = UIAlertController(title: "Favorite Saved", message: "Do you want to enable push notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Favorite Saved", message: "Do you want to enable notifications?", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			// Segue to notifications view if they select yes
@@ -85,7 +85,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.selectionChanged()
         
         // Prompt the user  if they want to delete their favorite because they will no longer receive notifications
-        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive push notifications", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
 			print("Deleted favorite address: \(self.common.favoriteAddress())")

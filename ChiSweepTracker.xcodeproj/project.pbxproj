@@ -24,6 +24,7 @@
 		FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */; };
 		FA6AFEE323A1E11D00F7E177 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */; };
 		FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */; };
+		FA78E2CA23BF91DA00537C45 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA78E2C923BF91DA00537C45 /* Toast.swift */; };
 		FA87EFD723AABBF10061DDBC /* logo-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD623AABBF10061DDBC /* logo-1024.png */; };
 		FA87EFD923AAEB960061DDBC /* notification.m4r in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD823AAEB960061DDBC /* notification.m4r */; };
 		FAD25E2923A325F5004FD3B9 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */; };
@@ -52,6 +53,7 @@
 		FA29464D23985FE600A24FFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
+		FA78E2C923BF91DA00537C45 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		FA87EFD623AABBF10061DDBC /* logo-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-1024.png"; sourceTree = "<group>"; };
 		FA87EFD823AAEB960061DDBC /* notification.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = notification.m4r; sourceTree = "<group>"; };
 		FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			children = (
 				FA0EC357239B263200DD3127 /* Common.swift */,
 				FA184FAB23987BE900AB2FF6 /* SODAClient.swift */,
+				FA78E2C923BF91DA00537C45 /* Toast.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA78E2CA23BF91DA00537C45 /* Toast.swift in Sources */,
 				FA6AFEE323A1E11D00F7E177 /* CalendarViewController.swift in Sources */,
 				FA184FA32398709100AB2FF6 /* NotificationsViewController.swift in Sources */,
 				FA184FB22399581C00AB2FF6 /* SelectSectionViewController.swift in Sources */,
@@ -466,7 +470,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -490,7 +494,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
