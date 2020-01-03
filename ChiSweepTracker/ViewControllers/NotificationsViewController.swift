@@ -201,7 +201,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 		else {
 			
-			//self.tabBarController?.navigationItem.title = ""
 			self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
 			
 			self.pushNotificationsSwitch.isOn = false
@@ -565,7 +564,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		if pushNotificationsSwitch.isOn == true {
 			
 			// Show enabled toast
-			toast.toast("Notifications enabled")
+			//toast.toast("Notifications enabled")
 			
 			// Save toggle setting to defaults
 			defaults.set(true, forKey: "notificationsToggled")
@@ -587,7 +586,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		else {
 			
 			// Show disabled toast
-			toast.toast("Notifications disabled")
+			//toast.toast("Notifications disabled")
 			
 			// SAve toggle setting to defaults
 			defaults.set(false, forKey: "notificationsToggled")
