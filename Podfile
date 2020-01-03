@@ -12,5 +12,7 @@ target 'ChiSweepTracker' do
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
+	
+	pod 'IQKeyboardManagerSwift'
 
 end

@@ -2,6 +2,7 @@ import UIKit
 import UserNotifications
 import Firebase
 import FirebaseMessaging
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Initialize Firebase Cloud Messaging
 		Messaging.messaging().delegate = self
 		UNUserNotificationCenter.current().delegate = self
+		
+		 IQKeyboardManager.shared.enable = true
         
         return true
     }

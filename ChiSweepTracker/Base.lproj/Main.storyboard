@@ -22,8 +22,8 @@
                                     <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="284" width="355" height="169.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
+                                <rect key="frame" x="10" y="284" width="355" height="205.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use one of the following options to find your sweep schedule" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jad-zx-64x">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="14.5"/>
@@ -32,7 +32,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
-                                        <rect key="frame" x="0.0" y="22.5" width="355" height="32"/>
+                                        <rect key="frame" x="0.0" y="34.5" width="355" height="32"/>
                                         <segments>
                                             <segment title="Drop Pin"/>
                                             <segment title="Use My Location"/>
@@ -43,7 +43,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <textField opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="123 Main St. Chicago, IL" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iz5-fA-FV8">
-                                        <rect key="frame" x="0.0" y="61.5" width="355" height="40"/>
+                                        <rect key="frame" x="0.0" y="85.5" width="355" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="yRh-DP-wdK"/>
                                         </constraints>
@@ -51,7 +51,7 @@
                                         <textInputTraits key="textInputTraits" textContentType="street-address"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
-                                        <rect key="frame" x="0.0" y="109.5" width="355" height="60"/>
+                                        <rect key="frame" x="0.0" y="145.5" width="355" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
@@ -62,7 +62,7 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
-                                        <rect key="frame" x="0.0" y="169.5" width="355" height="70"/>
+                                        <rect key="frame" x="0.0" y="205.5" width="355" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
@@ -372,7 +372,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="75" id="bDu-l0-4Dh"/>
                                                 </constraints>
-                                                <string key="text">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the schedule is released and when the City of Chicago makes any changes to the schedule.</string>
+                                                <string key="text">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the new schedule is released and when any changes are made to the schedule.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>

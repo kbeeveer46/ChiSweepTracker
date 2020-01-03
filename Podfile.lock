@@ -275,6 +275,7 @@ PODS:
     - gRPC-Core/Interface (= 1.21.0)
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.21.0)
+  - IQKeyboardManagerSwift (6.5.4)
   - leveldb-library (1.22)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
@@ -291,6 +292,7 @@ DEPENDENCIES:
   - Firebase/Firestore
   - Firebase/Messaging
   - FirebaseFirestoreSwift
+  - IQKeyboardManagerSwift
 
 SPEC REPOS:
   trunk:
@@ -315,6 +317,7 @@ SPEC REPOS:
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
+    - IQKeyboardManagerSwift
     - leveldb-library
     - nanopb
     - Protobuf
@@ -341,10 +344,11 @@ SPEC CHECKSUMS:
   GoogleUtilities: 29bd0d8f850efbd28cff6d99e8b7da1f8d236bcf
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
+  IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
 
-PODFILE CHECKSUM: 6507848f942b2404d75f195a6fe444aa07f8387e
+PODFILE CHECKSUM: 721d9485449f4f0bd8df0a360ad3f2c3e529edb2
 
 COCOAPODS: 1.8.4
