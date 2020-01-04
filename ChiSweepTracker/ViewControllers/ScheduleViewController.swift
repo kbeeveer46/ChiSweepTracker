@@ -159,8 +159,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+		// Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "scheduleTableCell", for: indexPath)
-        let monthNameLabel = cell.viewWithTag(1) as! UILabel
+        
+		// Get month name and days label from cell
+		let monthNameLabel = cell.viewWithTag(1) as! UILabel
         let daysLabel = cell.viewWithTag(2) as! UILabel
 
         // Put dates in one string and add padding between days
@@ -169,18 +172,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             dates = dates + String(date.date).padding(toLength: 5, withPad: " ", startingAt: 0)
         }
 
+		// Set month and days label text
         monthNameLabel.text = schedule.months[indexPath.row].name
         daysLabel.text = dates
-
-        // TODO: Style past months in grey color?
-//        let currentMonthNumber = Calendar.current.component(.month, from: Foundation.Date())
-//
-//        if currentMonthNumber > schedule.months[indexPath.row].number {
-//
-//            monthNameLabel.textColor = .lightGray
-//            daysLabel.textColor = .lightGray
-//
-//        }
 
         return cell
         
@@ -191,19 +185,25 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         scheduleMapView.delegate = self
         
+		// Create polygons
         let coordinates = self.schedule.polygonCoordinates
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
+		// Create annotation
         let annotation = MKPointAnnotation()
         annotation.title = "\(self.schedule.address)"
         annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
         annotation.coordinate = self.schedule.locationCoordinate
         
+		// Create span and region
         let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
         let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
         
+		// Set region
         scheduleMapView.setRegion(region, animated: true)
-        scheduleMapView.removeOverlays(scheduleMapView.overlays)
+        
+		// Add polygons to map
+		scheduleMapView.removeOverlays(scheduleMapView.overlays)
         scheduleMapView.addOverlay(polygon)
         scheduleMapView.addAnnotation(annotation)
         

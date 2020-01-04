@@ -9,6 +9,8 @@ class Common {
     
 	//MARK: Defaults
 	
+	// Shared
+	
 	func latestAppVersion() -> Int {
 		return defaults.integer(forKey: "latestAppVersion")
 	}
@@ -20,6 +22,8 @@ class Common {
 	func userDatasetVersion() -> Int {
 		return defaults.integer(forKey: "userDatasetVersion")
 	}
+	
+	// SODA SDK
 	
 	func dates() -> String {
 		return defaults.string(forKey: "datesTitle") ?? ""
@@ -57,8 +61,30 @@ class Common {
 		return defaults.string(forKey: "wardDataset") ?? ""
 	}
 	
+	// Favorites
+	
 	func favoriteAddress() -> String {
 		return defaults.string(forKey: "favoriteAddress") ?? ""
+	}
+	
+	func favoriteWard() -> String {
+		return defaults.string(forKey: "favoriteWard") ?? ""
+	}
+	
+	func favoriteSection() -> String {
+		return defaults.string(forKey: "favoriteSection") ?? ""
+	}
+	
+	func favoriteLatitude() -> Double {
+		return defaults.double(forKey: "favoriteLatitude")
+	}
+	
+	func favoriteLongitude() -> Double {
+		return defaults.double(forKey: "favoriteLongitude")
+	}
+	
+	func favoriteCoordinatesArray() -> [[NSArray]] {
+		return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()
 	}
 	
 	func notificationsToggled() -> Bool {

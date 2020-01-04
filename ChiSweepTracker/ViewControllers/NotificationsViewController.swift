@@ -13,7 +13,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	let toast = Toast()
     let common = Common()
     var schedule = ScheduleModel()
-    //var favoriteAddress = ""
     let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	
 	// MARK: Methods
@@ -42,48 +41,59 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     func loadFavoriteMap() {
         
         favoriteMapView.delegate = self
-        favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
+		// Get favorite values from defaults
 		let favoriteAddress = self.common.favoriteAddress()
-        let favoriteWard = defaults.string(forKey: "favoriteWard") ?? ""
-        let favoriteSection = defaults.string(forKey: "favoriteSection") ?? ""
-        let favoriteLongitude = defaults.double(forKey: "favoriteLongitude")
-        let favoriteLatitude = defaults.double(forKey: "favoriteLatitude")
-        let favoriteCoordinatesArray = defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]]
+		let favoriteWard = self.common.favoriteWard()
+		let favoriteSection = self.common.favoriteSection()
+		let favoriteLongitude = self.common.favoriteLongitude()
+		let favoriteLatitude = self.common.favoriteLatitude()
+		let favoriteCoordinatesArray = self.common.favoriteCoordinatesArray()
         var mapOverlayCoordinates = [CLLocationCoordinate2D]()
         
         if favoriteLongitude != 0 && favoriteLatitude != 0 {
             
-            if favoriteCoordinatesArray != nil {
-                for(_, coordinate) in favoriteCoordinatesArray!.enumerated() {
-                    for item in coordinate {
-                        var coordinate = CLLocationCoordinate2D()
-                        coordinate.longitude = item[0] as? Double ?? 0
-                        coordinate.latitude = item[1] as? Double ?? 0
-                        mapOverlayCoordinates.append(coordinate)
-                    }
-                }
-                let polygon = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
-                favoriteMapView.removeOverlays(favoriteMapView.overlays)
-                favoriteMapView.addOverlay(polygon)
-            }
+			// Loop through coordinates and add them to list
+			if favoriteCoordinatesArray.count > 0 {
+				for(_, coordinate) in favoriteCoordinatesArray.enumerated() {
+					for item in coordinate {
+						var coordinate = CLLocationCoordinate2D()
+						coordinate.longitude = item[0] as? Double ?? 0
+						coordinate.latitude = item[1] as? Double ?? 0
+						mapOverlayCoordinates.append(coordinate)
+					}
+				}
+			}
+			
+			// Create polygons and add them to map
+			let polygon = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
+			favoriteMapView.removeOverlays(favoriteMapView.overlays)
+			favoriteMapView.addOverlay(polygon)
 
+			// Create location using lat and long
             let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
 
+			// Create annotation using location coordinate
             let annotation = MKPointAnnotation()
             annotation.title = favoriteAddress
             annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
             annotation.coordinate = location.coordinate
 
+			// Create span and region
             let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             
+			// Add annoation
+			favoriteMapView.removeAnnotations(favoriteMapView.annotations)
             favoriteMapView.addAnnotation(annotation)
+			
+			// Set region
             favoriteMapView.setRegion(region, animated: true)
 
         }
         else {
             
+			// If there is no favorite then set the map to Chicago
             let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
             let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
             let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
@@ -146,6 +156,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
+		// Show toast message
 		toast.toast("Notification time updated")
 		
 		// Save form values to defaults

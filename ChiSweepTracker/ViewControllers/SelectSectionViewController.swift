@@ -26,6 +26,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		// Use Chicago data portal API to get sweep sections from user's ward
 		
+		// Clear sections from schedule so there are no duplicates
 		sections.removeAll()
 		
 		let ward = self.schedule.ward
@@ -41,6 +42,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 				
 				if data.count > 0 {
 					
+					// Loop through json data and add sections
 					for (_, item) in data.enumerated() {
 						
 						let section = item[self.common.section()] as? String ?? ""
@@ -53,6 +55,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 						}
 					}
 					
+					// Populate table view with sections
 					self.sectionTableView.dataSource = self
 					self.sectionTableView.delegate = self
 					self.sectionTableView.reloadData()
@@ -67,6 +70,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 	// Get schedule after user selects a section
     func getSchedule() {
         
+		// Clear months from schedule to make sure there aren't duplicates
         schedule.months.removeAll()
         
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
@@ -80,8 +84,10 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                 
                 if data.count > 0 {
                     
+					// Loop through months
                     for (_, item) in data.enumerated() {
                         
+						// Get values from json data
                         let monthName = item[self.common.month_name()] as? String ?? ""
                         let monthNumber = item[self.common.month_number()] as? String ?? ""
                         let dates = item[self.common.dates()] as? String ?? ""
@@ -94,6 +100,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         month.name = monthName
                         month.number = monthNumber
                         
+						// Loop through dates and add them to month
                         for day in datesArray {
                             
                             print("getSchedule date: \(day)")
@@ -109,6 +116,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                             }
                         }
                         
+						// Add month to schedule
                         self.schedule.months.append(month)
                         
                     }
@@ -129,36 +137,49 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		selectSectionMap.delegate = self
 		
+		// Get default values
 		let addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
 		let longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
 		let latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
 		
 		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
 			
+			// Create location from default lat and long
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
 			
+			// Create annotation from location coordinate
 			let annotation = MKPointAnnotation()
 			annotation.title = addressFromDefaults
 			annotation.coordinate = location.coordinate
 			
+			// Create span and region
 			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
 			let region = MKCoordinateRegion(center: location.coordinate, span: span)
 			
+			// Add annotation
 			selectSectionMap.removeAnnotations(selectSectionMap.annotations)
 			selectSectionMap.addAnnotation(annotation)
+			
+			// Set region
 			selectSectionMap.setRegion(region, animated: true)
 		}
 	}
     
     // Section table view methods
+	
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+		// Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTableCell", for: indexPath)
+		
+		// Get label from cell
         let sectionLabel = cell.viewWithTag(1) as! UILabel
+		
+		// Set label text with ward and section number
         sectionLabel.text = "Ward \(schedule.ward) - Section \(self.sections[indexPath.row])"
         
         return cell
@@ -167,11 +188,12 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+		// Get schedule and go to schedule view when a user selects a section
+		
         let row = indexPath.row
         
         self.schedule.section = sections[row]
         
-        // Get schedule and go to schedule view when a user selects a section
         getSchedule()
         
     }

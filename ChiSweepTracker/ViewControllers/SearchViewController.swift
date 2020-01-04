@@ -38,14 +38,19 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showFinishedScheduleButton() {
 		
+		// Get current month and year
 		let currentMonthNumber = Calendar.current.component(.month, from: Date())
 		var currentYear = Calendar.current.component(.year, from: Date())
+		
+		// If month is less than 4 then change the year to the previous year
 		if (currentMonthNumber < 4) {
 			currentYear = currentYear - 1
 		}
 		
+		// Hide finished button by default
 		self.finishedScheduleButton.isHidden = true
 		
+		// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
 		if currentMonthNumber < 4 || currentMonthNumber > 11
 		{
 			let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
@@ -88,6 +93,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Search for schedule when search button is tapped
     func searchForSchedule(_ address: String) {
         
+		// Clear all months and polygons so there are no duplicates
         self.schedule.months.removeAll()
         self.schedule.polygonCoordinates.removeAll()
         
@@ -95,12 +101,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         self.schedule.address = address
         
-        // Get coordinates
-        
+        // Get coordinates from address
         let geocoder = CLGeocoder()
-        
         geocoder.geocodeAddressString(address) { placemarks, error in
             
+			// No internet connection will cause an error
             if error != nil {
                 self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
                 return
@@ -108,8 +113,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
             if placemarks != nil {
             
+				// Get first placemark in list
                 let placemark = placemarks?.first
                 
+				// Set schedule location coordinates
                 var coordinates = CLLocationCoordinate2D()
                 coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
@@ -122,13 +129,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 print("searchForSchedule latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("searchForSchedule longitude: \(self.schedule.locationCoordinate.longitude)")
                 
-                let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-                
-                // Get ward and section JSON from City of Chicago
-                
 				print("searchForSchedule geom: \(self.common.the_geom())")
 				print("searchForSchedule ward dataset: \(self.common.wardDataset())")
 				
+				// Get ward and section
+				
+				let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 let wardQuery = wardClient.query(dataset: self.common.wardDataset())
                     .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
 					.limit(1)
@@ -139,15 +145,20 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         
                         if data.count > 0 {
                             
+							// Get values from json query
                             let ward = data[0][self.common.ward()] as? String ?? ""
                             let section = data[0][self.common.section()] as? String ?? ""
                             let the_geom = data[0][self.common.the_geom()] as? [String: Any] ?? [:]
                             let coordinatesWrapper = the_geom[self.common.coordinates()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
+							print("searchForSchedule ward: \(ward)")
+							print("searchForSchedule section: \(section)")
+							
 							// Set default polygon array to be used on all the views
                             defaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
                             
+							// Loop through coordinates array and add them to schedule
                             for(_, coordinate) in coordinatesArray!.enumerated() {
                                 
                                 for item in coordinate {
@@ -161,9 +172,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 }
                             }
                             
-                            print("searchForSchedule ward: \(ward)")
-                            print("searchForSchedule section: \(section)")
-                            
                             self.schedule.ward = ward
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
@@ -173,10 +181,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 return
                             }
                             
-                            // Get schedule JSON from City of Chicago
+                            // Get sweep months and days
                             
                             let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-                                .filter("ward = '\(ward)' \(section != "" ? "AND section = '\(section)'" : "") ")
+								.filter("\(self.common.ward()) = '\(ward)' \(section != "" ? "AND \(self.common.section()) = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -188,6 +196,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         
                                         for (_, item) in data.enumerated() {
                                             
+											// Get values from json call
                                             let monthName = item[self.common.month_name()] as? String ?? ""
                                             let monthNumber = item[self.common.month_number()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
@@ -200,6 +209,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             month.name = monthName
                                             month.number = monthNumber
                                             
+											// Loop through dates and add them to month
                                             for day in datesArray {
                                                 
                                                 print("searchForSchedule date: \(day)")
@@ -215,6 +225,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                                 }
                                             }
                                             
+											// Add month to schedule
                                             self.schedule.months.append(month)
                                             
                                         }
@@ -251,13 +262,19 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     func getAddressFromCoordinates(_ location: CLLocation) {
         
         var address = ""
+		
+		// Get address from schedule location coordinates
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         
         geocoder.reverseGeocodeLocation(location, completionHandler:
             {(placemarks, error) in
+				
+				// No internet connection will cause an error
                 if (error != nil) {
+					
 					print("getAddressFromCoordinates error: \(error!.localizedDescription)")
+					
 					// Stop updating location if user appears to be offline
 					self.locationManager.stopUpdatingLocation()
                     self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
@@ -272,21 +289,24 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         
                         if placemark.count > 0 {
                             
-                            let mark = placemarks![0]
+							// Get first placemark in list
+                            let placemark = placemarks![0]
                             
-                            if mark.subThoroughfare != nil {
-                                address = address + mark.subThoroughfare! + " "
+							// Create address string by combining placemark value
+                            if placemark.subThoroughfare != nil {
+                                address = address + placemark.subThoroughfare! + " "
                             }
-                            if mark.thoroughfare != nil {
-                                address = address + mark.thoroughfare! + ", "
+                            if placemark.thoroughfare != nil {
+                                address = address + placemark.thoroughfare! + ", "
                             }
-                            if mark.locality != nil {
-                                address = address + mark.locality! + " "
+                            if placemark.locality != nil {
+                                address = address + placemark.locality! + " "
                             }
-                            if mark.postalCode != nil {
-                                address = address + mark.postalCode! + " "
+                            if placemark.postalCode != nil {
+                                address = address + placemark.postalCode! + " "
                             }
                             
+							// Save address to global variable and address text box
                             self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
                             self.addressTextField.text = self.addressFromCoordinates
 							
