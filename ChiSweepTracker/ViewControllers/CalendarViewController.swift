@@ -203,8 +203,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         }
                         
                         DispatchQueue.main.async {
-							//self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar")
-							self.toast.toast("Event was added to your calendar on \(self.selectedMonthNumber)/\(date!)")
+							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar")
+							//self.toast.toast("Event was added to your calendar on \(self.selectedMonthNumber)/\(date!)")
                         }
                         
                         print("Added event")

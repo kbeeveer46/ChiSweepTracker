@@ -41,7 +41,8 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 		} else {
 			
 			// Show error message if no email client is found
-			toast.toast("Unable to find email app to send message")
+			self.common.showAlert(self.common.constants.errorTitle, "Unable to find email app to send message")
+			//toast.toast("Unable to find email app to send message")
 		}
 	}
 	

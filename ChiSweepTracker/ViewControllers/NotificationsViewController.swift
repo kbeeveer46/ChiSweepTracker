@@ -157,7 +157,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     @objc func timePickerChanged(picker: UIDatePicker) {
         
 		// Show toast message
-		toast.toast("Notification time updated")
+		//toast.toast("Notification time updated")
 		
 		// Save form values to defaults
         saveDefaultNotificationValues()
@@ -178,10 +178,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		self.onPicker.dataSource = self
 		
 		// Set values for when and time pickers
-        let when = defaults.object(forKey: "notificationWhen") as? String ?? ""
+		let when = self.common.notificationWhen()
         let index = whenData.firstIndex(of: when) ?? 0
-        let hour = defaults.integer(forKey: "notificationHour")
-        let minute = defaults.integer(forKey: "notificationMinute")
+        let hour = self.common.notificationHour()
+        let minute = self.common.notificationMinute()
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat =  "HH:mm"
@@ -193,7 +193,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
 
 		let favoriteAddress = self.common.favoriteAddress()
-		let notificationsToggled = defaults.bool(forKey: "notificationsToggled")
+		let notificationsToggled = self.common.notificationsToggled()
 		
 		// Disable form depending if they have notifications toggled on or off
 		if !favoriteAddress.isEmpty {
@@ -310,7 +310,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             if self.schedule.section.isEmpty {
-                                self.schedule.section = defaults.string(forKey: "favoriteSection") ?? ""
+								self.schedule.section = self.common.favoriteSection()
                             }
                             
                             let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
@@ -415,9 +415,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                         let center = UNUserNotificationCenter.current()
 														let calendar = Calendar.current
 														let currentYear = self.common.latestAppVersion() 
-														let notificationWhenDefault = defaults.object(forKey: "notificationWhen") as? String ?? ""
-														let notificationHourDefault = defaults.integer(forKey: "notificationHour")
-														let notificationMinuteDefault = defaults.integer(forKey: "notificationMinute")
+														let notificationWhenDefault = self.common.notificationWhen()
+														let notificationHourDefault = self.common.notificationHour()
+														let notificationMinuteDefault = self.common.notificationMinute()
 														var hour = 0
 														var minute = 0
 														var when = ""
@@ -628,7 +628,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-		toast.toast("Notification day updated")
+		//toast.toast("Notification day updated")
 		
 		// Save default notification form values when picker is changed
         saveDefaultNotificationValues()

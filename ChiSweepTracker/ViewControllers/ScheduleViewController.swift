@@ -67,7 +67,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
         // Alert the user that their favorite has been set and prompt them to enable notifications
-        let alert = UIAlertController(title: "Favorite Saved", message: "Do you want to enable notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Favorite Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			// Segue to notifications view if they select yes
@@ -119,7 +119,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	func setAddRemoveFavoriteButton() {
 		
 		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
-		let favoriteAddress = self.common.favoriteAddress() //defaults.string(forKey: "favoriteAddress") ?? ""
+		let favoriteAddress = self.common.favoriteAddress()
 		addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
 		removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
 		

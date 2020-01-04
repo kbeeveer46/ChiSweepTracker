@@ -23,6 +23,18 @@ class Common {
 		return defaults.integer(forKey: "userDatasetVersion")
 	}
 	
+	func defaultAddress() -> String {
+		return defaults.string(forKey: "defaultAddress") ?? ""
+	}
+	
+	func defaultLongitude() -> Double {
+		return defaults.double(forKey: "defaultLongitude")
+	}
+	
+	func defaultLatitude() -> Double {
+		return defaults.double(forKey: "defaultLatitude")
+	}
+	
 	// SODA SDK
 	
 	func dates() -> String {
@@ -85,6 +97,20 @@ class Common {
 	
 	func favoriteCoordinatesArray() -> [[NSArray]] {
 		return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()
+	}
+	
+	// Notifications
+	
+	func notificationWhen() -> String {
+		return defaults.string(forKey: "notificationWhen") ?? ""
+	}
+	
+	func notificationHour() -> Int {
+		return defaults.integer(forKey: "notificationHour")
+	}
+	
+	func notificationMinute() -> Int {
+		return defaults.integer(forKey: "notificationMinute")
 	}
 	
 	func notificationsToggled() -> Bool {

@@ -64,6 +64,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		if gesture.state == .ended {
 			
+			// Select drop pin in segmented control
+			searchTypeSegment.selectedSegmentIndex = 0
+			
 			// Stop updating location if user drops pin
 			locationManager.stopUpdatingLocation()
 			
@@ -347,9 +350,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		chicagoMapView.delegate = self
 		
-		let addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
-		let longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
-		let latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
+		let addressFromDefaults = self.common.defaultAddress()
+		let longitudeFromDefaults = self.common.defaultLongitude()
+		let latitudeFromDefaults = self.common.defaultLatitude()
 		
 		print("Default address: \(addressFromDefaults)")
 		print("Default longitude: \(longitudeFromDefaults)")
@@ -462,8 +465,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Alert user if they didn't enter an address
 		if address.isEmpty {
-			//self.common.showAlert("Please Enter An Address", "")
-			toast.toast("Address cannot be blank")
+			self.common.showAlert("Address cannot be blank", "")
+			//toast.toast("Address cannot be blank")
 			return
 		}
 		

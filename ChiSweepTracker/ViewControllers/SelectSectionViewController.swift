@@ -138,9 +138,9 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		selectSectionMap.delegate = self
 		
 		// Get default values
-		let addressFromDefaults = defaults.string(forKey: "defaultAddress") ?? ""
-		let longitudeFromDefaults = defaults.double(forKey: "defaultLongitude")
-		let latitudeFromDefaults = defaults.double(forKey: "defaultLatitude")
+		let addressFromDefaults = self.common.defaultAddress()
+		let longitudeFromDefaults = self.common.defaultLongitude()
+		let latitudeFromDefaults = self.common.defaultLatitude()
 		
 		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
 			
