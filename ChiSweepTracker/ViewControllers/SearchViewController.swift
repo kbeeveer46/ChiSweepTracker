@@ -59,20 +59,26 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		if gesture.state == .ended {
 			
+			// Stop updating location if user drops pin
+			locationManager.stopUpdatingLocation()
+			
+			// Get coordinates from dropped pin
 			let point = gesture.location(in: chicagoMapView)
 			let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
-			
 			let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
 			
 			// Save default lat and long to be use when user re-opens app
 			defaults.set(coordinate.latitude, forKey: "defaultLatitude")
 			defaults.set(coordinate.longitude, forKey: "defaultLongitude")
 			
+			// Get address from lat and long
 			getAddressFromCoordinates(location)
 			
+			// Create annotation
 			let annotation = MKPointAnnotation()
 			annotation.coordinate = coordinate
 			
+			// Add annotation to map
 			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
 			chicagoMapView.addAnnotation(annotation)
 			
