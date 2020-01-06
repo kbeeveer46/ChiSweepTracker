@@ -160,7 +160,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		// Only allow user to create ane event on a sweep day
         if cell.Circle.isHidden == false {
         
-			let alert = UIAlertController(title: "Add calendar event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)", preferredStyle: .alert)
+			let alert = UIAlertController(title: "Add calendar event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)/\(currentYear).", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
                 let eventStore = EKEventStore()
@@ -199,11 +199,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                             try eventStore.save(event, span: .thisEvent)
                         } catch let error as NSError {
 							print("Failed to add event with error: \(error.localizedDescription)")
-							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to calendar")
+							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to calendar.")
                         }
                         
                         DispatchQueue.main.async {
-							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar")
+							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar.")
 							//self.toast.toast("Event was added to your calendar on \(self.selectedMonthNumber)/\(date!)")
                         }
                         

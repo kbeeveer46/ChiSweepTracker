@@ -435,6 +435,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			print("Enter address selected and stopped updating location")
 			
+			// Clear search text box
+			addressTextField.text = ""
+			
 			// Stop updating location if user selects "enter address"
 			locationManager.stopUpdatingLocation()
 		}
