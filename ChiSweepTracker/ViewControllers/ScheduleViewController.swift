@@ -202,7 +202,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Set region
         scheduleMapView.setRegion(region, animated: true)
         
-		// Add polygons to map
+		// Add annotation and polygons to map
 		scheduleMapView.removeOverlays(scheduleMapView.overlays)
         scheduleMapView.addOverlay(polygon)
         scheduleMapView.addAnnotation(annotation)

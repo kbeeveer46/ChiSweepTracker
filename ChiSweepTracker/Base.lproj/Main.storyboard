@@ -111,8 +111,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
-                                <rect key="frame" x="15" y="59" width="345" height="525"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
+                                <rect key="frame" x="15" y="59" width="345" height="526"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-gL-upq">
                                         <rect key="frame" x="0.0" y="0.0" width="345" height="135"/>
@@ -135,7 +135,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qv8-r5-r5L">
-                                        <rect key="frame" x="0.0" y="150" width="345" height="170"/>
+                                        <rect key="frame" x="0.0" y="147" width="345" height="170"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="170" id="UnY-L4-FDY"/>
                                         </constraints>
@@ -155,7 +155,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wp5-4g-axw">
-                                        <rect key="frame" x="0.0" y="335" width="345" height="115"/>
+                                        <rect key="frame" x="0.0" y="329" width="345" height="115"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="115" id="4II-Rd-5gN"/>
                                         </constraints>
@@ -175,15 +175,15 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uz5-ux-x00">
-                                        <rect key="frame" x="0.0" y="465" width="345" height="60"/>
+                                        <rect key="frame" x="0.0" y="456" width="345" height="70"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="1b4-Uj-pvT"/>
+                                            <constraint firstAttribute="height" constant="70" id="1b4-Uj-pvT"/>
                                         </constraints>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
                                         <state key="normal">
                                             <attributedString key="attributedTitle">
-                                                <fragment content="Click here to contact Sweep Tracker with any issues, comments, or suggestions.">
+                                                <fragment content="Click here to contact Sweep Tracker with any issues, comments, or suggestions with this app.">
                                                     <attributes>
                                                         <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <font key="NSFont" metaFont="system" size="15"/>

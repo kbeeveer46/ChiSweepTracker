@@ -540,7 +540,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		let center = UNUserNotificationCenter.current()
 		let calendar = Calendar.current
-		let notificationDate = calendar.date(byAdding: .minute, value: 5,to: Date())
+		let notificationDate = calendar.date(byAdding: .minute, value: 3,to: Date())
 		
 		let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.timeZone], from: notificationDate!)
 		let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
