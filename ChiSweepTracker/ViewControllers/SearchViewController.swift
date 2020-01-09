@@ -14,7 +14,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     let schedule = ScheduleModel()
     let locationManager = CLLocationManager()
     let common = Common()
-	let toast = Toast()
     
     var addressFromTextField = ""
     var addressFromCoordinates = ""

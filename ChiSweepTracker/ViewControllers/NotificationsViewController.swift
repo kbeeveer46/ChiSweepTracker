@@ -10,7 +10,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
 	
-	let toast = Toast()
     let common = Common()
     var schedule = ScheduleModel()
     let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]

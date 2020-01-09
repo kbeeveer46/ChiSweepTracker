@@ -9,7 +9,6 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 	@IBOutlet weak var contactButton: UIButton!
 	
     let common = Common()
-	let toast = Toast()
     
     override func viewWillAppear(_ animated: Bool) {
         

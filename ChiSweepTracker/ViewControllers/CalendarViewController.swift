@@ -9,7 +9,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
 	let common = Common()
 	var schedule = ScheduleModel()
-	let toast = Toast()
 	
 	var currentYear = 0
     var selectedMonthNumber = 0
