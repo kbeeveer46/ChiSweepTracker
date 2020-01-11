@@ -4,6 +4,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	// This line is required or the screen is black
     var window: UIWindow?
+	
+	// Classes
 	let common = Common()
 
     @available(iOS 13.0, *)
@@ -32,6 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		// Get the latest schedule from Chicago and update notifications
 		self.common.getCityOfChicagoValuesFromDatabase(completion: { message in })
+		
     }
 
     @available(iOS 13.0, *)

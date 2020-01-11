@@ -389,54 +389,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CD64D99C-BA41-4E2C-B3EB-2E6A28491F19"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/SceneDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "sceneDidBecomeActive(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "CD64D99C-BA41-4E2C-B3EB-2E6A28491F19 - d1aebc15498fb992"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Sweep_Tracker.SceneDelegate.sceneDidBecomeActive(__C.UIScene) -&gt; ()"
-                  moduleName = "Sweep Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Google%20Drive/ChiSweepTracker/ChiSweepTracker/SceneDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "200">
-               </Location>
-               <Location
-                  uuid = "CD64D99C-BA41-4E2C-B3EB-2E6A28491F19 - 87bc167b357fb5b9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.String) -&gt; () in Sweep_Tracker.SceneDelegate.sceneDidBecomeActive(__C.UIScene) -&gt; ()"
-                  moduleName = "Sweep Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Google%20Drive/ChiSweepTracker/ChiSweepTracker/SceneDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "64">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E4E75052-8C70-479A-BEBF-4A9D7348BEB4"
             shouldBeEnabled = "No"
             ignoreCount = "0"

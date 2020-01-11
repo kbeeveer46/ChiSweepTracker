@@ -438,7 +438,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                             
                                                             for dayInMonth in monthInSchedule.dates {
                                                                 
-																let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date, hour: hour, minute: minute)
+																let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date, hour: hour, minute: minute, second: 0)
 																var date = calendar.date(from: dateComponents)
 																
                                                                 switch when {
@@ -461,7 +461,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 }
 																
 																// Create notificaton trigger
-																let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.timeZone], from: date!)
+																let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
                                                                 let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
                                                                 
 																// Create notification contents
@@ -473,7 +473,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 content.badge = 1
 
 																// Create notificaton identifier
-                                                                let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
+																let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
 
 																// Create notification request
                                                                 let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
