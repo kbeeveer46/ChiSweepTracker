@@ -64,7 +64,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		if gesture.state == .ended {
 			
 			// Select drop pin in segmented control
-			searchTypeSegment.selectedSegmentIndex = 0
+			searchTypeSegment.selectedSegmentIndex = 1
 			
 			// Stop updating location if user drops pin
 			locationManager.stopUpdatingLocation()
@@ -405,13 +405,23 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		if searchTypeSegment.selectedSegmentIndex == 0 {
 			
+			print("Enter address selected and stopped updating location")
+			
+			// Clear search text box
+			addressTextField.text = ""
+			
+			// Stop updating location if user selects "enter address"
+			locationManager.stopUpdatingLocation()
+			
+		}
+		else if searchTypeSegment.selectedSegmentIndex == 1 {
+			
 			// Stop updating location if user selects "drop pin"
 			locationManager.stopUpdatingLocation()
 			
 			print("Drop pin selected and stopped updating location")
-			
 		}
-		else if searchTypeSegment.selectedSegmentIndex == 1 {
+		else if searchTypeSegment.selectedSegmentIndex == 2 {
 			
 			print("Use my location selected")
 			
@@ -429,16 +439,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			else {
 				print("Location services are not enabled")
 			}
-		}
-		else if searchTypeSegment.selectedSegmentIndex == 2 {
-			
-			print("Enter address selected and stopped updating location")
-			
-			// Clear search text box
-			addressTextField.text = ""
-			
-			// Stop updating location if user selects "enter address"
-			locationManager.stopUpdatingLocation()
 		}
 	}
 	

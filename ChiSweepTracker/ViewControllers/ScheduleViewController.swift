@@ -67,7 +67,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
         // Alert the user that their favorite has been set and prompt them to enable notifications
-        let alert = UIAlertController(title: "Favorite saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Favorite Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			// Segue to notifications view if they select yes

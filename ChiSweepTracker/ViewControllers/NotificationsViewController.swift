@@ -466,7 +466,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 
 																// Create notification contents
                                                                 let content = UNMutableNotificationContent()
-                                                                content.title = "Sweep Alert For \(monthInSchedule.number)/\(dayInMonth.date)"
+                                                                content.title = "Sweeping on \(monthInSchedule.number)/\(dayInMonth.date)"
                                                                 content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
                                                                 let soundName = UNNotificationSoundName("notification.m4r")
 																content.sound = UNNotificationSound(named: soundName)

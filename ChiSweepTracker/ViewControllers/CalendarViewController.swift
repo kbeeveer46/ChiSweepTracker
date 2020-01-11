@@ -34,7 +34,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
 		// Get selected month name from schedule view and set it as the title
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
-        self.title = "\(selectedMonthName) Schedule - \(currentYear)"
+        self.title = "\(selectedMonthName) Sweep Schedule - \(currentYear)"
         
 		// Get first day of sweeping month from string of days from the schedule view. Used to calculate start day position
         firstDayOfSweepingInMonth = Int(selectedDates.prefix(2).trimmingCharacters(in: .whitespaces))!
