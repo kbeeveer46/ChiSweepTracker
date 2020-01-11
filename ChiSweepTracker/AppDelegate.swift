@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// Required for Firebase remote notifications
     let gcmMessageIDKey = "gcm.message_id"
 	
+	// Classes
     let common = Common()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -24,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		Messaging.messaging().delegate = self
 		UNUserNotificationCenter.current().delegate = self
 		
-		 IQKeyboardManager.shared.enable = true
+		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
+		IQKeyboardManager.shared.enable = true
         
         return true
     }
@@ -49,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Print message ID.
         //if let messageID = userInfo[gcmMessageIDKey] {
-        //print("Message ID: \(messageID)")
+		//	print("Message ID: \(messageID)")
         //}
         
         // Print full message.
@@ -69,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Print message ID.
         //if let messageID = userInfo[gcmMessageIDKey] {
-        //  print("Message ID: \(messageID)")
+		//	print("Message ID: \(messageID)")
         //}
         
         // Print full message.
@@ -81,11 +83,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
-		let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
-        let token = tokenParts.joined()
+        //let token = tokenParts.joined()
         
-        print("Device Token: \(token)")
+        //print("Device Token: \(token)")
     }
     
     func application(_ application: UIApplication,
@@ -113,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
-    // Receive displayed notifications for iOS 10 devices.
+    // This method runs before the notification is presented on the screen when the app is in the foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -125,7 +127,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         // Print message ID.
         //if let messageID = userInfo[gcmMessageIDKey] {
-        //print("Message ID: \(messageID)")
+		//	print("Message ID: \(messageID)")
         //}
         
         // Print full message.
@@ -135,18 +137,23 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         completionHandler([.alert, .badge, .sound])
     }
     
+	// This method runs when a notification is opened when the app is in the background and foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         
         UIApplication.shared.applicationIconBadgeNumber = 0
         
-        //let userInfo = response.notification.request.content.userInfo
+        let userInfo = response.notification.request.content.userInfo
         
         // Print message ID.
-//        if let messageID = userInfo[gcmMessageIDKey] {
-//            print("Message ID: \(messageID)")
-//        }
+        if let messageID = userInfo[gcmMessageIDKey] {
+            print("Message ID: \(messageID)")
+        }
+		
+		if let address = userInfo["address"] {
+			print("adress: \(address)")
+		}
         
         // Print full message.
         //print(userInfo)
@@ -164,11 +171,11 @@ extension AppDelegate: MessagingDelegate {
         
 		// This callback is fired at each app startup and whenever a new token is generated.
 		
-        print("Firebase registration token: \(fcmToken)")
+        //print("Firebase registration token: \(fcmToken)")
         
-        let dataDict:[String: String] = ["token": fcmToken]
+        //let dataDict:[String: String] = ["token": fcmToken]
         
-        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+        //NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
   
     }
     

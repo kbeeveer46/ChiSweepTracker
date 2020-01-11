@@ -472,7 +472,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				// Set location manager properties
 				locationManager.delegate = self
 				locationManager.desiredAccuracy = kCLLocationAccuracyBest
-				
+
 				// Start getting user's location
 				locationManager.startUpdatingLocation()
 				

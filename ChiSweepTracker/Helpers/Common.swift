@@ -198,17 +198,21 @@ class Common {
 						
 						docRef.getDocument { (document, error) in
 							if let document = document, document.exists {
+								
 								let data = document.data()
 								let latestDatasetVersion = data!["version"]!
+								
 								print("Latest dataset version: \(latestDatasetVersion)")
 								print("User dataset version: \(self.userDatasetVersion())")
+								
 								defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
+								
+								self.updateNotifications()
+								
 							} else {
 								print("Cannot get dataset version from Firebase")
 							}
 						}
-						
-						self.updateNotifications()
 					}
 				}
 		}

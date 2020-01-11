@@ -47,7 +47,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 		
 		// Unregister from Firebase Cloud Messaging notifications
-		UIApplication.shared.unregisterForRemoteNotifications()
+		//UIApplication.shared.unregisterForRemoteNotifications()
 		
 		print("Deleted user's local notifications")
 		

@@ -12,7 +12,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	
     let common = Common()
     var schedule = ScheduleModel()
-    let whenData = ["Day Of", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
+    let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	
 	// MARK: Methods
 	
@@ -356,17 +356,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                         
                                         if registerForPushNotifications == true {
                                             
-                                            // Clear current notifications and re-add them in case they changed
-                                            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                                            
-											print("Deleted user's local notifications")
-											
-                                            #if DEBUG
-                                                self.sendTestNotifications()
-                                            #endif
-                                            
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-                                            granted, error in
+												granted, error in
                                             
                                                 print("requestAuthorization granted: \(granted)")
                                                 
@@ -407,9 +398,18 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                     }
                                                 }
                                                 else {
-                                                    
+													
+													// Clear current notifications and re-add them in case they changed
+													UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+													
+													print("Deleted user's local notifications")
+													
 													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
+														
+														#if DEBUG
+														self.sendTestNotifications()
+														#endif
                                                     
                                                         let center = UNUserNotificationCenter.current()
 														let calendar = Calendar.current
@@ -539,9 +539,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		let center = UNUserNotificationCenter.current()
 		let calendar = Calendar.current
-		let notificationDate = calendar.date(byAdding: .minute, value: 3,to: Date())
+		let notificationDate = calendar.date(byAdding: .second, value: 15, to: Date())
 		
-		let triggerComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.timeZone], from: notificationDate!)
+		let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .timeZone], from: notificationDate!)
 		let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
 		
 		let content = UNMutableNotificationContent()
@@ -550,7 +550,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		let soundName = UNNotificationSoundName("notification.m4r")
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
-		
+		content.userInfo = ["address":self.common.favoriteAddress()]
 		let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
 		
 		let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
@@ -573,9 +573,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		if pushNotificationsSwitch.isOn == true {
 			
-			// Show enabled toast
-			//toast.toast("Notifications enabled")
-			
 			// Save toggle setting to defaults
 			defaults.set(true, forKey: "notificationsToggled")
 			
@@ -586,17 +583,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			// Save form values to defaults
 			saveDefaultNotificationValues()
 			
-			// Get schedule and update user's local notifications
-			self.getSchedule(true)
-			
 			// Register for Firebase Cloud Messaging notifications
 			UIApplication.shared.registerForRemoteNotifications()
 			
+			// Get schedule and update user's local notifications
+			self.getSchedule(true)
+			
 		}
 		else {
-			
-			// Show disabled toast
-			//toast.toast("Notifications disabled")
 			
 			// SAve toggle setting to defaults
 			defaults.set(false, forKey: "notificationsToggled")
