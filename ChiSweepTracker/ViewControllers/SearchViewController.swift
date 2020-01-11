@@ -287,49 +287,48 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         let location = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         
 		// Query geocoder to get address
-        geocoder.reverseGeocodeLocation(location, completionHandler:
-            {(placemarks, error) in
+        geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
 				
-				// No internet connection will cause an error
-                if (error != nil) {
-					
-					print("getAddressFromCoordinates error: \(error!.localizedDescription)")
-					
-					// Stop updating location if user appears to be offline
-					self.locationManager.stopUpdatingLocation()
-                    self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
-					return
-                }
-                
-                if placemarks != nil {
-                    
-                    // Get first placemark in list
-					let placemark = placemarks![0]
-					
-					// Create address string by combining placemark value
-					if placemark.subThoroughfare != nil {
-						address = address + placemark.subThoroughfare! + " "
-					}
-					if placemark.thoroughfare != nil {
-						address = address + placemark.thoroughfare! + ", "
-					}
-					if placemark.locality != nil {
-						address = address + placemark.locality! + " "
-					}
-					if placemark.postalCode != nil {
-						address = address + placemark.postalCode! + " "
-					}
-					
-					// Save address to global variable and address text box
-					self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
-					self.addressTextField.text = self.addressFromCoordinates
-					
-					// Save default address to be use when user re-opens app
-					defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
-					
-					print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
-                            
+			// No internet connection will cause an error
+			if (error != nil) {
+				
+				print("getAddressFromCoordinates error: \(error!.localizedDescription)")
+				
+				// Stop updating location if user appears to be offline
+				self.locationManager.stopUpdatingLocation()
+				self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
+				return
+			}
+			
+			if placemarks != nil {
+				
+				// Get first placemark in list
+				let placemark = placemarks![0]
+				
+				// Create address string by combining placemark value
+				if placemark.subThoroughfare != nil {
+					address = address + placemark.subThoroughfare! + " "
 				}
+				if placemark.thoroughfare != nil {
+					address = address + placemark.thoroughfare! + ", "
+				}
+				if placemark.locality != nil {
+					address = address + placemark.locality! + " "
+				}
+				if placemark.postalCode != nil {
+					address = address + placemark.postalCode! + " "
+				}
+				
+				// Save address to global variable and address text box
+				self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
+				self.addressTextField.text = self.addressFromCoordinates
+				
+				// Save default address to be use when user re-opens app
+				defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
+				
+				print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
+						
+			}
         })
     }
 	

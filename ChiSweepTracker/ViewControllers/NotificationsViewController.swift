@@ -5,13 +5,17 @@ import MapKit
 
 class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
+	// Controls
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
 	@IBOutlet weak var onPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
 	
+	// Classes
     let common = Common()
     var schedule = ScheduleModel()
+	
+	// Shared
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	
 	// MARK: Methods
@@ -39,6 +43,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	// Load map with default lat, long, and polygon coordinates or load Chicago map
     func loadFavoriteMap() {
         
+		// Set required properties for map
         favoriteMapView.delegate = self
         
 		// Get favorite values from defaults
@@ -52,10 +57,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         if favoriteLongitude != 0 && favoriteLatitude != 0 {
             
-			// Loop through coordinates and add them to list
+			// Loop through favorite coordinates array
 			if favoriteCoordinatesArray.count > 0 {
 				for(_, coordinate) in favoriteCoordinatesArray.enumerated() {
 					for item in coordinate {
+						
+						// Add coordinates to array for map
 						var coordinate = CLLocationCoordinate2D()
 						coordinate.longitude = item[0] as? Double ?? 0
 						coordinate.latitude = item[1] as? Double ?? 0
@@ -64,10 +71,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 				}
 			}
 			
-			// Create polygons and add them to map
-			let polygon = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
+			// Create polygons
+			let polygons = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
+			
+			// Add polygons to map
 			favoriteMapView.removeOverlays(favoriteMapView.overlays)
-			favoriteMapView.addOverlay(polygon)
+			favoriteMapView.addOverlay(polygons)
 
 			// Create location using lat and long
             let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
@@ -78,24 +87,34 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
             annotation.coordinate = location.coordinate
 
-			// Create span and region
+			// Create map span
             let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+			
+			// Create map region
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             
-			// Add annoation
+			// Add annoation to map
 			favoriteMapView.removeAnnotations(favoriteMapView.annotations)
             favoriteMapView.addAnnotation(annotation)
 			
-			// Set region
+			// Set map region
             favoriteMapView.setRegion(region, animated: true)
 
         }
         else {
             
 			// If there is no favorite then set the map to Chicago
+			
+			// Create map span
             let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+			
+			// Create map coordinates using Chicago
             let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+			
+			// Create map region using coordinates and span
             let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+			
+			// Set map region
             favoriteMapView.setRegion(region, animated: true)
             
         }
@@ -109,13 +128,16 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         generator.selectionChanged()
         
 		// Alert user if they want to delete their favorite because they will no longer receive push notifications
+		
+		// Create alert
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
         
-		// Add Yes button option
+		// Yes option
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
             
 			print("Deleted favorite address: \(self.common.favoriteAddress())")
 			
+			// Clear favorite default values
             defaults.set("", forKey: "favoriteAddress")
             defaults.set("", forKey: "favoriteWard")
             defaults.set("", forKey: "favoriteSection")
@@ -139,13 +161,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             if self.tabBarController == nil {
                 
                 if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-                    //destinationViewController.schedule = self.schedule
                     self.navigationController?.pushViewController(destinationViewController, animated: true)
                 }
             }
         }))
         
-		// Add No button option
+		// No option
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         
 		// Present alert
@@ -155,9 +176,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
-		// Show toast message
-		//toast.toast("Notification time updated")
-		
 		// Save form values to defaults
         saveDefaultNotificationValues()
         
@@ -471,6 +489,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 let soundName = UNNotificationSoundName("notification.m4r")
 																content.sound = UNNotificationSound(named: soundName)
                                                                 content.badge = 1
+																//content.userInfo = ["address":self.common.favoriteAddress()]
 
 																// Create notificaton identifier
 																let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
@@ -537,33 +556,47 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	
 	func sendTestNotifications() {
 		
+		// Get notification center
 		let center = UNUserNotificationCenter.current()
+		
+		// Set notification date and time
 		let calendar = Calendar.current
 		let notificationDate = calendar.date(byAdding: .second, value: 15, to: Date())
 		
+		// Create notification trigger components
 		let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: notificationDate!)
+		
+		// Create notification trigger
 		let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
 		
+		// Get notification sound
+		let soundName = UNNotificationSoundName("notification.m4r")
+		
+		// Create notification content
 		let content = UNMutableNotificationContent()
+		
+		// Set notification properties
 		content.title = "Sweep Alert Test"
 		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
-		let soundName = UNNotificationSoundName("notification.m4r")
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
-		content.userInfo = ["address":self.common.favoriteAddress()]
+		//content.userInfo = ["address":self.common.favoriteAddress()]
+		
+		// Create notification id
 		let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
 		
+		// Create notification request with id, content, and trigger
 		let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 		
+		// Add notification request to notification center
 		center.add(request, withCompletionHandler: { (error) in
 			if let error = error {
-				print(error.localizedDescription)
+				print("Unable to create test notification with error: \(error.localizedDescription)")
 			}
 			else {
 				print("Test notification added: \(identifier)")
 			}
 		})
-		
 	}
 
 	//MARK: Actions
@@ -621,10 +654,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-		//toast.toast("Notification day updated")
-		
 		// Save default notification form values when picker is changed
-        saveDefaultNotificationValues()
+		self.saveDefaultNotificationValues()
         
 		// Update notifications after picker is changed
         if self.pushNotificationsSwitch.isOn {
@@ -641,12 +672,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
         if overlay is MKPolygon {
             
-            if let pg = overlay as? MKPolygon {
+            if let polygon = overlay as? MKPolygon {
                 
-                let pr = MKPolygonRenderer(polygon: pg)
-                pr.fillColor = .red
-                pr.alpha = 0.4
-                return pr
+                let renderer = MKPolygonRenderer(polygon: polygon)
+                renderer.fillColor = .red
+                renderer.alpha = 0.4
+                return renderer
             }
         }
         
