@@ -541,7 +541,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		let calendar = Calendar.current
 		let notificationDate = calendar.date(byAdding: .second, value: 15, to: Date())
 		
-		let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .timeZone], from: notificationDate!)
+		let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: notificationDate!)
 		let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
 		
 		let content = UNMutableNotificationContent()
@@ -551,7 +551,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
 		content.userInfo = ["address":self.common.favoriteAddress()]
-		let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)"
+		let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
 		
 		let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 		
