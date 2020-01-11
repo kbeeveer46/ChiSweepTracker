@@ -4,33 +4,37 @@ import EventKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
    
+	// Controls
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var calendarMapView: MKMapView!
 
+	// Classes
 	let common = Common()
 	var schedule = ScheduleModel()
 	
+	// Shared
 	var currentYear = 0
     var selectedMonthNumber = 0
     var selectedMonthName = ""
     var selectedDates = ""
     
-	// Used determine what month has been selected enable to calculate start day position
+	// Used to determine what month has been selected enable to calculate start day position
     var firstDayOfSweepingInMonth = 0
     var weekDayNumberOfFirstDayOfSweepingInMonth = 0
     
-    var DaysInMonths = [31,28,31,30,31,30,31,31,30,31,30,31]
-    var NumberOfEmptyBox = Int()
-    var NextNumberOfEmptyBox = Int()
-    var PreviousNumberOfEmptyBox = 0
-    var Direction = 0
-    var PositionIndex = 0
+    var daysInMonths = [31,28,31,30,31,30,31,31,30,31,30,31]
+    var numberOfEmptyBox = Int()
+    var nextNumberOfEmptyBox = Int()
+    var previousNumberOfEmptyBox = 0
+    var direction = 0
+    var positionIndex = 0
     var dayCounter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		currentYear = self.common.latestAppVersion() //self.common.constants.appVersion
+		// Get latest app version (year)
+		currentYear = self.common.latestAppVersion()
         
 		// Get selected month name from schedule view and set it as the title
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()
@@ -46,35 +50,51 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         dateComponents.day = firstDayOfSweepingInMonth
         let firstDateOfSweepingInMonth = Foundation.Calendar.current.date(from: dateComponents)
         
+		// Get week day number from first day in month
         weekDayNumberOfFirstDayOfSweepingInMonth = Foundation.Calendar.current.component(.weekday, from: firstDateOfSweepingInMonth!) - 1
         if weekDayNumberOfFirstDayOfSweepingInMonth == 0 {
             weekDayNumberOfFirstDayOfSweepingInMonth = 7
         }
         
+		// Calculates the number of "empty" boxes at the start of every month
         calculateStartDateDayPosition()
         
+		// Load calendar map with annotation and polygons
         loadCalendarMap()
     }
     
 	// Load calendar map with annotation and polygons
     func loadCalendarMap() {
         
+		// Set required properties for map
         calendarMapView.delegate = self
         
+		// Get polygon coordinates from schedule
         let coordinates = self.schedule.polygonCoordinates
-        let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
+		
+		// Create polygons from coordinates
+        let polygons = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
+		// Create map annotation
         let annotation = MKPointAnnotation()
         annotation.title = "\(self.schedule.address)"
         annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
         annotation.coordinate = self.schedule.locationCoordinate
         
+		// Create map span
         let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+		
+		// Create map region from span
         let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
         
+		// Set map region
         calendarMapView.setRegion(region, animated: true)
+		
+		// Add polygons to map
         calendarMapView.removeOverlays(calendarMapView.overlays)
-        calendarMapView.addOverlay(polygon)
+        calendarMapView.addOverlay(polygons)
+		
+		// Add annotation to map
         calendarMapView.addAnnotation(annotation)
         
     }
@@ -84,12 +104,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         if overlay is MKPolygon {
             
-            if let pg = overlay as? MKPolygon {
+            if let polygon = overlay as? MKPolygon {
                 
-                let pr = MKPolygonRenderer(polygon: pg)
-                pr.fillColor = .red
-                pr.alpha = 0.4
-                return pr
+                let renderer = MKPolygonRenderer(polygon: polygon)
+                renderer.fillColor = .red
+                renderer.alpha = 0.4
+                return renderer
+				
             }
         }
         
@@ -98,49 +119,66 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     // Calculates the number of "empty" boxes at the start of every month
     func calculateStartDateDayPosition() {
-        switch Direction{
-        case 0:                                     
-            NumberOfEmptyBox = weekDayNumberOfFirstDayOfSweepingInMonth
+		
+        switch direction {
+			
+        case 0:
+			
+            numberOfEmptyBox = weekDayNumberOfFirstDayOfSweepingInMonth
             dayCounter = firstDayOfSweepingInMonth
-            while dayCounter>0 {
-                NumberOfEmptyBox = NumberOfEmptyBox - 1
+			
+            while dayCounter > 0 {
+				
+                numberOfEmptyBox = numberOfEmptyBox - 1
                 dayCounter = dayCounter - 1
-                if NumberOfEmptyBox == 0 {
-                    NumberOfEmptyBox = 7
+				
+                if numberOfEmptyBox == 0 {
+                    numberOfEmptyBox = 7
                 }
             }
-            if NumberOfEmptyBox == 7 {
-                NumberOfEmptyBox = 0
+			
+            if numberOfEmptyBox == 7 {
+                numberOfEmptyBox = 0
             }
-            PositionIndex = NumberOfEmptyBox
+			
+            positionIndex = numberOfEmptyBox
+			
         case 1...:
-            NextNumberOfEmptyBox = (PositionIndex + DaysInMonths[selectedMonthNumber])%7
-            PositionIndex = NextNumberOfEmptyBox
+			
+            nextNumberOfEmptyBox = (positionIndex + daysInMonths[selectedMonthNumber])%7
+            positionIndex = nextNumberOfEmptyBox
             
         case -1:
-            PreviousNumberOfEmptyBox = (7 - (DaysInMonths[selectedMonthNumber] - PositionIndex)%7)
-            if PreviousNumberOfEmptyBox == 7 {
-                PreviousNumberOfEmptyBox = 0
+			
+            previousNumberOfEmptyBox = (7 - (daysInMonths[selectedMonthNumber] - positionIndex)%7)
+			
+            if previousNumberOfEmptyBox == 7 {
+                previousNumberOfEmptyBox = 0
             }
-            PositionIndex = PreviousNumberOfEmptyBox
+			
+            positionIndex = previousNumberOfEmptyBox
+			
         default:
 			return
-            //fatalError()
         }
     }
 
 	// Required method for calendar collection view
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch Direction{
+		
+        switch direction {
+			
         case 0:
-            return DaysInMonths[selectedMonthNumber - 1] + NumberOfEmptyBox
+            return daysInMonths[selectedMonthNumber - 1] + numberOfEmptyBox
+			
         case 1...:
-            return DaysInMonths[selectedMonthNumber - 1] + NextNumberOfEmptyBox
+            return daysInMonths[selectedMonthNumber - 1] + nextNumberOfEmptyBox
+			
         case -1:
-            return DaysInMonths[selectedMonthNumber - 1] + PreviousNumberOfEmptyBox
+            return daysInMonths[selectedMonthNumber - 1] + previousNumberOfEmptyBox
+			
         default:
 			return 0
-            //fatalError()
         }
     }
     
@@ -152,26 +190,38 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         generator.prepare()
         generator.selectionChanged()
         
+		// Get cell from collection view
         let cell = collectionView.cellForItem(at: indexPath) as! DateCollectionViewCell
+		
+		// Get date label from cell
         let dateLabel = cell.viewWithTag(1) as! UILabel
+		
+		// Get date from date label
         let date = dateLabel.text
         
 		// Only allow user to create ane event on a sweep day
         if cell.Circle.isHidden == false {
         
+			// Creat alert
 			let alert = UIAlertController(title: "Add calendar event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)/\(currentYear).", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            
+			// Yes option
+			alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
+				// Create event store
                 let eventStore = EKEventStore()
 
+				// Request calendar access
                 eventStore.requestAccess(to: .event) { (granted, error) in
 
                     if (granted) && (error == nil) {
+						
                         print("Event access granted: \(granted)")
 
+						// Create event
                         let event:EKEvent = EKEvent(eventStore: eventStore)
 
-						// Create begin and end dates (9am and 2pm)
+						// Create begin date (9 am)
                         var startDateComponents = DateComponents()
                         startDateComponents.year = self.currentYear
                         startDateComponents.month = self.selectedMonthNumber
@@ -180,6 +230,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         startDateComponents.day = Int(date!)
                         let startDate = Foundation.Calendar.current.date(from: startDateComponents)
                         
+						// Create end date (2 pm)
                         var endDateComponents = DateComponents()
                         endDateComponents.year = self.currentYear
                         endDateComponents.month = self.selectedMonthNumber
@@ -188,22 +239,25 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         endDateComponents.day = Int(date!)
                         let endDate = Foundation.Calendar.current.date(from: endDateComponents)
                         
+						// Set event properties
                         event.title = "Street Sweeping"
                         event.startDate = startDate
                         event.endDate = endDate
                         event.notes = "Street sweeping in your neighborhood between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
                         event.calendar = eventStore.defaultCalendarForNewEvents
                         
+						// Add event to calendar
 						do {
                             try eventStore.save(event, span: .thisEvent)
-                        } catch let error as NSError {
+                        }
+						catch let error as NSError {
 							print("Failed to add event with error: \(error.localizedDescription)")
 							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to calendar.")
                         }
                         
+						// Alert user event was added
                         DispatchQueue.main.async {
 							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar.")
-							//self.toast.toast("Event was added to your calendar on \(self.selectedMonthNumber)/\(date!)")
                         }
                         
                         print("Added event")
@@ -218,8 +272,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                 
             }))
             
+			// No option
             alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
             
+			// Present alert
             self.present(alert, animated: true, completion: nil)
             
         }
@@ -227,8 +283,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     
 	// Required method for calendar collection view to populate view
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Calendar", for: indexPath) as! DateCollectionViewCell
         
+		// Get cell from collection view
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Calendar", for: indexPath) as! DateCollectionViewCell
+        
+		// Set cell properties
         cell.backgroundColor = UIColor.clear
         cell.DateLabel.textColor = UIColor.black
         cell.Circle.isHidden = true
@@ -238,13 +297,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
 
 		// The first cells that need to be hidden (if needed) will be negative or zero so we can hide them
-        switch Direction {
+        switch direction {
+			
         case 0:
-            cell.DateLabel.text = "\(indexPath.row + 1 - NumberOfEmptyBox)"
+            cell.DateLabel.text = "\(indexPath.row + 1 - numberOfEmptyBox)"
+			
         case 1:
-            cell.DateLabel.text = "\(indexPath.row + 1 - NextNumberOfEmptyBox)"
+            cell.DateLabel.text = "\(indexPath.row + 1 - nextNumberOfEmptyBox)"
+			
         case -1:
-            cell.DateLabel.text = "\(indexPath.row + 1 - PreviousNumberOfEmptyBox)"
+            cell.DateLabel.text = "\(indexPath.row + 1 - previousNumberOfEmptyBox)"
+			
         default:
 			cell.DateLabel.text = ""
         }
@@ -256,10 +319,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 
 		// Set weekend days color to light gray
         switch indexPath.row {
+			
         case 5,6,12,13,19,20,26,27,33,34:
             if Int(cell.DateLabel.text!)! > 0 {
                 cell.DateLabel.textColor = UIColor.lightGray
             }
+			
         default:
             break
         }
@@ -269,7 +334,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         datesArray = datesArray.filter {$0 != ""}
         
         for date in datesArray {
-            if indexPath.row + 1 - NumberOfEmptyBox == Int(date) {
+            if indexPath.row + 1 - numberOfEmptyBox == Int(date) {
                 cell.Circle.isHidden = false
                 cell.DrawCircle()
             }
