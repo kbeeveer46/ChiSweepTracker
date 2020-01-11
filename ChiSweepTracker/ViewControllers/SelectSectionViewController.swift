@@ -4,11 +4,15 @@ import MapKit
 
 class SelectSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MKMapViewDelegate {
 
+	// Controls
     @IBOutlet weak var sectionTableView: UITableView!
 	@IBOutlet weak var selectSectionMap: MKMapView!
 	
+	// Classes
     var schedule = ScheduleModel()
     let common = Common()
+	
+	// Shared
     var sections: [String] = []
     
     override func viewDidLoad() {
@@ -29,10 +33,13 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		// Clear sections from schedule so there are no duplicates
 		sections.removeAll()
 		
+		// Get ward from schedule
 		let ward = self.schedule.ward
 		
+		// Create SODA client using domain and token
 		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 		
+		// Query SODA API to get sections
 		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
 			.filter("\(self.common.ward()) = '\(ward)'")
 		
@@ -42,11 +49,13 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 				
 				if data.count > 0 {
 					
-					// Loop through json data and add sections
+					// Loop through json data
 					for (_, item) in data.enumerated() {
 						
+						// Get section
 						let section = item[self.common.section()] as? String ?? ""
 						
+						// Add section to sections list
 						if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
 							
 							if !self.sections.contains(where: { $0 == section}) {
@@ -55,7 +64,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 						}
 					}
 					
-					// Populate table view with sections
+					// Set required properties for table view
 					self.sectionTableView.dataSource = self
 					self.sectionTableView.delegate = self
 					self.sectionTableView.reloadData()
@@ -73,8 +82,10 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		// Clear months from schedule to make sure there aren't duplicates
         schedule.months.removeAll()
         
+		// Create SODA client using domain and token
         let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
+		// Query SODA API to get schedule
         let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
             .filter("\(self.common.ward()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.section()) = '\(self.schedule.section)'" : "") ")
 		
@@ -96,15 +107,17 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         print("getSchedule month name: \(monthName)")
                         print("getSchedule dates: \(datesArray)")
                         
+						// Create month object
                         let month = MonthModel()
                         month.name = monthName
                         month.number = monthNumber
                         
-						// Loop through dates and add them to month
+						// Loop through dates
                         for day in datesArray {
                             
                             print("getSchedule date: \(day)")
                             
+							// Add date to month
                             if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                 
                                 let date = DateModel()
@@ -135,6 +148,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 	// Load map using use default values from search
 	func loadSelectSectionMap() {
 		
+		// Set required properties for map
 		selectSectionMap.delegate = self
 		
 		// Get default values
@@ -176,10 +190,10 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		// Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTableCell", for: indexPath)
 		
-		// Get label from cell
+		// Get section label from cell
         let sectionLabel = cell.viewWithTag(1) as! UILabel
 		
-		// Set label text with ward and section number
+		// Set section label text with ward and section number
         sectionLabel.text = "Ward \(schedule.ward) - Section \(self.sections[indexPath.row])"
         
         return cell

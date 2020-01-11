@@ -5,16 +5,19 @@ import Firebase
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
+	// Controls
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchAddressButton: UIButton!
     @IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     @IBOutlet weak var finishedScheduleButton: UIButton!
 	
+	// Classes
     let schedule = ScheduleModel()
-    let locationManager = CLLocationManager()
     let common = Common()
     
+	// Shared
+	let locationManager = CLLocationManager()
     var addressFromTextField = ""
     var addressFromCoordinates = ""
     
@@ -37,7 +40,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showFinishedScheduleButton() {
 		
-		// Get current month and year
+		// Get month and year from current date
 		let currentMonthNumber = Calendar.current.component(.month, from: Date())
 		var currentYear = Calendar.current.component(.year, from: Date())
 		
@@ -63,15 +66,19 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		if gesture.state == .ended {
 			
-			// Select drop pin in segmented control
+			// Change segmented control to drop pin
 			searchTypeSegment.selectedSegmentIndex = 1
 			
 			// Stop updating location if user drops pin
 			locationManager.stopUpdatingLocation()
 			
-			// Get coordinates from dropped pin
+			// Create point from dropped pin
 			let point = gesture.location(in: chicagoMapView)
+			
+			// Get coordinates from point
 			let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
+			
+			// Create location from coordinates
 			let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
 			
 			// Save default lat and long to be use when user re-opens app
@@ -101,6 +108,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         print("searchForSchedule address: \(address)")
         
+		// Set schedule address
         self.schedule.address = address
         
         // Get coordinates from address
@@ -117,11 +125,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
 				// Get first placemark in list
                 let placemark = placemarks?.first
-                
-				// Set schedule location coordinates
+				
+				// Create coorindates from placemark
                 var coordinates = CLLocationCoordinate2D()
                 coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+				
+				// Set schedule location coordinates
                 self.schedule.locationCoordinate = coordinates
                 
 				// Set default lat and long to be used when user re-opens the app
@@ -134,10 +144,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				print("searchForSchedule geom: \(self.common.the_geom())")
 				print("searchForSchedule ward dataset: \(self.common.wardDataset())")
 				
-				// Get ward and section
-				
+				// Create SODA client using domain and token
 				let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-                let wardQuery = wardClient.query(dataset: self.common.wardDataset())
+                
+				// Query SODA API to get ward and section
+				let wardQuery = wardClient.query(dataset: self.common.wardDataset())
                     .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
 					.limit(1)
                 
@@ -157,23 +168,27 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 							print("searchForSchedule ward: \(ward)")
 							print("searchForSchedule section: \(section)")
 							
-							// Set default polygon array to be used on all the views
+							// Set default polygon array to be used in all the views
                             defaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
                             
-							// Loop through coordinates array and add them to schedule
+							// Loop through coordinates array
                             for(_, coordinate) in coordinatesArray!.enumerated() {
                                 
+								// Loop through each pair of coordinates
                                 for item in coordinate {
                                     
+									// Create coorindate from lat and long in array
                                     var coordinate = CLLocationCoordinate2D()
                                     coordinate.longitude = item[0] as? Double ?? 0
                                     coordinate.latitude = item[1] as? Double ?? 0
                                     
+									// Add coordinates to schedule polygon coordinates
                                     self.schedule.polygonCoordinates.append(coordinate)
                                     
                                 }
                             }
                             
+							// Set schedule ward and section
                             self.schedule.ward = ward
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
@@ -183,9 +198,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                 return
                             }
                             
-                            // Get sweep months and days
-                            
-                            let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
+                            // Query SODA API to get months and days
+							let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
 								.filter("\(self.common.ward()) = '\(ward)' \(section != "" ? "AND \(self.common.section()) = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
@@ -194,11 +208,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     
                                     if data.count > 0 {
                                         
-                                        // Populate schedule model to be used on schedule view
-                                        
+                                        // Loop through months
                                         for (_, item) in data.enumerated() {
                                             
-											// Get values from json call
+											// Get values from json data
                                             let monthName = item[self.common.month_name()] as? String ?? ""
                                             let monthNumber = item[self.common.month_number()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
@@ -207,15 +220,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             print("searchForSchedule month name: \(monthName)")
                                             print("searchForSchedule dates: \(datesArray)")
                                             
+											// Create month object
                                             let month = MonthModel()
                                             month.name = monthName
                                             month.number = monthNumber
                                             
-											// Loop through dates and add them to month
+											// Loop through dates
                                             for day in datesArray {
                                                 
                                                 print("searchForSchedule date: \(day)")
                                                 
+												// Add date to month
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
                                                     let date = DateModel()
@@ -265,10 +280,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         var address = ""
 		
-		// Get address from schedule location coordinates
+		// Create geocoder
         let geocoder = CLGeocoder()
+		
+		// Create location from CLLocation
         let location = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         
+		// Query geocoder to get address
         geocoder.reverseGeocodeLocation(location, completionHandler:
             {(placemarks, error) in
 				
@@ -285,52 +303,46 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
                 if placemarks != nil {
                     
-                    if placemarks!.count > 0 {
-                        
-                        let placemark = placemarks! as [CLPlacemark]
-                        
-                        if placemark.count > 0 {
+                    // Get first placemark in list
+					let placemark = placemarks![0]
+					
+					// Create address string by combining placemark value
+					if placemark.subThoroughfare != nil {
+						address = address + placemark.subThoroughfare! + " "
+					}
+					if placemark.thoroughfare != nil {
+						address = address + placemark.thoroughfare! + ", "
+					}
+					if placemark.locality != nil {
+						address = address + placemark.locality! + " "
+					}
+					if placemark.postalCode != nil {
+						address = address + placemark.postalCode! + " "
+					}
+					
+					// Save address to global variable and address text box
+					self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
+					self.addressTextField.text = self.addressFromCoordinates
+					
+					// Save default address to be use when user re-opens app
+					defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
+					
+					print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
                             
-							// Get first placemark in list
-                            let placemark = placemarks![0]
-                            
-							// Create address string by combining placemark value
-                            if placemark.subThoroughfare != nil {
-                                address = address + placemark.subThoroughfare! + " "
-                            }
-                            if placemark.thoroughfare != nil {
-                                address = address + placemark.thoroughfare! + ", "
-                            }
-                            if placemark.locality != nil {
-                                address = address + placemark.locality! + " "
-                            }
-                            if placemark.postalCode != nil {
-                                address = address + placemark.postalCode! + " "
-                            }
-                            
-							// Save address to global variable and address text box
-                            self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
-                            self.addressTextField.text = self.addressFromCoordinates
-							
-							// Save default address to be use when user re-opens app
-                            defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
-                            
-                            print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
-                            
-                        }
-                    }
-                }
+				}
         })
     }
 	
 	// If user disables location access prompt them to open the settings page to re-enable it
 	func showLocationDisabledAlert() {
 		
-		let alertController = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin on the map or enter your address", preferredStyle: .alert)
+		// Create alert
+		let alert = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin on the map or enter your address", preferredStyle: .alert)
 		
-		let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-		alertController.addAction(cancelAction)
+		// Cancel option
+		alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 		
+		// Yes option. Opening settings only available in iOS 10 and later
 		if #available(iOS 10.0, *) {
 			let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
 				if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -338,17 +350,20 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				}
 			}
 			
-			alertController.addAction(openAction)
+			alert.addAction(openAction)
 		}
 		
-		self.present(alertController, animated: true, completion: nil)
+		// Present alert
+		self.present(alert, animated: true, completion: nil)
 	}
 	
 	// Load map using use default values or a generic map of Chicago
 	func loadSearchMap() {
 		
+		// Set required properties for map
 		chicagoMapView.delegate = self
 		
+		// Get values from defaults
 		let addressFromDefaults = self.common.defaultAddress()
 		let longitudeFromDefaults = self.common.defaultLongitude()
 		let latitudeFromDefaults = self.common.defaultLatitude()
@@ -357,35 +372,52 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		print("Default longitude: \(longitudeFromDefaults)")
 		print("Default latitude: \(latitudeFromDefaults)")
 		
+		// Put address in address text box
 		addressTextField.text = addressFromDefaults
 		
-		// Add tap gesture to allow user to tap on map to drop a pin
+		// Create tap gesture to allow user to tap on map to drop a pin
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(addDroppedPin(gesture:)))
+		
+		// Add tap gesture to map
 		chicagoMapView.addGestureRecognizer(tapGesture)
 		
 		// If user has previously searched for an address use those defaults to load the map
 		// Load default map of the entire city of Chicago if no defaults are set
 		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
 			
+			// Create location from coordinates
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
 			
+			// Create map annotation
 			let annotation = MKPointAnnotation()
 			annotation.title = addressFromDefaults
 			annotation.coordinate = location.coordinate
 			
+			// Create map span from coordinates
 			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+			
+			// Create map region from spam
 			let region = MKCoordinateRegion(center: location.coordinate, span: span)
 			
+			// Add annotation to map
 			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
 			chicagoMapView.addAnnotation(annotation)
+			
+			// Set map region
 			chicagoMapView.setRegion(region, animated: true)
 		}
 		else {
 			
+			// Create map span using Chicago
 			let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+			
+			// Create coordinates using Chicago
 			let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+			
+			// Create map region from span and coordinates
 			let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
 			
+			// Set map region
 			chicagoMapView.setRegion(region, animated: true)
 		}
 	}
@@ -403,6 +435,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Remove map annotations
 		chicagoMapView.removeAnnotations(chicagoMapView.annotations)
 		
+		// Enter address
 		if searchTypeSegment.selectedSegmentIndex == 0 {
 			
 			print("Enter address selected and stopped updating location")
@@ -414,13 +447,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			locationManager.stopUpdatingLocation()
 			
 		}
+		// Drop pin
 		else if searchTypeSegment.selectedSegmentIndex == 1 {
 			
 			// Stop updating location if user selects "drop pin"
 			locationManager.stopUpdatingLocation()
 			
 			print("Drop pin selected and stopped updating location")
+			
 		}
+		// Use my location
 		else if searchTypeSegment.selectedSegmentIndex == 2 {
 			
 			print("Use my location selected")
@@ -430,10 +466,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			print("Requested location access")
 			
+			// Check if location services in enabled
 			if CLLocationManager.locationServicesEnabled() {
+				
+				// Set location manager properties
 				locationManager.delegate = self
 				locationManager.desiredAccuracy = kCLLocationAccuracyBest
+				
+				// Start getting user's location
 				locationManager.startUpdatingLocation()
+				
 				print("Location services enabled and started updating location")
 			}
 			else {
@@ -468,7 +510,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Alert user if they didn't enter an address
 		if address.isEmpty {
 			self.common.showAlert("Address cannot be blank", "")
-			//toast.toast("Address cannot be blank")
 			return
 		}
 		
@@ -497,6 +538,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     // Get user's last location and get address from coordinates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
+		// Get last location
         if let location = locations.last {
             
 			// Set default lat and long to be used when user re-opens app
@@ -506,17 +548,25 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Get address from coordinates to be used to fill in address text field and for schedule model
             getAddressFromCoordinates(location)
             
+			// Create coordinate from location coordinates
             var coordinates = CLLocationCoordinate2D()
             coordinates.latitude = location.coordinate.latitude
             coordinates.longitude = location.coordinate.longitude
             
+			// Create map annotation
 			let annotation = MKPointAnnotation()
 			annotation.coordinate = coordinates
 			
+			// Create map span
             let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+			
+			// Create map region from coordinates and span
             let region = MKCoordinateRegion(center: coordinates, span: span)
             
+			// Set map region
             chicagoMapView.setRegion(region, animated: true)
+			
+			// Add annotation to map
             chicagoMapView.removeAnnotations(chicagoMapView.annotations)
             chicagoMapView.addAnnotation(annotation)
             
@@ -550,7 +600,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Set the title or else the title is used from another tab
 		self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
 		
-        // Style segmented search type control
+        // Style segmented search type control with blue background on selected item
         if #available(iOS 13.0, *) {
             self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
             let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]

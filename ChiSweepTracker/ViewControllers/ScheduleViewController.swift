@@ -4,14 +4,18 @@ import MapKit
 
 class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
+	// Controls
     @IBOutlet weak var scheduleMapView: MKMapView!
     @IBOutlet weak var scheduleTableView: UITableView!
     
+	// Shared
     let generator = UISelectionFeedbackGenerator()
+	var addFavoriteButton = UIBarButtonItem()
+	var removeFavoriteButton = UIBarButtonItem()
+	
+	// Classes
 	let common = Common()
     var schedule = ScheduleModel()
-    var addFavoriteButton = UIBarButtonItem()
-    var removeFavoriteButton = UIBarButtonItem()
     
 	// MARK: Methods
 	
@@ -21,10 +25,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
 		// Show add or remove favorite button
-		setAddRemoveFavoriteButton()
+		self.setAddRemoveFavoriteButton()
 		
 		// Load map with annotations and overlays
-		loadScheduleMap()
+		self.loadScheduleMap()
 		
 		// Set required properties for schedule table view
 		self.scheduleTableView.dataSource = self
@@ -66,14 +70,19 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         // Set right bar button to remove now that a favorite has been set
         self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
-        // Alert the user that their favorite has been set and prompt them to enable notifications
+        // Create alert
         let alert = UIAlertController(title: "Favorite Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
-		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+		
+		// Yes option
+		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			// Segue to notifications view if they select yes
-            self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
-        }))
+			self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
+		}))
+		
+		// No option
+		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         
+		// Present alert
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -84,10 +93,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.prepare()
         generator.selectionChanged()
         
-        // Prompt the user  if they want to delete their favorite because they will no longer receive notifications
+        // Create alert
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-            
+        
+		// Yes option
+		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+			
 			print("Deleted favorite address: \(self.common.favoriteAddress())")
 			
 			// Clear favorites from defaults
@@ -111,7 +122,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             self.navigationItem.rightBarButtonItem = self.addFavoriteButton
             
         }))
+		
+		// No option
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+		
+		// Present alert
         self.present(alert, animated: true, completion: nil)
         
     }
@@ -119,10 +134,17 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	func setAddRemoveFavoriteButton() {
 		
 		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
+		
+		// Get favorite address
 		let favoriteAddress = self.common.favoriteAddress()
+		
+		// Initialize add button
 		addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
+		
+		// Initialize remove button
 		removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
 		
+		// Set top right navigation button to either add or remove
 		if favoriteAddress != schedule.address {
 			self.navigationItem.rightBarButtonItem = addFavoriteButton
 		}
@@ -137,19 +159,27 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+		tableView.deselectRow(at: indexPath, animated: true)
         
         // Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
         
 		// Get selected month and send user to calendar view
+		
+		// Get cell from table view
         let cell = tableView.cellForRow(at: indexPath)!
+		
+		// Get days label from cell
         let daysLabel = cell.viewWithTag(2) as! UILabel
+		
+		// Get list of days from days label
         let days = daysLabel.text!.trimmingCharacters(in: .whitespaces)
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
-            destinationViewController.selectedMonthNumber = Int(schedule.months[indexPath.row].number) ?? 0
+            
+			// Pass month name, number, days, and schededule to calendar view
+			destinationViewController.selectedMonthNumber = Int(schedule.months[indexPath.row].number) ?? 0
             destinationViewController.selectedMonthName = schedule.months[indexPath.row].name
             destinationViewController.selectedDates = days
             destinationViewController.schedule = self.schedule
@@ -162,18 +192,22 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "scheduleTableCell", for: indexPath)
         
-		// Get month name and days label from cell
+		// Get month name from cell
 		let monthNameLabel = cell.viewWithTag(1) as! UILabel
+		
+		// Get days label from cell
         let daysLabel = cell.viewWithTag(2) as! UILabel
 
-        // Put dates in one string and add padding between days
+        // Concatenate dates in one string and add padding between days
         var dates = ""
         for date in schedule.months[indexPath.row].dates  {
             dates = dates + String(date.date).padding(toLength: 5, withPad: " ", startingAt: 0)
         }
 
-		// Set month and days label text
+		// Set month label text
         monthNameLabel.text = schedule.months[indexPath.row].name
+		
+		// Set days label text
         daysLabel.text = dates
 
         return cell
@@ -183,6 +217,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// Load schedule map with annotation and polygons
     func loadScheduleMap() {
         
+		// Set required map properties
         scheduleMapView.delegate = self
         
 		// Create polygons
@@ -202,9 +237,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Set region
         scheduleMapView.setRegion(region, animated: true)
         
-		// Add annotation and polygons to map
+		// Add polygons to map
 		scheduleMapView.removeOverlays(scheduleMapView.overlays)
         scheduleMapView.addOverlay(polygon)
+		
+		// Add annotation to map
         scheduleMapView.addAnnotation(annotation)
         
     }
@@ -214,16 +251,16 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         if overlay is MKPolygon {
             
-            if let pg = overlay as? MKPolygon {
+            if let polygon = overlay as? MKPolygon {
                 
-                let pr = MKPolygonRenderer(polygon: pg)
-                pr.fillColor = .red
-                pr.alpha = 0.4
-                return pr
+                let renderer = MKPolygonRenderer(polygon: polygon)
+                renderer.fillColor = .red
+                renderer.alpha = 0.4
+                return renderer
+				
             }
         }
         
         return MKOverlayRenderer(overlay: overlay)
     }
-    
 }
