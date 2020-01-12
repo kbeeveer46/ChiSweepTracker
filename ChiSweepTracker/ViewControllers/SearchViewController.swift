@@ -597,7 +597,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		
 		// Set the title or else the title is used from another tab
-		self.tabBarController?.navigationItem.title = "Chicago Sweep Tracker"
+		self.tabBarController?.navigationItem.title = "Search For Sweep Schedule"
 		
         // Style segmented search type control with blue background on selected item
         if #available(iOS 13.0, *) {
