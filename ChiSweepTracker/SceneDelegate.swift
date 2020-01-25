@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0;
 		
 		// Get the latest schedule from Chicago and update notifications
-		self.common.getCityOfChicagoValuesFromDatabase(completion: { message in })
+		self.common.getValuesFromDatabase(completion: { message in })
 		
     }
 

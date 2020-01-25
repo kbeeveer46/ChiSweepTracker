@@ -121,6 +121,12 @@ class Common {
 		return defaults.integer(forKey: "notificationsYear")
 	}
 	
+	// Settings
+	
+	func contactEmail() -> String {
+		return defaults.string(forKey: "contactEmail") ?? "admin@chicagosweeptracker.info"
+	}
+	
 	//MARK: Constants
 	
     class Constants {
@@ -128,9 +134,11 @@ class Common {
 		#if DEBUG
 		let schedulesDatabaseName = "Schedules_Dev"
 		let updatesDatabaseName = "Updates_Dev"
+		let settingsDatabaseName = "Settings_Dev"
 		#else
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
+		let settingsDatabaseName = "Settings"
 		#endif
 	
 		let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
@@ -147,16 +155,16 @@ class Common {
 	
 	//MARK: Methods
 	
-	func getCityOfChicagoValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
+	func getValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
 		
+		// Get Chicago JSON data
 		let db = Firestore.firestore()
 		db.collection(self.constants.schedulesDatabaseName)
 			.order(by: "year", descending: true)
 			.limit(to: 1)
 			.getDocuments() { (querySnapshot, err) in
 				if let err = err {
-					//print("Could not get getCityOfChicagoValuesFromDatabase data from Firebase: \(err)")
-					fatalError("Could not get getCityOfChicagoValuesFromDatabase default data from Firebase: \(err)")
+					fatalError("Could not get Chicago data from Firebase: \(err)")
 				} else {
 					for document in querySnapshot!.documents {
 						
@@ -194,6 +202,7 @@ class Common {
 						defaults.set(sectionTitle, forKey: "sectionTitle")
 						defaults.set(wardTitle, forKey: "wardTitle")
 						
+						// Get data set version
 						let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.latestAppVersion()))
 						
 						docRef.getDocument { (document, error) in
@@ -212,6 +221,25 @@ class Common {
 							} else {
 								print("Cannot get dataset version from Firebase")
 							}
+						}
+						
+						// Get settings
+						let db = Firestore.firestore()
+						db.collection(self.constants.settingsDatabaseName)
+							.limit(to: 1)
+							.getDocuments() { (querySnapshot, err) in
+								if let err = err {
+									fatalError("Could not get settings data from Firebase: \(err)")
+								} else {
+									for document in querySnapshot!.documents {
+										
+										let data = document.data()
+										
+										let contactEmail = data["contactEmail"] as! String
+										
+										defaults.set(contactEmail, forKey: "contactEmail")
+									}
+								}
 						}
 					}
 				}

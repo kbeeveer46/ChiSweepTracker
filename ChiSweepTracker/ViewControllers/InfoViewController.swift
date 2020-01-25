@@ -47,7 +47,7 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 			
 			// Set mail properties
 			mail.mailComposeDelegate = self
-			mail.setToRecipients(["admin@chicagosweeptracker.info"])
+			mail.setToRecipients([self.common.contactEmail()])
 			mail.setSubject("Chicago Sweep Tracker")
 			
 			// Open email client using mail object
