@@ -5,9 +5,14 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 
 	// Controls
     @IBOutlet weak var infoButton: UIButton!
-    @IBOutlet weak var signsButton: UIButton!
-    @IBOutlet weak var ticketButton: UIButton!
+	@IBOutlet weak var infoButtonHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var signsButton: UIButton!
+	@IBOutlet weak var signsButtonHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ticketButton: UIButton!
+	@IBOutlet weak var ticketButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var contactButton: UIButton!
+	@IBOutlet weak var contactButtonHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var infoStackView: UIStackView!
 	
 	// Classes
     let common = Common()
@@ -29,7 +34,33 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
         self.common.styleButton(ticketButton, "dollar_circle", "008577")
 		self.common.styleButton(contactButton, "mail", "BF1A2F")
 		
+		// Initialize controls per device
+		initializeControlsPerDevice()
+		
     }
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			infoButton.titleLabel?.font = .systemFont(ofSize: 13)
+			infoButtonHeightConstraint.constant = 115
+			
+			signsButton.titleLabel?.font = .systemFont(ofSize: 13)
+			signsButtonHeightConstraint.constant = 145
+			
+			ticketButton.titleLabel?.font = .systemFont(ofSize: 13)
+			ticketButtonHeightConstraint.constant = 100
+			
+			contactButton.titleLabel?.font = .systemFont(ofSize: 13)
+			contactButtonHeightConstraint.constant = 55
+			
+			infoStackView.spacing = 6
+		default:
+			break
+		}
+		
+	}
 	
 	// Close email client after message is sent
 	func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
