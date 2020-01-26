@@ -28,6 +28,7 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
         self.common.styleButton(signsButton, "warning", "FF7832")
         self.common.styleButton(ticketButton, "dollar_circle", "008577")
 		self.common.styleButton(contactButton, "mail", "BF1A2F")
+		
     }
 	
 	// Close email client after message is sent

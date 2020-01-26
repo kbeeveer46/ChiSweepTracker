@@ -7,6 +7,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 	// Controls
     @IBOutlet weak var sectionTableView: UITableView!
 	@IBOutlet weak var selectSectionMap: MKMapView!
+	@IBOutlet weak var selectSectionMapHeightConstraint: NSLayoutConstraint!
 	
 	// Classes
     var schedule = ScheduleModel()
@@ -23,8 +24,22 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		// Load map with default lat and long from search
 		self.loadSelectSectionMap()
+		
+		// Initialize controls per device
+		self.initializeControlsPerDevice()
             
     }
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			selectSectionMapHeightConstraint.constant = 150
+		default:
+			break
+		}
+		
+	}
 	
 	func getSections() {
 		

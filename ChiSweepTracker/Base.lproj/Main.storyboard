@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8UQ-L6-Xkq">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8UQ-L6-Xkq">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,26 +13,26 @@
             <objects>
                 <viewController storyboardIdentifier="SearchViewController" id="BYZ-38-t0r" customClass="SearchViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
-                                <rect key="frame" x="0.0" y="44" width="375" height="235"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="287" width="355" height="295.5"/>
+                                <rect key="frame" x="10" y="287" width="300" height="295.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use one of the following options to find your sweep schedule" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jad-zx-64x">
-                                        <rect key="frame" x="0.0" y="0.0" width="355" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="14.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
-                                        <rect key="frame" x="0.0" y="34.5" width="355" height="32"/>
+                                        <rect key="frame" x="0.0" y="34.5" width="300" height="32"/>
                                         <segments>
                                             <segment title="Enter Address"/>
                                             <segment title="Drop Pin"/>
@@ -43,7 +43,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <textField opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Address..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iz5-fA-FV8">
-                                        <rect key="frame" x="0.0" y="85.5" width="355" height="40"/>
+                                        <rect key="frame" x="0.0" y="85.5" width="300" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="yRh-DP-wdK"/>
                                         </constraints>
@@ -51,7 +51,7 @@
                                         <textInputTraits key="textInputTraits" textContentType="street-address"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
-                                        <rect key="frame" x="0.0" y="145.5" width="355" height="60"/>
+                                        <rect key="frame" x="0.0" y="145.5" width="300" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
@@ -62,7 +62,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
-                                        <rect key="frame" x="0.0" y="225.5" width="355" height="70"/>
+                                        <rect key="frame" x="0.0" y="225.5" width="300" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
@@ -92,8 +92,10 @@
                     <connections>
                         <outlet property="addressTextField" destination="iz5-fA-FV8" id="tRP-VG-G6b"/>
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
+                        <outlet property="chicagoMapViewHeightConstraint" destination="XJi-jr-BwO" id="c9k-W2-bHd"/>
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
+                        <outlet property="searchStackView" destination="a0x-bJ-ZY7" id="jRj-FR-mMZ"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleFromSearchSegue" id="nuK-lD-YCG"/>
@@ -108,14 +110,14 @@
             <objects>
                 <viewController id="Rwe-fk-VdI" customClass="InfoViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="G20-ky-gbn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
-                                <rect key="frame" x="15" y="59" width="345" height="526"/>
+                                <rect key="frame" x="15" y="59" width="290" height="526"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-gL-upq">
-                                        <rect key="frame" x="0.0" y="0.0" width="345" height="135"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="290" height="135"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="135" id="caP-lb-bSu"/>
                                         </constraints>
@@ -135,7 +137,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qv8-r5-r5L">
-                                        <rect key="frame" x="0.0" y="147" width="345" height="170"/>
+                                        <rect key="frame" x="0.0" y="147" width="290" height="170"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="170" id="UnY-L4-FDY"/>
                                         </constraints>
@@ -155,7 +157,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wp5-4g-axw">
-                                        <rect key="frame" x="0.0" y="329" width="345" height="115"/>
+                                        <rect key="frame" x="0.0" y="329" width="290" height="115"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="115" id="4II-Rd-5gN"/>
                                         </constraints>
@@ -175,7 +177,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uz5-ux-x00">
-                                        <rect key="frame" x="0.0" y="456" width="345" height="70"/>
+                                        <rect key="frame" x="0.0" y="456" width="290" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="1b4-Uj-pvT"/>
                                         </constraints>
@@ -224,20 +226,20 @@
             <objects>
                 <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="235" id="Y6R-wb-aGO"/>
+                                            <constraint firstAttribute="height" constant="235" id="HPG-BM-ixl"/>
                                         </constraints>
                                     </mapView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on month to view calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKs-pP-ihq">
-                                        <rect key="frame" x="0.0" y="235" width="375" height="25"/>
+                                        <rect key="frame" x="0.0" y="235" width="320" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="XTR-2y-nQs"/>
                                         </constraints>
@@ -246,14 +248,14 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                        <rect key="frame" x="0.0" y="260" width="375" height="387"/>
+                                        <rect key="frame" x="0.0" y="260" width="320" height="264"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="43"/>
+                                                <rect key="frame" x="0.0" y="28" width="320" height="43"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gue-Fp-3PN" id="Lge-eF-dGr">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="TAj-sd-Da0">
@@ -265,10 +267,10 @@
                                                             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                                         </imageView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F5V-JI-uuh">
-                                                            <rect key="frame" x="35" y="11" width="330" height="21.5"/>
+                                                            <rect key="frame" x="35" y="3.5" width="275" height="36"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="September" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6xo-qv-gRm">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="115" height="21.5"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="115" height="36"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="115" id="0Yq-jF-s9t"/>
                                                                     </constraints>
@@ -277,7 +279,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1  2 8 9 15 16 22 23 29 30" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78y-U4-UIn">
-                                                                    <rect key="frame" x="115" y="0.0" width="215" height="21.5"/>
+                                                                    <rect key="frame" x="115" y="0.0" width="160" height="36"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -311,6 +313,7 @@
                     <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB"/>
                     <connections>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
+                        <outlet property="scheduleMapViewHeightConstraint" destination="HPG-BM-ixl" id="Ooq-z7-R99"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
                         <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationsFromScheduleSegue" id="eEQ-YS-Bae"/>
                         <segue destination="a8Y-hK-Ycy" kind="show" identifier="showCalendarSegue" id="OPE-t2-YWO"/>
@@ -325,28 +328,28 @@
             <objects>
                 <viewController id="gu7-gj-SCi" customClass="SelectSectionViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="p9q-d0-1iZ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="f6U-dp-Gws">
-                                <rect key="frame" x="0.0" y="44" width="375" height="235"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f6U-dp-Gws">
+                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="sA2-B1-Nsb"/>
                                 </constraints>
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OH9-2i-nMt">
-                                <rect key="frame" x="0.0" y="279" width="375" height="388"/>
+                                <rect key="frame" x="0.0" y="279" width="320" height="289"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sectionTableCell" id="ZwO-Sg-zxU">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="320" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZwO-Sg-zxU" id="HX0-1t-eGv">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ward 1 Section 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61d-w6-cis">
-                                                    <rect key="frame" x="130" y="13" width="115.5" height="18"/>
+                                                    <rect key="frame" x="102.5" y="13" width="115.5" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -377,6 +380,7 @@
                     <connections>
                         <outlet property="sectionTableView" destination="OH9-2i-nMt" id="VmB-pb-Ey4"/>
                         <outlet property="selectSectionMap" destination="f6U-dp-Gws" id="X9D-nM-g13"/>
+                        <outlet property="selectSectionMapHeightConstraint" destination="sA2-B1-Nsb" id="iVO-uw-knw"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleSegue" id="aU1-JL-7NV"/>
                     </connections>
                 </viewController>
@@ -389,23 +393,23 @@
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="45C-rY-kFz"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="235" width="375" height="323.5"/>
+                                <rect key="frame" x="0.0" y="279" width="320" height="379"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-aH-Zkq">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="112"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYR-QR-hEk">
-                                                <rect key="frame" x="22" y="8" width="345" height="82"/>
+                                                <rect key="frame" x="22" y="8" width="290" height="104"/>
                                                 <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                                 <attributedString key="attributedText">
                                                     <fragment>
@@ -423,16 +427,16 @@
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="0.0" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="110" width="375" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="132" width="320" height="67"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="xsQ-kE-RuZ">
-                                                <rect key="frame" x="20" y="0.0" width="25" height="33.5"/>
+                                                <rect key="frame" x="20" y="0.0" width="25" height="67"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="25" id="Iy1-gI-T98"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
-                                                <rect key="frame" x="55" y="2" width="241" height="30"/>
+                                                <rect key="frame" x="55" y="18.5" width="186" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="Fhg-bs-9kM"/>
                                                 </constraints>
@@ -441,7 +445,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="306" y="1.5" width="51" height="31"/>
+                                                <rect key="frame" x="251" y="18" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -451,7 +455,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="163.5" width="375" height="65"/>
+                                        <rect key="frame" x="0.0" y="219" width="320" height="65"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-Tc-noJ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="65"/>
@@ -460,16 +464,16 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
-                                                <rect key="frame" x="55" y="0.0" width="90" height="65"/>
+                                                <rect key="frame" x="55" y="0.0" width="60" height="65"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <pickerView contentMode="right" translatesAutoresizingMaskIntoConstraints="NO" id="LL0-f2-4jY">
-                                                <rect key="frame" x="155" y="0.0" width="200" height="65"/>
+                                                <rect key="frame" x="125" y="0.0" width="175" height="65"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="65" id="HMA-bb-iMa"/>
-                                                    <constraint firstAttribute="width" constant="200" id="YLF-yC-clf"/>
+                                                    <constraint firstAttribute="width" constant="175" id="YLF-yC-clf"/>
                                                 </constraints>
                                             </pickerView>
                                         </subviews>
@@ -482,7 +486,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="248.5" width="375" height="75"/>
+                                        <rect key="frame" x="0.0" y="304" width="320" height="75"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="ECS-GF-Q2t">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="75"/>
@@ -491,16 +495,16 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
-                                                <rect key="frame" x="55" y="0.0" width="90" height="75"/>
+                                                <rect key="frame" x="55" y="0.0" width="60" height="75"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="luP-wW-qKV">
-                                                <rect key="frame" x="155" y="0.0" width="200" height="75"/>
+                                                <rect key="frame" x="125" y="0.0" width="175" height="75"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="75" id="FN2-OG-r3Y"/>
-                                                    <constraint firstAttribute="width" constant="200" id="ZLn-qs-lhp"/>
+                                                    <constraint firstAttribute="width" constant="175" id="ZLn-qs-lhp"/>
                                                 </constraints>
                                             </datePicker>
                                         </subviews>
@@ -523,7 +527,9 @@
                     <tabBarItem key="tabBarItem" title="Favorite" image="star_border" id="WV3-iH-QOw"/>
                     <navigationItem key="navigationItem" title="Favorite Address" id="zlF-Cz-MXS"/>
                     <connections>
+                        <outlet property="favoriteMapHeighConstraint" destination="45C-rY-kFz" id="tcy-wp-hcd"/>
                         <outlet property="favoriteMapView" destination="x1r-6W-RMh" id="0zW-wy-e3V"/>
+                        <outlet property="infoLabel" destination="yYR-QR-hEk" id="o0L-ug-DOU"/>
                         <outlet property="onPicker" destination="LL0-f2-4jY" id="mlx-aQ-uua"/>
                         <outlet property="pushNotificationsSwitch" destination="jk6-Wy-pyD" id="f6m-W1-H1h"/>
                         <outlet property="timePicker" destination="luP-wW-qKV" id="Evl-EH-OAz"/>
@@ -540,7 +546,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8UQ-L6-Xkq" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="mD3-jK-kiL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -578,23 +584,23 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarViewController" id="a8Y-hK-Ycy" customClass="CalendarViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="izA-kT-NUo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZFy-60-zB9">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZFy-60-zB9">
+                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="3NZ-tU-kmZ"/>
                                 </constraints>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on sweep day to add calendar event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSJ-e6-OHu">
-                                <rect key="frame" x="8" y="243" width="359" height="18"/>
+                                <rect key="frame" x="8" y="287" width="304" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                <rect key="frame" x="35" y="295" width="305" height="336.5"/>
+                                <rect key="frame" x="7.5" y="339" width="305" height="336.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
                                         <rect key="frame" x="0.0" y="0.0" width="305" height="20.5"/>
@@ -718,6 +724,7 @@
                     <connections>
                         <outlet property="Calendar" destination="pG9-ck-JRR" id="yQY-VO-EZa"/>
                         <outlet property="calendarMapView" destination="ZFy-60-zB9" id="8OS-o5-xov"/>
+                        <outlet property="calendarMapViewHeightConstraint" destination="3NZ-tU-kmZ" id="ckG-nE-1tl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pge-xr-71M" sceneMemberID="firstResponder"/>
@@ -735,6 +742,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="eEQ-YS-Bae"/>
-        <segue reference="maw-XV-A0s"/>
+        <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
 </document>

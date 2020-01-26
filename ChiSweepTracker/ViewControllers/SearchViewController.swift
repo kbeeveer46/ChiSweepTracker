@@ -8,9 +8,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Controls
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchAddressButton: UIButton!
-    @IBOutlet weak var chicagoMapView: MKMapView!
+	@IBOutlet weak var chicagoMapViewHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     @IBOutlet weak var finishedScheduleButton: UIButton!
+	@IBOutlet weak var searchStackView: UIStackView!
 	
 	// Classes
     let schedule = ScheduleModel()
@@ -34,8 +36,25 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Style controls
 		self.styleControls()
+		
+		// Initialize controls per device
+		self.initializeControlsPerDevice()
         
     }
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			chicagoMapViewHeightConstraint.constant = 150
+			searchStackView.spacing = 15
+			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
+			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 13)
+		default:
+			break
+		}
+		
+	}
 	
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showFinishedScheduleButton() {
@@ -55,8 +74,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
 		if currentMonthNumber < 4 || currentMonthNumber > 11
 		{
-			let attributedString = NSMutableAttributedString(string: "Sweeping has ended for \(currentYear). Check back next spring for the new schedule and to set up your notifications.")
-			self.finishedScheduleButton.setAttributedTitle(attributedString, for: .normal)
+			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
 			self.finishedScheduleButton.isHidden = false
 		}
 	}
@@ -117,7 +135,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
 			// No internet connection will cause an error
             if error != nil {
-                self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
+				self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
                 return
             }
             

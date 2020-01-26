@@ -10,6 +10,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	@IBOutlet weak var onPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
+	@IBOutlet weak var favoriteMapHeighConstraint: NSLayoutConstraint!
+	@IBOutlet weak var infoLabel: UILabel!
 	
 	// Classes
     let common = Common()
@@ -28,8 +30,23 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
     
 		// Load map using user favorite lat, long, and polygon coorndinates
         loadFavoriteMap()
+		
+		// Initialize controls per device
+		initializeControlsPerDevice()
         
     }
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			infoLabel.isHidden = true
+			favoriteMapHeighConstraint.constant = 150
+		default:
+			break
+		}
+		
+	}
 	
 	// Go to schedule page when schedule button is clicked
     @objc func viewSchedule() {

@@ -6,8 +6,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
 	// Controls
     @IBOutlet weak var scheduleMapView: MKMapView!
+	@IBOutlet weak var scheduleMapViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scheduleTableView: UITableView!
-    
+	
 	// Shared
     let generator = UISelectionFeedbackGenerator()
 	var addFavoriteButton = UIBarButtonItem()
@@ -30,10 +31,25 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
 		
+		// Initialize controls per device
+		self.initializeControlsPerDevice()
+		
 		// Set required properties for schedule table view
 		self.scheduleTableView.dataSource = self
 		self.scheduleTableView.delegate = self
 		self.scheduleTableView.reloadData()
+	}
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			scheduleMapViewHeightConstraint.constant = 150
+			scheduleTableView.rowHeight = 37
+		default:
+			break
+		}
+		
 	}
     
 	// Method is called when user chooses yes to add a favorite

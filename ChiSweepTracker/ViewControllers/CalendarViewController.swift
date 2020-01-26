@@ -7,7 +7,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 	// Controls
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var calendarMapView: MKMapView!
-
+	@IBOutlet weak var calendarMapViewHeightConstraint: NSLayoutConstraint!
+	
 	// Classes
 	let common = Common()
 	var schedule = ScheduleModel()
@@ -57,11 +58,25 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         
 		// Calculates the number of "empty" boxes at the start of every month
-        calculateStartDateDayPosition()
+		self.calculateStartDateDayPosition()
         
 		// Load calendar map with annotation and polygons
-        loadCalendarMap()
+		self.loadCalendarMap()
+		
+		// Initialize controls per device
+		self.initializeControlsPerDevice()
     }
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			calendarMapViewHeightConstraint.constant = 150
+		default:
+			break
+		}
+		
+	}
     
 	// Load calendar map with annotation and polygons
     func loadCalendarMap() {
