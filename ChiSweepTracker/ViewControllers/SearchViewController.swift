@@ -13,6 +13,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
     @IBOutlet weak var finishedScheduleButton: UIButton!
 	@IBOutlet weak var searchStackView: UIStackView!
+	@IBOutlet weak var infoLabel: UILabel!
 	
 	// Classes
     let schedule = ScheduleModel()
@@ -50,6 +51,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			searchStackView.spacing = 15
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
 			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 13)
+			infoLabel.font = .systemFont(ofSize: 10)
 		default:
 			break
 		}

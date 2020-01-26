@@ -94,6 +94,7 @@
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="chicagoMapViewHeightConstraint" destination="XJi-jr-BwO" id="c9k-W2-bHd"/>
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
+                        <outlet property="infoLabel" destination="Jad-zx-64x" id="1dv-aT-zry"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchStackView" destination="a0x-bJ-ZY7" id="jRj-FR-mMZ"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>

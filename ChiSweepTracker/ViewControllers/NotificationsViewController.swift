@@ -40,7 +40,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			infoLabel.isHidden = true
+			//infoLabel.isHidden = true
+			infoLabel.font = .systemFont(ofSize: 11)
 			favoriteMapHeighConstraint.constant = 150
 		default:
 			break
