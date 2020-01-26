@@ -113,7 +113,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
         
 		// Yes option
-		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			
 			print("Deleted favorite address: \(self.common.favoriteAddress())")
 			
@@ -126,18 +126,20 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			defaults.set(nil, forKey: "favoriteCoordinatesArray")
 			defaults.set(false, forKey: "notificationsToggled")
 			
-            // Remove any notifications set from their previous favorite
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+			// Remove any notifications set from their previous favorite
+			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 			
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
 			
 			print("Deleted user's local notifications")
-            
-            // Set right bar button to add now that a favorite has been removed
-            self.navigationItem.rightBarButtonItem = self.addFavoriteButton
-            
-        }))
+			
+			// Set right bar button to add now that a favorite has been removed
+			self.navigationItem.rightBarButtonItem = self.addFavoriteButton
+			
+		})
+		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
+		alert.addAction(yesAction)
 		
 		// No option
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))

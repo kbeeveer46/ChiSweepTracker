@@ -36,11 +36,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         
     }
 	
+	// Change constraints and sizes per device
 	func initializeControlsPerDevice() {
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			//infoLabel.isHidden = true
 			infoLabel.font = .systemFont(ofSize: 11)
 			favoriteMapHeighConstraint.constant = 150
 		default:
@@ -151,38 +151,40 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
         
 		// Yes option
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-            
+		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+			
 			print("Deleted favorite address: \(self.common.favoriteAddress())")
 			
 			// Clear favorite default values
-            defaults.set("", forKey: "favoriteAddress")
-            defaults.set("", forKey: "favoriteWard")
-            defaults.set("", forKey: "favoriteSection")
-            defaults.set(0.0, forKey: "favoriteLongitude")
-            defaults.set(0.0, forKey: "favoriteLatitude")
-            defaults.set(nil, forKey: "favoriteCoordinatesArray")
-            defaults.set(false, forKey: "notificationsToggled")
-            
+			defaults.set("", forKey: "favoriteAddress")
+			defaults.set("", forKey: "favoriteWard")
+			defaults.set("", forKey: "favoriteSection")
+			defaults.set(0.0, forKey: "favoriteLongitude")
+			defaults.set(0.0, forKey: "favoriteLatitude")
+			defaults.set(nil, forKey: "favoriteCoordinatesArray")
+			defaults.set(false, forKey: "notificationsToggled")
+			
 			// Delete future local iOS notifications
 			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 			
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
-            
-            print("Deleted user's local notifications")
-            
-            // If on a view with a tab control then use it to go to the search view
-            self.tabBarController?.selectedIndex = 0
-            
-            // If not on a view with a tab control, use navigation controller to go to search view
-            if self.tabBarController == nil {
-                
-                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-                }
-            }
-        }))
+			
+			print("Deleted user's local notifications")
+			
+			// If on a view with a tab control then use it to go to the search view
+			self.tabBarController?.selectedIndex = 0
+			
+			// If not on a view with a tab control, use navigation controller to go to search view
+			if self.tabBarController == nil {
+				
+				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+					self.navigationController?.pushViewController(destinationViewController, animated: true)
+				}
+			}
+		})
+		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
+		alert.addAction(yesAction)
         
 		// No option
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
@@ -616,6 +618,47 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			}
 		})
 	}
+	
+	// When and time picker methods
+	func numberOfComponents(in pickerView: UIPickerView) -> Int {
+		return 1
+	}
+	
+	func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+		return whenData.count
+	}
+	
+	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+		
+		// Save default notification form values when picker is changed
+		self.saveDefaultNotificationValues()
+		
+		// Update notifications after picker is changed
+		if self.pushNotificationsSwitch.isOn {
+			self.getSchedule(true)
+		}
+	}
+	
+	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+		return whenData[row]
+	}
+	
+	// Required to load polygons on favorites map
+	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+		
+		if overlay is MKPolygon {
+			
+			if let polygon = overlay as? MKPolygon {
+				
+				let renderer = MKPolygonRenderer(polygon: polygon)
+				renderer.fillColor = .red
+				renderer.alpha = 0.4
+				return renderer
+			}
+		}
+		
+		return MKOverlayRenderer(overlay: overlay)
+	}
 
 	//MARK: Actions
 	
@@ -661,45 +704,5 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 	}
 
-    // When and time picker methods
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return whenData.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
-		// Save default notification form values when picker is changed
-		self.saveDefaultNotificationValues()
-        
-		// Update notifications after picker is changed
-        if self.pushNotificationsSwitch.isOn {
-            self.getSchedule(true)
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return whenData[row]
-    }
-    
-	// Required to load polygons on favorites map
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        
-        if overlay is MKPolygon {
-            
-            if let polygon = overlay as? MKPolygon {
-                
-                let renderer = MKPolygonRenderer(polygon: polygon)
-                renderer.fillColor = .red
-                renderer.alpha = 0.4
-                return renderer
-            }
-        }
-        
-        return MKOverlayRenderer(overlay: overlay)
-    }
 }
 
