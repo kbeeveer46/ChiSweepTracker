@@ -56,10 +56,10 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 			contactButtonHeightConstraint.constant = 55
 			
 			infoStackView.spacing = 6
+			
 		default:
 			break
 		}
-		
 	}
 	
 	// Close email client after message is sent
@@ -93,3 +93,5 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 		}
 	}
 }
+
+
