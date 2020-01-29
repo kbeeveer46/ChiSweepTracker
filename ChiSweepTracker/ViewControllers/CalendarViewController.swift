@@ -30,6 +30,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     var direction = 0
     var positionIndex = 0
     var dayCounter = 0
+	
+	// MARK: Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -358,6 +360,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return cell
     }
 }
+
+// MARK: Extensions
 
 // Capitalize first lett of month name
 extension String {

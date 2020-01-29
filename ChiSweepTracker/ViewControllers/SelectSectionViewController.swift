@@ -15,6 +15,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	// Shared
     var sections: [String] = []
+	
+	// MARK: Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()

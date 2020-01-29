@@ -26,7 +26,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         super.viewWillAppear(animated)
         
 		// Fill in notification form values with user defaults
-        loadDefaultNotificationValues()
+        loadNotificationControlValues()
     
 		// Load map using user favorite lat, long, and polygon coorndinates
         loadFavoriteMap()
@@ -46,7 +46,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		default:
 			break
 		}
-		
 	}
 	
 	// Go to schedule page when schedule button is clicked
@@ -205,7 +204,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
     }
     
-    func loadDefaultNotificationValues() {
+    func loadNotificationControlValues() {
         
 		// Set the title or else the title is used from another tab
 		self.tabBarController?.navigationItem.title = "Favorite Address"
@@ -703,6 +702,5 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			
 		}
 	}
-
 }
 

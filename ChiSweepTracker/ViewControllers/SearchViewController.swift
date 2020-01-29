@@ -441,6 +441,15 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
 	
+	// Prepare segue and pass data to view controllers
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "selectSectionSegue" {
+			if let selectSectionViewController = segue.destination as? SelectSectionViewController {
+				selectSectionViewController.schedule = schedule
+			}
+		}
+	}
+	
 	// MARK: Actions
 	
 	// Search type segmented control option changed event
@@ -541,15 +550,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Test addresses
 		//self.searchForSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
 		
-	}
-	
-	// Prepare segue and pass data to view controllers
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "selectSectionSegue" {
-			if let selectSectionViewController = segue.destination as? SelectSectionViewController {
-				selectSectionViewController.schedule = schedule
-			}
-		}
 	}
     
     // MARK: Location Manager
