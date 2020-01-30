@@ -150,7 +150,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 									
 									let distance = stationLocation.distance(from: location)
 									
-									if (distance < 400) {
+									if (distance < 300) {
 									
 										// Create annotation using divvy coordinate
 										let divvyAnnotation = CustomPointAnnotation()
@@ -345,6 +345,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			
 			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+			
+			if self.tabBarController == nil {
+				self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
+				self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+			}
 		}
 		else {
 			

@@ -85,7 +85,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		print("Added favorite address: \(self.common.favoriteAddress())")
         
         // Set right bar button to remove now that a favorite has been set
-        self.navigationItem.rightBarButtonItem = removeFavoriteButton
+        //self.navigationItem.rightBarButtonItem = removeFavoriteButton
         
         // Create alert
         let alert = UIAlertController(title: "Favorite Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
@@ -111,7 +111,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.selectionChanged()
         
         // Create alert
-        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Remove Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
         
 		// Yes option
 		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -136,7 +136,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			print("Deleted user's local notifications")
 			
 			// Set right bar button to add now that a favorite has been removed
-			self.navigationItem.rightBarButtonItem = self.addFavoriteButton
+			//self.navigationItem.rightBarButtonItem = self.addFavoriteButton
 			
 		})
 		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
@@ -150,26 +150,75 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
     }
 	
-	func setAddRemoveFavoriteButton() {
+	@objc func openOptionsMenu() {
 		
-		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
+		// Add haptic feedback
+		let generator = UISelectionFeedbackGenerator()
+		generator.prepare()
+		generator.selectionChanged()
 		
 		// Get favorite address
 		let favoriteAddress = self.common.favoriteAddress()
 		
-		// Initialize add button
-		addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
+		// Create options alert
+		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
-		// Initialize remove button
-		removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+		// Create remove favorite option for options alert
+		let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
+			
+			self.removeFavorite()
+			
+		})
 		
-		// Set top right navigation button to either add or remove
-		if favoriteAddress != schedule.address {
-			self.navigationItem.rightBarButtonItem = addFavoriteButton
+		// Create add favorite option for options alert
+		let saveFavoriteAction = UIAlertAction(title: "Save As Favorite Address", style: .default, handler:{ action in
+			
+			self.addFavorite()
+			
+		})
+		
+		if (favoriteAddress == "") {
+		
+			optionsAlert.addAction(saveFavoriteAction)
 		}
 		else {
-			self.navigationItem.rightBarButtonItem = removeFavoriteButton
+			
+			optionsAlert.addAction(removeFavoriteAction)
 		}
+		
+		// Create cancel option for options alert
+		let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+		
+		// Add options to options alert
+		optionsAlert.addAction(cancelAction)
+		
+		// Present options alert
+		self.present(optionsAlert, animated: true, completion: nil)
+		
+	}
+	
+	func setAddRemoveFavoriteButton() {
+		
+		self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+		
+		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
+		
+		// Get favorite address
+		//let favoriteAddress = self.common.favoriteAddress()
+		
+		// Initialize add button
+		//addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
+		
+		// Initialize remove button
+		//removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+		
+		// Set top right navigation button to either add or remove
+		//if favoriteAddress != schedule.address {
+		//	self.navigationItem.rightBarButtonItem = addFavoriteButton
+		//}
+		//else {
+		//	self.navigationItem.rightBarButtonItem = removeFavoriteButton
+		//}
 	}
 
     // Months/Days table view methods
@@ -244,11 +293,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
 		// Create annotation
-		//let annotation = MKPointAnnotation()
-        //annotation.title = "\(self.schedule.address)"
-        //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
-        //annotation.coordinate = self.schedule.locationCoordinate
-		
 		let annotation = CustomPointAnnotation()
 		annotation.customImageName = "pin-red"
 		annotation.coordinate = self.schedule.locationCoordinate
