@@ -779,7 +779,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		let customPointAnnotation = annotation as! CustomPointAnnotation
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
-		
+		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
 		if (customPointAnnotation.customImageName == "pin-red") {
