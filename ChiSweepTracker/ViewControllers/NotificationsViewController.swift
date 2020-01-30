@@ -70,6 +70,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		let favoriteLongitude = self.common.favoriteLongitude()
 		let favoriteLatitude = self.common.favoriteLatitude()
 		let favoriteCoordinatesArray = self.common.favoriteCoordinatesArray()
+		let showDivvyStations = self.common.showDivvyStations()
         var mapOverlayCoordinates = [CLLocationCoordinate2D]()
         
         if favoriteLongitude != 0 && favoriteLatitude != 0 {
@@ -99,10 +100,16 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
 
 			// Create annotation using location coordinate
-            let annotation = MKPointAnnotation()
-            annotation.title = favoriteAddress
-            annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
-            annotation.coordinate = location.coordinate
+            //let annotation = MKPointAnnotation()
+            //annotation.title = favoriteAddress
+            //annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
+            //annotation.coordinate = location.coordinate
+			
+			let annotation = CustomPointAnnotation()
+			annotation.customImageName = "pin-red"
+			annotation.coordinate = location.coordinate
+			annotation.title = favoriteAddress
+			annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
 
 			// Create map span
             let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
@@ -112,10 +119,75 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
 			// Add annoation to map
 			favoriteMapView.removeAnnotations(favoriteMapView.annotations)
-            favoriteMapView.addAnnotation(annotation)
+            //favoriteMapView.addAnnotation(annotation)
+			//let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
+			self.favoriteMapView.addAnnotation(annotation)
 			
 			// Set map region
             favoriteMapView.setRegion(region, animated: true)
+			
+			if (showDivvyStations) {
+				
+				let divvyClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+				
+				let divvyQuery = divvyClient.query(dataset: self.common.divvyDataset())
+				
+				divvyQuery.get { res in
+					switch res {
+					case .dataset (let data):
+						
+						if data.count > 0 {
+							
+							for (_, item) in data.enumerated() {
+							
+								let latitude = item["latitude"] as? String ?? ""
+								let longitude = item["longitude"] as? String ?? ""
+								let name = item["station_name"] as? String ?? ""
+								let docksInService = item["docks_in_service"] as? String ?? ""
+								let status = item["status"] as? String ?? ""
+							
+								if (latitude != "" && longitude != "") {
+									
+									let latitudeDouble = Double(latitude)
+									let longitudeDouble = Double(longitude)
+									
+									let stationLocation: CLLocation = CLLocation(latitude: latitudeDouble!, longitude: longitudeDouble!)
+									
+									let distance = stationLocation.distance(from: location)
+									//print("Distance: \(distance)")
+									
+									if (distance < 400) {
+									
+										// Create annotation using divvy coordinate
+										//let divvyAnnotation = MKPointAnnotation()
+										//divvyAnnotation.title = name
+										//divvyAnnotation.subtitle = "Status: \(status) Docks In Service: \(docksInService)"
+										//divvyAnnotation.coordinate = stationLocation.coordinate
+										//self.favoriteMapView.addAnnotation(divvyAnnotation)
+										
+										let divvyAnnotation = CustomPointAnnotation()
+										divvyAnnotation.customImageName = "pin-blue"
+										divvyAnnotation.coordinate = stationLocation.coordinate
+										divvyAnnotation.title = name
+										divvyAnnotation.subtitle = "Status: \(status) - Docks In Service: \(docksInService)"
+										
+										let divvyAnnotationView = MKPinAnnotationView(annotation: divvyAnnotation, reuseIdentifier: "divvy")
+										self.favoriteMapView.addAnnotation(divvyAnnotationView.annotation!)
+										
+									}
+								}
+					
+							}
+							
+							//let ward = data[0][self.common.ward()] as? String ?? ""
+						}
+					case .error (let err):
+						print((err as NSError).userInfo.debugDescription)
+					
+					}
+				}
+				
+			}
 
         }
         else {
@@ -137,59 +209,102 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
     }
     
-    @objc func removeFavorite() {
-        
+    @objc func openOptionsMenu() {
+		
 		// Add haptic feedback
         let generator = UISelectionFeedbackGenerator()
         generator.prepare()
         generator.selectionChanged()
-        
-		// Alert user if they want to delete their favorite because they will no longer receive push notifications
 		
-		// Create alert
-        let alert = UIAlertController(title: "Delete Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
+		// Get show/hide Divvy statins value from defaults
+		let showDivvyStations = self.common.showDivvyStations()
         
-		// Yes option
-		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+		// Create options alert
+		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
+		
+		// Create remove favorite option for options alert
+		let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
 			
-			print("Deleted favorite address: \(self.common.favoriteAddress())")
+			// Create remove favorite alert
+			let removeFavoriteAlert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications", preferredStyle: .alert)
 			
-			// Clear favorite default values
-			defaults.set("", forKey: "favoriteAddress")
-			defaults.set("", forKey: "favoriteWard")
-			defaults.set("", forKey: "favoriteSection")
-			defaults.set(0.0, forKey: "favoriteLongitude")
-			defaults.set(0.0, forKey: "favoriteLatitude")
-			defaults.set(nil, forKey: "favoriteCoordinatesArray")
-			defaults.set(false, forKey: "notificationsToggled")
+			// Create yes option for remove favorite alert
+			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			
-			// Delete future local iOS notifications
-			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-			
-			// Unregister from Firebase Cloud Messaging notifications
-			UIApplication.shared.unregisterForRemoteNotifications()
-			
-			print("Deleted user's local notifications")
-			
-			// If on a view with a tab control then use it to go to the search view
-			self.tabBarController?.selectedIndex = 0
-			
-			// If not on a view with a tab control, use navigation controller to go to search view
-			if self.tabBarController == nil {
+				print("Deleted favorite address: \(self.common.favoriteAddress())")
 				
-				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-					self.navigationController?.pushViewController(destinationViewController, animated: true)
+				// Clear favorite default values
+				defaults.set("", forKey: "favoriteAddress")
+				defaults.set("", forKey: "favoriteWard")
+				defaults.set("", forKey: "favoriteSection")
+				defaults.set(0.0, forKey: "favoriteLongitude")
+				defaults.set(0.0, forKey: "favoriteLatitude")
+				defaults.set(nil, forKey: "favoriteCoordinatesArray")
+				defaults.set(false, forKey: "notificationsToggled")
+				
+				// Delete future local iOS notifications
+				UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+				
+				// Unregister from Firebase Cloud Messaging notifications
+				UIApplication.shared.unregisterForRemoteNotifications()
+				
+				print("Deleted user's local notifications")
+				
+				// If on a view with a tab control then use it to go to the search view
+				self.tabBarController?.selectedIndex = 0
+				
+				// If not on a view with a tab control, use navigation controller to go to search view
+				if self.tabBarController == nil {
+					
+					if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+						self.navigationController?.pushViewController(destinationViewController, animated: true)
+					}
 				}
-			}
+				
+			})
+			yesAction.setValue(UIColor.red, forKey: "titleTextColor")
+			
+			// Create and add no option for remove favorite alert
+			removeFavoriteAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+			
+			// Add yes option to remove favorite alert
+			removeFavoriteAlert.addAction(yesAction)
+			
+			// Present remove favorite alert
+			self.present(removeFavoriteAlert, animated: true, completion: nil)
+			
 		})
-		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
-		alert.addAction(yesAction)
+		
+		// Create nearby Divvy stations option for options alert
+		if (showDivvyStations == false) {
+			let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
+				
+				defaults.set(true, forKey: "showDivvyStations")
+				self.loadFavoriteMap()
+				
+			})
+			optionsAlert.addAction(showDivvyAction)
+		}
+		else {
+			let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations", style: .default, handler:{ action in
+		
+				defaults.set(false, forKey: "showDivvyStations")
+				self.loadFavoriteMap()
+		
+			})
+			optionsAlert.addAction(hideDivvyAction)
+		}
+		
+		// Create cancel option for options alert
+		let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+		
+		// Add options to options alert
+		optionsAlert.addAction(cancelAction)
+		optionsAlert.addAction(removeFavoriteAction)
+		
         
-		// No option
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        
-		// Present alert
-        self.present(alert, animated: true, completion: nil)
+		// Present options alert
+        self.present(optionsAlert, animated: true, completion: nil)
         
     }
     
@@ -244,7 +359,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			self.timePicker.isUserInteractionEnabled = notificationsToggled
 			
 			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
-			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
+			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 		}
 		else {
 			
@@ -657,6 +772,29 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 		
 		return MKOverlayRenderer(overlay: overlay)
+	}
+	
+	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+		
+		let reuseIdentifier = "divvy"
+		
+		var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
+		
+		if annotationView == nil {
+			
+			annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+			annotationView?.canShowCallout = true
+			
+		} else {
+			
+			annotationView?.annotation = annotation
+			
+		}
+		
+		let customPointAnnotation = annotation as! CustomPointAnnotation
+		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
+		
+		return annotationView
 	}
 
 	//MARK: Actions

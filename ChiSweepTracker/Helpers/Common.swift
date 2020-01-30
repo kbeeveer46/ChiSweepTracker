@@ -35,6 +35,10 @@ class Common {
 		return defaults.double(forKey: "defaultLatitude")
 	}
 	
+	func showDivvyStations() -> Bool {
+		return defaults.bool(forKey: "showDivvyStations")
+	}
+	
 	// SODA SDK
 	
 	func dates() -> String {
@@ -71,6 +75,10 @@ class Common {
 	
 	func wardDataset() -> String {
 		return defaults.string(forKey: "wardDataset") ?? ""
+	}
+	
+	func divvyDataset() -> String {
+		return defaults.string(forKey: "divvyDataset") ?? ""
 	}
 	
 	// Favorites
@@ -187,6 +195,7 @@ class Common {
 						let monthNumberTitle = data["monthNumberTitle"] as! String
 						let sectionTitle = data["sectionTitle"] as! String
 						let wardTitle = data["wardTitle"] as! String
+						let divvyDataset = data["divvyDataset"] as! String
 						
 						print("latestAppVersion: \(latestAppVersion)")
 						print("wardDataset: \(wardDataset)")
@@ -198,6 +207,7 @@ class Common {
 						print("monthNumberTitle: \(monthNumberTitle)")
 						print("sectionTitle: \(sectionTitle)")
 						print("wardTitle: \(wardTitle)")
+						print("divvyDataset: \(divvyDataset)")
 						
 						defaults.set(latestAppVersion, forKey: "latestAppVersion")
 						defaults.set(wardDataset, forKey: "wardDataset")
@@ -209,6 +219,7 @@ class Common {
 						defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
 						defaults.set(sectionTitle, forKey: "sectionTitle")
 						defaults.set(wardTitle, forKey: "wardTitle")
+						defaults.set(divvyDataset, forKey: "divvyDataset")
 						
 						// Get data set version
 						let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.latestAppVersion()))
