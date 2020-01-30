@@ -30,8 +30,8 @@
             filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "498"
-            endingLineNumber = "498"
+            startingLineNumber = "502"
+            endingLineNumber = "502"
             landmarkName = "searchTypeTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>

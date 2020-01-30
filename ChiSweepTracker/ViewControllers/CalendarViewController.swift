@@ -1,6 +1,7 @@
 import UIKit
 import MapKit
 import EventKit
+import THLabel
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
    
@@ -93,11 +94,17 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let polygons = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
 		// Create map annotation
-        let annotation = MKPointAnnotation()
+        //let annotation = MKPointAnnotation()
+		//annotation.title = "\(self.schedule.address)"
+        //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
+        //annotation.coordinate = self.schedule.locationCoordinate
+		
+		let annotation = CustomPointAnnotation()
+		annotation.customImageName = "pin-red"
+		annotation.coordinate = self.schedule.locationCoordinate
         annotation.title = "\(self.schedule.address)"
-        annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
-        annotation.coordinate = self.schedule.locationCoordinate
-        
+		annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
+		
 		// Create map span
         let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
 		
@@ -133,6 +140,41 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         return MKOverlayRenderer(overlay: overlay)
     }
+	
+	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+		
+		let reuseIdentifier = "pin"
+		
+		var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
+		
+		if annotationView == nil {
+			
+			annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+			annotationView?.canShowCallout = true
+			
+		}
+		else {
+			
+			annotationView?.annotation = annotation
+			
+		}
+		
+		let customPointAnnotation = annotation as! CustomPointAnnotation
+		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
+		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
+		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
+		
+		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+		annotationLabel.lineBreakMode = .byWordWrapping
+		annotationLabel.textAlignment = .center
+		annotationLabel.font = .boldSystemFont(ofSize: 11)
+		annotationLabel.text = annotation.title!
+		annotationLabel.strokeSize = 1
+		annotationLabel.strokeColor = UIColor.white
+		annotationView?.addSubview(annotationLabel)
+		
+		return annotationView
+	}
     
     // Calculates the number of "empty" boxes at the start of every month
     func calculateStartDateDayPosition() {

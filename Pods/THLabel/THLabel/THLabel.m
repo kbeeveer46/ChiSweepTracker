@@ -524,10 +524,14 @@
 			break;
 			
 		case NSTextAlignmentNatural:
-			if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) {
-				textRect.origin.x = floorf(CGRectGetMinX(contentRect) + CGRectGetWidth(contentRect) - CGRectGetWidth(textRect));
+			if (@available(iOS 9.0, *)) {
+				if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) {
+					textRect.origin.x = floorf(CGRectGetMinX(contentRect) + CGRectGetWidth(contentRect) - CGRectGetWidth(textRect));
+				} else {
+					textRect.origin.x = floorf(CGRectGetMinX(contentRect));
+				}
 			} else {
-				textRect.origin.x = floorf(CGRectGetMinX(contentRect));
+				// Fallback on earlier versions
 			}
 			break;
 			

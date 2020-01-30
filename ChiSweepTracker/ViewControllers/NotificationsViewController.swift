@@ -785,7 +785,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		if (customPointAnnotation.customImageName == "pin-red") {
 		
 			let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
-			//annotationLabel.numberOfLines = 2
 			annotationLabel.lineBreakMode = .byWordWrapping
 			annotationLabel.textAlignment = .center
 			annotationLabel.font = .boldSystemFont(ofSize: 11)

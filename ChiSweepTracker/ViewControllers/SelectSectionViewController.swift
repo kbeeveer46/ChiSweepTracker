@@ -1,6 +1,7 @@
 import UIKit
 import CoreLocation
 import MapKit
+import THLabel
 
 class SelectSectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MKMapViewDelegate {
 
@@ -179,9 +180,14 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
 			
 			// Create annotation from location coordinate
-			let annotation = MKPointAnnotation()
-			annotation.title = addressFromDefaults
+			//let annotation = MKPointAnnotation()
+			//annotation.title = addressFromDefaults
+			//annotation.coordinate = location.coordinate
+			
+			let annotation = CustomPointAnnotation()
+			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
+			annotation.title = addressFromDefaults
 			
 			// Create span and region
 			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
@@ -194,6 +200,41 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			// Set region
 			selectSectionMap.setRegion(region, animated: true)
 		}
+	}
+	
+	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+		
+		let reuseIdentifier = "pin"
+		
+		var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
+		
+		if annotationView == nil {
+			
+			annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+			annotationView?.canShowCallout = true
+			
+		}
+		else {
+			
+			annotationView?.annotation = annotation
+			
+		}
+		
+		let customPointAnnotation = annotation as! CustomPointAnnotation
+		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
+		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
+		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
+		
+		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+		annotationLabel.lineBreakMode = .byWordWrapping
+		annotationLabel.textAlignment = .center
+		annotationLabel.font = .boldSystemFont(ofSize: 11)
+		annotationLabel.text = annotation.title!
+		annotationLabel.strokeSize = 1
+		annotationLabel.strokeColor = UIColor.white
+		annotationView?.addSubview(annotationLabel)
+		
+		return annotationView
 	}
     
     // Section table view methods
