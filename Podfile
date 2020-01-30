@@ -14,5 +14,6 @@ target 'ChiSweepTracker' do
   pod 'FirebaseFirestoreSwift'
 	
 	pod 'IQKeyboardManagerSwift'
+	pod 'THLabel', '~> 1.4.0'
 
 end

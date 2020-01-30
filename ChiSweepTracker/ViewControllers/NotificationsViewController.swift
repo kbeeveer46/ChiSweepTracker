@@ -2,6 +2,7 @@ import UIKit
 import UserNotifications
 import CoreLocation
 import MapKit
+import THLabel
 
 class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
@@ -100,11 +101,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
 
 			// Create annotation using location coordinate
-            //let annotation = MKPointAnnotation()
-            //annotation.title = favoriteAddress
-            //annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
-            //annotation.coordinate = location.coordinate
-			
 			let annotation = CustomPointAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
@@ -119,9 +115,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
 			// Add annoation to map
 			favoriteMapView.removeAnnotations(favoriteMapView.annotations)
-            //favoriteMapView.addAnnotation(annotation)
-			//let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
-			self.favoriteMapView.addAnnotation(annotation)
+			let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
+			self.favoriteMapView.addAnnotation(annotationView.annotation!)
 			
 			// Set map region
             favoriteMapView.setRegion(region, animated: true)
@@ -154,17 +149,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 									let stationLocation: CLLocation = CLLocation(latitude: latitudeDouble!, longitude: longitudeDouble!)
 									
 									let distance = stationLocation.distance(from: location)
-									//print("Distance: \(distance)")
 									
 									if (distance < 400) {
 									
 										// Create annotation using divvy coordinate
-										//let divvyAnnotation = MKPointAnnotation()
-										//divvyAnnotation.title = name
-										//divvyAnnotation.subtitle = "Status: \(status) Docks In Service: \(docksInService)"
-										//divvyAnnotation.coordinate = stationLocation.coordinate
-										//self.favoriteMapView.addAnnotation(divvyAnnotation)
-										
 										let divvyAnnotation = CustomPointAnnotation()
 										divvyAnnotation.customImageName = "pin-blue"
 										divvyAnnotation.coordinate = stationLocation.coordinate
@@ -176,10 +164,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 										
 									}
 								}
-					
 							}
-							
-							//let ward = data[0][self.common.ward()] as? String ?? ""
 						}
 					case .error (let err):
 						print((err as NSError).userInfo.debugDescription)
@@ -776,7 +761,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 		
-		let reuseIdentifier = "divvy"
+		let reuseIdentifier = "pin"
 		
 		var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
 		
@@ -785,7 +770,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
 			annotationView?.canShowCallout = true
 			
-		} else {
+		}
+		else {
 			
 			annotationView?.annotation = annotation
 			
@@ -793,6 +779,22 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		let customPointAnnotation = annotation as! CustomPointAnnotation
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
+		
+		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
+		
+		if (customPointAnnotation.customImageName == "pin-red") {
+		
+			let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+			//annotationLabel.numberOfLines = 2
+			annotationLabel.lineBreakMode = .byWordWrapping
+			annotationLabel.textAlignment = .center
+			annotationLabel.font = .boldSystemFont(ofSize: 11)
+			annotationLabel.text = annotation.title!
+			annotationLabel.strokeSize = 1
+			annotationLabel.strokeColor = UIColor.white
+			annotationView?.addSubview(annotationLabel)
+			
+		}
 		
 		return annotationView
 	}
