@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.applicationIconBadgeNumber = 0
 		
 		// Get the latest schedule from Chicago and update notifications
-		self.common.getValuesFromDatabase(completion: { message in })
+		self.common.getDataFromDatabase(completion: { message in })
     }
     
     func application(_ application: UIApplication,

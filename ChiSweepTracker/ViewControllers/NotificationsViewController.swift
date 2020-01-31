@@ -49,7 +49,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 	}
 	
-	// Go to schedule page when schedule button is clicked
+	// Go to schedule page when top left schedule button is clicked
     @objc func viewSchedule() {
         
         if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
@@ -71,7 +71,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		let favoriteLongitude = self.common.favoriteLongitude()
 		let favoriteLatitude = self.common.favoriteLatitude()
 		let favoriteCoordinatesArray = self.common.favoriteCoordinatesArray()
-		let showDivvyStations = self.common.showDivvyStations()
         var mapOverlayCoordinates = [CLLocationCoordinate2D]()
         
         if favoriteLongitude != 0 && favoriteLatitude != 0 {
@@ -121,59 +120,14 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			// Set map region
             favoriteMapView.setRegion(region, animated: true)
 			
-			if (showDivvyStations) {
-				
-				let divvyClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-				
-				let divvyQuery = divvyClient.query(dataset: self.common.divvyDataset())
-				
-				divvyQuery.get { res in
-					switch res {
-					case .dataset (let data):
-						
-						if data.count > 0 {
-							
-							for (_, item) in data.enumerated() {
-							
-								let latitude = item["latitude"] as? String ?? ""
-								let longitude = item["longitude"] as? String ?? ""
-								let name = item["station_name"] as? String ?? ""
-								let docksInService = item["docks_in_service"] as? String ?? ""
-								let status = item["status"] as? String ?? ""
-							
-								if (latitude != "" && longitude != "") {
-									
-									let latitudeDouble = Double(latitude)
-									let longitudeDouble = Double(longitude)
-									
-									let stationLocation: CLLocation = CLLocation(latitude: latitudeDouble!, longitude: longitudeDouble!)
-									
-									let distance = stationLocation.distance(from: location)
-									
-									if (distance < 300) {
-									
-										// Create annotation using divvy coordinate
-										let divvyAnnotation = CustomPointAnnotation()
-										divvyAnnotation.customImageName = "pin-blue"
-										divvyAnnotation.coordinate = stationLocation.coordinate
-										divvyAnnotation.title = name
-										divvyAnnotation.subtitle = "Status: \(status) - Docks In Service: \(docksInService)"
-										
-										let divvyAnnotationView = MKPinAnnotationView(annotation: divvyAnnotation, reuseIdentifier: "divvy")
-										self.favoriteMapView.addAnnotation(divvyAnnotationView.annotation!)
-										
-									}
-								}
-							}
-						}
-					case .error (let err):
-						print((err as NSError).userInfo.debugDescription)
-					
-					}
-				}
-				
-			}
-
+			// Add Divvy stations to map
+			addDivvyStationsToMap(location)
+			
+			// Ad relocated vehicles to map
+			addRelocationVehiclesToMap(location)
+			
+			// Add towed vehicles to map
+			addTowedVehiclesToMap(location)
         }
         else {
             
@@ -193,6 +147,159 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
             
         }
     }
+	
+	func addRelocationVehiclesToMap(_ favoriteLocatin: CLLocation) {
+	
+		// Get show towed vehicle setting from defaults
+		let showTowedVehicles = self.common.showTowedVehicles()
+		
+	}
+	
+	func addTowedVehiclesToMap(_ favoriteLocation: CLLocation) {
+		
+		// Get show towed vehicle setting from defaults
+		let showTowedVehicles = self.common.showTowedVehicles()
+		
+		// Show towed vehicles if user has that option turned on
+		if (showTowedVehicles) {
+			
+			// Create SODA client
+			let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+			
+			// Create SODA query
+			let towedQuery = towedClient.query(dataset: self.common.towedDataset())
+			
+			towedQuery.get { res in
+				switch res {
+				case .dataset (let data):
+					
+					if data.count > 0 {
+						
+						// Loop through Divvy data
+						for (_, item) in data.enumerated() {
+							
+							// Get values for each Divvy station
+							let towedDate = item[self.common.towedDateTitle()] as? String ?? ""
+							let make = item[self.common.towedMakeTitle()] as? String ?? ""
+							let style = item[self.common.towedStyleTitle()] as? String ?? ""
+							let color = item[self.common.towedColorTitle()] as? String ?? ""
+							let plate = item[self.common.towedPlateTitle()] as? String ?? ""
+							let state = item[self.common.towedStateTitle()] as? String ?? ""
+							let towedToAddress = item[self.common.towedToAddressTitle()] as? String ?? ""
+							let towedToPhone = item[self.common.towedToPhoneTitle()] as? String ?? ""
+							
+							let geocoder = CLGeocoder()
+							geocoder.geocodeAddressString(towedToAddress + " Chicago") { placemarks, error in
+								
+								// No internet connection will cause an error
+								if error != nil {
+									//self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
+									//return
+								}
+								
+								if placemarks != nil {
+									
+									// Get first placemark in list
+									let placemark = placemarks?.first
+									
+									let latitude = placemark?.location?.coordinate.latitude ?? 0
+									let longitude = placemark?.location?.coordinate.longitude ?? 0
+									
+									// Create towed location
+									let towedLocated: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
+									
+									// Get distance from favorite address to station
+									let distance = towedLocated.distance(from: favoriteLocation)
+									
+									// Show towed vehicle on map if distance is less than or equal to 300 meters
+									if (distance <= 300) {
+										
+										// Create annotation for towed location
+										let towedAnnotation = CustomPointAnnotation()
+										towedAnnotation.customImageName = "pin-orange"
+										towedAnnotation.coordinate = towedLocated.coordinate
+										towedAnnotation.title = "Plate #: \(plate) - State: \(state) - Make: \(make) - Style: \(style) - Color: \(color)"
+										towedAnnotation.subtitle = "Date: \(towedDate) - Towed To Address: \(towedToAddress) - Towed To Phone: \(towedToPhone)"
+										
+										// Add annotation to map
+										let towedAnnotationView = MKPinAnnotationView(annotation: towedAnnotation, reuseIdentifier: "towed")
+										self.favoriteMapView.addAnnotation(towedAnnotationView.annotation!)
+										
+									}
+								}
+							}
+						}
+					}
+				case .error (let err):
+					print((err as NSError).userInfo.debugDescription)
+				}
+			}
+		}
+		
+	}
+	
+	func addDivvyStationsToMap(_ favoriteLocation: CLLocation) {
+		
+		// Get show Divvy station setting from defaults
+		let showDivvyStations = self.common.showDivvyStations()
+		
+		// Show Divvy stations if user has that option turned on
+		if (showDivvyStations) {
+			
+			// Create SODA client
+			let divvyClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+			
+			// Create SODA query
+			let divvyQuery = divvyClient.query(dataset: self.common.divvyDataset())
+			
+			divvyQuery.get { res in
+				switch res {
+				case .dataset (let data):
+					
+					if data.count > 0 {
+						
+						// Loop through Divvy data
+						for (_, item) in data.enumerated() {
+							
+							// Get values for each Divvy station
+							let latitude = item["latitude"] as? String ?? ""
+							let longitude = item["longitude"] as? String ?? ""
+							let name = item["station_name"] as? String ?? ""
+							let docksInService = item["docks_in_service"] as? String ?? ""
+							let status = item["status"] as? String ?? ""
+							
+							if (latitude != "" && longitude != "") {
+								
+								// Create station location
+								let stationLocation: CLLocation = CLLocation(latitude: Double(latitude)!, longitude: Double(longitude)!)
+								
+								// Get distance from favorite address to station
+								let distance = stationLocation.distance(from: favoriteLocation)
+								
+								// Show station on map if distance is less than or equal to 300 meters
+								if (distance <= 300) {
+									
+									// Create annotation for divvy station
+									let divvyAnnotation = CustomPointAnnotation()
+									divvyAnnotation.customImageName = "pin-blue"
+									divvyAnnotation.coordinate = stationLocation.coordinate
+									divvyAnnotation.title = name
+									divvyAnnotation.subtitle = "Status: \(status) - Docks In Service: \(docksInService)"
+									
+									// Add annotation to map
+									let divvyAnnotationView = MKPinAnnotationView(annotation: divvyAnnotation, reuseIdentifier: "divvy")
+									self.favoriteMapView.addAnnotation(divvyAnnotationView.annotation!)
+									
+								}
+							}
+						}
+					}
+				case .error (let err):
+					print((err as NSError).userInfo.debugDescription)
+				}
+			}
+		}
+	}
     
     @objc func openOptionsMenu() {
 		
@@ -201,8 +308,9 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         generator.prepare()
         generator.selectionChanged()
 		
-		// Get show/hide Divvy statins value from defaults
+		// Get values from defaults
 		let showDivvyStations = self.common.showDivvyStations()
+		let showTowedVehicles = self.common.showTowedVehicles()
         
 		// Create options alert
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
@@ -259,25 +367,38 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			self.present(removeFavoriteAlert, animated: true, completion: nil)
 			
 		})
+		removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
 		
-		// Create nearby Divvy stations option for options alert
+		// Create nearby Divvy stations options for alert
 		if (showDivvyStations == false) {
 			let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
-				
 				defaults.set(true, forKey: "showDivvyStations")
 				self.loadFavoriteMap()
-				
 			})
 			optionsAlert.addAction(showDivvyAction)
 		}
 		else {
 			let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations", style: .default, handler:{ action in
-		
 				defaults.set(false, forKey: "showDivvyStations")
 				self.loadFavoriteMap()
-		
 			})
 			optionsAlert.addAction(hideDivvyAction)
+		}
+		
+		// Create nearby towed vehicle options for alert
+		if (showTowedVehicles == false) {
+			let showTowedAction = UIAlertAction(title: "Vehicle Missing? Show Towed Vehicles", style: .default, handler:{ action in
+				defaults.set(true, forKey: "showTowedVehicles")
+				self.loadFavoriteMap()
+			})
+			optionsAlert.addAction(showTowedAction)
+		}
+		else {
+			let hideTowedAction = UIAlertAction(title: "Hide Towed Vehicles", style: .default, handler:{ action in
+				defaults.set(false, forKey: "showTowedVehicles")
+				self.loadFavoriteMap()
+			})
+			optionsAlert.addAction(hideTowedAction)
 		}
 		
 		// Create cancel option for options alert
@@ -286,7 +407,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		// Add options to options alert
 		optionsAlert.addAction(cancelAction)
 		optionsAlert.addAction(removeFavoriteAction)
-		
         
 		// Present options alert
         self.present(optionsAlert, animated: true, completion: nil)

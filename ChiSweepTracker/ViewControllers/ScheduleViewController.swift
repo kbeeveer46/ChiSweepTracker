@@ -165,24 +165,19 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Create remove favorite option for options alert
 		let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
-			
 			self.removeFavorite()
-			
 		})
+		removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
 		
 		// Create add favorite option for options alert
 		let saveFavoriteAction = UIAlertAction(title: "Save As Favorite Address", style: .default, handler:{ action in
-			
 			self.addFavorite()
-			
 		})
 		
 		if (favoriteAddress == "") {
-		
 			optionsAlert.addAction(saveFavoriteAction)
 		}
 		else {
-			
 			optionsAlert.addAction(removeFavoriteAction)
 		}
 		

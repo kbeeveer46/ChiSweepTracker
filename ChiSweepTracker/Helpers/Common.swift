@@ -35,11 +35,9 @@ class Common {
 		return defaults.double(forKey: "defaultLatitude")
 	}
 	
-	func showDivvyStations() -> Bool {
-		return defaults.bool(forKey: "showDivvyStations")
-	}
-	
 	// SODA SDK
+	
+	// Schedule
 	
 	func dates() -> String {
 		return defaults.string(forKey: "datesTitle") ?? ""
@@ -77,8 +75,122 @@ class Common {
 		return defaults.string(forKey: "wardDataset") ?? ""
 	}
 	
+	// Divvy
+	
 	func divvyDataset() -> String {
 		return defaults.string(forKey: "divvyDataset") ?? ""
+	}
+	
+	func divvyDocksInServiceTitle() -> String {
+		return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""
+	}
+	
+	func divvyLatitudeTitle() -> String {
+		return defaults.string(forKey: "divvyLatitudeTitle") ?? ""
+	}
+	
+	func divvyLongitudeTitle() -> String {
+		return defaults.string(forKey: "divvyLongitudeTitle") ?? ""
+	}
+	
+	func divvyStationNameTitle() -> String {
+		return defaults.string(forKey: "divvyStationNameTitle") ?? ""
+	}
+	
+	func divvyStatusTitle() -> String {
+		return defaults.string(forKey: "divvyStatusTitle") ?? ""
+	}
+	
+	// Towed vehicles
+	
+	func towedDataset() -> String {
+		return defaults.string(forKey: "towedDataset") ?? ""
+	}
+	
+	func towedColorTitle() -> String {
+		return defaults.string(forKey: "towedColorTitle") ?? ""
+	}
+	
+	func towedInventoryNumberTitle() -> String {
+		return defaults.string(forKey: "towedInventoryNumberTitle") ?? ""
+	}
+	
+	func towedMakeTitle() -> String {
+		return defaults.string(forKey: "towedMakeTitle") ?? ""
+	}
+	
+	func towedPlateTitle() -> String {
+		return defaults.string(forKey: "towedPlateTitle") ?? ""
+	}
+	
+	func towedStateTitle() -> String {
+		return defaults.string(forKey: "towedStateTitle") ?? ""
+	}
+	
+	func towedStyleTitle() -> String {
+		return defaults.string(forKey: "towedStyleTitle") ?? ""
+	}
+	
+	func towedDateTitle() -> String {
+		return defaults.string(forKey: "towedDateTitle") ?? ""
+	}
+	
+	func towedToAddressTitle() -> String {
+		return defaults.string(forKey: "towedToAddressTitle") ?? ""
+	}
+	
+	func towedToPhoneTitle() -> String {
+		return defaults.string(forKey: "towedToPhoneTitle") ?? ""
+	}
+	
+	// Relocated vehicles
+	
+	func relocatedDataset() -> String {
+		return defaults.string(forKey: "relocatedDataset") ?? ""
+	}
+	
+	func relocatedColorTitle() -> String {
+		return defaults.string(forKey: "relocatedColorTitle") ?? ""
+	}
+	
+	func relocatedMakeTitle() -> String {
+		return defaults.string(forKey: "relocatedMakeTitle") ?? ""
+	}
+	
+	func relocatedPlateTitle() -> String {
+		return defaults.string(forKey: "relocatedPlateTitle") ?? ""
+	}
+	
+	func relocatedDateTitle() -> String {
+		return defaults.string(forKey: "relocatedDateTitle") ?? ""
+	}
+	
+	func relocatedFromLatitudeTitle() -> String {
+		return defaults.string(forKey: "relocatedFromLatitudeTitle") ?? ""
+	}
+	
+	func relocatedFromLongitudeTitle() -> String {
+		return defaults.string(forKey: "relocatedFromLongitudeTitle") ?? ""
+	}
+	
+	func relocatedReasonTitle() -> String {
+		return defaults.string(forKey: "relocatedReasonTitle") ?? ""
+	}
+	
+	func relocatedToAddressNumberTitle() -> String {
+		return defaults.string(forKey: "relocatedToAddressNumberTitle") ?? ""
+	}
+	
+	func relocatedToDirectionTitle() -> String {
+		return defaults.string(forKey: "relocatedToDirectionTitle") ?? ""
+	}
+	
+	func relocatedToStreetTitle() -> String {
+		return defaults.string(forKey: "relocatedToStreetTitle") ?? ""
+	}
+	
+	func relocatedStateTitle() -> String {
+		return defaults.string(forKey: "relocatedStateTitle") ?? ""
 	}
 	
 	// Favorites
@@ -105,6 +217,14 @@ class Common {
 	
 	func favoriteCoordinatesArray() -> [[NSArray]] {
 		return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()
+	}
+	
+	func showDivvyStations() -> Bool {
+		return defaults.bool(forKey: "showDivvyStations")
+	}
+	
+	func showTowedVehicles() -> Bool {
+		return defaults.bool(forKey: "showTowedVehicles")
 	}
 	
 	// Notifications
@@ -145,10 +265,16 @@ class Common {
 		let schedulesDatabaseName = "Schedules_Dev"
 		let updatesDatabaseName = "Updates_Dev"
 		let settingsDatabaseName = "Settings_Dev"
+		let divvysDatabaseName = "Divvys_Dev"
+		let towedDatabaseName = "TowedVehicles_Dev"
+		let relocatedDatabaseName = "RelocatedVehicles_Dev"
 		#else
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
 		let settingsDatabaseName = "Settings"
+		let divvysDatabaseName = "Divvys"
+		let towedDatabaseName = "TowedVehicles"
+		let relocatedDatabaseName = "RelocatedVehicles"
 		#endif
 	
 		// SODA
@@ -171,10 +297,11 @@ class Common {
 	
 	//MARK: Methods
 	
-	func getValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
+	func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
 		
-		// Get Chicago JSON data
 		let db = Firestore.firestore()
+		
+		// Get schedule data
 		db.collection(self.constants.schedulesDatabaseName)
 			.order(by: "year", descending: true)
 			.limit(to: 1)
@@ -195,7 +322,6 @@ class Common {
 						let monthNumberTitle = data["monthNumberTitle"] as! String
 						let sectionTitle = data["sectionTitle"] as! String
 						let wardTitle = data["wardTitle"] as! String
-						let divvyDataset = data["divvyDataset"] as! String
 						
 						print("latestAppVersion: \(latestAppVersion)")
 						print("wardDataset: \(wardDataset)")
@@ -207,7 +333,6 @@ class Common {
 						print("monthNumberTitle: \(monthNumberTitle)")
 						print("sectionTitle: \(sectionTitle)")
 						print("wardTitle: \(wardTitle)")
-						print("divvyDataset: \(divvyDataset)")
 						
 						defaults.set(latestAppVersion, forKey: "latestAppVersion")
 						defaults.set(wardDataset, forKey: "wardDataset")
@@ -219,7 +344,6 @@ class Common {
 						defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
 						defaults.set(sectionTitle, forKey: "sectionTitle")
 						defaults.set(wardTitle, forKey: "wardTitle")
-						defaults.set(divvyDataset, forKey: "divvyDataset")
 						
 						// Get data set version
 						let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.latestAppVersion()))
@@ -241,30 +365,164 @@ class Common {
 								print("Cannot get dataset version from Firebase")
 							}
 						}
-						
-						// Get settings
-						let db = Firestore.firestore()
-						db.collection(self.constants.settingsDatabaseName)
-							.limit(to: 1)
-							.getDocuments() { (querySnapshot, err) in
-								if let err = err {
-									fatalError("Could not get settings data from Firebase: \(err)")
-								} else {
-									for document in querySnapshot!.documents {
-										
-										let data = document.data()
-										
-										let contactEmail = data["contactEmail"] as! String
-										
-										defaults.set(contactEmail, forKey: "contactEmail")
-									}
-								}
-						}
 					}
 				}
 		}
 		
-		completion("Finished calling getCityOfChicagoValuesFromDatabase")
+		// Get settings data
+		db.collection(self.constants.settingsDatabaseName)
+			.limit(to: 1)
+			.getDocuments() { (querySnapshot, err) in
+				if let err = err {
+					print("Could not get settings data from Firebase: \(err)")
+				} else {
+					for document in querySnapshot!.documents {
+						
+						let data = document.data()
+						
+						let contactEmail = data["contactEmail"] as! String
+						
+						defaults.set(contactEmail, forKey: "contactEmail")
+					}
+				}
+		}
+		
+		// Get Divvys data
+		db.collection(self.constants.divvysDatabaseName)
+			.limit(to: 1)
+			.getDocuments() { (querySnapshot, err) in
+				if let err = err {
+					print("Could not get Divvys data from Firebase: \(err)")
+				} else {
+					for document in querySnapshot!.documents {
+						
+						let data = document.data()
+						
+						let divvyDataset = data["divvyDataset"] as! String
+						let divvyDocksInServiceTitle = data["docksInServiceTitle"] as! String
+						let divvyLatitudeTitle = data["latitudeTitle"] as! String
+						let divvyLongitudeTitle = data["longitudeTitle"] as! String
+						let divvyStationNameTitle = data["stationNameTitle"] as! String
+						let divvyStatusTitle = data["statusTitle"] as! String
+						
+						print("divvyDataset: \(divvyDataset)")
+						print("divvyDocksInServiceTitle: \(divvyDocksInServiceTitle)")
+						print("divvyLatitudeTitle: \(divvyLatitudeTitle)")
+						print("divvyLongitudeTitle: \(divvyLongitudeTitle)")
+						print("divvyStationNameTitle: \(divvyStationNameTitle)")
+						print("divvyStatusTitle: \(divvyStatusTitle)")
+						
+						defaults.set(divvyDataset, forKey: "divvyDataset")
+						defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
+						defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
+						defaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
+						defaults.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
+						defaults.set(divvyStatusTitle, forKey: "divvyStatusTitle")
+					}
+				}
+		}
+		
+		// Get relocated vehicles data
+		db.collection(self.constants.relocatedDatabaseName)
+			.limit(to: 1)
+			.getDocuments() { (querySnapshot, err) in
+				if let err = err {
+					print("Could not get relocated vehicle data from Firebase: \(err)")
+				} else {
+					for document in querySnapshot!.documents {
+						
+						let data = document.data()
+						
+						let relocatedDataset = data["relocatedDataset"] as! String
+						let relocatedColorTitle = data["colorTitle"] as! String
+						let relocatedMakeTitle = data["makeTitle"] as! String
+						let relocatedPlateTitle = data["plateTitle"] as! String
+						let relocatedDateTitle = data["relocatedDateTitle"] as! String
+						let relocatedFromLatitudeTitle = data["relocatedFromLatitudeTitle"] as! String
+						let relocatedFromLongitudeTitle = data["relocatedFromLongitudeTitle"] as! String
+						let relocatedReasonTitle = data["relocatedReasonTitle"] as! String
+						let relocatedToAddressNumberTitle = data["relocatedToAddressNumberTitle"] as! String
+						let relocatedToDirectionTitle = data["relocatedToDirectionTitle"] as! String
+						let relocatedToStreetTitle = data["relocatedToStreetTitle"] as! String
+						let relocatedStateTitle = data["stateTitle"] as! String
+
+						print("relocatedDataset: \(relocatedDataset)")
+						print("relocatedColorTitle: \(relocatedColorTitle)")
+						print("relocatedMakeTitle: \(relocatedMakeTitle)")
+						print("relocatedPlateTitle: \(relocatedPlateTitle)")
+						print("relocatedDateTitle: \(relocatedDateTitle)")
+						print("relocatedFromLatitudeTitle: \(relocatedFromLatitudeTitle)")
+						print("relocatedFromLongitudeTitle: \(relocatedFromLongitudeTitle)")
+						print("relocatedReasonTitle: \(relocatedReasonTitle)")
+						print("relocatedToAddressNumberTitle: \(relocatedToAddressNumberTitle)")
+						print("relocatedToDirectionTitle: \(relocatedToDirectionTitle)")
+						print("relocatedToStreetTitle: \(relocatedToStreetTitle)")
+						print("relocatedStateTitle: \(relocatedStateTitle)")
+						
+						defaults.set(relocatedDataset, forKey: "relocatedDataset")
+						defaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
+						defaults.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
+						defaults.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
+						defaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
+						defaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
+						defaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
+						defaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
+						defaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
+						defaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
+						defaults.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
+						defaults.set(relocatedStateTitle, forKey: "relocatedStateTitle")
+					}
+				}
+		}
+		
+		// Get towed vehicles data
+		db.collection(self.constants.towedDatabaseName)
+			.limit(to: 1)
+			.getDocuments() { (querySnapshot, err) in
+				if let err = err {
+					print("Could not get towed vehicle data from Firebase: \(err)")
+				} else {
+					for document in querySnapshot!.documents {
+						
+						let data = document.data()
+						
+						let towedDataset = data["towedDataset"] as! String
+						let towedColorTitle = data["colorTitle"] as! String
+						let towedInventoryNumberTitle = data["inventoryNumberTitle"] as! String
+						let towedMakeTitle = data["makeTitle"] as! String
+						let towedPlateTitle = data["plateTitle"] as! String
+						let towedStateTitle = data["stateTitle"] as! String
+						let towedStyleTitle = data["styleTitle"] as! String
+						let towedDateTitle = data["towedDateTitle"] as! String
+						let towedToAddressTitle = data["towedToAddressTitle"] as! String
+						let towedToPhoneTitle = data["towedToPhoneTitle"] as! String
+
+						print("towedDataset: \(towedDataset)")
+						print("towedColorTitle: \(towedColorTitle)")
+						print("towedInventoryNumberTitle: \(towedInventoryNumberTitle)")
+						print("towedMakeTitle: \(towedMakeTitle)")
+						print("towedPlateTitle: \(towedPlateTitle)")
+						print("towedStateTitle: \(towedStateTitle)")
+						print("towedStyleTitle: \(towedStyleTitle)")
+						print("towedDateTitle: \(towedDateTitle)")
+						print("towedToAddressTitle: \(towedToAddressTitle)")
+						print("towedToPhoneTitle: \(towedToPhoneTitle)")
+						
+						defaults.set(towedDataset, forKey: "towedDataset")
+						defaults.set(towedColorTitle, forKey: "towedColorTitle")
+						defaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
+						defaults.set(towedMakeTitle, forKey: "towedMakeTitle")
+						defaults.set(towedPlateTitle, forKey: "towedPlateTitle")
+						defaults.set(towedStateTitle, forKey: "towedStateTitle")
+						defaults.set(towedStyleTitle, forKey: "towedStyleTitle")
+						defaults.set(towedDateTitle, forKey: "towedDateTitle")
+						defaults.set(towedToAddressTitle, forKey: "towedToAddressTitle")
+						defaults.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
+					}
+				}
+		}
+		
+		completion("Finished getting data from Firebase")
 	}
 	
 	func updateNotifications() {
