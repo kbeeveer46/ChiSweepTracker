@@ -127,7 +127,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			addRelocationVehiclesToMap(location)
 			
 			// Add towed vehicles to map
-			addTowedVehiclesToMap(location)
+			//addTowedVehiclesToMap(location)
         }
         else {
             
@@ -148,15 +148,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         }
     }
 	
-	func addRelocationVehiclesToMap(_ favoriteLocatin: CLLocation) {
+	func addRelocationVehiclesToMap(_ favoriteLocation: CLLocation) {
 	
-		// Get show towed vehicle setting from defaults
-		let showTowedVehicles = self.common.showTowedVehicles()
-		
-	}
-	
-	func addTowedVehiclesToMap(_ favoriteLocation: CLLocation) {
-		
 		// Get show towed vehicle setting from defaults
 		let showTowedVehicles = self.common.showTowedVehicles()
 		
@@ -164,69 +157,55 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		if (showTowedVehicles) {
 			
 			// Create SODA client
-			let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+			let relocatedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 			
 			// Create SODA query
-			let towedQuery = towedClient.query(dataset: self.common.towedDataset())
+			let relocatedQuery = relocatedClient.query(dataset: self.common.relocatedDataset())
 			
-			towedQuery.get { res in
+			relocatedQuery.get { res in
 				switch res {
 				case .dataset (let data):
 					
 					if data.count > 0 {
 						
-						// Loop through Divvy data
+						// Loop through relocated vehicle data
 						for (_, item) in data.enumerated() {
 							
-							// Get values for each Divvy station
-							let towedDate = item[self.common.towedDateTitle()] as? String ?? ""
-							let make = item[self.common.towedMakeTitle()] as? String ?? ""
-							let style = item[self.common.towedStyleTitle()] as? String ?? ""
-							let color = item[self.common.towedColorTitle()] as? String ?? ""
-							let plate = item[self.common.towedPlateTitle()] as? String ?? ""
-							let state = item[self.common.towedStateTitle()] as? String ?? ""
-							let towedToAddress = item[self.common.towedToAddressTitle()] as? String ?? ""
-							let towedToPhone = item[self.common.towedToPhoneTitle()] as? String ?? ""
+							// Get values for each relocated vehicle
+							let relocatedDate = item[self.common.relocatedDateTitle()] as? String ?? ""
+							let make = item[self.common.relocatedMakeTitle()] as? String ?? ""
+							let color = item[self.common.relocatedColorTitle()] as? String ?? ""
+							let plate = item[self.common.relocatedPlateTitle()] as? String ?? ""
+							let state = item[self.common.relocatedStateTitle()] as? String ?? ""
+							let relocatedToAddressNumber = item[self.common.relocatedToAddressNumberTitle()] as? String ?? ""
+							let relocatedToDirection = item[self.common.relocatedToDirectionTitle()] as? String ?? ""
+							let relocatedToStreet = item[self.common.relocatedToStreetTitle()] as? String ?? ""
+							let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
+							let relocatedFromLatitude = item[self.common.relocatedFromLatitudeTitle()] as? String ?? ""
+							let relocatedFromLongitude = item[self.common.relocatedFromLongitudeTitle()] as? String ?? ""
 							
-							let geocoder = CLGeocoder()
-							geocoder.geocodeAddressString(towedToAddress + " Chicago") { placemarks, error in
+							if (relocatedFromLatitude != "" && relocatedFromLongitude != "") {
+							
+								let relocatedLocation: CLLocation = CLLocation(latitude: Double(relocatedFromLatitude)!, longitude: Double(relocatedFromLongitude)!)
+										
+								// Get distance from favorite address to station
+								let distance = relocatedLocation.distance(from: favoriteLocation)
 								
-								// No internet connection will cause an error
-								if error != nil {
-									//self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
-									//return
-								}
+								// Show towed vehicle on map if distance is less than or equal to 300 meters
+								//if (distance <= 300) {
 								
-								if placemarks != nil {
-									
-									// Get first placemark in list
-									let placemark = placemarks?.first
-									
-									let latitude = placemark?.location?.coordinate.latitude ?? 0
-									let longitude = placemark?.location?.coordinate.longitude ?? 0
-									
-									// Create towed location
-									let towedLocated: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
-									
-									// Get distance from favorite address to station
-									let distance = towedLocated.distance(from: favoriteLocation)
-									
-									// Show towed vehicle on map if distance is less than or equal to 300 meters
-									if (distance <= 300) {
-										
-										// Create annotation for towed location
-										let towedAnnotation = CustomPointAnnotation()
-										towedAnnotation.customImageName = "pin-orange"
-										towedAnnotation.coordinate = towedLocated.coordinate
-										towedAnnotation.title = "Plate #: \(plate) - State: \(state) - Make: \(make) - Style: \(style) - Color: \(color)"
-										towedAnnotation.subtitle = "Date: \(towedDate) - Towed To Address: \(towedToAddress) - Towed To Phone: \(towedToPhone)"
-										
-										// Add annotation to map
-										let towedAnnotationView = MKPinAnnotationView(annotation: towedAnnotation, reuseIdentifier: "towed")
-										self.favoriteMapView.addAnnotation(towedAnnotationView.annotation!)
-										
-									}
-								}
+								// Create annotation for towed location
+								let relocatedAnnotation = CustomPointAnnotation()
+								relocatedAnnotation.customImageName = "pin-orange"
+								relocatedAnnotation.coordinate = relocatedLocation.coordinate
+								relocatedAnnotation.title = "Plate #: \(plate) - State: \(state) - Make: \(make) - Color: \(color)"
+								relocatedAnnotation.subtitle = "Date: \(relocatedDate) - To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+								
+								// Add annotation to map
+								let relocatedAnnotationView = MKPinAnnotationView(annotation: relocatedAnnotation, reuseIdentifier: "relocated")
+								self.favoriteMapView.addAnnotation(relocatedAnnotationView.annotation!)
+								
+								//}
 							}
 						}
 					}
@@ -237,6 +216,88 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 		
 	}
+	
+//	func addTowedVehiclesToMap(_ favoriteLocation: CLLocation) {
+//
+//		// Get show towed vehicle setting from defaults
+//		let showTowedVehicles = self.common.showTowedVehicles()
+//
+//		// Show towed vehicles if user has that option turned on
+//		if (showTowedVehicles) {
+//
+//			// Create SODA client
+//			let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+//
+//			// Create SODA query
+//			let towedQuery = towedClient.query(dataset: self.common.towedDataset())
+//
+//			towedQuery.get { res in
+//				switch res {
+//				case .dataset (let data):
+//
+//					if data.count > 0 {
+//
+//						// Loop through towed vehicle data
+//						for (_, item) in data.enumerated() {
+//
+//							// Get values for each towed vehicle
+//							let towedDate = item[self.common.towedDateTitle()] as? String ?? ""
+//							let make = item[self.common.towedMakeTitle()] as? String ?? ""
+//							let style = item[self.common.towedStyleTitle()] as? String ?? ""
+//							let color = item[self.common.towedColorTitle()] as? String ?? ""
+//							let plate = item[self.common.towedPlateTitle()] as? String ?? ""
+//							let state = item[self.common.towedStateTitle()] as? String ?? ""
+//							let towedToAddress = item[self.common.towedToAddressTitle()] as? String ?? ""
+//							let towedToPhone = item[self.common.towedToPhoneTitle()] as? String ?? ""
+//
+//							let geocoder = CLGeocoder()
+//							geocoder.geocodeAddressString(towedToAddress + " Chicago") { placemarks, error in
+//
+//								// No internet connection will cause an error
+//								if error != nil {
+//									//self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
+//									//return
+//								}
+//
+//								if placemarks != nil {
+//
+//									// Get first placemark in list
+//									let placemark = placemarks?.first
+//
+//									let latitude = placemark?.location?.coordinate.latitude ?? 0
+//									let longitude = placemark?.location?.coordinate.longitude ?? 0
+//
+//									// Create towed location
+//									let towedLocated: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
+//
+//									// Get distance from favorite address to station
+//									let distance = towedLocated.distance(from: favoriteLocation)
+//
+//									// Show towed vehicle on map if distance is less than or equal to 300 meters
+//									//if (distance <= 300) {
+//
+//										// Create annotation for towed location
+//										let towedAnnotation = CustomPointAnnotation()
+//										towedAnnotation.customImageName = "pin-orange"
+//										towedAnnotation.coordinate = towedLocated.coordinate
+//										towedAnnotation.title = "Plate #: \(plate) - State: \(state) - Make: \(make) - Style: \(style) - Color: \(color)"
+//										towedAnnotation.subtitle = "Date: \(towedDate) - Towed To Address: \(towedToAddress) - Towed To Phone: \(towedToPhone)"
+//
+//										// Add annotation to map
+//										let towedAnnotationView = MKPinAnnotationView(annotation: towedAnnotation, reuseIdentifier: "towed")
+//										self.favoriteMapView.addAnnotation(towedAnnotationView.annotation!)
+//
+//									//}
+//								}
+//							}
+//						}
+//					}
+//				case .error (let err):
+//					print((err as NSError).userInfo.debugDescription)
+//				}
+//			}
+//		}
+//	}
 	
 	func addDivvyStationsToMap(_ favoriteLocation: CLLocation) {
 		
