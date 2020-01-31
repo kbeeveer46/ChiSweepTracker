@@ -20,6 +20,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	
 	// Shared
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
+	var relocatedVehicleCount = 0
+	var divvyStationCount = 0
 	
 	// MARK: Methods
 	
@@ -151,6 +153,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		// Get show relocated vehicle setting from defaults
 		let showTowedVehicles = self.common.showTowedVehicles()
 		
+		self.relocatedVehicleCount = 0
+		
 		// Show relocated vehicles if user has that option turned on
 		if (showTowedVehicles) {
 			
@@ -180,7 +184,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 							let relocatedToAddressNumber = item[self.common.relocatedToAddressNumberTitle()] as? String ?? ""
 							let relocatedToDirection = item[self.common.relocatedToDirectionTitle()] as? String ?? ""
 							let relocatedToStreet = item[self.common.relocatedToStreetTitle()] as? String ?? ""
-							let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
+							//let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
 							let relocatedFromLatitude = item[self.common.relocatedFromLatitudeTitle()] as? String ?? ""
 							let relocatedFromLongitude = item[self.common.relocatedFromLongitudeTitle()] as? String ?? ""
 							
@@ -194,6 +198,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 								// Show relocated vehicle on map if distance is less than or equal to 300 meters
 								if (distance <= 200) {
 								
+									self.relocatedVehicleCount += 1
 									foundRelocatedVehicles = true
 									
 									relocatedDate = Date.getFormattedDate(relocatedDate)
@@ -213,11 +218,11 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 							}
 						}
 						if (foundRelocatedVehicles == false) {
-							self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
+							//self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
 						}
 					}
 					else {
-						self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
+						//self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
 					}
 				case .error (let err):
 					print((err as NSError).userInfo.debugDescription)
@@ -231,6 +236,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		// Get show Divvy station setting from defaults
 		let showDivvyStations = self.common.showDivvyStations()
+		
+		self.divvyStationCount = 0
 		
 		// Show Divvy stations if user has that option turned on
 		if (showDivvyStations) {
@@ -267,6 +274,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 								
 								// Show station on map if distance is less than or equal to 300 meters
 								if (distance <= 300) {
+									
+									self.divvyStationCount += 1
 									
 									// Create annotation for divvy station
 									let divvyAnnotation = CustomPointAnnotation()
@@ -367,7 +376,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			optionsAlert.addAction(showDivvyAction)
 		}
 		else {
-			let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations", style: .default, handler:{ action in
+			let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations (\(divvyStationCount))", style: .default, handler:{ action in
 				defaults.set(false, forKey: "showDivvyStations")
 				self.loadFavoriteMap()
 			})
@@ -383,7 +392,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			optionsAlert.addAction(showRelocatedAction)
 		}
 		else {
-			let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles", style: .default, handler:{ action in
+			let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles (\(relocatedVehicleCount))", style: .default, handler:{ action in
 				defaults.set(false, forKey: "showTowedVehicles")
 				self.loadFavoriteMap()
 			})
