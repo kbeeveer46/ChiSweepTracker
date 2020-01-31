@@ -168,6 +168,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 					
 					if data.count > 0 {
 						
+						var foundRelocatedVehicles = false
+						
 						// Loop through relocated vehicle data
 						for (_, item) in data.enumerated() {
 							
@@ -192,8 +194,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 								let distance = relocatedLocation.distance(from: favoriteLocation)
 								
 								// Show relocated vehicle on map if distance is less than or equal to 300 meters
-								if (distance <= 300) {
+								if (distance <= 200) {
 								
+									foundRelocatedVehicles = true
+									
 									relocatedDate = Date.getFormattedDate(relocatedDate)
 									
 									// Create annotation for relocated location
@@ -210,6 +214,12 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 								}
 							}
 						}
+						if (foundRelocatedVehicles == false) {
+							self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
+						}
+					}
+					else {
+						self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
 					}
 				case .error (let err):
 					print((err as NSError).userInfo.debugDescription)
@@ -530,7 +540,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 			
 			if self.tabBarController == nil {
-				self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
+				//self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
 				self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 			}
 		}
