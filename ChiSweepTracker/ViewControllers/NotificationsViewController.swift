@@ -150,17 +150,17 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 	
 	func addRelocationVehiclesToMap(_ favoriteLocation: CLLocation) {
 	
-		// Get show towed vehicle setting from defaults
+		// Get show relocated vehicle setting from defaults
 		let showTowedVehicles = self.common.showTowedVehicles()
 		
-		// Show towed vehicles if user has that option turned on
+		// Show relocated vehicles if user has that option turned on
 		if (showTowedVehicles) {
 			
 			// Create SODA client
 			let relocatedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 			
 			// Create SODA query
-			let relocatedQuery = relocatedClient.query(dataset: self.common.relocatedDataset())
+			let relocatedQuery = relocatedClient.query(dataset: self.common.relocatedDataset()).limit(5000)
 			
 			relocatedQuery.get { res in
 				switch res {
@@ -172,7 +172,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 						for (_, item) in data.enumerated() {
 							
 							// Get values for each relocated vehicle
-							let relocatedDate = item[self.common.relocatedDateTitle()] as? String ?? ""
+							var relocatedDate = item[self.common.relocatedDateTitle()] as? String ?? ""
 							let make = item[self.common.relocatedMakeTitle()] as? String ?? ""
 							let color = item[self.common.relocatedColorTitle()] as? String ?? ""
 							let plate = item[self.common.relocatedPlateTitle()] as? String ?? ""
@@ -188,24 +188,26 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 							
 								let relocatedLocation: CLLocation = CLLocation(latitude: Double(relocatedFromLatitude)!, longitude: Double(relocatedFromLongitude)!)
 										
-								// Get distance from favorite address to station
+								// Get distance from favorite address to relocated vehicle
 								let distance = relocatedLocation.distance(from: favoriteLocation)
 								
-								// Show towed vehicle on map if distance is less than or equal to 300 meters
-								//if (distance <= 300) {
+								// Show relocated vehicle on map if distance is less than or equal to 300 meters
+								if (distance <= 300) {
 								
-								// Create annotation for towed location
-								let relocatedAnnotation = CustomPointAnnotation()
-								relocatedAnnotation.customImageName = "pin-orange"
-								relocatedAnnotation.coordinate = relocatedLocation.coordinate
-								relocatedAnnotation.title = "Plate #: \(plate) - State: \(state) - Make: \(make) - Color: \(color)"
-								relocatedAnnotation.subtitle = "Date: \(relocatedDate) - To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+									relocatedDate = Date.getFormattedDate(relocatedDate)
+									
+									// Create annotation for relocated location
+									let relocatedAnnotation = CustomPointAnnotation()
+									relocatedAnnotation.customImageName = "pin-orange"
+									relocatedAnnotation.coordinate = relocatedLocation.coordinate
+									relocatedAnnotation.subtitle = "#:\(plate) State:\(state) Make:\(make) Color:\(color)"
+									relocatedAnnotation.title = "Date:\(relocatedDate) To:\(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+									
+									// Add annotation to map
+									let relocatedAnnotationView = MKPinAnnotationView(annotation: relocatedAnnotation, reuseIdentifier: "relocated")
+									self.favoriteMapView.addAnnotation(relocatedAnnotationView.annotation!)
 								
-								// Add annotation to map
-								let relocatedAnnotationView = MKPinAnnotationView(annotation: relocatedAnnotation, reuseIdentifier: "relocated")
-								self.favoriteMapView.addAnnotation(relocatedAnnotationView.annotation!)
-								
-								//}
+								}
 							}
 						}
 					}
@@ -1026,6 +1028,23 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			print("Deleted user's local notifications")
 			
 		}
+	}
+}
+
+// MARK: Extensions
+
+extension Date {
+	
+	static func getFormattedDate(_ string: String) -> String {
+		
+		let dateFormatterGet = DateFormatter()
+		dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+		
+		let dateFormatterPrint = DateFormatter()
+		dateFormatterPrint.dateFormat = "MM/dd/yyyy"
+		
+		let date: Date? = dateFormatterGet.date(from: string)
+		return dateFormatterPrint.string(from: date!);
 	}
 }
 

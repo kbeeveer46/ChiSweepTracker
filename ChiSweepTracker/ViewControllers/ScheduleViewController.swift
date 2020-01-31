@@ -174,7 +174,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			self.addFavorite()
 		})
 		
-		if (favoriteAddress == "") {
+		if (favoriteAddress != schedule.address) {
 			optionsAlert.addAction(saveFavoriteAction)
 		}
 		else {
