@@ -179,12 +179,85 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	
 	@IBAction func searchTowedVehiclesTapped(_ sender: Any) {
 		
-		// Segue to towed result view
-		if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedResultsViewController") as? TowedResultsViewController {
-			//destinationViewController.schedule = self.schedule
-			self.navigationController?.pushViewController(destinationViewController, animated: true)
+		var towedVehicles = [TowedVehicleModel]()
+		let selectedMake = self.makePicker.selectedRow(inComponent: 0) > 0 ? self.makes[self.makePicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
+		let selectedModel = self.modelPicker.selectedRow(inComponent: 0) > 0 ? self.models[self.modelPicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
+		let selectedColor = self.colorPicker.selectedRow(inComponent: 0) > 0 ? self.colors[self.colorPicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
+		let selectedState = self.statePicker.selectedRow(inComponent: 0) > 0 ? self.states[self.statePicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
+		let plate = licensePlateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+		
+		if (selectedMake == "") {
+			self.common.showAlert(self.common.constants.errorTitle, "Please select a Make")
+			return
 		}
 		
+		var filter = selectedMake != "" ? "\(self.common.towedMakeTitle()) = '\(selectedMake)'" : ""
+		    filter += selectedModel != "" ? " AND \(self.common.towedModelTitle()) = '\(selectedModel)'" : ""
+		    filter += selectedColor != "" ? " AND \(self.common.towedColorTitle()) = '\(selectedColor)'" : ""
+		    filter += selectedState != "" ? " AND \(self.common.towedStateTitle()) = '\(selectedState)'" : ""
+			filter += plate! != "" ? " AND lower(\(self.common.towedPlateTitle())) = '\(plate!)'" : ""
+		
+		// Create SODA client
+		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+		
+		// Create SODA query
+		let towedQuery = towedClient.query(dataset: self.common.towedDataset())
+			.filter(filter)
+			.orderAscending(self.common.towedMakeTitle())
+		    .limit(10000)
+			//.orderAscending(self.common.towedStateTitle())
+			//.orderAscending(self.common.towedPlateTitle())
+			
+		towedQuery.get { res in
+			switch res {
+			case .dataset (let data):
+				
+				if data.count > 0 {
+					
+					// Loop through towed vehicle data
+					for (_, item) in data.enumerated() {
+						
+						// Get values for each towed vehicle
+						var towedDate = item[self.common.towedDateTitle()] as? String ?? ""
+						let make = item[self.common.towedMakeTitle()] as? String ?? ""
+						let model = item[self.common.towedModelTitle()] as? String ?? ""
+						let style = item[self.common.towedStyleTitle()] as? String ?? ""
+						let color = item[self.common.towedColorTitle()] as? String ?? ""
+						let plate = item[self.common.towedPlateTitle()] as? String ?? ""
+						let state = item[self.common.towedStateTitle()] as? String ?? ""
+						let inventoryNumber = item[self.common.towedInventoryNumberTitle()] as? String ?? ""
+						let towedToAddress = item[self.common.towedToAddressTitle()] as? String ?? ""
+						let towedToPhone = item[self.common.towedToPhoneTitle()] as? String ?? ""
+						
+						towedDate = Date.getFormattedDate(towedDate)
+						
+						let vehicle = TowedVehicleModel()
+						vehicle.towDate = towedDate
+						vehicle.make = make
+						vehicle.model = model
+						vehicle.style = style
+						vehicle.color = color
+						vehicle.plateNumber = plate
+						vehicle.state = state
+						vehicle.towedToAddress = towedToAddress
+						vehicle.towedToPhone = towedToPhone
+						vehicle.inventoryNumber = inventoryNumber
+						towedVehicles.append(vehicle)
+					}
+					
+					// Segue to towed result view
+					if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedResultsViewController") as? TowedResultsViewController {
+						destinationViewController.towedVehicles = towedVehicles
+						self.navigationController?.pushViewController(destinationViewController, animated: true)
+					}
+				}
+				else {
+					self.common.showAlert("Search Completed", "No vehicles matching your searh criteria were found.")
+				}
+			case .error (let err):
+				print((err as NSError).userInfo.debugDescription)
+			}
+		}
 	}
 	
 

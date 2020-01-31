@@ -967,21 +967,3 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 	}
 }
-
-// MARK: Extensions
-
-extension Date {
-	
-	static func getFormattedDate(_ string: String) -> String {
-		
-		let dateFormatterGet = DateFormatter()
-		dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-		
-		let dateFormatterPrint = DateFormatter()
-		dateFormatterPrint.dateFormat = "MM/dd/yyyy"
-		
-		let date: Date? = dateFormatterGet.date(from: string)
-		return dateFormatterPrint.string(from: date!);
-	}
-}
-

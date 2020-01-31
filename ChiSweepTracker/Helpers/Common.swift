@@ -581,6 +581,33 @@ class Common {
 
 // MARK: Extensions
 
+// Capitalize first lett of month name
+extension String {
+	
+	func capitalizingFirstLetter() -> String {
+		return prefix(1).capitalized + dropFirst()
+	}
+	
+	mutating func capitalizeFirstLetter() {
+		self = self.capitalizingFirstLetter()
+	}
+}
+
+extension Date {
+	
+	static func getFormattedDate(_ string: String) -> String {
+		
+		let dateFormatterGet = DateFormatter()
+		dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+		
+		let dateFormatterPrint = DateFormatter()
+		dateFormatterPrint.dateFormat = "MM/dd/yyyy"
+		
+		let date: Date? = dateFormatterGet.date(from: string)
+		return dateFormatterPrint.string(from: date!);
+	}
+}
+
 // Enable the use of hex strings to color views
 extension UIColor {
     convenience init(hexString: String, alpha: CGFloat = 1.0) {
