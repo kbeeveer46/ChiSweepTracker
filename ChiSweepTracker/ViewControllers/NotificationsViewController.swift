@@ -458,21 +458,32 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			optionsAlert.addAction(hideDivvyAction)
 		}
 		
-		// Create nearby towed vehicle options for alert
+		// Create nearby towed/relocated vehicle options for alert
 		if (showTowedVehicles == false) {
-			let showTowedAction = UIAlertAction(title: "Vehicle Missing? Show Towed Vehicles", style: .default, handler:{ action in
+			let showRelocatedAction = UIAlertAction(title: "Vehicle Missing? Show Relocated Vehicles", style: .default, handler:{ action in
 				defaults.set(true, forKey: "showTowedVehicles")
 				self.loadFavoriteMap()
 			})
-			optionsAlert.addAction(showTowedAction)
+			optionsAlert.addAction(showRelocatedAction)
 		}
 		else {
-			let hideTowedAction = UIAlertAction(title: "Hide Towed Vehicles", style: .default, handler:{ action in
+			let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles", style: .default, handler:{ action in
 				defaults.set(false, forKey: "showTowedVehicles")
 				self.loadFavoriteMap()
 			})
-			optionsAlert.addAction(hideTowedAction)
+			optionsAlert.addAction(hideRelocatedAction)
 		}
+		
+		let showTowedAction = UIAlertAction(title: "Vehicle Missing? Search Towed Vehicles", style: .default, handler:{ action in
+			
+			// Segue to towed search view
+			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedSearchViewController") as? TowedSearchViewController {
+				//destinationViewController.schedule = self.schedule
+				self.navigationController?.pushViewController(destinationViewController, animated: true)
+			}
+			
+		})
+		optionsAlert.addAction(showTowedAction)
 		
 		// Create cancel option for options alert
 		let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
