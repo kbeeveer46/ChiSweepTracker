@@ -55,5 +55,22 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 		
 		return cell
 	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: true)
+		
+		// Get selected towed vehicle and go to towed vehicle detail view
+		
+		let row = indexPath.row
+		
+		let towedVehicle = towedVehicles[row]
+		
+		// Segue to towed detail view
+		if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedDetailViewController") as? TowedDetailViewController {
+			destinationViewController.towedVehicle = towedVehicle
+			self.navigationController?.pushViewController(destinationViewController, animated: true)
+		}
+		
+	}
 
 }

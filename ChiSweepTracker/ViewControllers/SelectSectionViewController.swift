@@ -180,10 +180,6 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
 			
 			// Create annotation from location coordinate
-			//let annotation = MKPointAnnotation()
-			//annotation.title = addressFromDefaults
-			//annotation.coordinate = location.coordinate
-			
 			let annotation = CustomPointAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
