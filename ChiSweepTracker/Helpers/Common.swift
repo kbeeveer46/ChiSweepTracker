@@ -119,6 +119,10 @@ class Common {
 		return defaults.string(forKey: "towedMakeTitle") ?? ""
 	}
 	
+	func towedModelTitle() -> String {
+		return defaults.string(forKey: "towedModelTitle") ?? ""
+	}
+	
 	func towedPlateTitle() -> String {
 		return defaults.string(forKey: "towedPlateTitle") ?? ""
 	}
@@ -490,6 +494,7 @@ class Common {
 						let towedColorTitle = data["colorTitle"] as! String
 						let towedInventoryNumberTitle = data["inventoryNumberTitle"] as! String
 						let towedMakeTitle = data["makeTitle"] as! String
+						let towedModelTitle = data["modelTitle"] as! String
 						let towedPlateTitle = data["plateTitle"] as! String
 						let towedStateTitle = data["stateTitle"] as! String
 						let towedStyleTitle = data["styleTitle"] as! String
@@ -501,6 +506,7 @@ class Common {
 						print("towedColorTitle: \(towedColorTitle)")
 						print("towedInventoryNumberTitle: \(towedInventoryNumberTitle)")
 						print("towedMakeTitle: \(towedMakeTitle)")
+						print("towedModelTitle: \(towedModelTitle)")
 						print("towedPlateTitle: \(towedPlateTitle)")
 						print("towedStateTitle: \(towedStateTitle)")
 						print("towedStyleTitle: \(towedStyleTitle)")
@@ -512,6 +518,7 @@ class Common {
 						defaults.set(towedColorTitle, forKey: "towedColorTitle")
 						defaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
 						defaults.set(towedMakeTitle, forKey: "towedMakeTitle")
+						defaults.set(towedModelTitle, forKey: "towedModelTitle")
 						defaults.set(towedPlateTitle, forKey: "towedPlateTitle")
 						defaults.set(towedStateTitle, forKey: "towedStateTitle")
 						defaults.set(towedStyleTitle, forKey: "towedStyleTitle")

@@ -24,6 +24,7 @@
 		FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */; };
 		FA3F868D23E47C7C00194C47 /* TowedSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F868C23E47C7C00194C47 /* TowedSearchViewController.swift */; };
 		FA3F868F23E48BEF00194C47 /* TowedResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F868E23E48BEF00194C47 /* TowedResultsViewController.swift */; };
+		FA3F869123E48DBB00194C47 /* TowedVehicleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F869023E48DBB00194C47 /* TowedVehicleModel.swift */; };
 		FA6AFEE323A1E11D00F7E177 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */; };
 		FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */; };
 		FA87EFD723AABBF10061DDBC /* logo-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD623AABBF10061DDBC /* logo-1024.png */; };
@@ -55,6 +56,7 @@
 		FA29464D23985FE600A24FFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA3F868C23E47C7C00194C47 /* TowedSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowedSearchViewController.swift; sourceTree = "<group>"; };
 		FA3F868E23E48BEF00194C47 /* TowedResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowedResultsViewController.swift; sourceTree = "<group>"; };
+		FA3F869023E48DBB00194C47 /* TowedVehicleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowedVehicleModel.swift; sourceTree = "<group>"; };
 		FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA87EFD623AABBF10061DDBC /* logo-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-1024.png"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
+				FA3F869023E48DBB00194C47 /* TowedVehicleModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
+				FA3F869123E48DBB00194C47 /* TowedVehicleModel.swift in Sources */,
 				FA3F868D23E47C7C00194C47 /* TowedSearchViewController.swift in Sources */,
 				FA29464423985FE300A24FFC /* SearchViewController.swift in Sources */,
 				FA29464023985FE300A24FFC /* AppDelegate.swift in Sources */,

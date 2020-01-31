@@ -523,23 +523,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="SaY-wE-6dM">
-                                <rect key="frame" x="20" y="54" width="335" height="485"/>
+                                <rect key="frame" x="20" y="54" width="335" height="505"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VeC-NR-S82">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="75"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Make" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2J-P7-F1P">
-                                                <rect key="frame" x="0.0" y="0.0" width="110" height="75"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Fx-y2-sOx">
-                                                <rect key="frame" x="110" y="0.0" width="225" height="75"/>
+                                            <pickerView tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Fx-y2-sOx">
+                                                <rect key="frame" x="110" y="0.0" width="225" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="qiq-kD-gzj"/>
-                                                    <constraint firstAttribute="height" constant="75" id="y2w-hD-mKt"/>
+                                                    <constraint firstAttribute="height" constant="80" id="y2w-hD-mKt"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="0Np-di-K2M" id="dFy-3y-PdD"/>
+                                                    <outlet property="delegate" destination="0Np-di-K2M" id="xeY-Ey-Agi"/>
+                                                </connections>
                                             </pickerView>
                                         </subviews>
                                         <constraints>
@@ -548,61 +552,73 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P2U-hk-6Gn">
-                                        <rect key="frame" x="0.0" y="92" width="335" height="75"/>
+                                        <rect key="frame" x="0.0" y="97" width="335" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Model" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A6K-ue-ihy">
-                                                <rect key="frame" x="0.0" y="0.0" width="110" height="75"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hce-ti-9ye">
-                                                <rect key="frame" x="110" y="0.0" width="225" height="75"/>
+                                            <pickerView tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hce-ti-9ye">
+                                                <rect key="frame" x="110" y="0.0" width="225" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="ovO-h0-eJF"/>
-                                                    <constraint firstAttribute="height" constant="75" id="xmL-5A-Ufp"/>
+                                                    <constraint firstAttribute="height" constant="80" id="xmL-5A-Ufp"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="0Np-di-K2M" id="NhP-qO-bZF"/>
+                                                    <outlet property="delegate" destination="0Np-di-K2M" id="gJ0-oQ-Teg"/>
+                                                </connections>
                                             </pickerView>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LJg-aC-lmX">
-                                        <rect key="frame" x="0.0" y="184" width="335" height="75"/>
+                                        <rect key="frame" x="0.0" y="194" width="335" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEr-80-tq5">
-                                                <rect key="frame" x="0.0" y="0.0" width="110" height="75"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wV5-Sx-OUt">
-                                                <rect key="frame" x="110" y="0.0" width="225" height="75"/>
+                                            <pickerView tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wV5-Sx-OUt">
+                                                <rect key="frame" x="110" y="0.0" width="225" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="Gvg-pX-vgO"/>
-                                                    <constraint firstAttribute="height" constant="75" id="aol-MM-bVP"/>
+                                                    <constraint firstAttribute="height" constant="80" id="aol-MM-bVP"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="0Np-di-K2M" id="1ED-gn-9wR"/>
+                                                    <outlet property="delegate" destination="0Np-di-K2M" id="JgN-fA-y1f"/>
+                                                </connections>
                                             </pickerView>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e8u-ex-FU2">
-                                        <rect key="frame" x="0.0" y="276" width="335" height="75"/>
+                                        <rect key="frame" x="0.0" y="291" width="335" height="80"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EwF-xa-gcA">
-                                                <rect key="frame" x="0.0" y="0.0" width="110" height="75"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="110" height="80"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1r5-Fj-aXy">
-                                                <rect key="frame" x="110" y="0.0" width="225" height="75"/>
+                                            <pickerView tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1r5-Fj-aXy">
+                                                <rect key="frame" x="110" y="0.0" width="225" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="AJF-gj-j1O"/>
-                                                    <constraint firstAttribute="height" constant="75" id="d3B-yM-zVF"/>
+                                                    <constraint firstAttribute="height" constant="80" id="d3B-yM-zVF"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="0Np-di-K2M" id="ScD-m3-2Mx"/>
+                                                    <outlet property="delegate" destination="0Np-di-K2M" id="Ywh-IW-yIG"/>
+                                                </connections>
                                             </pickerView>
                                         </subviews>
                                     </stackView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="License Plate #" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ehq-AH-2LY">
-                                        <rect key="frame" x="0.0" y="368" width="335" height="40"/>
+                                        <rect key="frame" x="0.0" y="388" width="335" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="9HG-NW-fRi"/>
                                         </constraints>
@@ -610,7 +626,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WcB-Ef-2bU">
-                                        <rect key="frame" x="0.0" y="425" width="335" height="60"/>
+                                        <rect key="frame" x="0.0" y="445" width="335" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="K4q-bV-Jup"/>
                                         </constraints>
@@ -633,7 +649,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="Jqp-fo-5nv"/>
                     <connections>
+                        <outlet property="colorPicker" destination="wV5-Sx-OUt" id="Owt-e3-GMW"/>
+                        <outlet property="licensePlateTextField" destination="Ehq-AH-2LY" id="yu3-UO-0ZM"/>
+                        <outlet property="makePicker" destination="2Fx-y2-sOx" id="3Yt-df-EVa"/>
+                        <outlet property="modelPicker" destination="hce-ti-9ye" id="2Z5-Db-Abu"/>
                         <outlet property="searchTowedVehiclesButton" destination="WcB-Ef-2bU" id="744-xV-1Of"/>
+                        <outlet property="statePicker" destination="1r5-Fj-aXy" id="5wz-jV-VPB"/>
+                        <outlet property="towedSearchStackView" destination="SaY-wE-6dM" id="Szm-cq-dbQ"/>
                         <segue destination="yL8-7X-4Ow" kind="show" id="a7n-EA-5I3"/>
                     </connections>
                 </viewController>
