@@ -1,12 +1,12 @@
 import Foundation
 
 public class TowedVehicleModel {
-	var towDate = ""
+	var towedDate = ""
 	var make = ""
 	var style = ""
 	var model = ""
 	var color = ""
-	var plateNumber = ""
+	var plate = ""
 	var state = ""
 	var inventoryNumber = ""
 	var towedToAddress = ""

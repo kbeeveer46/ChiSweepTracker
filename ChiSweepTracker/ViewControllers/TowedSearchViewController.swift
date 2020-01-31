@@ -238,12 +238,12 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 						towedDate = Date.getFormattedDate(towedDate)
 						
 						let vehicle = TowedVehicleModel()
-						vehicle.towDate = towedDate
+						vehicle.towedDate = towedDate
 						vehicle.make = make
 						vehicle.model = model
 						vehicle.style = style
 						vehicle.color = color
-						vehicle.plateNumber = plate
+						vehicle.plate = plate
 						vehicle.state = state
 						vehicle.towedToAddress = towedToAddress
 						vehicle.towedToPhone = towedToPhone

@@ -47,8 +47,8 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 		modelLabel.text = self.towedVehicles[indexPath.row].model
 		colorLabel.text = self.towedVehicles[indexPath.row].color
 		stateLabel.text = self.towedVehicles[indexPath.row].state
-		plateLabel.text = self.towedVehicles[indexPath.row].plateNumber
-		dateLabel.text = self.towedVehicles[indexPath.row].towDate
+		plateLabel.text = self.towedVehicles[indexPath.row].plate
+		dateLabel.text = self.towedVehicles[indexPath.row].towedDate
 		toAddressLabel.text = self.towedVehicles[indexPath.row].towedToAddress
 		toPhoneLabel.text = self.towedVehicles[indexPath.row].towedToPhone
 		inventoryNumberLabel.text = self.towedVehicles[indexPath.row].inventoryNumber

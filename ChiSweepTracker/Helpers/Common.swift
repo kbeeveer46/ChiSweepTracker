@@ -604,6 +604,11 @@ extension Date {
 		dateFormatterPrint.dateFormat = "MM/dd/yyyy"
 		
 		let date: Date? = dateFormatterGet.date(from: string)
+		
+		if (date == nil) {
+			return ""
+		}
+		
 		return dateFormatterPrint.string(from: date!);
 	}
 }

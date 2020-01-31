@@ -6,6 +6,16 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	
 	// Controls
 	@IBOutlet weak var towedDetailMapView: MKMapView!
+	@IBOutlet weak var towedDetailMapViewHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var makeLabel: UILabel!
+	@IBOutlet weak var modelLabel: UILabel!
+	@IBOutlet weak var colorLabel: UILabel!
+	@IBOutlet weak var stateLabel: UILabel!
+	@IBOutlet weak var plateLabel: UILabel!
+	@IBOutlet weak var towedDateLabel: UILabel!
+	@IBOutlet weak var towedToAddressLabel: UILabel!
+	@IBOutlet weak var towedToPhoneLabel: UILabel!
+	@IBOutlet weak var inventoryNumberLabel: UILabel!
 	
 	// Shared
 	var towedVehicle = TowedVehicleModel()
@@ -19,7 +29,38 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		// Load detail map and show towed to location pin
 		self.loadDetailSectionMap()
 		
+		// Populate labels with data from towed vehicle
+		self.populateTowedVehicleLabels()
+		
+		// Initialize controls per device
+		self.initializeControlsPerDevice()
+		
     }
+	
+	func populateTowedVehicleLabels() {
+		
+		makeLabel.text = towedVehicle.make
+		modelLabel.text = towedVehicle.model
+		colorLabel.text = towedVehicle.color
+		stateLabel.text = towedVehicle.state
+		plateLabel.text = towedVehicle.plate
+		towedDateLabel.text = towedVehicle.towedDate
+		towedToAddressLabel.text = towedVehicle.towedToAddress
+		towedToPhoneLabel.text = towedVehicle.towedToPhone
+		inventoryNumberLabel.text = towedVehicle.inventoryNumber
+		
+	}
+	
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			towedDetailMapViewHeightConstraint.constant = 150
+		default:
+			break
+		}
+		
+	}
 	
 	// Load map using use default values from search
 	func loadDetailSectionMap() {

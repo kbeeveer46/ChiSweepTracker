@@ -971,19 +971,19 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DQR-gl-Vmu">
-                                <rect key="frame" x="20" y="255" width="335" height="260"/>
+                                <rect key="frame" x="15" y="250" width="355" height="260"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X5n-7H-qOP">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Make" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BWW-ba-W2L">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HOND" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yIe-tf-ebF">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -995,16 +995,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fd-bM-a5Z">
-                                        <rect key="frame" x="0.0" y="30" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="30" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Model" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U8y-Eq-sKh">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CIV" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edY-q0-91B">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1016,16 +1016,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8y3-tb-X6e">
-                                        <rect key="frame" x="0.0" y="60" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="60" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MmH-Cf-MBL">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BLK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7KR-5t-9PU">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1037,16 +1037,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PsA-6J-f6c">
-                                        <rect key="frame" x="0.0" y="90" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="90" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jj9-xO-oOz">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RY9-Ct-RMs">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1058,16 +1058,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3RG-6h-k28">
-                                        <rect key="frame" x="0.0" y="120" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="120" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="License Plate #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zIt-Fi-dSf">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ABC 123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f18-ic-MsD">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1079,16 +1079,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VWl-Oy-BEr">
-                                        <rect key="frame" x="0.0" y="150" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="150" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Towed Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lsd-Co-oFQ">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="6" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/1/2020" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZoC-pG-YY2">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1100,16 +1100,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o2E-tV-jCY">
-                                        <rect key="frame" x="0.0" y="180" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="180" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Towed To Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iRk-A9-z9O">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="7" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Main St." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Qc-s4-9Jc">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1121,16 +1121,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwK-jg-Kvp">
-                                        <rect key="frame" x="0.0" y="210" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="210" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Towed To Phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hgF-gQ-AKd">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="8" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(123) 456-7890" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1GW-WW-XHT">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1142,16 +1142,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GMP-5y-Cv2">
-                                        <rect key="frame" x="0.0" y="240" width="335" height="20"/>
+                                        <rect key="frame" x="0.0" y="240" width="355" height="20"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inventory #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5B-ba-UvG">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" tag="9" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12345" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nF6-ky-ht7">
-                                                <rect key="frame" x="167.5" y="0.0" width="167.5" height="20"/>
+                                                <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1167,18 +1167,28 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="DQR-gl-Vmu" firstAttribute="leading" secondItem="K59-3N-ynW" secondAttribute="leading" constant="20" id="0F9-w8-ZOx"/>
+                            <constraint firstItem="DQR-gl-Vmu" firstAttribute="leading" secondItem="K59-3N-ynW" secondAttribute="leading" constant="15" id="0F9-w8-ZOx"/>
                             <constraint firstItem="vGJ-YO-mr6" firstAttribute="top" secondItem="K59-3N-ynW" secondAttribute="top" id="dzh-J2-DYj"/>
                             <constraint firstItem="vGJ-YO-mr6" firstAttribute="leading" secondItem="K59-3N-ynW" secondAttribute="leading" id="gLv-RD-XPm"/>
-                            <constraint firstItem="K59-3N-ynW" firstAttribute="trailing" secondItem="DQR-gl-Vmu" secondAttribute="trailing" constant="20" id="h9j-ub-FCM"/>
+                            <constraint firstItem="K59-3N-ynW" firstAttribute="trailing" secondItem="DQR-gl-Vmu" secondAttribute="trailing" constant="5" id="h9j-ub-FCM"/>
                             <constraint firstItem="K59-3N-ynW" firstAttribute="trailing" secondItem="vGJ-YO-mr6" secondAttribute="trailing" id="mUX-15-DB8"/>
-                            <constraint firstItem="DQR-gl-Vmu" firstAttribute="top" secondItem="vGJ-YO-mr6" secondAttribute="bottom" constant="20" id="oTo-xG-wTs"/>
+                            <constraint firstItem="DQR-gl-Vmu" firstAttribute="top" secondItem="vGJ-YO-mr6" secondAttribute="bottom" constant="15" id="oTo-xG-wTs"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="K59-3N-ynW"/>
                     </view>
                     <navigationItem key="navigationItem" id="poO-SD-lw9"/>
                     <connections>
+                        <outlet property="colorLabel" destination="7KR-5t-9PU" id="hMA-KS-usG"/>
+                        <outlet property="inventoryNumberLabel" destination="nF6-ky-ht7" id="hOn-rm-1oG"/>
+                        <outlet property="makeLabel" destination="yIe-tf-ebF" id="8YG-q7-Amd"/>
+                        <outlet property="modelLabel" destination="edY-q0-91B" id="XDS-2P-4PJ"/>
+                        <outlet property="plateLabel" destination="f18-ic-MsD" id="96q-Xe-nsP"/>
+                        <outlet property="stateLabel" destination="RY9-Ct-RMs" id="nBb-ax-TVB"/>
+                        <outlet property="towedDateLabel" destination="ZoC-pG-YY2" id="06f-8u-fnL"/>
                         <outlet property="towedDetailMapView" destination="vGJ-YO-mr6" id="uSe-XM-mTj"/>
+                        <outlet property="towedDetailMapViewHeightConstraint" destination="Vw1-Oc-mZQ" id="3Hz-BI-Vqi"/>
+                        <outlet property="towedToAddressLabel" destination="8Qc-s4-9Jc" id="ZHe-Fc-3lx"/>
+                        <outlet property="towedToPhoneLabel" destination="1GW-WW-XHT" id="JbE-jA-TjE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sVv-IT-bRG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
