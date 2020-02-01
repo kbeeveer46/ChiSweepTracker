@@ -199,11 +199,11 @@
             <objects>
                 <viewController storyboardIdentifier="ScheduleViewController" id="Xr8-KD-z2R" customClass="ScheduleViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n6l-LK-poC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                 <subviews>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
@@ -221,7 +221,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                        <rect key="frame" x="0.0" y="260" width="320" height="264"/>
+                                        <rect key="frame" x="0.0" y="260" width="320" height="288"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
@@ -366,17 +366,17 @@
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
-                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="45C-rY-kFz"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="279" width="310" height="335.5"/>
+                                <rect key="frame" x="0.0" y="235" width="310" height="345.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-aH-Zkq">
                                         <rect key="frame" x="0.0" y="0.0" width="310" height="112"/>
@@ -428,24 +428,24 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="185.5" width="310" height="65"/>
+                                        <rect key="frame" x="0.0" y="185.5" width="310" height="70"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-Tc-noJ">
-                                                <rect key="frame" x="20" y="0.0" width="25" height="65"/>
+                                                <rect key="frame" x="20" y="0.0" width="25" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="25" id="UGz-XO-IgL"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uc-gJ-6px">
-                                                <rect key="frame" x="55" y="0.0" width="50" height="65"/>
+                                                <rect key="frame" x="55" y="0.0" width="50" height="70"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <pickerView contentMode="right" translatesAutoresizingMaskIntoConstraints="NO" id="LL0-f2-4jY">
-                                                <rect key="frame" x="115" y="0.0" width="175" height="65"/>
+                                                <rect key="frame" x="115" y="0.0" width="175" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="65" id="HMA-bb-iMa"/>
+                                                    <constraint firstAttribute="height" constant="70" id="HMA-bb-iMa"/>
                                                     <constraint firstAttribute="width" constant="175" id="YLF-yC-clf"/>
                                                 </constraints>
                                             </pickerView>
@@ -453,24 +453,24 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="270.5" width="310" height="65"/>
+                                        <rect key="frame" x="0.0" y="275.5" width="310" height="70"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="ECS-GF-Q2t">
-                                                <rect key="frame" x="20" y="0.0" width="25" height="65"/>
+                                                <rect key="frame" x="20" y="0.0" width="25" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="25" id="aPh-sX-vh2"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0S-y0-5Xx">
-                                                <rect key="frame" x="55" y="0.0" width="50" height="65"/>
+                                                <rect key="frame" x="55" y="0.0" width="50" height="70"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="luP-wW-qKV">
-                                                <rect key="frame" x="115" y="0.0" width="175" height="65"/>
+                                                <rect key="frame" x="115" y="0.0" width="175" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="65" id="FN2-OG-r3Y"/>
+                                                    <constraint firstAttribute="height" constant="70" id="FN2-OG-r3Y"/>
                                                     <constraint firstAttribute="width" constant="175" id="ZLn-qs-lhp"/>
                                                 </constraints>
                                             </datePicker>
@@ -513,11 +513,11 @@
             <objects>
                 <viewController storyboardIdentifier="TowedSearchViewController" id="0Np-di-K2M" customClass="TowedSearchViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gWO-hG-nPS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="bGr-IJ-eIs">
-                                <rect key="frame" x="20" y="44" width="280" height="435"/>
+                                <rect key="frame" x="20" y="0.0" width="280" height="435"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VeC-NR-S82">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="85"/>
@@ -635,7 +635,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WcB-Ef-2bU">
-                                <rect key="frame" x="20" y="499" width="280" height="60"/>
+                                <rect key="frame" x="20" y="465" width="280" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="K4q-bV-Jup"/>
                                 </constraints>
@@ -649,7 +649,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="bGr-IJ-eIs" firstAttribute="leading" secondItem="vmP-o2-Fxh" secondAttribute="leading" constant="20" id="NtB-zz-qHf"/>
-                            <constraint firstItem="WcB-Ef-2bU" firstAttribute="top" secondItem="bGr-IJ-eIs" secondAttribute="bottom" constant="20" id="SsE-Xg-AvD"/>
+                            <constraint firstItem="WcB-Ef-2bU" firstAttribute="top" secondItem="bGr-IJ-eIs" secondAttribute="bottom" constant="30" id="SsE-Xg-AvD"/>
                             <constraint firstItem="vmP-o2-Fxh" firstAttribute="trailing" secondItem="bGr-IJ-eIs" secondAttribute="trailing" constant="20" id="TCd-VR-fom"/>
                             <constraint firstItem="bGr-IJ-eIs" firstAttribute="top" secondItem="vmP-o2-Fxh" secondAttribute="top" id="feV-eD-1ZE"/>
                             <constraint firstItem="WcB-Ef-2bU" firstAttribute="leading" secondItem="vmP-o2-Fxh" secondAttribute="leading" constant="20" id="sMJ-Hf-cE7"/>
@@ -678,11 +678,11 @@
             <objects>
                 <viewController storyboardIdentifier="TowedResultsViewController" id="yL8-7X-4Ow" customClass="TowedResultsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lFY-78-xMd">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7aX-lO-kbB">
-                                <rect key="frame" x="15" y="54" width="290" height="504"/>
+                                <rect key="frame" x="15" y="10" width="290" height="528"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="towedVehicleTableCell" id="ZKL-y8-1mW">
@@ -923,17 +923,17 @@
             <objects>
                 <viewController storyboardIdentifier="TowedDetailViewController" id="3Vw-rl-u6h" customClass="TowedDetailViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yd5-2v-am5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vGJ-YO-mr6">
-                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="Vw1-Oc-mZQ"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="DQR-gl-Vmu">
-                                <rect key="frame" x="20" y="299" width="300" height="324"/>
+                                <rect key="frame" x="20" y="255" width="300" height="324"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X5n-7H-qOP">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="20"/>
@@ -1201,23 +1201,23 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarViewController" id="a8Y-hK-Ycy" customClass="CalendarViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="izA-kT-NUo">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZFy-60-zB9">
-                                <rect key="frame" x="0.0" y="44" width="320" height="235"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="3NZ-tU-kmZ"/>
                                 </constraints>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on sweep day to add calendar event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSJ-e6-OHu">
-                                <rect key="frame" x="8" y="287" width="304" height="18"/>
+                                <rect key="frame" x="8" y="243" width="304" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                <rect key="frame" x="7.5" y="339" width="305" height="336.5"/>
+                                <rect key="frame" x="7.5" y="295" width="305" height="336.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
                                         <rect key="frame" x="0.0" y="0.0" width="305" height="20.5"/>
@@ -1358,6 +1358,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="eEQ-YS-Bae"/>
-        <segue reference="aU1-JL-7NV"/>
+        <segue reference="maw-XV-A0s"/>
     </inferredMetricsTieBreakers>
 </document>
