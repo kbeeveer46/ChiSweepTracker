@@ -171,7 +171,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			towedSearchStackView.spacing = 12
+			towedSearchStackView.spacing = 0
 		default:
 			break
 		}
