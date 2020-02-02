@@ -13,12 +13,14 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var stateLabel: UILabel!
 	@IBOutlet weak var plateLabel: UILabel!
 	@IBOutlet weak var towedDateLabel: UILabel!
-	@IBOutlet weak var towedToAddressLabel: UILabel!
-	@IBOutlet weak var towedToPhoneLabel: UILabel!
+	@IBOutlet weak var towedToAddressButton: UIButton!
+	@IBOutlet weak var towedToPhoneButton: UIButton!
 	@IBOutlet weak var inventoryNumberLabel: UILabel!
 	
 	// Shared
 	var towedVehicle = TowedVehicleModel()
+	var latitude = 0.0
+	var longitude = 0.0
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +47,8 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		stateLabel.text = towedVehicle.state
 		plateLabel.text = towedVehicle.plate
 		towedDateLabel.text = towedVehicle.towedDate
-		towedToAddressLabel.text = towedVehicle.towedToAddress
-		towedToPhoneLabel.text = towedVehicle.towedToPhone
+		towedToAddressButton.setTitle(towedVehicle.towedToAddress, for: .normal)
+		towedToPhoneButton.setTitle(towedVehicle.towedToPhone, for: .normal)
 		inventoryNumberLabel.text = towedVehicle.inventoryNumber
 		
 	}
@@ -84,11 +86,11 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 				let placemark = placemarks?.first
 				
 				// Create coorindates from placemark
-				let latitude = placemark?.location?.coordinate.latitude ?? 0
-				let longitude = placemark?.location?.coordinate.longitude ?? 0
+				self.latitude = placemark?.location?.coordinate.latitude ?? 0
+				self.longitude = placemark?.location?.coordinate.longitude ?? 0
 				
 				// Create location from lat and long
-				let location: CLLocation = CLLocation(latitude: latitude, longitude: longitude)
+				let location: CLLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
 				
 				// Create annotation from location coordinate
 				let annotation = CustomPointAnnotation()
@@ -140,5 +142,37 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		annotationView?.addSubview(annotationLabel)
 		
 		return annotationView
+	}
+	
+	// MARK: Events
+	
+	@IBAction func towedToPhoneTapped(_ sender: Any) {
+	
+		var phone = towedVehicle.towedToPhone
+		phone = phone.replacingOccurrences(of: "(", with: "")
+		phone = phone.replacingOccurrences(of: ")", with: "")
+		phone = phone.replacingOccurrences(of: " ", with: "")
+		phone = phone.replacingOccurrences(of: "-", with: "")
+		
+		let url = URL(string: "tel://+1\(phone)")
+	
+		UIApplication.shared.open(url!, options: [:], completionHandler:nil)
+		
+	}
+	
+	@IBAction func towedToAddressTapped(_ sender: Any) {
+	
+		let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
+
+		let regionSpan =   MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+
+		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+
+		let mapItem = MKMapItem(placemark: placemark)
+
+		mapItem.name = towedVehicle.towedToAddress
+
+		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
+
 	}
 }
