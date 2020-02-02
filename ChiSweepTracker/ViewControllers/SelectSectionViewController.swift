@@ -59,7 +59,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		// Query SODA API to get sections
 		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-			.filter("\(self.common.ward()) = '\(ward)'")
+			.filter("\(self.common.wardTitle()) = '\(ward)'")
 		
 		scheduleQuery.get { res in
 			switch res {
@@ -71,7 +71,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					for (_, item) in data.enumerated() {
 						
 						// Get section
-						let section = item[self.common.section()] as? String ?? ""
+						let section = item[self.common.sectionTitle()] as? String ?? ""
 						
 						// Add section to sections list
 						if !section.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -105,7 +105,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
 		// Query SODA API to get schedule
         let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-            .filter("\(self.common.ward()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.section()) = '\(self.schedule.section)'" : "") ")
+            .filter("\(self.common.wardTitle()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.sectionTitle()) = '\(self.schedule.section)'" : "") ")
 		
         scheduleQuery.get { res in
             switch res {
@@ -117,8 +117,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     for (_, item) in data.enumerated() {
                         
 						// Get values from json data
-                        let monthName = item[self.common.month_name()] as? String ?? ""
-                        let monthNumber = item[self.common.month_number()] as? String ?? ""
+                        let monthName = item[self.common.monthNameTitle()] as? String ?? ""
+                        let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
                         let dates = item[self.common.dates()] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",")
                         

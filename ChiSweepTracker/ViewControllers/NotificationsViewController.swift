@@ -546,7 +546,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
                 let wardQuery = wardClient.query(dataset: self.common.wardDataset())
-                    .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                    .filter("intersects(\(self.common.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
 					.limit(1)
 				
                 wardQuery.get { res in
@@ -555,10 +555,10 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.common.ward()] as? String ?? ""
-                            let section = data[0][self.common.section()] as? String ?? ""
-                            let the_geom = data[0][self.common.the_geom()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.coordinates()] as? NSMutableArray
+                            let ward = data[0][self.common.wardTitle()] as? String ?? ""
+                            let section = data[0][self.common.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.common.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             self.schedule.polygonCoordinates.removeAll()
@@ -584,7 +584,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                             }
                             
                             let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-								.filter("\(self.common.ward()) = '\(ward)' AND \(self.common.section()) = '\(self.schedule.section)'")
+								.filter("\(self.common.wardTitle()) = '\(ward)' AND \(self.common.sectionTitle()) = '\(self.schedule.section)'")
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -596,8 +596,8 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.common.month_name()] as? String ?? ""
-                                            let monthNumber = item[self.common.month_number()] as? String ?? ""
+                                            let monthName = item[self.common.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             

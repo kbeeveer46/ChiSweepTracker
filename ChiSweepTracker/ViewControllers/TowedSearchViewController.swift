@@ -200,7 +200,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") \(self.common.towedModelTitle()) = '\(selectedModel)'" : ""
 		filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") \(self.common.towedColorTitle()) = '\(selectedColor)'" : ""
 		filter += selectedState != "" ? " \(filter != "" ? " AND" : "") \(self.common.towedStateTitle()) = '\(selectedState)'" : ""
-		filter += plate! != "" ? " \(filter != "" ? " AND" : "") lower(\(self.common.towedPlateTitle())) like '%\(plate!)%'" : ""
+		filter += plate! != "" ? " \(filter != "" ? " AND" : "") lower(\(self.common.towedPlateTitle())) like '%\(plate!.replacingOccurrences(of: " ", with: ""))%'" : ""
 		
 		// Create SODA client
 		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)

@@ -166,7 +166,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 print("searchForSchedule latitude: \(self.schedule.locationCoordinate.latitude)")
                 print("searchForSchedule longitude: \(self.schedule.locationCoordinate.longitude)")
                 
-				print("searchForSchedule geom: \(self.common.the_geom())")
+				print("searchForSchedule geom: \(self.common.geomTitle())")
 				print("searchForSchedule ward dataset: \(self.common.wardDataset())")
 				
 				// Create SODA client using domain and token
@@ -174,7 +174,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
 				// Query SODA API to get ward and section
 				let wardQuery = wardClient.query(dataset: self.common.wardDataset())
-                    .filter("intersects(\(self.common.the_geom()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                    .filter("intersects(\(self.common.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
 					.limit(1)
                 
                 wardQuery.get { res in
@@ -184,10 +184,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         if data.count > 0 {
                             
 							// Get values from json query
-                            let ward = data[0][self.common.ward()] as? String ?? ""
-                            let section = data[0][self.common.section()] as? String ?? ""
-                            let the_geom = data[0][self.common.the_geom()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.coordinates()] as? NSMutableArray
+                            let ward = data[0][self.common.wardTitle()] as? String ?? ""
+                            let section = data[0][self.common.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.common.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
 							print("searchForSchedule ward: \(ward)")
@@ -225,7 +225,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
                             // Query SODA API to get months and days
 							let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-								.filter("\(self.common.ward()) = '\(ward)' \(section != "" ? "AND \(self.common.section()) = '\(section)'" : "") ")
+								.filter("\(self.common.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.common.sectionTitle()) = '\(section)'" : "") ")
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -237,8 +237,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         for (_, item) in data.enumerated() {
                                             
 											// Get values from json data
-                                            let monthName = item[self.common.month_name()] as? String ?? ""
-                                            let monthNumber = item[self.common.month_number()] as? String ?? ""
+                                            let monthName = item[self.common.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",")
                                             

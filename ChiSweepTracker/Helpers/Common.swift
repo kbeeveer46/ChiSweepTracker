@@ -43,27 +43,27 @@ class Common {
 		return defaults.string(forKey: "datesTitle") ?? ""
 	}
 	
-	func month_number() -> String {
+	func monthNumberTitle() -> String {
 		return defaults.string(forKey: "monthNumberTitle") ?? ""
 	}
 	
-	func month_name() -> String {
+	func monthNameTitle() -> String {
 		return defaults.string(forKey: "monthNameTitle") ?? ""
 	}
 	
-	func coordinates() -> String {
+	func coordinatesTitle() -> String {
 		return defaults.string(forKey: "coordinatesTitle") ?? ""
 	}
 	
-	func section() -> String {
+	func sectionTitle() -> String {
 		return defaults.string(forKey: "sectionTitle") ?? ""
 	}
 	
-	func ward() -> String {
+	func wardTitle() -> String {
 		return defaults.string(forKey: "wardTitle") ?? ""
 	}
 	
-	func the_geom() -> String {
+	func geomTitle() -> String {
 		return defaults.string(forKey: "geomTitle") ?? ""
 	}
 	
