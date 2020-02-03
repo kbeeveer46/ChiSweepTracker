@@ -681,8 +681,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on vehicle to view map of location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UKo-L7-B4k">
+                                <rect key="frame" x="10" y="4" width="355" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7aX-lO-kbB">
-                                <rect key="frame" x="15" y="10" width="345" height="627"/>
+                                <rect key="frame" x="15" y="28" width="345" height="609"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="towedVehicleTableCell" id="ZKL-y8-1mW">
@@ -902,8 +908,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="V5M-a9-2lo" firstAttribute="bottom" secondItem="7aX-lO-kbB" secondAttribute="bottom" constant="10" id="BJi-bw-gbu"/>
-                            <constraint firstItem="7aX-lO-kbB" firstAttribute="top" secondItem="V5M-a9-2lo" secondAttribute="top" constant="10" id="Pvd-MS-mRQ"/>
+                            <constraint firstItem="UKo-L7-B4k" firstAttribute="leading" secondItem="V5M-a9-2lo" secondAttribute="leading" constant="10" id="Grs-PE-Q9G"/>
+                            <constraint firstItem="7aX-lO-kbB" firstAttribute="top" secondItem="UKo-L7-B4k" secondAttribute="bottom" constant="6" id="Pvd-MS-mRQ"/>
+                            <constraint firstItem="UKo-L7-B4k" firstAttribute="top" secondItem="V5M-a9-2lo" secondAttribute="top" constant="4" id="UFU-7m-aOz"/>
                             <constraint firstItem="V5M-a9-2lo" firstAttribute="trailing" secondItem="7aX-lO-kbB" secondAttribute="trailing" constant="15" id="Z0j-Js-Joz"/>
+                            <constraint firstAttribute="trailing" secondItem="UKo-L7-B4k" secondAttribute="trailing" constant="10" id="jAR-TC-7be"/>
                             <constraint firstItem="7aX-lO-kbB" firstAttribute="leading" secondItem="V5M-a9-2lo" secondAttribute="leading" constant="15" id="leh-pv-1Cc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="V5M-a9-2lo"/>
@@ -1070,7 +1079,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HAu-1J-ubF">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="HAu-1J-ubF">
                                                 <rect key="frame" x="177.5" y="0.0" width="177.5" height="20"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="123 Main St."/>
