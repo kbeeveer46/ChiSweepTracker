@@ -829,7 +829,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		let content = UNMutableNotificationContent()
 		
 		// Set notification properties
-		content.title = "Sweep Alert Test"
+		content.title = "Street Sweeping On 7/9 (Test)"
 		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
