@@ -102,17 +102,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Create location from coordinates
 			let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
 			
-			// Save default lat and long to be use when user re-opens app
-			defaults.set(coordinate.latitude, forKey: "defaultLatitude")
-			defaults.set(coordinate.longitude, forKey: "defaultLongitude")
-			
 			// Get address from lat and long
 			getAddressFromCoordinates(location)
 			
 			// Create annotation
-			//let annotation = MKPointAnnotation()
-			//annotation.coordinate = coordinate
-			
 			let annotation = CustomPointAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
@@ -348,8 +341,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				self.addressFromCoordinates = address.trimmingCharacters(in: .whitespaces)
 				self.addressTextField.text = self.addressFromCoordinates
 				
-				// Save default address to be use when user re-opens app
+				// Save defaults to be use when user re-opens app
 				defaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
+				defaults.set(location.coordinate.latitude, forKey: "defaultLatitude")
+				defaults.set(location.coordinate.longitude, forKey: "defaultLongitude")
 				
 				print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
 						
@@ -605,10 +600,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Get last location
         if let location = locations.last {
             
-			// Set default lat and long to be used when user re-opens app
-            defaults.set(location.coordinate.latitude, forKey: "defaultLatitude")
-            defaults.set(location.coordinate.longitude, forKey: "defaultLongitude")
-            
 			// Get address from coordinates to be used to fill in address text field and for schedule model
             getAddressFromCoordinates(location)
             
@@ -618,9 +609,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             coordinates.longitude = location.coordinate.longitude
             
 			// Create map annotation
-			//let annotation = MKPointAnnotation()
-			//annotation.coordinate = coordinates
-			
 			let annotation = CustomPointAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
