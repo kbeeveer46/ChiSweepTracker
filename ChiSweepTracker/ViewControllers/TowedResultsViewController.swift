@@ -18,7 +18,7 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 		self.towedVehiclesTableView.delegate = self
 		
 		// Set the title
-		self.navigationItem.title = "Towed Vehicle Search Results (\(towedVehicles.count))"
+		self.navigationItem.title = "Search Results (\(towedVehicles.count))"
 		
 	}
 	

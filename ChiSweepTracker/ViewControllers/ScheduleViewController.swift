@@ -26,8 +26,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Set title using latest app version (year)
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
-		// Show add or remove favorite button
-		self.setAddRemoveFavoriteButton()
+		// Show settings button in the top right
+		self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 		
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
@@ -190,30 +190,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Present options alert
 		self.present(optionsAlert, animated: true, completion: nil)
 		
-	}
-	
-	func setAddRemoveFavoriteButton() {
-		
-		self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-		
-		// If user has a favorite address and it matches the address they're viewing then show the remove favorite button, otherwise show add button
-		
-		// Get favorite address
-		//let favoriteAddress = self.common.favoriteAddress()
-		
-		// Initialize add button
-		//addFavoriteButton = UIBarButtonItem(image: UIImage(named: "star_border"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(addFavorite))
-		
-		// Initialize remove button
-		//removeFavoriteButton = UIBarButtonItem(image: UIImage(named: "star"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(removeFavorite))
-		
-		// Set top right navigation button to either add or remove
-		//if favoriteAddress != schedule.address {
-		//	self.navigationItem.rightBarButtonItem = addFavoriteButton
-		//}
-		//else {
-		//	self.navigationItem.rightBarButtonItem = removeFavoriteButton
-		//}
 	}
 
     // Months/Days table view methods

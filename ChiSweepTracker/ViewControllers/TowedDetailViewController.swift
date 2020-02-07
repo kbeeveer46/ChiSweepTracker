@@ -29,7 +29,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		self.navigationItem.title = "Towed Vehicle Details"
 		
 		// Load detail map and show towed to location pin
-		self.loadDetailSectionMap()
+		self.loadTowedDetailMap()
 		
 		// Populate labels with data from towed vehicle
 		self.populateTowedVehicleLabels()
@@ -65,14 +65,18 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	}
 	
 	// Load map using use default values from search
-	func loadDetailSectionMap() {
+	func loadTowedDetailMap() {
 		
 		// Set required properties for map
 		towedDetailMapView.delegate = self
 		
+		if (!towedVehicle.towedToAddress.contains("Chicago")) {
+			towedVehicle.towedToAddress += " Chicago, IL"
+		}
+		
 		// Get coordinates from address
 		let geocoder = CLGeocoder()
-		geocoder.geocodeAddressString(towedVehicle.towedToAddress + " Chicago") { placemarks, error in
+		geocoder.geocodeAddressString(towedVehicle.towedToAddress) { placemarks, error in
 			
 			// No internet connection will cause an error
 			if error != nil {

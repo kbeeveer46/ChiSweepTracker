@@ -64,20 +64,20 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 						let color = item[self.common.towedColorTitle()] as? String ?? ""
 						let state = item[self.common.towedStateTitle()] as? String ?? ""
 
-						if !self.makes.contains(where: { $0 == make}) && make != "" {
-							self.makes.append(make)
+						if !self.makes.contains(where: { $0.uppercased() == make.uppercased()}) && make != "" {
+							self.makes.append(make.uppercased())
 						}
 						
-						if !self.models.contains(where: { $0 == model}) && model != "" {
-							self.models.append(model)
+						if !self.models.contains(where: { $0.uppercased() == model.uppercased()}) && model != "" {
+							self.models.append(model.uppercased())
 						}
 						
-						if !self.colors.contains(where: { $0 == color}) && color != "" {
-							self.colors.append(color)
+						if !self.colors.contains(where: { $0.uppercased() == color.uppercased()}) && color != "" {
+							self.colors.append(color.uppercased())
 						}
 						
-						if !self.states.contains(where: { $0 == state}) && state != "" {
-							self.states.append(state)
+						if !self.states.contains(where: { $0.uppercased() == state.uppercased()}) && state != "" {
+							self.states.append(state.uppercased())
 						}
 					}
 					
@@ -189,18 +189,18 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		var towedVehicles = [TowedVehicleModel]()
 		
 		// Get selected values from controls
-		let selectedMake = self.makePicker.selectedRow(inComponent: 0) > 0 ? self.makes[self.makePicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
-		let selectedModel = self.modelPicker.selectedRow(inComponent: 0) > 0 ? self.models[self.modelPicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
-		let selectedColor = self.colorPicker.selectedRow(inComponent: 0) > 0 ? self.colors[self.colorPicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
-		let selectedState = self.statePicker.selectedRow(inComponent: 0) > 0 ? self.states[self.statePicker.selectedRow(inComponent: 0) - 1].uppercased() : ""
-		let plate = licensePlateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+		let selectedMake = self.makePicker.selectedRow(inComponent: 0) > 0 ? self.makes[self.makePicker.selectedRow(inComponent: 0) - 1] : ""
+		let selectedModel = self.modelPicker.selectedRow(inComponent: 0) > 0 ? self.models[self.modelPicker.selectedRow(inComponent: 0) - 1] : ""
+		let selectedColor = self.colorPicker.selectedRow(inComponent: 0) > 0 ? self.colors[self.colorPicker.selectedRow(inComponent: 0) - 1] : ""
+		let selectedState = self.statePicker.selectedRow(inComponent: 0) > 0 ? self.states[self.statePicker.selectedRow(inComponent: 0) - 1] : ""
+		let plate = licensePlateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().replacingOccurrences(of: " ", with: "")
 		
 		// Create filter to be used in query
 		var filter = selectedMake != "" ? "\(self.common.towedMakeTitle()) = '\(selectedMake)'" : ""
-		filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") \(self.common.towedModelTitle()) = '\(selectedModel)'" : ""
-		filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") \(self.common.towedColorTitle()) = '\(selectedColor)'" : ""
-		filter += selectedState != "" ? " \(filter != "" ? " AND" : "") \(self.common.towedStateTitle()) = '\(selectedState)'" : ""
-		filter += plate! != "" ? " \(filter != "" ? " AND" : "") lower(\(self.common.towedPlateTitle())) like '%\(plate!.replacingOccurrences(of: " ", with: ""))%'" : ""
+		filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedModelTitle())) = '\(selectedModel)'" : ""
+		filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedColorTitle())) = '\(selectedColor)'" : ""
+		filter += selectedState != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedStateTitle())) = '\(selectedState)'" : ""
+		filter += plate! != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedPlateTitle())) like '%\(plate!)%'" : ""
 		
 		// Create SODA client
 		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)

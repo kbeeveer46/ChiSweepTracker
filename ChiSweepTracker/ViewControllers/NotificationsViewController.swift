@@ -208,7 +208,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 									relocatedAnnotation.customImageName = "pin-orange"
 									relocatedAnnotation.coordinate = relocatedLocation.coordinate
 									relocatedAnnotation.subtitle = "#:\(plate) State:\(state) Make:\(make) Color:\(color)"
-									relocatedAnnotation.title = "Date:\(relocatedDate) To:\(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+									relocatedAnnotation.title = "\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
 									
 									// Add annotation to map
 									let relocatedAnnotationView = MKPinAnnotationView(annotation: relocatedAnnotation, reuseIdentifier: "relocated")
@@ -958,7 +958,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		}
 		else {
 			
-			// SAve toggle setting to defaults
+			// Save toggle setting to defaults
 			defaults.set(false, forKey: "notificationsToggled")
 			
 			// Disable when and time controls
