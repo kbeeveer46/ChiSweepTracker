@@ -41,6 +41,8 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	
 	func populateTowedVehicleLabels() {
 		
+		// Populate labels with data from towed vehicle
+		
 		makeLabel.text = towedVehicle.make
 		modelLabel.text = towedVehicle.model
 		colorLabel.text = towedVehicle.color
