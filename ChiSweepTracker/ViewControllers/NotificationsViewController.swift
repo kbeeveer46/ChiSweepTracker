@@ -737,7 +737,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
                                                                 
 																// Create notification contents
                                                                 let content = UNMutableNotificationContent()
-                                                                content.title = "Street Sweeping On \(monthInSchedule.number)/\(dayInMonth.date)"
+                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
                                                                 content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
                                                                 let soundName = UNNotificationSoundName("notification.m4r")
 																content.sound = UNNotificationSound(named: soundName)
@@ -766,7 +766,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 														// Use the value to alert them if they loaded the app after a new year came out
 														let notificationsYear = self.common.notificationsYear()
 														let latestAppVersion = self.common.latestAppVersion()
-														if notificationsYear > 0 && notificationsYear < latestAppVersion {
+														if notificationsYear < latestAppVersion {
 															self.common.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
 														}
 														defaults.set(latestAppVersion, forKey: "notificationsYear")
@@ -775,7 +775,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 														// Use the value to alert them if they loaded the app after Chicago changed the schedule
 														let latestDatasetVersion = self.common.latestDatasetVersion()
 														let userDatasetVersion = self.common.userDatasetVersion()
-														if userDatasetVersion > 0 && userDatasetVersion < latestDatasetVersion {
+														if userDatasetVersion < latestDatasetVersion {
 															self.common.showAlert("Notifications Updated", "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
 														}
 														defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
@@ -829,7 +829,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		let content = UNMutableNotificationContent()
 		
 		// Set notification properties
-		content.title = "Street Sweeping On 7/9 (Test)"
+		content.title = "Street Sweeping 7/9 (Test)"
 		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
@@ -939,8 +939,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 		
 		if pushNotificationsSwitch.isOn == true {
 			
-			// Save toggle setting to defaults
+			let latestAppVersion = self.common.latestAppVersion()
+			let latestDatasetVersion = self.common.latestDatasetVersion()
+
+			// Save settings to defaults
 			defaults.set(true, forKey: "notificationsToggled")
+			defaults.set(latestAppVersion, forKey: "notificationsYear")
+			defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
 			
 			// Enable when and time controls
 			self.timePicker.isUserInteractionEnabled = true

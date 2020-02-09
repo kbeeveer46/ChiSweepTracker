@@ -711,10 +711,7 @@ public enum Model : String {
 	iPhone11           = "iPhone 11",
 	iPhone11Pro        = "iPhone 11 Pro",
 	iPhone11ProMax     = "iPhone 11 Pro Max",
-	
-	//Apple TV
-	AppleTV            = "Apple TV",
-	AppleTV_4K         = "Apple TV 4K",
+
 	unrecognized       = "?unrecognized?"
 }
 
@@ -832,11 +829,7 @@ public extension UIDevice {
 			"iPhone11,8" : .iPhoneXR,
 			"iPhone12,1" : .iPhone11,
 			"iPhone12,3" : .iPhone11Pro,
-			"iPhone12,5" : .iPhone11ProMax,
-			
-			//Apple TV
-			"AppleTV5,3" : .AppleTV,
-			"AppleTV6,2" : .AppleTV_4K
+			"iPhone12,5" : .iPhone11ProMax
 		]
 		
 		if let model = modelMap[String.init(validatingUTF8: modelCode!)!] {
