@@ -106,15 +106,16 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 				annotation.subtitle = "Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
 				
 				// Create span and region
-				let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+				let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
 				let region = MKCoordinateRegion(center: location.coordinate, span: span)
+
+				// Set region
+				self.towedDetailMapView.setRegion(region, animated: true)
 				
 				// Add annotation
 				self.towedDetailMapView.removeAnnotations(self.towedDetailMapView.annotations)
 				self.towedDetailMapView.addAnnotation(annotation)
 				
-				// Set region
-				self.towedDetailMapView.setRegion(region, animated: true)
 			}
 		}
 	}
@@ -168,9 +169,9 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	
 	@IBAction func towedToAddressTapped(_ sender: Any) {
 	
-		let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
+		let coordinates = CLLocationCoordinate2DMake(self.latitude, self.longitude)
 
-		let regionSpan =   MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
 
 		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
 

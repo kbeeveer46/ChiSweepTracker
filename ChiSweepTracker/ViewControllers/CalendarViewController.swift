@@ -94,12 +94,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let polygons = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
 		// Create map annotation
-        //let annotation = MKPointAnnotation()
-		//annotation.title = "\(self.schedule.address)"
-        //annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
-        //annotation.coordinate = self.schedule.locationCoordinate
-		
-		let annotation = CustomPointAnnotation()
+        let annotation = CustomPointAnnotation()
 		annotation.customImageName = "pin-red"
 		annotation.coordinate = self.schedule.locationCoordinate
         annotation.title = "\(self.schedule.address)"

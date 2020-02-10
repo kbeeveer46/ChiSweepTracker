@@ -111,7 +111,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.selectionChanged()
         
         // Create alert
-        let alert = UIAlertController(title: "Remove Favorite?", message: "You will no longer receive notifications", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications", preferredStyle: .alert)
         
 		// Yes option
 		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
