@@ -186,7 +186,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		generator.prepare()
 		generator.selectionChanged()
 		
-		var towedVehicles = [TowedVehicleModel]()
+		var towedVehicles = [VehicleModel]()
 		
 		// Get selected values from controls
 		let selectedMake = self.makePicker.selectedRow(inComponent: 0) > 0 ? self.makes[self.makePicker.selectedRow(inComponent: 0) - 1] : ""
@@ -237,7 +237,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 						// Change date to MM/dd/yyyy
 						towedDate = Date.getFormattedDate(towedDate)
 						
-						let vehicle = TowedVehicleModel()
+						let vehicle = VehicleModel()
 						vehicle.towedDate = towedDate
 						vehicle.make = make
 						vehicle.model = model

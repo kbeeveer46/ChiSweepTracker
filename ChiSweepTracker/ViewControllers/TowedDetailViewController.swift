@@ -18,7 +18,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var inventoryNumberLabel: UILabel!
 	
 	// Shared
-	var towedVehicle = TowedVehicleModel()
+	var towedVehicle = VehicleModel()
 	var latitude = 0.0
 	var longitude = 0.0
 	
@@ -63,7 +63,6 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		default:
 			break
 		}
-		
 	}
 	
 	// Load map using use default values from search

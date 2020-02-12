@@ -6,7 +6,7 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 	@IBOutlet weak var towedVehiclesTableView: UITableView!
 	
 	// Shared
-	var towedVehicles = [TowedVehicleModel]()
+	var towedVehicles = [VehicleModel]()
 		
 	// MARK: Methods
 	

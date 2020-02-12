@@ -182,7 +182,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 							let relocatedToAddressNumber = item[self.common.relocatedToAddressNumberTitle()] as? String ?? ""
 							let relocatedToDirection = item[self.common.relocatedToDirectionTitle()] as? String ?? ""
 							let relocatedToStreet = item[self.common.relocatedToStreetTitle()] as? String ?? ""
-							//let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
+							let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
 							let relocatedFromLatitude = item[self.common.relocatedFromLatitudeTitle()] as? String ?? ""
 							let relocatedFromLongitude = item[self.common.relocatedFromLongitudeTitle()] as? String ?? ""
 							
@@ -207,9 +207,16 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									relocatedAnnotation.subtitle = "#:\(plate) State:\(state) Make:\(make) Color:\(color)"
 									relocatedAnnotation.title = "\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
 									
-									let relocatedVehicle = TowedVehicleModel()
-									relocatedVehicle.towedToAddress = "\(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
-									
+									let relocatedVehicle = VehicleModel()
+									relocatedVehicle.relocatedToAddress = "\(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+									relocatedVehicle.color = color
+									relocatedVehicle.make = make
+									relocatedVehicle.plate = plate
+									relocatedVehicle.state = state
+									relocatedVehicle.relocatedDate = relocatedDate
+									relocatedVehicle.relocatedFromLatitude = relocatedFromLatitude
+									relocatedVehicle.relocatedFromLongitude = relocatedFromLongitude
+									relocatedVehicle.relocatedReason = relocatedReason
 									relocatedAnnotation.relocatedVehicle = relocatedVehicle
 									
 									// Add annotation to map
@@ -934,7 +941,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			//detailsButton.layer.cornerRadius = 7.0
 			//detailsButton.backgroundColor = UIColor(hexString: "#FF7832")
 			detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
-			//detailsButton.leftImage(image: UIImage(named: "pageview")!, name: "pageview")
 			
 			annotationView!.leftCalloutAccessoryView = detailsButton
 			

@@ -6,8 +6,8 @@ public class ScheduleModel {
     var ward = ""
     var section = ""
     var months: [MonthModel] = []
-    var locationCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var polygonCoordinates: [CLLocationCoordinate2D] = [CLLocationCoordinate2D]()
+    var locationCoordinate = CLLocationCoordinate2D()
+    var polygonCoordinates = [CLLocationCoordinate2D]()
 }
 
 class MonthModel: Identifiable  {
