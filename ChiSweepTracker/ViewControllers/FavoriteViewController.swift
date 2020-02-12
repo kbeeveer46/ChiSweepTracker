@@ -4,7 +4,7 @@ import CoreLocation
 import MapKit
 import THLabel
 
-class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
+class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
 	// Controls
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
@@ -29,13 +29,13 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
         super.viewWillAppear(animated)
         
 		// Fill in notification form values with user defaults
-        loadNotificationControlValues()
+		self.loadNotificationControlValues()
     
 		// Load map using user favorite lat, long, and polygon coorndinates
-        loadFavoriteMap()
+		self.loadFavoriteMap()
 		
 		// Initialize controls per device
-		initializeControlsPerDevice()
+		self.initializeControlsPerDevice()
         
     }
 	
@@ -106,7 +106,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
 			annotation.title = favoriteAddress
-			annotation.subtitle = "Ward \(favoriteWard) - Section \(favoriteSection)"
+			annotation.subtitle = "Ward: \(favoriteWard) - Section: \(favoriteSection)"
 
 			// Create map span
             let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
@@ -169,9 +169,7 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 				case .dataset (let data):
 					
 					if data.count > 0 {
-						
-						var foundRelocatedVehicles = false
-						
+												
 						// Loop through relocated vehicle data
 						for (_, item) in data.enumerated() {
 							
@@ -199,7 +197,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 								if (distance <= 200) {
 								
 									self.relocatedVehicleCount += 1
-									foundRelocatedVehicles = true
 									
 									relocatedDate = Date.getFormattedDate(relocatedDate)
 									
@@ -210,15 +207,17 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 									relocatedAnnotation.subtitle = "#:\(plate) State:\(state) Make:\(make) Color:\(color)"
 									relocatedAnnotation.title = "\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
 									
+									let relocatedVehicle = TowedVehicleModel()
+									relocatedVehicle.towedToAddress = "\(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+									
+									relocatedAnnotation.relocatedVehicle = relocatedVehicle
+									
 									// Add annotation to map
 									let relocatedAnnotationView = MKPinAnnotationView(annotation: relocatedAnnotation, reuseIdentifier: "relocated")
 									self.favoriteMapView.addAnnotation(relocatedAnnotationView.annotation!)
 								
 								}
 							}
-						}
-						if (foundRelocatedVehicles == false) {
-							//self.common.showAlert("Search Completed", "No vehicles near your address have been relocated.\n\nHide relocated vehicles in the settings menu to stop seeing this message.")
 						}
 					}
 					else {
@@ -229,7 +228,6 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 				}
 			}
 		}
-		
 	}
 	
 	func addDivvyStationsToMap(_ favoriteLocation: CLLocation) {
@@ -928,8 +926,32 @@ class NotificationsViewController: UIViewController, UIPickerViewDelegate, UITex
 			annotationView?.addSubview(annotationLabel)
 			
 		}
+		else if (customPointAnnotation.customImageName == "pin-orange") {
+			
+			let detailsButton = UIButton()
+			detailsButton.frame.size.width = 35
+			detailsButton.frame.size.height = 35
+			//detailsButton.layer.cornerRadius = 7.0
+			//detailsButton.backgroundColor = UIColor(hexString: "#FF7832")
+			detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
+			//detailsButton.leftImage(image: UIImage(named: "pageview")!, name: "pageview")
+			
+			annotationView!.leftCalloutAccessoryView = detailsButton
+			
+		}
 		
 		return annotationView
+	}
+	
+	func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+		if let annotation = view.annotation as? CustomPointAnnotation {
+			
+			// Segue to relocated detail view
+			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
+				destinationViewController.relocatedVehicle = annotation.relocatedVehicle
+				self.navigationController?.pushViewController(destinationViewController, animated: true)
+			}
+		}
 	}
 
 	//MARK: Actions

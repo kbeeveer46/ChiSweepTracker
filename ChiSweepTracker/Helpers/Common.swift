@@ -538,7 +538,7 @@ class Common {
 		let notificationsToggled = self.notificationsToggled()
 		
 		if !favoriteAddress.isEmpty && notificationsToggled == true {
-			let notificationViewController = NotificationsViewController()
+			let notificationViewController = FavoriteViewController()
 			notificationViewController.getSchedule(true, true)
 		}
 	}

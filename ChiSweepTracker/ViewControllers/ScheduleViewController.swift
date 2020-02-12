@@ -268,7 +268,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		annotation.customImageName = "pin-red"
 		annotation.coordinate = self.schedule.locationCoordinate
 		annotation.title = "\(self.schedule.address)"
-		annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
+		annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
         
 		// Create span and region
         let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)

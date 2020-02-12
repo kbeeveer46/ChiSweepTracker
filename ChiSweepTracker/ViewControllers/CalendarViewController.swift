@@ -98,7 +98,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		annotation.customImageName = "pin-red"
 		annotation.coordinate = self.schedule.locationCoordinate
         annotation.title = "\(self.schedule.address)"
-		annotation.subtitle = "Ward \(self.schedule.ward) - Section \(self.schedule.section)"
+		annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
 		
 		// Create map span
         let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
@@ -257,7 +257,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if cell.Circle.isHidden == false {
         
 			// Creat alert
-			let alert = UIAlertController(title: "Add calendar event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)/\(currentYear).", preferredStyle: .alert)
+			let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)/\(currentYear).", preferredStyle: .alert)
             
 			// Yes option
 			alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -311,7 +311,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         
 						// Alert user event was added
                         DispatchQueue.main.async {
-							self.common.showAlert(self.common.constants.successTitle, "Event named 'Street Sweeping' was added to your calendar.")
+							self.common.showAlert("Event Added", "Event named 'Street Sweeping' was added to your calendar.")
                         }
                         
                         print("Added event")

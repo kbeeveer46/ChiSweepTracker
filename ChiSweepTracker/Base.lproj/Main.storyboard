@@ -364,7 +364,7 @@
         <!--Favorite Address-->
         <scene sceneID="XQY-3Z-30v">
             <objects>
-                <viewController storyboardIdentifier="NotificationsViewController" id="aNg-gl-cTZ" customClass="NotificationsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoriteViewController" id="aNg-gl-cTZ" customClass="FavoriteViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -502,6 +502,7 @@
                         <outlet property="timePicker" destination="luP-wW-qKV" id="Evl-EH-OAz"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="showScheduleFromNotificationsSegue" id="maw-XV-A0s"/>
                         <segue destination="0Np-di-K2M" kind="show" identifier="showTowedSearchFromFavoritesSegue" id="h4N-AG-OrJ"/>
+                        <segue destination="NuG-xh-ACk" kind="show" identifier="showRelocatedDetailFromFavoriteSegue" id="fhG-up-OrJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2U-VA-5Ek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -920,6 +921,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qqN-eh-izS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2562" y="-611"/>
+        </scene>
+        <!--Relocated Detail View Controller-->
+        <scene sceneID="NxD-gV-mbL">
+            <objects>
+                <viewController storyboardIdentifier="RelocatedDetailViewController" id="NuG-xh-ACk" customClass="RelocatedDetailViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AYd-Rh-fh8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="y6c-AZ-1wW">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="235"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="235" id="EKg-7a-wGS"/>
+                                </constraints>
+                            </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phT-zR-2Qe">
+                                <rect key="frame" x="166" y="384" width="89" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="y6c-AZ-1wW" firstAttribute="leading" secondItem="Evc-hh-j3N" secondAttribute="leading" id="8SF-X2-pmk"/>
+                            <constraint firstItem="y6c-AZ-1wW" firstAttribute="top" secondItem="Evc-hh-j3N" secondAttribute="top" id="KVc-YA-Ezk"/>
+                            <constraint firstItem="Evc-hh-j3N" firstAttribute="trailing" secondItem="y6c-AZ-1wW" secondAttribute="trailing" id="L5V-vi-ITB"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Evc-hh-j3N"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="VeL-Hm-AdE"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aYR-DH-fhq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3297" y="-1271"/>
         </scene>
         <!--Towed Detail View Controller-->
         <scene sceneID="AHh-P1-K6O">
