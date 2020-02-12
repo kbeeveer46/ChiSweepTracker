@@ -7,6 +7,13 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 	// Controls
 	@IBOutlet weak var relocatedDetailMap: MKMapView!
 	@IBOutlet weak var relocatedDetailMapHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var makeLabel: UILabel!
+	@IBOutlet weak var colorLabel: UILabel!
+	@IBOutlet weak var stateLabel: UILabel!
+	@IBOutlet weak var plateLabel: UILabel!
+	@IBOutlet weak var dateLabel: UILabel!
+	@IBOutlet weak var addressButton: UIButton!
+	@IBOutlet weak var reasonLabel: UILabel!
 	
 	// Shared
 	var relocatedVehicle = VehicleModel()
@@ -19,15 +26,14 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		// Set the title
 		self.navigationItem.title = "Relocated Vehicle Details"
 		
-		// Load detail map and show towed to location pin
+		// Load detail map and show relocated to location pin
 		self.loadRelocatedDetailMap()
 		
-		// Populate labels with data from towed vehicle
+		// Populate labels with data from relocated vehicle
 		self.populateTowedVehicleLabels()
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
-		
 		
     }
 	
@@ -39,11 +45,17 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		default:
 			break
 		}
-		
 	}
 	
 	func populateTowedVehicleLabels() {
 		
+		makeLabel.text = relocatedVehicle.make
+		colorLabel.text = relocatedVehicle.color
+		stateLabel.text = relocatedVehicle.state
+		plateLabel.text = relocatedVehicle.plate
+		dateLabel.text = relocatedVehicle.relocatedDate
+		addressButton.setTitle(relocatedVehicle.relocatedToAddress, for: .normal)
+		reasonLabel.text = relocatedVehicle.relocatedReason
 		
 	}
     
@@ -89,11 +101,11 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				annotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
 				
 				// Create span and region
-				let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
-				let region = MKCoordinateRegion(center: location.coordinate, span: span)
+				//let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+				//let region = MKCoordinateRegion(center: location.coordinate, span: span)
 				
 				// Set region
-				self.relocatedDetailMap.setRegion(region, animated: true)
+				//self.relocatedDetailMap.setRegion(region, animated: true)
 				
 				// Add annotation
 				self.relocatedDetailMap.removeAnnotations(self.relocatedDetailMap.annotations)
@@ -101,8 +113,47 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				
 				// Relocated from pin
 				
+				// Create location from lat and long
+				let location2: CLLocation = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
+				
+				// Create annotation from location coordinate
+				let annotation2 = CustomPointAnnotation()
+				annotation2.customImageName = "pin-orange"
+				annotation2.coordinate = location2.coordinate
+				annotation2.title = "Relocated From" //self.relocatedVehicle.relocatedToAddress
+				annotation2.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
+				self.relocatedDetailMap.addAnnotation(annotation2)
+				
+				
+				let request = MKDirections.Request()
+				request.source = MKMapItem(placemark: MKPlacemark(coordinate: annotation.coordinate, addressDictionary: nil))
+				request.destination = MKMapItem(placemark: MKPlacemark(coordinate: annotation2.coordinate, addressDictionary: nil))
+				request.requestsAlternateRoutes = true
+				request.transportType = .walking
+				
+				let directions = MKDirections(request: request)
+				
+				directions.calculate { [unowned self] response, error in
+					guard let unwrappedResponse = response else { return }
+					
+					if (unwrappedResponse.routes.count > 0) {
+						self.relocatedDetailMap.addOverlay(unwrappedResponse.routes[0].polyline)
+						self.relocatedDetailMap.setVisibleMapRect(unwrappedResponse.routes[0].polyline.boundingMapRect, animated: true)
+					}
+				}
+				
 			}
 		}
+	}
+	
+	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+					
+		assert(overlay is MKPolyline, "overlay must be polyline")
+		
+		let polylineRenderer = MKPolylineRenderer(overlay: overlay)
+		polylineRenderer.strokeColor = UIColor(hexString: "#FF7832")
+		polylineRenderer.lineWidth = 5
+		return polylineRenderer
 	}
 	
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -136,4 +187,10 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		return annotationView
 	}
 
+	@IBAction func addressButtonTapped(_ sender: Any) {
+		
+		print("tapped")
+		
+	}
+	
 }
