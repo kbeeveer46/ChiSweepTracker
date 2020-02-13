@@ -66,14 +66,6 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		self.relocatedDetailMap.delegate = self
 		self.relocatedDetailMap.layoutMargins = UIEdgeInsets(top: 60, left: 60, bottom: 60, right: 60)
 		
-		let location3 = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
-		
-		let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
-		let region = MKCoordinateRegion(center: location3.coordinate, span: span)
-		
-		// Set region
-		self.relocatedDetailMap.setRegion(region, animated: true)
-		
 		if (!relocatedVehicle.relocatedToAddress.contains("Chicago")) {
 			relocatedVehicle.relocatedToAddress += " Chicago, IL"
 		}
@@ -100,21 +92,14 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				self.longitude = placemark?.location?.coordinate.longitude ?? 0
 				
 				// Create location from lat and long
-				let location: CLLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
+				let location = CLLocation(latitude: self.latitude, longitude: self.longitude)
 				
 				// Create annotation from location coordinate
 				let annotation = CustomPointAnnotation()
 				annotation.customImageName = "pin-orange"
 				annotation.coordinate = location.coordinate
-				annotation.title = self.relocatedVehicle.relocatedToAddress
+				annotation.title = "To: \(self.relocatedVehicle.relocatedToAddress)"
 				annotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
-				
-				// Create span and region
-				//let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-				//let region = MKCoordinateRegion(center: location.coordinate, span: span)
-				
-				// Set region
-				//self.relocatedDetailMap.setRegion(region, animated: true)
 				
 				// Add annotation
 				self.relocatedDetailMap.removeAnnotations(self.relocatedDetailMap.annotations)
@@ -123,7 +108,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				// Relocated from pin
 				
 				// Create location from lat and long
-				let location2: CLLocation = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
+				let location2 = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
 				
 				// Create annotation from location coordinate
 				let annotation2 = CustomPointAnnotation()
@@ -137,7 +122,6 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				let request = MKDirections.Request()
 				request.source = MKMapItem(placemark: MKPlacemark(coordinate: annotation.coordinate, addressDictionary: nil))
 				request.destination = MKMapItem(placemark: MKPlacemark(coordinate: annotation2.coordinate, addressDictionary: nil))
-				request.requestsAlternateRoutes = true
 				request.transportType = .walking
 				
 				let directions = MKDirections(request: request)
@@ -159,15 +143,13 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		}
 	}
 	
-	func zoomToFitMapAnnotations(_ map:MKMapView)
-	{
-		if(map.annotations.count == 0)
-		{
+	func zoomToFitMapAnnotations(_ map:MKMapView) {
+		
+		if (map.annotations.count == 0) {
 			return
 		}
 		
 		var topLeftCoord = CLLocationCoordinate2D(latitude: -90, longitude: 180)
-		
 		var bottomRightCoord = CLLocationCoordinate2D(latitude: 90, longitude: -180)
 		
 		
@@ -182,7 +164,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		let resd = CLLocationCoordinate2D(latitude: topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5, longitude: topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5)
 		
-		let span = MKCoordinateSpan(latitudeDelta: fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.3, longitudeDelta: fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.3)
+		let span = MKCoordinateSpan(latitudeDelta: fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 10.3, longitudeDelta: fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 10.3)
 		
 		var region = MKCoordinateRegion(center: resd, span: span);
 		
@@ -198,7 +180,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		assert(overlay is MKPolyline, "overlay must be polyline")
 		
 		let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-		polylineRenderer.strokeColor = UIColor.systemBlue //UIColor(hexString: "#FF7832")
+		polylineRenderer.strokeColor = UIColor(hexString: "#FF7832")
 		polylineRenderer.lineWidth = 5
 		return polylineRenderer
 	}
@@ -236,8 +218,17 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 
 	@IBAction func addressButtonTapped(_ sender: Any) {
 		
-		print("tapped")
+		let coordinates = CLLocationCoordinate2DMake(self.latitude, self.longitude)
 		
+		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+		
+		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+		
+		let mapItem = MKMapItem(placemark: placemark)
+		
+		mapItem.name = relocatedVehicle.relocatedToAddress
+		
+		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
 	}
 	
 }
