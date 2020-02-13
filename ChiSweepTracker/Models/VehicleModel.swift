@@ -1,6 +1,13 @@
 import Foundation
 
 public class VehicleModel {
+	
+	// Towed
+	
+	// Relocated
+	
+	// Shared
+	
 	var towedDate = ""
 	var relocatedDate = ""
 	var make = ""

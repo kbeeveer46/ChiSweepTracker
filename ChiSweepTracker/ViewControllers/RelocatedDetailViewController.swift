@@ -64,6 +64,15 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		// Set required properties for map
 		self.relocatedDetailMap.delegate = self
+		self.relocatedDetailMap.layoutMargins = UIEdgeInsets(top: 60, left: 60, bottom: 60, right: 60)
+		
+		let location3 = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
+		
+		let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+		let region = MKCoordinateRegion(center: location3.coordinate, span: span)
+		
+		// Set region
+		self.relocatedDetailMap.setRegion(region, animated: true)
 		
 		if (!relocatedVehicle.relocatedToAddress.contains("Chicago")) {
 			relocatedVehicle.relocatedToAddress += " Chicago, IL"
@@ -142,8 +151,46 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 					}
 				}
 				
+				
+				self.relocatedDetailMap.showAnnotations(self.relocatedDetailMap.annotations, animated: true)
+				//self.zoomToFitMapAnnotations(self.relocatedDetailMap)
+				
 			}
 		}
+	}
+	
+	func zoomToFitMapAnnotations(_ map:MKMapView)
+	{
+		if(map.annotations.count == 0)
+		{
+			return
+		}
+		
+		var topLeftCoord = CLLocationCoordinate2D(latitude: -90, longitude: 180)
+		
+		var bottomRightCoord = CLLocationCoordinate2D(latitude: 90, longitude: -180)
+		
+		
+		map.annotations.forEach {
+			
+			topLeftCoord.longitude = fmin(topLeftCoord.longitude, $0.coordinate.longitude);
+			topLeftCoord.latitude = fmax(topLeftCoord.latitude, $0.coordinate.latitude);
+			
+			bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, $0.coordinate.longitude);
+			bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, $0.coordinate.latitude);
+		}
+		
+		let resd = CLLocationCoordinate2D(latitude: topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5, longitude: topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5)
+		
+		let span = MKCoordinateSpan(latitudeDelta: fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.3, longitudeDelta: fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.3)
+		
+		var region = MKCoordinateRegion(center: resd, span: span);
+		
+		region = map.regionThatFits(region)
+		
+		map.setRegion(region, animated: true)
+		
+		
 	}
 	
 	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -151,7 +198,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		assert(overlay is MKPolyline, "overlay must be polyline")
 		
 		let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-		polylineRenderer.strokeColor = UIColor(hexString: "#FF7832")
+		polylineRenderer.strokeColor = UIColor.systemBlue //UIColor(hexString: "#FF7832")
 		polylineRenderer.lineWidth = 5
 		return polylineRenderer
 	}

@@ -920,6 +920,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
+		annotationView?.leftCalloutAccessoryView = nil
 		
 		if (customPointAnnotation.customImageName == "pin-red") {
 		
@@ -942,7 +943,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			//detailsButton.backgroundColor = UIColor(hexString: "#FF7832")
 			detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
 			
-			annotationView!.leftCalloutAccessoryView = detailsButton
+			annotationView?.leftCalloutAccessoryView = detailsButton
 			
 		}
 		
