@@ -3,24 +3,24 @@ import Foundation
 public class VehicleModel {
 	
 	// Towed
-	
-	// Relocated
-	
-	// Shared
-	
-	var towedDate = ""
-	var relocatedDate = ""
-	var make = ""
-	var style = ""
 	var model = ""
-	var color = ""
-	var plate = ""
-	var state = ""
+	var towedDate = ""
 	var inventoryNumber = ""
 	var towedToAddress = ""
-	var relocatedToAddress = ""
 	var towedToPhone = ""
+	var style = ""
+	
+	// Relocated
+	var relocatedDate = ""
 	var relocatedFromLongitude = ""
 	var relocatedFromLatitude = ""
 	var relocatedReason = ""
+	var relocatedToAddress = ""
+	
+	// Shared
+	var make = ""
+	var color = ""
+	var plate = ""
+	var state = ""
+	
 }
