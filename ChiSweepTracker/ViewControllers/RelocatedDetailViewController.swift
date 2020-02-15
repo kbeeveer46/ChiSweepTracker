@@ -70,6 +70,17 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		self.relocatedDetailMap.removeAnnotations(self.relocatedDetailMap.annotations)
 		self.relocatedDetailMap.removeOverlays(self.relocatedDetailMap.overlays)
 		
+		let centerLocation = CLLocationCoordinate2D(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
+		
+		// Create map span
+		let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+		
+		// Create map region from span
+		let region = MKCoordinateRegion(center: centerLocation, span: span)
+		
+		// Set map region
+		relocatedDetailMap.setRegion(region, animated: false)
+		
 		// Add "Chicago, IL" to end of address if it doesn't exist to help find the address when it's clicked
 		if (!relocatedVehicle.relocatedToAddress.contains("Chicago")) {
 			relocatedVehicle.relocatedToAddress += " Chicago, IL"
@@ -95,16 +106,6 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				self.toLongitude = placemark?.location?.coordinate.longitude ?? 0
 				
 				// Create location from lat and long
-				let toLocation = CLLocation(latitude: self.toLatitude, longitude: self.toLongitude)
-				
-				// Create annotation from location coordinate
-				let toAnnotation = CustomAnnotation()
-				toAnnotation.customImageName = "pin-orange"
-				toAnnotation.coordinate = toLocation.coordinate
-				toAnnotation.title = "To: \(self.relocatedVehicle.relocatedToAddress)"
-				//toAnnotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
-							
-				// Create location from lat and long
 				let fromLocation = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
 				
 				// Create annotation from location coordinate
@@ -112,12 +113,24 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				fromAnnotation.customImageName = "pin-orange"
 				fromAnnotation.coordinate = fromLocation.coordinate
 				fromAnnotation.title = "From: \(self.relocatedVehicle.relocatedFromAddress)"
-				//fromAnnotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
-			
+				
+				// Create location from lat and long
+				let toLocation = CLLocation(latitude: self.toLatitude, longitude: self.toLongitude)
+				
+				// Create annotation from location coordinate
+				let toAnnotation = CustomAnnotation()
+				toAnnotation.customImageName = "pin-orange"
+				toAnnotation.coordinate = toLocation.coordinate
+				toAnnotation.title = "To: \(self.relocatedVehicle.relocatedToAddress)"
+				
+				// Add annotations
+				self.relocatedDetailMap.addAnnotation(fromAnnotation)
+				self.relocatedDetailMap.addAnnotation(toAnnotation)
+				
 				// Create polyline use map directions between both annotations
 				let request = MKDirections.Request()
-				request.source = MKMapItem(placemark: MKPlacemark(coordinate: toAnnotation.coordinate, addressDictionary: nil))
-				request.destination = MKMapItem(placemark: MKPlacemark(coordinate: fromAnnotation.coordinate, addressDictionary: nil))
+				request.destination = MKMapItem(placemark: MKPlacemark(coordinate: toAnnotation.coordinate, addressDictionary: nil))
+				request.source = MKMapItem(placemark: MKPlacemark(coordinate: fromAnnotation.coordinate, addressDictionary: nil))
 				request.transportType = .walking
 				
 				let directions = MKDirections(request: request)
@@ -127,14 +140,9 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 					
 					if (unwrappedResponse.routes.count > 0) {
 						self.relocatedDetailMap.addOverlay(unwrappedResponse.routes[0].polyline)
-						self.relocatedDetailMap.setVisibleMapRect(unwrappedResponse.routes[0].polyline.boundingMapRect, animated: true)
+						self.relocatedDetailMap.setVisibleMapRect(unwrappedResponse.routes[0].polyline.boundingMapRect, animated: false)
 					}
 				}
-				
-				// Add annotations
-				self.relocatedDetailMap.addAnnotation(toAnnotation)
-				self.relocatedDetailMap.addAnnotation(fromAnnotation)
-				
 			}
 		}
 	}

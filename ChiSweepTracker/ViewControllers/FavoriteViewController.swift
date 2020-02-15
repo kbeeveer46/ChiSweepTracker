@@ -207,8 +207,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									let relocatedAnnotation = CustomAnnotation()
 									relocatedAnnotation.customImageName = "pin-orange"
 									relocatedAnnotation.coordinate = relocatedLocation.coordinate
-									relocatedAnnotation.subtitle = "#:\(plate) State:\(state) Make:\(make) Color:\(color)"
-									relocatedAnnotation.title = "\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
+									relocatedAnnotation.subtitle = "Click on magnifying glass for more details" //"#:\(plate) State:\(state) Make:\(make) Color:\(color)"
+									relocatedAnnotation.title = "Make: \(make) - Plate #: \(plate)" //"\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
 									
 									let relocatedVehicle = VehicleModel()
 									relocatedVehicle.relocatedToAddress = "\(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
