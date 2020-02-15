@@ -177,6 +177,18 @@ class Common {
 		return defaults.string(forKey: "relocatedFromLongitudeTitle") ?? ""
 	}
 	
+	func relocatedFromAddressNumberTitle() -> String {
+		return defaults.string(forKey: "relocatedFromAddressNumberTitle") ?? ""
+	}
+	
+	func relocatedFromDirectionTitle() -> String {
+		return defaults.string(forKey: "relocatedFromDirectionTitle") ?? ""
+	}
+	
+	func relocatedFromStreetTitle() -> String {
+		return defaults.string(forKey: "relocatedFromStreetTitle") ?? ""
+	}
+	
 	func relocatedReasonTitle() -> String {
 		return defaults.string(forKey: "relocatedReasonTitle") ?? ""
 	}
@@ -444,6 +456,9 @@ class Common {
 						let relocatedDateTitle = data["relocatedDateTitle"] as! String
 						let relocatedFromLatitudeTitle = data["relocatedFromLatitudeTitle"] as! String
 						let relocatedFromLongitudeTitle = data["relocatedFromLongitudeTitle"] as! String
+						let relocatedFromAddressNumberTitle = data["relocatedFromAddressNumberTitle"] as! String
+						let relocatedFromDirectionTitle = data["relocatedFromDirectionTitle"] as! String
+						let relocatedFromStreetTitle = data["relocatedFromStreetTitle"] as! String
 						let relocatedReasonTitle = data["relocatedReasonTitle"] as! String
 						let relocatedToAddressNumberTitle = data["relocatedToAddressNumberTitle"] as! String
 						let relocatedToDirectionTitle = data["relocatedToDirectionTitle"] as! String
@@ -457,6 +472,9 @@ class Common {
 						print("relocatedDateTitle: \(relocatedDateTitle)")
 						print("relocatedFromLatitudeTitle: \(relocatedFromLatitudeTitle)")
 						print("relocatedFromLongitudeTitle: \(relocatedFromLongitudeTitle)")
+						print("relocatedFromAddressNumberTitle: \(relocatedFromAddressNumberTitle)")
+						print("relocatedFromDirectionTitle: \(relocatedFromDirectionTitle)")
+						print("relocatedFromStreetTitle: \(relocatedFromStreetTitle)")
 						print("relocatedReasonTitle: \(relocatedReasonTitle)")
 						print("relocatedToAddressNumberTitle: \(relocatedToAddressNumberTitle)")
 						print("relocatedToDirectionTitle: \(relocatedToDirectionTitle)")
@@ -470,6 +488,9 @@ class Common {
 						defaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
 						defaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
 						defaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
+						defaults.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
+						defaults.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
+						defaults.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
 						defaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
 						defaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
 						defaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")

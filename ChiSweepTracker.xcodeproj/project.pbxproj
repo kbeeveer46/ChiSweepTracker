@@ -32,7 +32,7 @@
 		FA87EFD723AABBF10061DDBC /* logo-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD623AABBF10061DDBC /* logo-1024.png */; };
 		FA87EFD923AAEB960061DDBC /* notification.m4r in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD823AAEB960061DDBC /* notification.m4r */; };
 		FAD25E2923A325F5004FD3B9 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */; };
-		FAD706A023E26B930017A14D /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7069F23E26B930017A14D /* CustomPointAnnotation.swift */; };
+		FAD706A023E26B930017A14D /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7069F23E26B930017A14D /* CustomAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,7 +66,7 @@
 		FA87EFD623AABBF10061DDBC /* logo-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-1024.png"; sourceTree = "<group>"; };
 		FA87EFD823AAEB960061DDBC /* notification.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = notification.m4r; sourceTree = "<group>"; };
 		FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
-		FAD7069F23E26B930017A14D /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
+		FAD7069F23E26B930017A14D /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,7 +139,6 @@
 			children = (
 				FA0EC357239B263200DD3127 /* Common.swift */,
 				FA184FAB23987BE900AB2FF6 /* SODAClient.swift */,
-				FAD7069F23E26B930017A14D /* CustomPointAnnotation.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -194,6 +193,7 @@
 		FA6AFEE623A1E16200F7E177 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				FAD7069F23E26B930017A14D /* CustomAnnotation.swift */,
 				FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */,
 			);
 			path = CustomViews;
@@ -334,7 +334,7 @@
 				FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */,
 				FA2890D923F443A400695F0A /* RelocatedDetailViewController.swift in Sources */,
 				FA0EC358239B263200DD3127 /* Common.swift in Sources */,
-				FAD706A023E26B930017A14D /* CustomPointAnnotation.swift in Sources */,
+				FAD706A023E26B930017A14D /* CustomAnnotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

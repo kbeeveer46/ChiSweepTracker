@@ -14,6 +14,7 @@ public class VehicleModel {
 	var relocatedDate = ""
 	var relocatedFromLongitude = ""
 	var relocatedFromLatitude = ""
+	var relocatedFromAddress = ""
 	var relocatedReason = ""
 	var relocatedToAddress = ""
 	

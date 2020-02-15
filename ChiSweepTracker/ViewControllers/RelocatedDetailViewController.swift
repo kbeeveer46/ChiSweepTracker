@@ -13,12 +13,13 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var plateLabel: UILabel!
 	@IBOutlet weak var dateLabel: UILabel!
 	@IBOutlet weak var addressButton: UIButton!
+	@IBOutlet weak var relocatedFromAddressButton: UIButton!
 	@IBOutlet weak var reasonLabel: UILabel!
 	
 	// Shared
 	var relocatedVehicle = VehicleModel()
-	var latitude = 0.0
-	var longitude = 0.0
+	var toLatitude = 0.0
+	var toLongitude = 0.0
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +55,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		stateLabel.text = relocatedVehicle.state
 		plateLabel.text = relocatedVehicle.plate
 		dateLabel.text = relocatedVehicle.relocatedDate
+		relocatedFromAddressButton.setTitle(relocatedVehicle.relocatedFromAddress, for: .normal)
 		addressButton.setTitle(relocatedVehicle.relocatedToAddress, for: .normal)
 		reasonLabel.text = relocatedVehicle.relocatedReason
 		
@@ -89,28 +91,28 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				let placemark = placemarks?.first
 				
 				// Create coorindates from placemark
-				self.latitude = placemark?.location?.coordinate.latitude ?? 0
-				self.longitude = placemark?.location?.coordinate.longitude ?? 0
+				self.toLatitude = placemark?.location?.coordinate.latitude ?? 0
+				self.toLongitude = placemark?.location?.coordinate.longitude ?? 0
 				
 				// Create location from lat and long
-				let toLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
+				let toLocation = CLLocation(latitude: self.toLatitude, longitude: self.toLongitude)
 				
 				// Create annotation from location coordinate
-				let toAnnotation = CustomPointAnnotation()
+				let toAnnotation = CustomAnnotation()
 				toAnnotation.customImageName = "pin-orange"
 				toAnnotation.coordinate = toLocation.coordinate
 				toAnnotation.title = "To: \(self.relocatedVehicle.relocatedToAddress)"
-				toAnnotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
+				//toAnnotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
 							
 				// Create location from lat and long
 				let fromLocation = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
 				
 				// Create annotation from location coordinate
-				let fromAnnotation = CustomPointAnnotation()
+				let fromAnnotation = CustomAnnotation()
 				fromAnnotation.customImageName = "pin-orange"
 				fromAnnotation.coordinate = fromLocation.coordinate
-				fromAnnotation.title = "Relocated From" //self.relocatedVehicle.relocatedToAddress
-				fromAnnotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
+				fromAnnotation.title = "From: \(self.relocatedVehicle.relocatedFromAddress)"
+				//fromAnnotation.subtitle = "" //"Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
 			
 				// Create polyline use map directions between both annotations
 				let request = MKDirections.Request()
@@ -161,7 +163,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 			annotationView?.annotation = annotation
 		}
 		
-		let customPointAnnotation = annotation as! CustomPointAnnotation
+		let customPointAnnotation = annotation as! CustomAnnotation
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
@@ -177,10 +179,26 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		return annotationView
 	}
-
+	
+	@IBAction func relocatedFromAddressTapped(_ sender: Any) {
+		
+		let coordinates = CLLocationCoordinate2DMake(Double(self.relocatedVehicle.relocatedFromLatitude)!, Double(self.relocatedVehicle.relocatedFromLongitude)!)
+		
+		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+		
+		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+		
+		let mapItem = MKMapItem(placemark: placemark)
+		
+		mapItem.name = relocatedVehicle.relocatedFromAddress
+		
+		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
+		
+	}
+	
 	@IBAction func addressButtonTapped(_ sender: Any) {
 		
-		let coordinates = CLLocationCoordinate2DMake(self.latitude, self.longitude)
+		let coordinates = CLLocationCoordinate2DMake(self.toLatitude, self.toLongitude)
 		
 		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
 		

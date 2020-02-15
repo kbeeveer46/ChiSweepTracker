@@ -264,7 +264,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
         
 		// Create annotation
-		let annotation = CustomPointAnnotation()
+		let annotation = CustomAnnotation()
 		annotation.customImageName = "pin-red"
 		annotation.coordinate = self.schedule.locationCoordinate
 		annotation.title = "\(self.schedule.address)"
@@ -322,7 +322,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			
 		}
 		
-		let customPointAnnotation = annotation as! CustomPointAnnotation
+		let customPointAnnotation = annotation as! CustomAnnotation
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })

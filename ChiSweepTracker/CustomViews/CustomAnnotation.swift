@@ -1,7 +1,7 @@
 import UIKit
 import MapKit
 
-class CustomPointAnnotation: MKPointAnnotation {
+class CustomAnnotation: MKPointAnnotation {
 	
 	var customImageName = ""
 	var relocatedVehicle = VehicleModel()

@@ -102,7 +102,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
 
 			// Create annotation using location coordinate
-			let annotation = CustomPointAnnotation()
+			let annotation = CustomAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
 			annotation.title = favoriteAddress
@@ -185,6 +185,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 							let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
 							let relocatedFromLatitude = item[self.common.relocatedFromLatitudeTitle()] as? String ?? ""
 							let relocatedFromLongitude = item[self.common.relocatedFromLongitudeTitle()] as? String ?? ""
+							let relocatedFromAddressNumber = item[self.common.relocatedFromAddressNumberTitle()] as? String ?? ""
+							let relocatedFromDirection = item[self.common.relocatedFromDirectionTitle()] as? String ?? ""
+							let relocatedFromStreet = item[self.common.relocatedFromStreetTitle()] as? String ?? ""
 							
 							if (relocatedFromLatitude != "" && relocatedFromLongitude != "") {
 							
@@ -201,7 +204,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									relocatedDate = Date.getFormattedDate(relocatedDate)
 									
 									// Create annotation for relocated location
-									let relocatedAnnotation = CustomPointAnnotation()
+									let relocatedAnnotation = CustomAnnotation()
 									relocatedAnnotation.customImageName = "pin-orange"
 									relocatedAnnotation.coordinate = relocatedLocation.coordinate
 									relocatedAnnotation.subtitle = "#:\(plate) State:\(state) Make:\(make) Color:\(color)"
@@ -216,6 +219,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									relocatedVehicle.relocatedDate = relocatedDate
 									relocatedVehicle.relocatedFromLatitude = relocatedFromLatitude
 									relocatedVehicle.relocatedFromLongitude = relocatedFromLongitude
+									relocatedVehicle.relocatedFromAddress = "\(relocatedFromAddressNumber) \(relocatedFromDirection) \(relocatedFromStreet)"
 									relocatedVehicle.relocatedReason = relocatedReason
 									relocatedAnnotation.relocatedVehicle = relocatedVehicle
 									
@@ -283,7 +287,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									self.divvyStationCount += 1
 									
 									// Create annotation for divvy station
-									let divvyAnnotation = CustomPointAnnotation()
+									let divvyAnnotation = CustomAnnotation()
 									divvyAnnotation.customImageName = "pin-blue"
 									divvyAnnotation.coordinate = stationLocation.coordinate
 									divvyAnnotation.title = name
@@ -916,7 +920,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 		}
 		
-		let customPointAnnotation = annotation as! CustomPointAnnotation
+		let customPointAnnotation = annotation as! CustomAnnotation
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
@@ -951,7 +955,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	}
 	
 	func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-		if let annotation = view.annotation as? CustomPointAnnotation {
+		if let annotation = view.annotation as? CustomAnnotation {
 			
 			// Segue to relocated detail view
 			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {

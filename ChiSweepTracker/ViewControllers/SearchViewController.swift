@@ -106,7 +106,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			getAddressFromCoordinates(location)
 			
 			// Create annotation
-			let annotation = CustomPointAnnotation()
+			let annotation = CustomAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
 
@@ -412,7 +412,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			//annotation.title = addressFromDefaults
 			//annotation.coordinate = location.coordinate
 			
-			let annotation = CustomPointAnnotation()
+			let annotation = CustomAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
 			annotation.title = addressFromDefaults
@@ -464,7 +464,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 		}
 		
-		let customPointAnnotation = annotation as! CustomPointAnnotation
+		let customPointAnnotation = annotation as! CustomAnnotation
 		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
@@ -609,7 +609,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             coordinates.longitude = location.coordinate.longitude
             
 			// Create map annotation
-			let annotation = CustomPointAnnotation()
+			let annotation = CustomAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
 			
