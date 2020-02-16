@@ -990,7 +990,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 					destinationViewController.station = annotation.divvyStation
 					self.navigationController?.pushViewController(destinationViewController, animated: true)
 				}
-				
 			}
 		}
 	}

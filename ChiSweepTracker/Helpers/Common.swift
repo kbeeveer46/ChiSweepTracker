@@ -61,6 +61,10 @@ class Common {
 	// Divvy
 	
 	func divvyDataset() -> String {return defaults.string(forKey: "divvyDataset") ?? ""}
+	func divvyJSONUrl() -> String {return defaults.string(forKey: "divvyJSONUrl") ?? ""}
+	func divvyJSONBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONBikesAvailableTitle") ?? ""}
+	func divvyJSONEBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONEBikesAvailableTitle") ?? ""}
+	func divvyJSONDocksAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONDocksAvailableTitle") ?? ""}
 	func divvyIdTitle() -> String {return defaults.string(forKey: "divvyIdTitle") ?? ""}
 	func divvyDocksInServiceTitle() -> String {return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""}
 	func divvyLatitudeTitle() -> String {return defaults.string(forKey: "divvyLatitudeTitle") ?? ""}
@@ -382,6 +386,10 @@ class Common {
 						let data = document.data()
 						
 						let divvyDataset = data["divvyDataset"] as! String
+						let divvyJSONUrl = data["divvyJSONUrl"] as! String
+						let divvyJSONBikesAvailableTitle = data["divvyJSONBikesAvailableTitle"] as! String
+						let divvyJSONEBikesAvailableTitle = data["divvyJSONEBikesAvailableTitle"] as! String
+						let divvyJSONDocksAvailableTitle = data["divvyJSONDocksAvailableTitle"] as! String
 						let divvyIdTitle = data["idTitle"] as! String
 						let divvyDocksInServiceTitle = data["docksInServiceTitle"] as! String
 						let divvyLatitudeTitle = data["latitudeTitle"] as! String
@@ -390,6 +398,10 @@ class Common {
 						let divvyStatusTitle = data["statusTitle"] as! String
 						
 						print("divvyDataset: \(divvyDataset)")
+						print("divvyJSONUrl: \(divvyJSONUrl)")
+						print("divvyJSONBikesAvailableTitle: \(divvyJSONBikesAvailableTitle)")
+						print("divvyJSONEBikesAvailableTitle: \(divvyJSONEBikesAvailableTitle)")
+						print("divvyJSONDocksAvailableTitle: \(divvyJSONDocksAvailableTitle)")
 						print("divvyIdTitle: \(divvyIdTitle)")
 						print("divvyDocksInServiceTitle: \(divvyDocksInServiceTitle)")
 						print("divvyLatitudeTitle: \(divvyLatitudeTitle)")
@@ -398,6 +410,10 @@ class Common {
 						print("divvyStatusTitle: \(divvyStatusTitle)")
 						
 						defaults.set(divvyDataset, forKey: "divvyDataset")
+						defaults.set(divvyJSONUrl, forKey: "divvyJSONUrl")
+						defaults.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
+						defaults.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
+						defaults.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
 						defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
 						defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
 						defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")

@@ -7,6 +7,11 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 	// Controls
 	@IBOutlet weak var stationMapView: MKMapView!
 	@IBOutlet weak var stationMapViewHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var nameLabel: UILabel!
+	@IBOutlet weak var bikesAvailableLabel: UILabel!
+	
+	// Classes
+	let common = Common()
 	
 	// Shared
 	var station = DivvyStationModel()
@@ -23,6 +28,8 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
 		
+		self.populateStationLabels()
+		
     }
 	
 	func initializeControlsPerDevice() {
@@ -33,6 +40,51 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		default:
 			break
 		}
+	}
+	
+	func populateStationLabels() {
+		
+		let url = URL(string: self.common.divvyJSONUrl())
+		URLSession.shared.dataTask(with:url!, completionHandler: {(results, response, error) in
+			guard let results = results, error == nil else { return }
+			
+			do {
+				let json = try JSONSerialization.jsonObject(with: results, options: .allowFragments) as? [String:Any]
+				let data = json?["data"] as? [String: Any] ?? [:]
+				let stations = data["stations"] as? [[String: Any]] ?? []
+				let bikesAvailable = 0
+				
+				for item in stations {
+					
+					let id = item["station_id"] as? String ?? ""
+					
+					if (id.trimmingCharacters(in: .whitespaces) == self.station.id.trimmingCharacters(in: .whitespaces)) {
+						
+						let bikesAvailable = item[self.common.divvyJSONBikesAvailableTitle()] as? Int ?? 0
+						let eBikesAvailable = item[self.common.divvyJSONEBikesAvailableTitle()] as? Int ?? 0
+						let docksAvailable = item[self.common.divvyJSONDocksAvailableTitle()] as? Int ?? 0
+						
+						print("ID: \(id)")
+						print("bikesAvailable: \(bikesAvailable)")
+						print("eBikesAvailable: \(eBikesAvailable)")
+						print("docksAvailable: \(docksAvailable)")
+						
+						break
+					}
+					
+				}
+				
+				DispatchQueue.main.async {
+					self.nameLabel.text = self.station.name
+					self.bikesAvailableLabel.text = "\(bikesAvailable)"
+					
+				}
+				
+			} catch {
+				print(error)
+			}
+		}).resume()
+		
 	}
 	
 	func loadStationMap() {
