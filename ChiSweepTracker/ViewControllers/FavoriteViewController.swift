@@ -955,9 +955,11 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	}
 	
 	func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+		
+		// Segue to relocated detail view
+		
 		if let annotation = view.annotation as? CustomAnnotation {
 			
-			// Segue to relocated detail view
 			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
 				destinationViewController.relocatedVehicle = annotation.relocatedVehicle
 				self.navigationController?.pushViewController(destinationViewController, animated: true)
