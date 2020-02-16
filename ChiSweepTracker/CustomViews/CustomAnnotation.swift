@@ -5,5 +5,6 @@ class CustomAnnotation: MKPointAnnotation {
 	
 	var customImageName = ""
 	var relocatedVehicle = VehicleModel()
+	var divvyStation = DivvyStationModel()
 	
 }

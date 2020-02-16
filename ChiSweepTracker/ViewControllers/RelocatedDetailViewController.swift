@@ -112,7 +112,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				let fromAnnotation = CustomAnnotation()
 				fromAnnotation.customImageName = "pin-orange"
 				fromAnnotation.coordinate = fromLocation.coordinate
-				fromAnnotation.title = "From: \(self.relocatedVehicle.relocatedFromAddress)"
+				fromAnnotation.title = "Relocated From: \(self.relocatedVehicle.relocatedFromAddress)"
 				
 				// Create location from lat and long
 				let toLocation = CLLocation(latitude: self.toLatitude, longitude: self.toLongitude)
@@ -121,7 +121,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				let toAnnotation = CustomAnnotation()
 				toAnnotation.customImageName = "pin-orange"
 				toAnnotation.coordinate = toLocation.coordinate
-				toAnnotation.title = "To: \(self.relocatedVehicle.relocatedToAddress)"
+				toAnnotation.title = "Relocated To: \(self.relocatedVehicle.relocatedToAddress)"
 				
 				// Add annotations
 				self.relocatedDetailMap.addAnnotation(fromAnnotation)

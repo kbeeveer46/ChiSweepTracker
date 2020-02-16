@@ -11,29 +11,12 @@ class Common {
 	
 	// Shared
 	
-	func latestAppVersion() -> Int {
-		return defaults.integer(forKey: "latestAppVersion")
-	}
-	
-	func latestDatasetVersion() -> Int {
-		return defaults.integer(forKey: "latestDatasetVersion")
-	}
-	
-	func userDatasetVersion() -> Int {
-		return defaults.integer(forKey: "userDatasetVersion")
-	}
-	
-	func defaultAddress() -> String {
-		return defaults.string(forKey: "defaultAddress") ?? ""
-	}
-	
-	func defaultLongitude() -> Double {
-		return defaults.double(forKey: "defaultLongitude")
-	}
-	
-	func defaultLatitude() -> Double {
-		return defaults.double(forKey: "defaultLatitude")
-	}
+	func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
+	func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
+	func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
+	func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
+	func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
+	func defaultLatitude() -> Double {return defaults.double(forKey: "defaultLatitude")}
 	
 	// SODA SDK
 	
@@ -77,29 +60,13 @@ class Common {
 	
 	// Divvy
 	
-	func divvyDataset() -> String {
-		return defaults.string(forKey: "divvyDataset") ?? ""
-	}
-	
-	func divvyDocksInServiceTitle() -> String {
-		return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""
-	}
-	
-	func divvyLatitudeTitle() -> String {
-		return defaults.string(forKey: "divvyLatitudeTitle") ?? ""
-	}
-	
-	func divvyLongitudeTitle() -> String {
-		return defaults.string(forKey: "divvyLongitudeTitle") ?? ""
-	}
-	
-	func divvyStationNameTitle() -> String {
-		return defaults.string(forKey: "divvyStationNameTitle") ?? ""
-	}
-	
-	func divvyStatusTitle() -> String {
-		return defaults.string(forKey: "divvyStatusTitle") ?? ""
-	}
+	func divvyDataset() -> String {return defaults.string(forKey: "divvyDataset") ?? ""}
+	func divvyIdTitle() -> String {return defaults.string(forKey: "divvyIdTitle") ?? ""}
+	func divvyDocksInServiceTitle() -> String {return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""}
+	func divvyLatitudeTitle() -> String {return defaults.string(forKey: "divvyLatitudeTitle") ?? ""}
+	func divvyLongitudeTitle() -> String {return defaults.string(forKey: "divvyLongitudeTitle") ?? ""}
+	func divvyStationNameTitle() -> String {return defaults.string(forKey: "divvyStationNameTitle") ?? ""}
+	func divvyStatusTitle() -> String {return defaults.string(forKey: "divvyStatusTitle") ?? ""}
 	
 	// Towed vehicles
 	
@@ -415,6 +382,7 @@ class Common {
 						let data = document.data()
 						
 						let divvyDataset = data["divvyDataset"] as! String
+						let divvyIdTitle = data["idTitle"] as! String
 						let divvyDocksInServiceTitle = data["docksInServiceTitle"] as! String
 						let divvyLatitudeTitle = data["latitudeTitle"] as! String
 						let divvyLongitudeTitle = data["longitudeTitle"] as! String
@@ -422,6 +390,7 @@ class Common {
 						let divvyStatusTitle = data["statusTitle"] as! String
 						
 						print("divvyDataset: \(divvyDataset)")
+						print("divvyIdTitle: \(divvyIdTitle)")
 						print("divvyDocksInServiceTitle: \(divvyDocksInServiceTitle)")
 						print("divvyLatitudeTitle: \(divvyLatitudeTitle)")
 						print("divvyLongitudeTitle: \(divvyLongitudeTitle)")
@@ -429,6 +398,7 @@ class Common {
 						print("divvyStatusTitle: \(divvyStatusTitle)")
 						
 						defaults.set(divvyDataset, forKey: "divvyDataset")
+						defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
 						defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
 						defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
 						defaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")

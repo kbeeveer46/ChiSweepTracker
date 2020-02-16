@@ -71,6 +71,18 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		// Set required properties for map
 		towedDetailMapView.delegate = self
 		
+		// Create map span using Chicago
+		let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+		
+		// Create coordinates using Chicago
+		let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+		
+		// Create map region from span and coordinates
+		let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+		
+		// Set map region
+		towedDetailMapView.setRegion(region, animated: false)
+		
 		if (!towedVehicle.towedToAddress.contains("Chicago")) {
 			towedVehicle.towedToAddress += " Chicago, IL"
 		}
@@ -109,7 +121,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 				let region = MKCoordinateRegion(center: location.coordinate, span: span)
 
 				// Set region
-				self.towedDetailMapView.setRegion(region, animated: true)
+				self.towedDetailMapView.setRegion(region, animated: false)
 				
 				// Add annotation
 				self.towedDetailMapView.removeAnnotations(self.towedDetailMapView.annotations)

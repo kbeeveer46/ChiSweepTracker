@@ -41,8 +41,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
-        
-    }
+		
+	}
 	
 	func initializeControlsPerDevice() {
 		
@@ -56,7 +56,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		default:
 			break
 		}
-		
 	}
 	
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)

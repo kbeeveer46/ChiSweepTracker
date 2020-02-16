@@ -267,11 +267,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 						for (_, item) in data.enumerated() {
 							
 							// Get values for each Divvy station
-							let latitude = item["latitude"] as? String ?? ""
-							let longitude = item["longitude"] as? String ?? ""
-							let name = item["station_name"] as? String ?? ""
-							let docksInService = item["docks_in_service"] as? String ?? ""
-							let status = item["status"] as? String ?? ""
+							let latitude = item[self.common.divvyLatitudeTitle()] as? String ?? ""
+							let longitude = item[self.common.divvyLongitudeTitle()] as? String ?? ""
+							let name = item[self.common.divvyStationNameTitle()] as? String ?? ""
+							let docksInService = item[self.common.divvyDocksInServiceTitle()] as? String ?? ""
+							let status = item[self.common.divvyStatusTitle()] as? String ?? ""
+							let id = item[self.common.divvyIdTitle()] as? String ?? ""
 							
 							if (latitude != "" && longitude != "") {
 								
@@ -292,6 +293,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									divvyAnnotation.coordinate = stationLocation.coordinate
 									divvyAnnotation.title = name
 									divvyAnnotation.subtitle = "Status: \(status) - Docks In Service: \(docksInService)"
+									
+									let station = DivvyStationModel()
+									station.id = id
+									station.name = name
+									station.latitude = latitude
+									station.longitude = longitude
+									station.docksInService = docksInService
+									station.status = status
+									divvyAnnotation.divvyStation = station
 									
 									// Add annotation to map
 									let divvyAnnotationView = MKPinAnnotationView(annotation: divvyAnnotation, reuseIdentifier: "divvy")
@@ -938,14 +948,18 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			annotationView?.addSubview(annotationLabel)
 			
 		}
-		else if (customPointAnnotation.customImageName == "pin-orange") {
+		else if (customPointAnnotation.customImageName == "pin-orange" || customPointAnnotation.customImageName == "pin-blue") {
 			
 			let detailsButton = UIButton()
 			detailsButton.frame.size.width = 35
 			detailsButton.frame.size.height = 35
-			//detailsButton.layer.cornerRadius = 7.0
-			//detailsButton.backgroundColor = UIColor(hexString: "#FF7832")
-			detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
+			
+			if (customPointAnnotation.customImageName == "pin-orange") {
+				detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
+			}
+			else {
+				detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
+			}
 			
 			annotationView?.leftCalloutAccessoryView = detailsButton
 			
@@ -956,13 +970,27 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	
 	func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
 		
-		// Segue to relocated detail view
-		
 		if let annotation = view.annotation as? CustomAnnotation {
 			
-			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
-				destinationViewController.relocatedVehicle = annotation.relocatedVehicle
-				self.navigationController?.pushViewController(destinationViewController, animated: true)
+			if (annotation.customImageName == "pin-orange") {
+			
+				// Segue to relocated detail view
+				
+				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
+					destinationViewController.relocatedVehicle = annotation.relocatedVehicle
+					self.navigationController?.pushViewController(destinationViewController, animated: true)
+				}
+				
+			}
+			else if (annotation.customImageName == "pin-blue") {
+				
+				// Segue to divvy detail view
+				
+				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "DivvyDetailViewController") as? DivvyDetailViewController {
+					destinationViewController.station = annotation.divvyStation
+					self.navigationController?.pushViewController(destinationViewController, animated: true)
+				}
+				
 			}
 		}
 	}

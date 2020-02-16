@@ -27,6 +27,8 @@
 		FA3F868F23E48BEF00194C47 /* TowedResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F868E23E48BEF00194C47 /* TowedResultsViewController.swift */; };
 		FA3F869123E48DBB00194C47 /* VehicleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F869023E48DBB00194C47 /* VehicleModel.swift */; };
 		FA3F869323E4DAD200194C47 /* TowedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F869223E4DAD100194C47 /* TowedDetailViewController.swift */; };
+		FA5B0D9923F9E7FB00D90316 /* DivvyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5B0D9823F9E7FA00D90316 /* DivvyDetailViewController.swift */; };
+		FA5B0D9B23F9E8FA00D90316 /* DivvyStationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */; };
 		FA6AFEE323A1E11D00F7E177 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */; };
 		FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */; };
 		FA87EFD723AABBF10061DDBC /* logo-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD623AABBF10061DDBC /* logo-1024.png */; };
@@ -61,6 +63,8 @@
 		FA3F868E23E48BEF00194C47 /* TowedResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowedResultsViewController.swift; sourceTree = "<group>"; };
 		FA3F869023E48DBB00194C47 /* VehicleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleModel.swift; sourceTree = "<group>"; };
 		FA3F869223E4DAD100194C47 /* TowedDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TowedDetailViewController.swift; path = "/Users/macbook/Google Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/TowedDetailViewController.swift"; sourceTree = "<absolute>"; };
+		FA5B0D9823F9E7FA00D90316 /* DivvyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivvyDetailViewController.swift; sourceTree = "<group>"; };
+		FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivvyStationModel.swift; sourceTree = "<group>"; };
 		FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA87EFD623AABBF10061DDBC /* logo-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-1024.png"; sourceTree = "<group>"; };
@@ -112,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */,
+				FA5B0D9823F9E7FA00D90316 /* DivvyDetailViewController.swift */,
 				FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */,
 				FA184FA22398709100AB2FF6 /* FavoriteViewController.swift */,
 				FA2890D823F443A400695F0A /* RelocatedDetailViewController.swift */,
@@ -130,6 +135,7 @@
 			children = (
 				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
 				FA3F869023E48DBB00194C47 /* VehicleModel.swift */,
+				FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,6 +329,7 @@
 				FA3F869323E4DAD200194C47 /* TowedDetailViewController.swift in Sources */,
 				FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
+				FA5B0D9923F9E7FB00D90316 /* DivvyDetailViewController.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
 				FA3F869123E48DBB00194C47 /* VehicleModel.swift in Sources */,
 				FA3F868D23E47C7C00194C47 /* TowedSearchViewController.swift in Sources */,
@@ -335,6 +342,7 @@
 				FA2890D923F443A400695F0A /* RelocatedDetailViewController.swift in Sources */,
 				FA0EC358239B263200DD3127 /* Common.swift in Sources */,
 				FAD706A023E26B930017A14D /* CustomAnnotation.swift in Sources */,
+				FA5B0D9B23F9E8FA00D90316 /* DivvyStationModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
