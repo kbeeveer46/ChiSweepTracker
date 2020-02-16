@@ -8,7 +8,10 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var stationMapView: MKMapView!
 	@IBOutlet weak var stationMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var nameLabel: UILabel!
+	@IBOutlet weak var statusLabel: UILabel!
 	@IBOutlet weak var bikesAvailableLabel: UILabel!
+	@IBOutlet weak var eBikesAvailableLabel: UILabel!
+	@IBOutlet weak var docksAvailableLabel: UILabel!
 	
 	// Classes
 	let common = Common()
@@ -52,7 +55,10 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 				let json = try JSONSerialization.jsonObject(with: results, options: .allowFragments) as? [String:Any]
 				let data = json?["data"] as? [String: Any] ?? [:]
 				let stations = data["stations"] as? [[String: Any]] ?? []
-				let bikesAvailable = 0
+				
+				var bikesAvailable = 0
+				var eBikesAvailable = 0
+				var docksAvailable = 0
 				
 				for item in stations {
 					
@@ -60,9 +66,9 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 					
 					if (id.trimmingCharacters(in: .whitespaces) == self.station.id.trimmingCharacters(in: .whitespaces)) {
 						
-						let bikesAvailable = item[self.common.divvyJSONBikesAvailableTitle()] as? Int ?? 0
-						let eBikesAvailable = item[self.common.divvyJSONEBikesAvailableTitle()] as? Int ?? 0
-						let docksAvailable = item[self.common.divvyJSONDocksAvailableTitle()] as? Int ?? 0
+						bikesAvailable = item[self.common.divvyJSONBikesAvailableTitle()] as? Int ?? 0
+						eBikesAvailable = item[self.common.divvyJSONEBikesAvailableTitle()] as? Int ?? 0
+						docksAvailable = item[self.common.divvyJSONDocksAvailableTitle()] as? Int ?? 0
 						
 						print("ID: \(id)")
 						print("bikesAvailable: \(bikesAvailable)")
@@ -76,8 +82,10 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 				
 				DispatchQueue.main.async {
 					self.nameLabel.text = self.station.name
+					self.statusLabel.text = self.station.status
 					self.bikesAvailableLabel.text = "\(bikesAvailable)"
-					
+					self.eBikesAvailableLabel.text = "\(eBikesAvailable)"
+					self.docksAvailableLabel.text = "\(docksAvailable)"
 				}
 				
 			} catch {
@@ -103,7 +111,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		//annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
 		
 		// Create map span
-		let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+		let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
 		
 		// Create map region from span
 		let region = MKCoordinateRegion(center: coordinates, span: span)

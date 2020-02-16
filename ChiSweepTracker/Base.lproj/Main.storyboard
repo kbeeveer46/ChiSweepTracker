@@ -938,7 +938,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="OEz-kq-mDE">
-                                <rect key="frame" x="20" y="255" width="350" height="59"/>
+                                <rect key="frame" x="20" y="255" width="350" height="174.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s9s-Ry-YjT">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="20.5"/>
@@ -949,7 +949,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chicago &amp; Dearborn" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fu-j7-Vu3">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chicago &amp; Dearborn" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fu-j7-Vu3">
                                                 <rect key="frame" x="175" y="0.0" width="175" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -960,8 +960,28 @@
                                             <constraint firstItem="2fu-j7-Vu3" firstAttribute="width" secondItem="pLG-ng-dCj" secondAttribute="width" id="hbb-wt-gpe"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ow-l0-6Zb">
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Y9-E7-yok">
                                         <rect key="frame" x="0.0" y="38.5" width="350" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0nj-la-zPN">
+                                                <rect key="frame" x="0.0" y="0.0" width="175" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In Service" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Vg-0b-hfV">
+                                                <rect key="frame" x="175" y="0.0" width="175" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="7Vg-0b-hfV" firstAttribute="width" secondItem="0nj-la-zPN" secondAttribute="width" id="Kqw-94-DN8"/>
+                                        </constraints>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ow-l0-6Zb">
+                                        <rect key="frame" x="0.0" y="77" width="350" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bikes Available" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NMk-Bo-fe2">
                                                 <rect key="frame" x="0.0" y="0.0" width="175" height="20.5"/>
@@ -978,6 +998,46 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="sVz-Ld-YjG" firstAttribute="width" secondItem="NMk-Bo-fe2" secondAttribute="width" id="CeL-y7-Npq"/>
+                                        </constraints>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Kz-dL-hXo">
+                                        <rect key="frame" x="0.0" y="115.5" width="350" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E-Bikes Available" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lpc-ut-DPr">
+                                                <rect key="frame" x="0.0" y="0.0" width="175" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qap-sl-h1k">
+                                                <rect key="frame" x="175" y="0.0" width="175" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="qap-sl-h1k" firstAttribute="width" secondItem="Lpc-ut-DPr" secondAttribute="width" id="wjo-tl-LcJ"/>
+                                        </constraints>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7WN-Ha-NOQ">
+                                        <rect key="frame" x="0.0" y="154" width="350" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Docks Available" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EwS-46-fFg">
+                                                <rect key="frame" x="0.0" y="0.0" width="175" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUf-Ob-NpW">
+                                                <rect key="frame" x="175" y="0.0" width="175" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="cUf-Ob-NpW" firstAttribute="width" secondItem="EwS-46-fFg" secondAttribute="width" id="fvv-ai-nRh"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -997,9 +1057,12 @@
                     <navigationItem key="navigationItem" id="2Xh-Eu-dWH"/>
                     <connections>
                         <outlet property="bikesAvailableLabel" destination="sVz-Ld-YjG" id="OVp-B6-WNn"/>
+                        <outlet property="docksAvailableLabel" destination="cUf-Ob-NpW" id="9sV-ZC-h3D"/>
+                        <outlet property="eBikesAvailableLabel" destination="qap-sl-h1k" id="a7N-fH-4Tv"/>
                         <outlet property="nameLabel" destination="2fu-j7-Vu3" id="HZ6-1o-nvA"/>
                         <outlet property="stationMapView" destination="5eL-H6-udm" id="e0b-mv-waf"/>
                         <outlet property="stationMapViewHeightConstraint" destination="dMf-gM-1PA" id="Bvs-1d-cQb"/>
+                        <outlet property="statusLabel" destination="7Vg-0b-hfV" id="IZ1-Zz-lrh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgn-ak-y21" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
