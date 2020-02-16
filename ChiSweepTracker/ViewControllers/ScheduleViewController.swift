@@ -12,8 +12,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	
 	// Shared
     let generator = UISelectionFeedbackGenerator()
-	var addFavoriteButton = UIBarButtonItem()
-	var removeFavoriteButton = UIBarButtonItem()
 	
 	// Classes
 	let common = Common()
@@ -27,7 +25,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
 		// Show settings button in the top right
-		self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+		if (schedule.address.trimmingCharacters(in: .whitespaces) != self.common.favoriteAddress().trimmingCharacters(in: .whitespaces)) {
+			self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+		}
 		
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
