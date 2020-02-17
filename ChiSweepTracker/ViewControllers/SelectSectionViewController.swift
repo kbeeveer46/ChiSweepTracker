@@ -194,7 +194,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			selectSectionMap.addAnnotation(annotation)
 			
 			// Set region
-			selectSectionMap.setRegion(region, animated: true)
+			selectSectionMap.setRegion(region, animated: false)
 		}
 	}
 	

@@ -140,7 +140,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 					
 					if (unwrappedResponse.routes.count > 0) {
 						self.relocatedDetailMap.addOverlay(unwrappedResponse.routes[0].polyline)
-						self.relocatedDetailMap.setVisibleMapRect(unwrappedResponse.routes[0].polyline.boundingMapRect, animated: false)
+						self.relocatedDetailMap.setVisibleMapRect(unwrappedResponse.routes[0].polyline.boundingMapRect, animated: true)
 					}
 				}
 			}

@@ -120,7 +120,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			self.favoriteMapView.addAnnotation(annotationView.annotation!)
 			
 			// Set map region
-            favoriteMapView.setRegion(region, animated: true)
+            favoriteMapView.setRegion(region, animated: false)
 			
 			// Add Divvy stations to map
 			addDivvyStationsToMap(location)
@@ -143,7 +143,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
 			
 			// Set map region
-            favoriteMapView.setRegion(region, animated: true)
+            favoriteMapView.setRegion(region, animated: false)
             
         }
     }

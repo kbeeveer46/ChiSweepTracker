@@ -427,7 +427,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			chicagoMapView.addAnnotation(annotation)
 			
 			// Set map region
-			chicagoMapView.setRegion(region, animated: true)
+			chicagoMapView.setRegion(region, animated: false)
 		}
 		else {
 			
@@ -441,7 +441,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
 			
 			// Set map region
-			chicagoMapView.setRegion(region, animated: true)
+			chicagoMapView.setRegion(region, animated: false)
 		}
 	}
 	

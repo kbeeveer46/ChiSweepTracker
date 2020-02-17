@@ -275,7 +275,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
         
 		// Set region
-        scheduleMapView.setRegion(region, animated: true)
+        scheduleMapView.setRegion(region, animated: false)
         
 		// Add polygons to map
 		scheduleMapView.removeOverlays(scheduleMapView.overlays)

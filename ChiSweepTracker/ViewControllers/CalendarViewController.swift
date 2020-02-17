@@ -107,7 +107,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
         
 		// Set map region
-        calendarMapView.setRegion(region, animated: true)
+        calendarMapView.setRegion(region, animated: false)
 		
 		// Add polygons to map
         calendarMapView.removeOverlays(calendarMapView.overlays)
