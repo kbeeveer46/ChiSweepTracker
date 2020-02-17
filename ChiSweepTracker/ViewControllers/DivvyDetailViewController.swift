@@ -31,6 +31,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
 		
+		// Populate divvy station label values
 		self.populateStationLabels()
 		
     }
@@ -53,8 +54,8 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 			
 			do {
 				let json = try JSONSerialization.jsonObject(with: results, options: .allowFragments) as? [String:Any]
-				let data = json?["data"] as? [String: Any] ?? [:]
-				let stations = data["stations"] as? [[String: Any]] ?? []
+				let data = json?["\(self.common.divvyJSONDataTitle())"] as? [String: Any] ?? [:]
+				let stations = data["\(self.common.divvyJSONStationsTitle())"] as? [[String: Any]] ?? []
 				
 				var bikesAvailable = 0
 				var eBikesAvailable = 0
@@ -62,7 +63,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 				
 				for item in stations {
 					
-					let id = item["station_id"] as? String ?? ""
+					let id = item["\(self.common.divvyJSONIdTitle())"] as? String ?? ""
 					
 					if (id.trimmingCharacters(in: .whitespaces) == self.station.id.trimmingCharacters(in: .whitespaces)) {
 						
@@ -70,14 +71,8 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 						eBikesAvailable = item[self.common.divvyJSONEBikesAvailableTitle()] as? Int ?? 0
 						docksAvailable = item[self.common.divvyJSONDocksAvailableTitle()] as? Int ?? 0
 						
-						print("ID: \(id)")
-						print("bikesAvailable: \(bikesAvailable)")
-						print("eBikesAvailable: \(eBikesAvailable)")
-						print("docksAvailable: \(docksAvailable)")
-						
 						break
 					}
-					
 				}
 				
 				DispatchQueue.main.async {
@@ -92,7 +87,6 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 				print(error)
 			}
 		}).resume()
-		
 	}
 	
 	func loadStationMap() {
@@ -108,7 +102,6 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		annotation.customImageName = "pin-blue"
 		annotation.coordinate = coordinates
 		annotation.title = station.name
-		//annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
 		
 		// Create map span
 		let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
@@ -154,5 +147,4 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		return annotationView
 	}
-    
 }

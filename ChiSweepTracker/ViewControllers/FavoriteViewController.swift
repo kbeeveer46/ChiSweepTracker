@@ -207,7 +207,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									let relocatedAnnotation = CustomAnnotation()
 									relocatedAnnotation.customImageName = "pin-orange"
 									relocatedAnnotation.coordinate = relocatedLocation.coordinate
-									relocatedAnnotation.subtitle = "Click on magnifying glass for more details" //"#:\(plate) State:\(state) Make:\(make) Color:\(color)"
+									relocatedAnnotation.subtitle = "Click on magnifying glass for more info" //"#:\(plate) State:\(state) Make:\(make) Color:\(color)"
 									relocatedAnnotation.title = "Make: \(make) - Plate #: \(plate)" //"\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
 									
 									let relocatedVehicle = VehicleModel()
@@ -292,7 +292,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									divvyAnnotation.customImageName = "pin-blue"
 									divvyAnnotation.coordinate = stationLocation.coordinate
 									divvyAnnotation.title = name
-									divvyAnnotation.subtitle = "Status: \(status) - Docks In Service: \(docksInService)"
+									divvyAnnotation.subtitle = "Click on magnifying glass for more info" //"Status: \(status) - Docks In Service: \(docksInService)"
 									
 									let station = DivvyStationModel()
 									station.id = id
@@ -955,10 +955,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			detailsButton.frame.size.height = 35
 			
 			if (customPointAnnotation.customImageName == "pin-orange") {
-				detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
+				detailsButton.setImage(UIImage(named: "search-orange"), for: .normal)
 			}
 			else {
-				detailsButton.setImage(UIImage(named: "pageview"), for: .normal)
+				detailsButton.setImage(UIImage(named: "search-blue"), for: .normal)
 			}
 			
 			annotationView?.leftCalloutAccessoryView = detailsButton
