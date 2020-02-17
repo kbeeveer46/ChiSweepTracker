@@ -101,6 +101,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Create location from coordinates
 			let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
 			
+			// Create map span from coordinates
+			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+			
+			// Create map region from spam
+			let region = MKCoordinateRegion(center: location.coordinate, span: span)
+			
 			// Get address from lat and long
 			getAddressFromCoordinates(location)
 			
@@ -112,6 +118,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Add annotation to map
 			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
 			chicagoMapView.addAnnotation(annotation)
+			
+			// Set map region
+			chicagoMapView.setRegion(region, animated: true)
 			
 		}
 	}
@@ -407,10 +416,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
 			
 			// Create map annotation
-			//let annotation = MKPointAnnotation()
-			//annotation.title = addressFromDefaults
-			//annotation.coordinate = location.coordinate
-			
 			let annotation = CustomAnnotation()
 			annotation.customImageName = "pin-red"
 			annotation.coordinate = location.coordinate
@@ -590,7 +595,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		//self.searchForSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
 		
 	}
-    
+	
     // MARK: Location Manager
     
     // Get user's last location and get address from coordinates

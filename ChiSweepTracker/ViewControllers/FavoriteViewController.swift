@@ -22,6 +22,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	var relocatedVehicleCount = 0
 	var divvyStationCount = 0
+	var hasChangedRegion = false
 	
 	// MARK: Methods
 	
@@ -99,7 +100,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			favoriteMapView.addOverlay(polygons)
 
 			// Create location using lat and long
-            let location: CLLocation = CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
+			let location =  CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
 
 			// Create annotation using location coordinate
 			let annotation = CustomAnnotation()
@@ -109,10 +110,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			annotation.subtitle = "Ward: \(favoriteWard) - Section: \(favoriteSection)"
 
 			// Create map span
-            let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+			let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
 			
 			// Create map region
-            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+			let region = MKCoordinateRegion(center: location.coordinate, span: span)
             
 			// Add annoation to map
 			favoriteMapView.removeAnnotations(favoriteMapView.annotations)
@@ -120,7 +121,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			self.favoriteMapView.addAnnotation(annotationView.annotation!)
 			
 			// Set map region
-            favoriteMapView.setRegion(region, animated: false)
+			if (hasChangedRegion == false) {
+				favoriteMapView.setRegion(region, animated: false)
+			}
 			
 			// Add Divvy stations to map
 			addDivvyStationsToMap(location)
@@ -975,7 +978,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			if (annotation.customImageName == "pin-orange") {
 			
 				// Segue to relocated detail view
-				
 				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
 					destinationViewController.relocatedVehicle = annotation.relocatedVehicle
 					self.navigationController?.pushViewController(destinationViewController, animated: true)
@@ -985,13 +987,18 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			else if (annotation.customImageName == "pin-blue") {
 				
 				// Segue to divvy detail view
-				
 				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "DivvyDetailViewController") as? DivvyDetailViewController {
 					destinationViewController.station = annotation.divvyStation
 					self.navigationController?.pushViewController(destinationViewController, animated: true)
 				}
 			}
 		}
+	}
+	
+	func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+		
+		hasChangedRegion = true
+		
 	}
 
 	//MARK: Actions
