@@ -150,13 +150,28 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Message ID: \(messageID)")
         }
-		
-		if let address = userInfo["address"] {
-			print("adress: \(address)")
-		}
         
         // Print full message.
         //print(userInfo)
+		
+//		if let address = userInfo["address"] {
+//			print("adress: \(address)")
+//		}
+//
+//		if let address = userInfo["address"] as? String {
+//
+//			print("Notification address: \(address)")
+//
+//			if (address != "") {
+//
+//				let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//				let initialViewController = mainStoryboard.instantiateViewController(withIdentifier: "ScheduleViewController") as! ScheduleViewController
+//				let rootViewController = UIApplication.shared.windows.first!.rootViewController as! UINavigationController
+//				initialViewController.address = address
+//				rootViewController.pushViewController(initialViewController, animated: true);
+//
+//			}
+//		}
         
         completionHandler()
         
