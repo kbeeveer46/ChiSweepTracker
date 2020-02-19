@@ -153,7 +153,11 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                 
                     // Segue to schedule view now that schedule model is populated
-                    self.performSegue(withIdentifier: "viewScheduleSegue", sender: self)
+					if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+						destinationViewController.schedule = self.schedule
+						self.navigationController?.pushViewController(destinationViewController, animated: true)
+					}
+					return
             
                 }
             case .error (let err):
@@ -266,11 +270,4 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
-    // Pass schedule model to schedule view controller
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if let scheduleViewController = segue.destination as? ScheduleViewController {
-            scheduleViewController.schedule = schedule
-        }
-    }
 }

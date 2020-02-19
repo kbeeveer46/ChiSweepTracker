@@ -70,7 +70,5 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 			destinationViewController.towedVehicle = towedVehicle
 			self.navigationController?.pushViewController(destinationViewController, animated: true)
 		}
-		
 	}
-
 }

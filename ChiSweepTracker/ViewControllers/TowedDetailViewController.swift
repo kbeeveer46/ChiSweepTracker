@@ -113,7 +113,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 				let annotation = CustomAnnotation()
 				annotation.customImageName = "pin-red"
 				annotation.coordinate = location.coordinate
-				annotation.title = self.towedVehicle.towedToAddress
+				annotation.title = "Towed To: \(self.towedVehicle.towedToAddress)"
 				annotation.subtitle = "Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
 				
 				// Create span and region

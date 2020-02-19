@@ -220,7 +220,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             
 							// If there are multiple sections then segue to select section view
                             if self.schedule.section.isEmpty {
-                                self.performSegue(withIdentifier: "selectSectionSegue", sender: self)
+								if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SelectSectionViewController") as? SelectSectionViewController {
+									destinationViewController.schedule = self.schedule
+									self.navigationController?.pushViewController(destinationViewController, animated: true)
+								}
                                 return
                             }
                             
@@ -483,15 +486,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		annotationView?.addSubview(annotationLabel)
 		
 		return annotationView
-	}
-	
-	// Prepare segue and pass data to view controllers
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "selectSectionSegue" {
-			if let selectSectionViewController = segue.destination as? SelectSectionViewController {
-				selectSectionViewController.schedule = schedule
-			}
-		}
 	}
 	
 	// MARK: Actions
