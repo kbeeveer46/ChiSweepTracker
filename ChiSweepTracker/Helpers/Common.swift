@@ -264,6 +264,7 @@ class Common {
 						let divvyJSONDataTitle = data["divvyJSONDataTitle"] as! String
 						let divvyJSONStationsTitle = data["divvyJSONStationsTitle"] as! String
 						let divvyJSONIdTitle = data["divvyJSONIdTitle"] as! String
+						let divvyJSONLastUpdatedTitle = data["divvyJSONLastUpdatedTitle"] as! String
 						
 						print("divvyDataset: \(divvyDataset)")
 						print("divvyIdTitle: \(divvyIdTitle)")
@@ -280,6 +281,7 @@ class Common {
 						print("divvyJSONDataTitle: \(divvyJSONDataTitle)")
 						print("divvyJSONStationsTitle: \(divvyJSONStationsTitle)")
 						print("divvyJSONIdTitle: \(divvyJSONIdTitle)")
+						print("divvyJSONLastUpdatedTitle: \(divvyJSONLastUpdatedTitle)")
 						
 						defaults.set(divvyDataset, forKey: "divvyDataset")
 						defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
@@ -296,6 +298,7 @@ class Common {
 						defaults.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
 						defaults.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
 						defaults.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
+						defaults.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
 					}
 				}
 		}
