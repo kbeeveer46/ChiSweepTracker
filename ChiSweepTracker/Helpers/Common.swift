@@ -49,6 +49,7 @@ class Common {
 	func divvyJSONDataTitle() -> String {return defaults.string(forKey: "divvyJSONDataTitle") ?? ""}
 	func divvyJSONStationsTitle() -> String {return defaults.string(forKey: "divvyJSONStationsTitle") ?? ""}
 	func divvyJSONIdTitle() -> String {return defaults.string(forKey: "divvyJSONIdTitle") ?? ""}
+	func divvyJSONLastUpdatedTitle() -> String {return defaults.string(forKey: "divvyJSONLastUpdatedTitle") ?? ""}
 	
 	// Towed vehicles
 	
@@ -459,6 +460,19 @@ class Common {
 		}
 	}
 
+	
+	func UTCToLocal(date:String) -> String {
+		
+		let dateFormatter = DateFormatter()
+		//dateFormatter.dateFormat = "MM/dd/yyyy"
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		
+		let dt = dateFormatter.date(from: date)
+		dateFormatter.timeZone = TimeZone.current
+		dateFormatter.dateFormat = "MM/dd/yyyy"
+		
+		return dateFormatter.string(from: dt!)
+	}
 }
 
 // MARK: Extensions
@@ -477,15 +491,16 @@ extension String {
 
 extension Date {
 	
-	static func getFormattedDate(_ string: String) -> String {
+	static func getFormattedDate(_ date: String,_ inputFormat: String,_ outputFormat: String = "MM/dd/yyyy") -> String {
 		
 		let dateFormatterGet = DateFormatter()
-		dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+		dateFormatterGet.dateFormat = inputFormat //"yyyy-MM-dd'T'HH:mm:ss.SSS"
 		
 		let dateFormatterPrint = DateFormatter()
-		dateFormatterPrint.dateFormat = "MM/dd/yyyy"
+		dateFormatterPrint.dateFormat = outputFormat //"MM/dd/yyyy"
+		dateFormatterPrint.timeZone = TimeZone.current
 		
-		let date: Date? = dateFormatterGet.date(from: string)
+		let date: Date? = dateFormatterGet.date(from: date)
 		
 		if (date == nil) {
 			return ""

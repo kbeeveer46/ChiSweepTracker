@@ -131,7 +131,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				let request = MKDirections.Request()
 				request.destination = MKMapItem(placemark: MKPlacemark(coordinate: toAnnotation.coordinate, addressDictionary: nil))
 				request.source = MKMapItem(placemark: MKPlacemark(coordinate: fromAnnotation.coordinate, addressDictionary: nil))
-				request.transportType = .walking
+				//request.transportType = .driving
 				
 				let directions = MKDirections(request: request)
 				

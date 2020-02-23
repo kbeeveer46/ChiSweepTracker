@@ -204,7 +204,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 								
 									self.relocatedVehicleCount += 1
 									
-									relocatedDate = Date.getFormattedDate(relocatedDate)
+									relocatedDate = Date.getFormattedDate(relocatedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS")
 									
 									// Create annotation for relocated location
 									let relocatedAnnotation = CustomAnnotation()
@@ -764,7 +764,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                 let soundName = UNNotificationSoundName("notification.m4r")
 																content.sound = UNNotificationSound(named: soundName)
                                                                 content.badge = 1
-																//content.userInfo = ["address":self.common.favoriteAddress()]
+																content.userInfo = ["address":self.common.favoriteAddress()]
 
 																// Create notificaton identifier
 																let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
@@ -855,7 +855,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
-		//content.userInfo = ["address":self.common.favoriteAddress()]
+		content.userInfo = ["address":self.common.favoriteAddress()]
 		
 		// Create notification id
 		let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"

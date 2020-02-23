@@ -12,6 +12,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var bikesAvailableLabel: UILabel!
 	@IBOutlet weak var eBikesAvailableLabel: UILabel!
 	@IBOutlet weak var docksAvailableLabel: UILabel!
+	@IBOutlet weak var lastUpdatedLabel: UILabel!
 	
 	// Classes
 	let common = Common()
@@ -53,7 +54,11 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 			guard let results = results, error == nil else { return }
 			
 			do {
+				
 				let json = try JSONSerialization.jsonObject(with: results, options: .allowFragments) as? [String:Any]
+				let lastUpdated = json?[self.common.divvyJSONLastUpdatedTitle()] as? Double ?? 0.0
+				let lastUpdatedUTCDate = NSDate(timeIntervalSince1970: lastUpdated)
+				let lastUpdatedUTCDateFormatted = Date.getFormattedDate("\(lastUpdatedUTCDate)", "yyyy-MM-dd HH:mm:ss ZZZ", "MM/dd hh:mm a")
 				let data = json?["\(self.common.divvyJSONDataTitle())"] as? [String: Any] ?? [:]
 				let stations = data["\(self.common.divvyJSONStationsTitle())"] as? [[String: Any]] ?? []
 				
@@ -81,6 +86,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 					self.bikesAvailableLabel.text = "\(bikesAvailable)"
 					self.eBikesAvailableLabel.text = "\(eBikesAvailable)"
 					self.docksAvailableLabel.text = "\(docksAvailable)"
+					self.lastUpdatedLabel.text = "\(lastUpdatedUTCDateFormatted)"
 				}
 				
 			} catch {

@@ -235,7 +235,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 						let towedToPhone = item[self.common.towedToPhoneTitle()] as? String ?? ""
 						
 						// Change date to MM/dd/yyyy
-						towedDate = Date.getFormattedDate(towedDate)
+						towedDate = Date.getFormattedDate(towedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS")
 						
 						let vehicle = VehicleModel()
 						vehicle.towedDate = towedDate
