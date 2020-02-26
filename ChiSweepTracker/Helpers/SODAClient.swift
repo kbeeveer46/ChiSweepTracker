@@ -3,7 +3,7 @@ import Foundation
 // Reference: http://dev.socrata.com/consumers/getting-started.html
 
 // The default number of items to return in SODAClient.queryDataset calls.
-public let SODADefaultLimit = 5000
+public let SODADefaultLimit = 5000 // I don't think this works.
 
 // The result of an asynchronous SODAClient.queryDataset call. It can either succeed with data or fail with an error.
 public enum SODADatasetResult {

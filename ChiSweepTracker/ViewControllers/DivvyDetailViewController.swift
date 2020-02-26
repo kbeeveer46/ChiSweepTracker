@@ -49,23 +49,32 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 	
 	func populateStationLabels() {
 		
+		// Get JSON URL
 		let url = URL(string: self.common.divvyJSONUrl())
+		
 		URLSession.shared.dataTask(with:url!, completionHandler: {(results, response, error) in
 			guard let results = results, error == nil else { return }
 			
 			do {
-				
+				// Get entire JSON response
 				let json = try JSONSerialization.jsonObject(with: results, options: .allowFragments) as? [String:Any]
+				
+				// Get last updated unix timestamp and convert it to local time
 				let lastUpdated = json?[self.common.divvyJSONLastUpdatedTitle()] as? Double ?? 0.0
 				let lastUpdatedUTCDate = NSDate(timeIntervalSince1970: lastUpdated)
 				let lastUpdatedUTCDateFormatted = Date.getFormattedDate("\(lastUpdatedUTCDate)", "yyyy-MM-dd HH:mm:ss ZZZ", "MM/dd hh:mm a")
+				
+				// Get data element from JSON
 				let data = json?["\(self.common.divvyJSONDataTitle())"] as? [String: Any] ?? [:]
+				
+				// Get station element from data
 				let stations = data["\(self.common.divvyJSONStationsTitle())"] as? [[String: Any]] ?? []
 				
 				var bikesAvailable = 0
 				var eBikesAvailable = 0
 				var docksAvailable = 0
 				
+				// Loop through stations data to find matching station id and retrieve data
 				for item in stations {
 					
 					let id = item["\(self.common.divvyJSONIdTitle())"] as? String ?? ""
@@ -80,6 +89,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 					}
 				}
 				
+				// Populate labels
 				DispatchQueue.main.async {
 					self.nameLabel.text = self.station.name
 					self.statusLabel.text = self.station.status
@@ -90,7 +100,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 				}
 				
 			} catch {
-				print(error)
+				print("Divvy JSON error: \(error)")
 			}
 		}).resume()
 	}

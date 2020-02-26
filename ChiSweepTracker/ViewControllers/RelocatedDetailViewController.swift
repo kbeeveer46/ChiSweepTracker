@@ -70,6 +70,9 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		self.relocatedDetailMap.removeAnnotations(self.relocatedDetailMap.annotations)
 		self.relocatedDetailMap.removeOverlays(self.relocatedDetailMap.overlays)
 		
+		// Do not remove this. Used to zoom in on map before view loads.
+		
+		// Create location from from lat and long
 		let centerLocation = CLLocationCoordinate2D(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
 		
 		// Create map span
@@ -80,6 +83,8 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		// Set map region
 		relocatedDetailMap.setRegion(region, animated: false)
+		
+		//
 		
 		// Add "Chicago, IL" to end of address if it doesn't exist to help find the address when it's clicked
 		if (!relocatedVehicle.relocatedToAddress.contains("Chicago")) {
@@ -92,8 +97,8 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 			
 			// No internet connection will cause an error
 			if error != nil {
-				//self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
-				//return
+				print("Error getting relocated to address lat and long: \(error!)")
+				return
 			}
 			
 			if placemarks != nil {
@@ -105,36 +110,34 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				self.toLatitude = placemark?.location?.coordinate.latitude ?? 0
 				self.toLongitude = placemark?.location?.coordinate.longitude ?? 0
 				
-				// Create location from lat and long
+				// Create from and to location using lat and long
 				let fromLocation = CLLocation(latitude: Double(self.relocatedVehicle.relocatedFromLatitude)!, longitude: Double(self.relocatedVehicle.relocatedFromLongitude)!)
+				let toLocation = CLLocation(latitude: self.toLatitude, longitude: self.toLongitude)
 				
-				// Create annotation from location coordinate
+				// Create from and to annotation from location coordinate
 				let fromAnnotation = CustomAnnotation()
 				fromAnnotation.customImageName = "pin-orange"
 				fromAnnotation.coordinate = fromLocation.coordinate
 				fromAnnotation.title = "Relocated From: \(self.relocatedVehicle.relocatedFromAddress)"
-				
-				// Create location from lat and long
-				let toLocation = CLLocation(latitude: self.toLatitude, longitude: self.toLongitude)
-				
-				// Create annotation from location coordinate
+			
 				let toAnnotation = CustomAnnotation()
 				toAnnotation.customImageName = "pin-orange"
 				toAnnotation.coordinate = toLocation.coordinate
 				toAnnotation.title = "Relocated To: \(self.relocatedVehicle.relocatedToAddress)"
 				
-				// Add annotations
+				// Add from and to annotations
 				self.relocatedDetailMap.addAnnotation(fromAnnotation)
 				self.relocatedDetailMap.addAnnotation(toAnnotation)
 				
-				// Create polyline use map directions between both annotations
+				// Initialize directions request with from and to annotations
 				let request = MKDirections.Request()
 				request.destination = MKMapItem(placemark: MKPlacemark(coordinate: toAnnotation.coordinate, addressDictionary: nil))
 				request.source = MKMapItem(placemark: MKPlacemark(coordinate: fromAnnotation.coordinate, addressDictionary: nil))
-				//request.transportType = .driving
 				
+				// Create directions object from request
 				let directions = MKDirections(request: request)
 				
+				// Calculate directions based on destination and source
 				directions.calculate { [unowned self] response, error in
 					guard let unwrappedResponse = response else { return }
 					
