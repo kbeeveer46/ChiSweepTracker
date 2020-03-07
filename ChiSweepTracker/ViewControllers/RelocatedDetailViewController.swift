@@ -87,13 +87,14 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		//
 		
 		// Add "Chicago, IL" to end of address if it doesn't exist to help find the address when it's clicked
-		if (!relocatedVehicle.relocatedToAddress.contains("Chicago")) {
-			relocatedVehicle.relocatedToAddress += " Chicago, IL"
+		var relocatedToAddress = relocatedVehicle.relocatedToAddress
+		if (!relocatedToAddress.contains("Chicago")) {
+			relocatedToAddress += " Chicago, IL"
 		}
 		
 		// Get coordinates from relocated to address
 		let geocoder = CLGeocoder()
-		geocoder.geocodeAddressString(relocatedVehicle.relocatedToAddress) { placemarks, error in
+		geocoder.geocodeAddressString(relocatedToAddress) { placemarks, error in
 			
 			// No internet connection will cause an error
 			if error != nil {
@@ -140,9 +141,9 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				// Calculate directions based on destination and source
 				directions.calculate { [unowned self] response, error in
 					guard let unwrappedResponse = response else { return }
-					
+
 					if (unwrappedResponse.routes.count > 0) {
-						self.relocatedDetailMap.addOverlay(unwrappedResponse.routes[0].polyline)
+						//self.relocatedDetailMap.addOverlay(unwrappedResponse.routes[0].polyline)
 						self.relocatedDetailMap.setVisibleMapRect(unwrappedResponse.routes[0].polyline.boundingMapRect, animated: true)
 					}
 				}
@@ -150,15 +151,15 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		}
 	}
 	
-	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-					
-		assert(overlay is MKPolyline, "overlay must be polyline")
-		
-		let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-		polylineRenderer.strokeColor = UIColor(hexString: "#FF7832")
-		polylineRenderer.lineWidth = 3
-		return polylineRenderer
-	}
+//	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+//
+//		assert(overlay is MKPolyline, "overlay must be polyline")
+//
+//		let polylineRenderer = MKPolylineRenderer(overlay: overlay)
+//		polylineRenderer.strokeColor = UIColor(hexString: "#FF7832")
+//		polylineRenderer.lineWidth = 3
+//		return polylineRenderer
+//	}
 	
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 		
