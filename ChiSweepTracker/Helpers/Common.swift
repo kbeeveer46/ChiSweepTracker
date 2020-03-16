@@ -142,7 +142,7 @@ class Common {
         let errorTitle = "Something went wrong..."
         let notFound = "Could not find sweep schedule. Address must reside in Chicago."
 		
-		let finishedScheduleMessage = "Sweeping has ended for _currentYear_. Check back next spring for the new schedule and to set up your notifications."
+		let finishedScheduleMessage = "Sweeping has ended for _currentYear_. Check back next April for the new schedule and to set up your notifications."
 		let noInternetConnectionSearchMessage = "You must be connected to the Internet to find your sweep area."
     }
 	

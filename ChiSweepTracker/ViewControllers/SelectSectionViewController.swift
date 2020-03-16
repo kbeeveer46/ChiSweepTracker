@@ -106,6 +106,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		// Query SODA API to get schedule
         let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
             .filter("\(self.common.wardTitle()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.sectionTitle()) = '\(self.schedule.section)'" : "") ")
+			.orderAscending(self.common.monthNumberTitle())
 		
         scheduleQuery.get { res in
             switch res {

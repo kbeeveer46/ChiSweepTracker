@@ -230,6 +230,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             // Query SODA API to get months and days
 							let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
 								.filter("\(self.common.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.common.sectionTitle()) = '\(section)'" : "") ")
+								.orderAscending(self.common.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {

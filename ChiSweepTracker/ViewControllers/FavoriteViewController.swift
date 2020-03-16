@@ -22,7 +22,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
 	var relocatedVehicleCount = 0
 	var divvyStationCount = 0
-	var hasChangedRegion = false
 	
 	// MARK: Methods
 	
@@ -121,9 +120,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			self.favoriteMapView.addAnnotation(annotationView.annotation!)
 			
 			// Set map region
-			if (hasChangedRegion == false) {
-				favoriteMapView.setRegion(region, animated: false)
-			}
+			favoriteMapView.setRegion(region, animated: false)
 			
 			// Add Divvy stations to map
 			addDivvyStationsToMap(location)
@@ -607,6 +604,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                             
                             let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
 								.filter("\(self.common.wardTitle()) = '\(ward)' AND \(self.common.sectionTitle()) = '\(self.schedule.section)'")
+								.orderAscending(self.common.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -993,12 +991,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				}
 			}
 		}
-	}
-	
-	func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-		
-		hasChangedRegion = true
-		
 	}
 
 	//MARK: Actions
