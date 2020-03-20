@@ -207,7 +207,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									let relocatedAnnotation = CustomAnnotation()
 									relocatedAnnotation.customImageName = "pin-orange"
 									relocatedAnnotation.coordinate = relocatedLocation.coordinate
-									relocatedAnnotation.subtitle = "Click on magnifying glass for more info" //"#:\(plate) State:\(state) Make:\(make) Color:\(color)"
+									relocatedAnnotation.subtitle = "Click on magnifying glass for details" //"#:\(plate) State:\(state) Make:\(make) Color:\(color)"
 									relocatedAnnotation.title = "Make: \(make) - Plate #: \(plate)" //"\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
 									
 									let relocatedVehicle = VehicleModel()
@@ -292,7 +292,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									divvyAnnotation.customImageName = "pin-blue"
 									divvyAnnotation.coordinate = stationLocation.coordinate
 									divvyAnnotation.title = name
-									divvyAnnotation.subtitle = "Click on magnifying glass for more info" //"Status: \(status) - Docks In Service: \(docksInService)"
+									divvyAnnotation.subtitle = "Click on magnifying glass for details" //"Status: \(status) - Docks In Service: \(docksInService)"
 									
 									let station = DivvyStationModel()
 									station.id = id

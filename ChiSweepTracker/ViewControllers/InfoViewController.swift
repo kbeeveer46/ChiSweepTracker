@@ -61,7 +61,7 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 			//contactButtonHeightConstraint.constant = 55
 			
 			rateButton.titleLabel?.font = .systemFont(ofSize: 13)
-			rateButtonHeightConstraint.constant = 70
+			rateButtonHeightConstraint.constant = 65
 			
 		case .iPhone6S,
 			 .iPhone7,

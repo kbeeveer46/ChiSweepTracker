@@ -117,8 +117,21 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="yYl-5I-4u5">
                                 <rect key="frame" x="7" y="51" width="361" height="449"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="syr-6a-Pdy">
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="70"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="70" id="QhL-Q1-AJh"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal" title="Enjoying Sweep Tracker? Click here to give it a 5-star rating. Your positive rating will help others in Chicago avoid tickets."/>
+                                        <connections>
+                                            <action selector="rateButtonTapped:" destination="Rwe-fk-VdI" eventType="touchUpInside" id="h2Z-lj-rgR"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="gxI-gL-upq">
-                                        <rect key="frame" x="0.0" y="0.0" width="361" height="110"/>
+                                        <rect key="frame" x="0.0" y="78" width="361" height="110"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="110" id="caP-lb-bSu"/>
                                         </constraints>
@@ -130,7 +143,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="qv8-r5-r5L">
-                                        <rect key="frame" x="0.0" y="118" width="361" height="140"/>
+                                        <rect key="frame" x="0.0" y="196" width="361" height="140"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="140" id="UnY-L4-FDY"/>
                                         </constraints>
@@ -142,7 +155,7 @@
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="wp5-4g-axw">
-                                        <rect key="frame" x="0.0" y="266" width="361" height="105"/>
+                                        <rect key="frame" x="0.0" y="344" width="361" height="105"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="105" id="4II-Rd-5gN"/>
                                         </constraints>
@@ -154,7 +167,7 @@
                                         </state>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="uz5-ux-x00">
-                                        <rect key="frame" x="0.0" y="375" width="361" height="55"/>
+                                        <rect key="frame" x="0.0" y="449" width="361" height="55"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="1b4-Uj-pvT"/>
                                         </constraints>
@@ -164,21 +177,6 @@
                                         <state key="normal" title="Click here to contact Sweep Tracker with any issues, comments, or suggestions with this app."/>
                                         <connections>
                                             <action selector="contactButtonTapped:" destination="Rwe-fk-VdI" eventType="touchUpInside" id="aq7-kM-SZf"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="syr-6a-Pdy">
-                                        <rect key="frame" x="0.0" y="379" width="361" height="70"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="70" id="QhL-Q1-AJh"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
-                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
-                                        <state key="normal">
-                                            <string key="title">Enjoying Sweep Tracker? Click here to give it a 5-star rating. You rating will promote the app and help others in Chicago avoid tickets.</string>
-                                        </state>
-                                        <connections>
-                                            <action selector="rateButtonTapped:" destination="Rwe-fk-VdI" eventType="touchUpInside" id="h2Z-lj-rgR"/>
                                         </connections>
                                     </button>
                                 </subviews>
