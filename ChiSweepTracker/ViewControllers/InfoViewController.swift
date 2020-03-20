@@ -1,5 +1,6 @@
 import UIKit
 import MessageUI
+import StoreKit
 
 class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
@@ -13,6 +14,8 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 	@IBOutlet weak var contactButton: UIButton!
 	@IBOutlet weak var contactButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var infoStackView: UIStackView!
+	@IBOutlet weak var rateButton: UIButton!
+	@IBOutlet weak var rateButtonHeightConstraint: NSLayoutConstraint!
 	
 	// Classes
     let common = Common()
@@ -32,7 +35,8 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
         self.common.styleButton(infoButton, "sweeper", "007AFF")
         self.common.styleButton(signsButton, "warning", "FF7832")
         self.common.styleButton(ticketButton, "dollar_circle", "008577")
-		self.common.styleButton(contactButton, "mail", "BF1A2F")
+		//self.common.styleButton(contactButton, "mail", "BF1A2F")
+		self.common.styleButton(rateButton, "star_rate", "BF1A2F")
 		
 		// Initialize controls per device
 		initializeControlsPerDevice()
@@ -43,19 +47,29 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
+			
 			infoButton.titleLabel?.font = .systemFont(ofSize: 13)
-			infoButtonHeightConstraint.constant = 115
+			infoButtonHeightConstraint.constant = 105
 			
 			signsButton.titleLabel?.font = .systemFont(ofSize: 13)
-			signsButtonHeightConstraint.constant = 145
+			signsButtonHeightConstraint.constant = 135
 			
 			ticketButton.titleLabel?.font = .systemFont(ofSize: 13)
 			ticketButtonHeightConstraint.constant = 100
 			
-			contactButton.titleLabel?.font = .systemFont(ofSize: 13)
-			contactButtonHeightConstraint.constant = 55
+			//contactButton.titleLabel?.font = .systemFont(ofSize: 13)
+			//contactButtonHeightConstraint.constant = 55
 			
-			infoStackView.spacing = 6
+			rateButton.titleLabel?.font = .systemFont(ofSize: 13)
+			rateButtonHeightConstraint.constant = 70
+			
+		case .iPhone6S,
+			 .iPhone7,
+			 .iPhone8,
+			 .iPhoneX:
+			
+			infoButtonHeightConstraint.constant = 120
+			signsButtonHeightConstraint.constant = 160
 			
 		default:
 			break
@@ -67,7 +81,17 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 		controller.dismiss(animated: true)
 	}
 	
-	// MARK: Methods
+	// MARK: Actions
+	
+	@IBAction func rateButtonTapped(_ sender: Any) {
+	
+		if #available(iOS 10.3, *) {
+			SKStoreReviewController.requestReview()
+		} else {
+			// Fallback on earlier versions
+		}
+	}
+	
 	
 	@IBAction func contactButtonTapped(_ sender: Any) {
 		

@@ -186,11 +186,11 @@ extension AppDelegate: MessagingDelegate {
         
 		// This callback is fired at each app startup and whenever a new token is generated.
 		
-        //print("Firebase registration token: \(fcmToken)")
+        print("Firebase registration token: \(fcmToken)")
         
-        //let dataDict:[String: String] = ["token": fcmToken]
+        let dataDict:[String: String] = ["token": fcmToken]
         
-        //NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
   
     }
     
