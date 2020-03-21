@@ -297,16 +297,20 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         event.title = "Street Sweeping"
                         event.startDate = startDate
                         event.endDate = endDate
-                        event.notes = "Street sweeping in your neighborhood between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
+                        event.notes = "Street sweeping between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
                         event.calendar = eventStore.defaultCalendarForNewEvents
                         
+						// Add reminder 30 minutes before event startDate
+						let reminder = EKAlarm(relativeOffset: -1800)
+						event.addAlarm(reminder)
+						
 						// Add event to calendar
 						do {
                             try eventStore.save(event, span: .thisEvent)
                         }
 						catch let error as NSError {
 							print("Failed to add event with error: \(error.localizedDescription)")
-							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to calendar.")
+							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to your calendar.")
                         }
                         
 						// Alert user event was added
