@@ -45,7 +45,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			scheduleMapViewHeightConstraint.constant = 150
+			scheduleMapViewHeightConstraint.constant = 175
 			scheduleTableView.rowHeight = 37
 		default:
 			break

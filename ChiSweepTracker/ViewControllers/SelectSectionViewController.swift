@@ -37,7 +37,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			selectSectionMapHeightConstraint.constant = 150
+			selectSectionMapHeightConstraint.constant = 175
 		default:
 			break
 		}

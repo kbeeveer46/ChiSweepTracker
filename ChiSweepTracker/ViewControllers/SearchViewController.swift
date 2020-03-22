@@ -15,7 +15,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var finishedScheduleButton: UIButton!
 	@IBOutlet weak var searchStackView: UIStackView!
 	@IBOutlet weak var infoLabel: UILabel!
-	
+
 	// Classes
     let schedule = ScheduleModel()
     let common = Common()
@@ -48,8 +48,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			chicagoMapViewHeightConstraint.constant = 150
-			searchStackView.spacing = 15
+			chicagoMapViewHeightConstraint.constant = 175
+			searchStackView.spacing = 10
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
 			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 13)
 			infoLabel.font = .systemFont(ofSize: 10)

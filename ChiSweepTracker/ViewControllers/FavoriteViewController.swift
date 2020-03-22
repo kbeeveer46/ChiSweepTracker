@@ -13,6 +13,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     @IBOutlet weak var favoriteMapView: MKMapView!
 	@IBOutlet weak var favoriteMapHeighConstraint: NSLayoutConstraint!
 	@IBOutlet weak var infoLabel: UILabel!
+	@IBOutlet weak var favoriteStackView: UIStackView!
+	@IBOutlet weak var whenPickerHeightConstraint: NSLayoutConstraint!
 	
 	// Classes
     let common = Common()
@@ -45,7 +47,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		switch UIDevice().type {
 		case .iPhoneSE:
 			infoLabel.font = .systemFont(ofSize: 11)
-			favoriteMapHeighConstraint.constant = 150
+			favoriteMapHeighConstraint.constant = 175
+			favoriteStackView.spacing = 10
+			whenPickerHeightConstraint.constant = 50
 		default:
 			break
 		}
@@ -65,7 +69,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
 		// Set required properties for map
         favoriteMapView.delegate = self
-        
+		favoriteMapView.removeOverlays(favoriteMapView.overlays)
+		
 		// Get favorite values from defaults
 		let favoriteAddress = self.common.favoriteAddress()
 		let favoriteWard = self.common.favoriteWard()

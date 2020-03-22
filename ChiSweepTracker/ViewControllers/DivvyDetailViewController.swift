@@ -41,7 +41,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			stationMapViewHeightConstraint.constant = 150
+			stationMapViewHeightConstraint.constant = 175
 		default:
 			break
 		}

@@ -74,7 +74,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			calendarMapViewHeightConstraint.constant = 150
+			calendarMapViewHeightConstraint.constant = 175
+			self.title = "\(selectedMonthName) Schedule - \(currentYear)"
 		default:
 			break
 		}

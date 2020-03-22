@@ -96,7 +96,7 @@
                         <outlet property="finishedScheduleButton" destination="I6v-KF-Plh" id="SRG-9K-G2o"/>
                         <outlet property="infoLabel" destination="Jad-zx-64x" id="1dv-aT-zry"/>
                         <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
-                        <outlet property="searchStackView" destination="a0x-bJ-ZY7" id="jRj-FR-mMZ"/>
+                        <outlet property="searchStackView" destination="a0x-bJ-ZY7" id="VDY-wb-0A0"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="gu7-gj-SCi" kind="show" identifier="selectSectionSegue" id="l20-dB-abe"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleFromSearchSegue" id="nuK-lD-YCG"/>
@@ -391,7 +391,7 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="279" width="365" height="406"/>
+                                <rect key="frame" x="0.0" y="279" width="365" height="323.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-aH-Zkq">
                                         <rect key="frame" x="0.0" y="0.0" width="365" height="90"/>
@@ -415,16 +415,16 @@
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="0.0" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="110" width="365" height="67"/>
+                                        <rect key="frame" x="0.0" y="110" width="365" height="33.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="xsQ-kE-RuZ">
-                                                <rect key="frame" x="20" y="0.0" width="25" height="67"/>
+                                                <rect key="frame" x="20" y="0.0" width="25" height="33.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="25" id="Iy1-gI-T98"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1X-Vs-FoR">
-                                                <rect key="frame" x="55" y="18.5" width="231" height="30"/>
+                                                <rect key="frame" x="55" y="2" width="231" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="Fhg-bs-9kM"/>
                                                 </constraints>
@@ -433,7 +433,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="right" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="right" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jk6-Wy-pyD">
-                                                <rect key="frame" x="296" y="18" width="51" height="31"/>
+                                                <rect key="frame" x="296" y="1.5" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="pushNotificationsTapped:" destination="aNg-gl-cTZ" eventType="valueChanged" id="sNB-uJ-qMJ"/>
                                                 </connections>
@@ -443,7 +443,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="197" width="365" height="70"/>
+                                        <rect key="frame" x="0.0" y="163.5" width="365" height="70"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-Tc-noJ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="70"/>
@@ -460,15 +460,15 @@
                                             <pickerView contentMode="right" translatesAutoresizingMaskIntoConstraints="NO" id="LL0-f2-4jY">
                                                 <rect key="frame" x="170" y="0.0" width="175" height="70"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="70" id="HMA-bb-iMa"/>
                                                     <constraint firstAttribute="width" constant="175" id="YLF-yC-clf"/>
+                                                    <constraint firstAttribute="height" constant="70" id="aVq-zv-nLP"/>
                                                 </constraints>
                                             </pickerView>
                                         </subviews>
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="287" width="365" height="119"/>
+                                        <rect key="frame" x="0.0" y="253.5" width="365" height="70"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="ECS-GF-Q2t">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="70"/>
@@ -511,10 +511,12 @@
                     <connections>
                         <outlet property="favoriteMapHeighConstraint" destination="45C-rY-kFz" id="tcy-wp-hcd"/>
                         <outlet property="favoriteMapView" destination="x1r-6W-RMh" id="0zW-wy-e3V"/>
+                        <outlet property="favoriteStackView" destination="O2H-e5-O3v" id="gMA-Yk-VKN"/>
                         <outlet property="infoLabel" destination="yYR-QR-hEk" id="o0L-ug-DOU"/>
                         <outlet property="onPicker" destination="LL0-f2-4jY" id="mlx-aQ-uua"/>
                         <outlet property="pushNotificationsSwitch" destination="jk6-Wy-pyD" id="f6m-W1-H1h"/>
                         <outlet property="timePicker" destination="luP-wW-qKV" id="Evl-EH-OAz"/>
+                        <outlet property="whenPickerHeightConstraint" destination="aVq-zv-nLP" id="0Rz-Yk-BEd"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="showScheduleFromNotificationsSegue" id="maw-XV-A0s"/>
                         <segue destination="0Np-di-K2M" kind="show" identifier="showTowedSearchFromFavoritesSegue" id="h4N-AG-OrJ"/>
                         <segue destination="NuG-xh-ACk" kind="show" identifier="showRelocatedDetailFromFavoriteSegue" id="fhG-up-OrJ"/>

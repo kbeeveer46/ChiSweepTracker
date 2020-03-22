@@ -42,7 +42,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			relocatedDetailMapHeightConstraint.constant = 150
+			relocatedDetailMapHeightConstraint.constant = 175
 		default:
 			break
 		}
