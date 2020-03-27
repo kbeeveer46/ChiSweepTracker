@@ -494,6 +494,14 @@ extension String {
 
 extension Date {
 	
+	var month: String {
+		
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "MMMM"
+		return dateFormatter.string(from: self)
+		
+	}
+	
 	static func getFormattedDate(_ date: String,_ inputFormat: String,_ outputFormat: String = "MM/dd/yyyy") -> String {
 		
 		let dateFormatterGet = DateFormatter()

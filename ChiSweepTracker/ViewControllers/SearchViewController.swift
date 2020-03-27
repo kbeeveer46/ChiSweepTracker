@@ -118,7 +118,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						
 						let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
 						let dates = item[self.common.dates()] as? String ?? ""
-						let datesArray = dates.components(separatedBy: ",")
+						let datesArray = dates.components(separatedBy: ",").sorted()
 						
 						if (Int(monthNumber) == (currentMonthNumber + count)) {
 							
@@ -341,7 +341,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             let monthName = item[self.common.monthNameTitle()] as? String ?? ""
                                             let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
-                                            let datesArray = dates.components(separatedBy: ",")
+                                            let datesArray = dates.components(separatedBy: ",").sorted()
                                             
                                             print("searchForSchedule month name: \(monthName)")
                                             print("searchForSchedule dates: \(datesArray)")
@@ -587,6 +587,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	
 	// MARK: Actions
 	
+	@IBAction func finishedScheduleTapped(_ sender: Any) {
+		
+		
+	}
+	
 	// Search type segmented control option changed event
 	@IBAction func searchTypeTapped(_ sender: Any) {
 		
@@ -681,9 +686,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Find address and go to select section view or schedule view
 		self.searchForSchedule(address)
-		
-		// Test addresses
-		//self.searchForSchedule("1601 North Clark Street, Chicago, IL, USA") // Has multiple sections
 		
 	}
 	

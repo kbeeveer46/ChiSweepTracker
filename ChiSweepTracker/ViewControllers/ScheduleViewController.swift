@@ -25,7 +25,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
 		// Show settings button in the top right
-		if (schedule.address.trimmingCharacters(in: .whitespaces) != self.common.favoriteAddress().trimmingCharacters(in: .whitespaces)) {
+		if (
+				schedule.address.trimmingCharacters(in: .whitespaces) != self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) ||
+				schedule.address.trimmingCharacters(in: .whitespaces) == self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) && self.common.favoriteSection() != self.schedule.section
+		   ) {
 			self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 		}
 		
@@ -174,7 +177,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			self.addFavorite()
 		})
 		
-		if (favoriteAddress != schedule.address) {
+		if (
+				favoriteAddress != schedule.address ||
+				favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section
+		   ) {
 			optionsAlert.addAction(saveFavoriteAction)
 		}
 		else {
@@ -248,6 +254,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Set days label text
         daysLabel.text = dates
+		
+		let date = Date()
+		if date.month.uppercased() == schedule.months[indexPath.row].name.uppercased() {
+			daysLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
+			daysLabel.textColor = UIColor(hexString: "#007AFF")
+			monthNameLabel.textColor = UIColor(hexString: "#007AFF")
+		}
 
         return cell
         

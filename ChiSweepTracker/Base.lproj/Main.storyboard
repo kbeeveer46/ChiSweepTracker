@@ -69,6 +69,9 @@
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Sweep Schedule Finished Button"/>
+                                        <connections>
+                                            <action selector="finishedScheduleTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VTw-9N-8jR"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -1764,7 +1767,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="lRu-XB-8Bj"/>
+        <segue reference="eEQ-YS-Bae"/>
         <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
     <resources>
