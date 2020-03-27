@@ -500,7 +500,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 			
 			if self.tabBarController == nil {
-				//self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
 				self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 			}
 		}

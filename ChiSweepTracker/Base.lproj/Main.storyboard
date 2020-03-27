@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8UQ-L6-Xkq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8UQ-L6-Xkq">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1763,6 +1763,10 @@
             <point key="canvasLocation" x="3302" y="81"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="lRu-XB-8Bj"/>
+        <segue reference="nuK-lD-YCG"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar_day" width="33.5" height="33.5"/>
         <image name="info_circle" width="33.5" height="33.5"/>
@@ -1770,8 +1774,4 @@
         <image name="star_border" width="33.5" height="33.5"/>
         <image name="time" width="33.5" height="33.5"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="lRu-XB-8Bj"/>
-        <segue reference="nuK-lD-YCG"/>
-    </inferredMetricsTieBreakers>
 </document>

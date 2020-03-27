@@ -74,10 +74,106 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		self.finishedScheduleButton.isHidden = true
 		
 		// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
-		if currentMonthNumber < 4 || currentMonthNumber > 11
-		{
-			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
-			self.finishedScheduleButton.isHidden = false
+//		if currentMonthNumber < 4 || currentMonthNumber > 11 {
+//			self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
+//			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
+//			self.finishedScheduleButton.isHidden = false
+//		}
+//		else {
+			
+			if self.common.favoriteAddress() != "" {
+			
+				getNextSweepingDate()
+				self.common.styleButton(finishedScheduleButton, "ended", "FF7832")
+
+			}
+		//}
+	}
+	
+	func getNextSweepingDate(_ count: Int = 0) {
+		
+		let currentYear = Calendar.current.component(.year, from: Date())
+		let currentMonthNumber = Calendar.current.component(.month, from: Date())
+		let currentDay = Calendar.current.component(.day, from: Date())
+		var foundNextSweepingDay = false
+		var nextSweepingDay = 0
+		var nextSweepingMonth = 0
+		
+		// Create SODA client using domain and token
+		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+		
+		// Query SODA API to get months and days
+		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
+			.filter("\(self.common.wardTitle()) = '\(self.common.favoriteWard())' AND \(self.common.sectionTitle()) = '\(self.common.favoriteSection())' AND \(self.common.monthNumberTitle()) >= '\(currentMonthNumber)'")
+			.orderAscending(self.common.monthNumberTitle())
+		
+		scheduleQuery.get { res in
+			switch res {
+			case .dataset (let data):
+				
+				if data.count > 0 {
+					
+					// Loop through months
+					for (_, item) in data.enumerated() {
+						
+						let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
+						let dates = item[self.common.dates()] as? String ?? ""
+						let datesArray = dates.components(separatedBy: ",")
+						
+						if (Int(monthNumber) == (currentMonthNumber + count)) {
+							
+							// Loop through dates
+							for day in datesArray {
+															
+								if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+									
+									if count == 0 {
+										
+										if Int(day)! >= currentDay {
+											
+											nextSweepingDay = Int(day)!
+											nextSweepingMonth = Int(monthNumber)!
+											
+											foundNextSweepingDay = true
+											break
+											
+										}
+										
+									}
+									else {
+										
+										nextSweepingDay = Int(day)!
+										nextSweepingMonth = Int(monthNumber)!
+										
+										foundNextSweepingDay = true
+										break
+										
+									}
+								}
+							}
+							
+							if foundNextSweepingDay {
+								break
+							}
+						}
+					}
+					
+					if foundNextSweepingDay {
+						
+						DispatchQueue.main.async {
+							self.finishedScheduleButton.isHidden = false
+							self.finishedScheduleButton.setTitle("Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear).\nCheck for signage and move your vehicle to avoid tickets.", for: .normal)
+						}
+						
+					}
+					
+					if foundNextSweepingDay == false && count <= 7 {
+						self.getNextSweepingDate(count + 1)
+					}
+				}
+			case .error (let err):
+				print("getNextSweepingDate error: \(err.localizedDescription)")
+			}
 		}
 	}
 
@@ -664,7 +760,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         // Style and add images to buttons
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
-        self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
 
     }
 }
