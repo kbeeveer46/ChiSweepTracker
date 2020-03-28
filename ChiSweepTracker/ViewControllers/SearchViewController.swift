@@ -74,20 +74,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		self.finishedScheduleButton.isHidden = true
 		
 		// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
-//		if currentMonthNumber < 4 || currentMonthNumber > 11 {
-//			self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
-//			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
-//			self.finishedScheduleButton.isHidden = false
-//		}
-//		else {
+		if currentMonthNumber < 4 || currentMonthNumber > 11 {
+			self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
+			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
+			self.finishedScheduleButton.isHidden = false
+		}
+		else {
 			
 			if self.common.favoriteAddress() != "" {
-			
 				getNextSweepingDate()
-				self.common.styleButton(finishedScheduleButton, "ended", "FF7832")
-
 			}
-		//}
+		}
 	}
 	
 	func getNextSweepingDate(_ count: Int = 0) {
@@ -138,20 +135,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 											break
 											
 										}
-										
 									}
 									else {
-										
 										nextSweepingDay = Int(day)!
 										nextSweepingMonth = Int(monthNumber)!
 										
 										foundNextSweepingDay = true
 										break
-										
 									}
 								}
 							}
-							
 							if foundNextSweepingDay {
 								break
 							}
@@ -159,12 +152,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					}
 					
 					if foundNextSweepingDay {
-						
 						DispatchQueue.main.async {
+							self.common.styleButton(self.finishedScheduleButton, "calendar_day_white", "FF7832")
 							self.finishedScheduleButton.isHidden = false
 							self.finishedScheduleButton.setTitle("Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear).\nCheck for signage and move your vehicle to avoid tickets.", for: .normal)
 						}
-						
 					}
 					
 					if foundNextSweepingDay == false && count <= 7 {

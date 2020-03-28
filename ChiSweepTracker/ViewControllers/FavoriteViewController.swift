@@ -703,7 +703,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                      DispatchQueue.main.async {
 														
 														#if DEBUG
-														self.sendTestNotifications()
+														//self.sendTestNotifications()
 														#endif
                                                     
                                                         let center = UNUserNotificationCenter.current()
