@@ -623,7 +623,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                             let monthName = item[self.common.monthNameTitle()] as? String ?? ""
                                             let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
-                                            let datesArray = dates.components(separatedBy: ",").sorted()
+                                            let datesArray = dates.components(separatedBy: ",")
                                             
 											let month = MonthModel()
                                             month.name = monthName
