@@ -34,6 +34,7 @@
 		FA87EFD723AABBF10061DDBC /* logo-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD623AABBF10061DDBC /* logo-1024.png */; };
 		FA87EFD923AAEB960061DDBC /* notification.m4r in Resources */ = {isa = PBXBuildFile; fileRef = FA87EFD823AAEB960061DDBC /* notification.m4r */; };
 		FAD25E2923A325F5004FD3B9 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */; };
+		FAD5595B242FB49200F11DA1 /* logo-trash-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD5595A242FB49100F11DA1 /* logo-trash-1024.png */; };
 		FAD706A023E26B930017A14D /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7069F23E26B930017A14D /* CustomAnnotation.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		FA87EFD623AABBF10061DDBC /* logo-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-1024.png"; sourceTree = "<group>"; };
 		FA87EFD823AAEB960061DDBC /* notification.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = notification.m4r; sourceTree = "<group>"; };
 		FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		FAD5595A242FB49100F11DA1 /* logo-trash-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-trash-1024.png"; sourceTree = "<group>"; };
 		FAD7069F23E26B930017A14D /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +100,7 @@
 		FA0EC351239B0B8200DD3127 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				FAD5595A242FB49100F11DA1 /* logo-trash-1024.png */,
 				FA87EFD623AABBF10061DDBC /* logo-1024.png */,
 			);
 			path = Images;
@@ -269,6 +272,7 @@
 				FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */,
 				FA87EFD923AAEB960061DDBC /* notification.m4r in Resources */,
 				FA0EC391239C31CF00DD3127 /* GoogleService-Info.plist in Resources */,
+				FAD5595B242FB49200F11DA1 /* logo-trash-1024.png in Resources */,
 				FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */,
 				FA29464723985FE300A24FFC /* Main.storyboard in Resources */,
 			);
