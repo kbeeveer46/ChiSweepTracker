@@ -115,7 +115,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						
 						let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
 						let dates = item[self.common.dates()] as? String ?? ""
-						let datesArray = dates.components(separatedBy: ",")
+						let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
 						
 						if (Int(monthNumber) == (currentMonthNumber + count)) {
 							
@@ -333,7 +333,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             let monthName = item[self.common.monthNameTitle()] as? String ?? ""
                                             let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
                                             let dates = item[self.common.dates()] as? String ?? ""
-                                            let datesArray = dates.components(separatedBy: ",")
+                                            let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
                                             print("searchForSchedule month name: \(monthName)")
                                             print("searchForSchedule dates: \(datesArray)")
