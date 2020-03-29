@@ -539,10 +539,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="bGr-IJ-eIs">
-                                <rect key="frame" x="20" y="44" width="335" height="435"/>
+                                <rect key="frame" x="20" y="54" width="335" height="481"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the following fields to search for vehicles towed by the City of Chicago in the past 90 days" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UD6-d1-HE3">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VeC-NR-S82">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="85"/>
+                                        <rect key="frame" x="0.0" y="46" width="335" height="85"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Make" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2J-P7-F1P">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="85"/>
@@ -568,7 +574,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P2U-hk-6Gn">
-                                        <rect key="frame" x="0.0" y="95" width="335" height="85"/>
+                                        <rect key="frame" x="0.0" y="141" width="335" height="85"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Model" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A6K-ue-ihy">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="85"/>
@@ -590,7 +596,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LJg-aC-lmX">
-                                        <rect key="frame" x="0.0" y="190" width="335" height="85"/>
+                                        <rect key="frame" x="0.0" y="236" width="335" height="85"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEr-80-tq5">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="85"/>
@@ -612,7 +618,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e8u-ex-FU2">
-                                        <rect key="frame" x="0.0" y="285" width="335" height="85"/>
+                                        <rect key="frame" x="0.0" y="331" width="335" height="85"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EwF-xa-gcA">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="85"/>
@@ -634,7 +640,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="99L-lM-bDK">
-                                        <rect key="frame" x="0.0" y="380" width="335" height="55"/>
+                                        <rect key="frame" x="0.0" y="426" width="335" height="55"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Plate #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIt-Bb-Wv7">
                                                 <rect key="frame" x="0.0" y="15" width="125" height="40"/>
@@ -657,7 +663,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WcB-Ef-2bU">
-                                <rect key="frame" x="20" y="509" width="335" height="60"/>
+                                <rect key="frame" x="20" y="565" width="335" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="K4q-bV-Jup"/>
                                 </constraints>
@@ -673,7 +679,7 @@
                             <constraint firstItem="bGr-IJ-eIs" firstAttribute="leading" secondItem="vmP-o2-Fxh" secondAttribute="leading" constant="20" id="NtB-zz-qHf"/>
                             <constraint firstItem="WcB-Ef-2bU" firstAttribute="top" secondItem="bGr-IJ-eIs" secondAttribute="bottom" constant="30" id="SsE-Xg-AvD"/>
                             <constraint firstItem="vmP-o2-Fxh" firstAttribute="trailing" secondItem="bGr-IJ-eIs" secondAttribute="trailing" constant="20" id="TCd-VR-fom"/>
-                            <constraint firstItem="bGr-IJ-eIs" firstAttribute="top" secondItem="vmP-o2-Fxh" secondAttribute="top" id="feV-eD-1ZE"/>
+                            <constraint firstItem="bGr-IJ-eIs" firstAttribute="top" secondItem="vmP-o2-Fxh" secondAttribute="top" constant="10" id="feV-eD-1ZE"/>
                             <constraint firstItem="WcB-Ef-2bU" firstAttribute="leading" secondItem="vmP-o2-Fxh" secondAttribute="leading" constant="20" id="sMJ-Hf-cE7"/>
                             <constraint firstItem="vmP-o2-Fxh" firstAttribute="trailing" secondItem="WcB-Ef-2bU" secondAttribute="trailing" constant="20" id="vRN-8A-hQq"/>
                         </constraints>
@@ -686,6 +692,8 @@
                         <outlet property="makePicker" destination="2Fx-y2-sOx" id="3Yt-df-EVa"/>
                         <outlet property="modelPicker" destination="hce-ti-9ye" id="2Z5-Db-Abu"/>
                         <outlet property="searchTowedVehiclesButton" destination="WcB-Ef-2bU" id="744-xV-1Of"/>
+                        <outlet property="searchTowedVehiclesButtonPaddingConstraint" destination="SsE-Xg-AvD" id="Wit-Oi-c7c"/>
+                        <outlet property="searchTowedVehiclesHeaderLabel" destination="UD6-d1-HE3" id="CdU-It-2bC"/>
                         <outlet property="statePicker" destination="1r5-Fj-aXy" id="5wz-jV-VPB"/>
                         <outlet property="towedSearchStackView" destination="bGr-IJ-eIs" id="Bnm-R9-Z2b"/>
                         <segue destination="yL8-7X-4Ow" kind="show" identifier="showTowedResultsFromTowedSearchSegue" id="a7n-EA-5I3"/>

@@ -4,12 +4,14 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	
 	// Controls
 	@IBOutlet weak var searchTowedVehiclesButton: UIButton!
+	@IBOutlet weak var searchTowedVehiclesButtonPaddingConstraint: NSLayoutConstraint!
 	@IBOutlet weak var makePicker: UIPickerView!
 	@IBOutlet weak var modelPicker: UIPickerView!
 	@IBOutlet weak var colorPicker: UIPickerView!
 	@IBOutlet weak var statePicker: UIPickerView!
 	@IBOutlet weak var licensePlateTextField: UITextField!
 	@IBOutlet weak var towedSearchStackView: UIStackView!
+	@IBOutlet weak var searchTowedVehiclesHeaderLabel: UILabel!
 	
 	// Classes
 	let common = Common()
@@ -172,6 +174,8 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		switch UIDevice().type {
 		case .iPhoneSE:
 			towedSearchStackView.spacing = 0
+			searchTowedVehiclesHeaderLabel.font = .systemFont(ofSize: 11)
+			searchTowedVehiclesButtonPaddingConstraint.constant = 7
 		default:
 			break
 		}
