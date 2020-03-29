@@ -51,8 +51,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			chicagoMapViewHeightConstraint.constant = 175
 			searchStackView.spacing = 10
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
-			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 13)
+			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 12)
 			infoLabel.font = .systemFont(ofSize: 10)
+		case .iPhone6,
+			 .iPhone6S:
+			searchStackView.spacing = 10
 		default:
 			break
 		}
@@ -62,22 +65,25 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	func showFinishedScheduleButton() {
 		
 		// Get month and year from current date
-		let currentMonthNumber = Calendar.current.component(.month, from: Date())
-		var currentYear = Calendar.current.component(.year, from: Date())
+		let currentDay = Calendar.current.component(.day, from: Date())
+		let currentMonth = Calendar.current.component(.month, from: Date())
+		let currentYear = Calendar.current.component(.year, from: Date())
 		
-		// If month is less than 4 then change the year to the previous year
-		if (currentMonthNumber < 4) {
-			currentYear = currentYear - 1
-		}
-		
-		// Hide finished button by default
-		self.finishedScheduleButton.isHidden = true
-		
-		// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
-		if currentMonthNumber < 4 || currentMonthNumber > 11 {
-			self.common.styleButton(finishedScheduleButton, "ended", "BF1A2F")
+		if currentMonth > 11 {
+			
+			// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
 			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
-			self.finishedScheduleButton.isHidden = false
+		}
+		else if currentMonth < 4 {
+
+			// Show begin schedule message along with the amount of days until the begin date
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "M/dd/yyyy"
+			let start = dateFormatter.date(from: "\(currentMonth)/\(currentDay)/\(currentYear)")!
+			let end = dateFormatter.date(from: "4/1/\(currentYear)")!
+			let diff = Date.daysBetween(start: start, end: end)
+			
+			self.finishedScheduleButton.setTitle(self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)"), for: .normal)
 		}
 		else {
 			
@@ -95,6 +101,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		var foundNextSweepingDay = false
 		var nextSweepingDay = 0
 		var nextSweepingMonth = 0
+		
+		self.finishedScheduleButton.isHidden = true
 		
 		// Create SODA client using domain and token
 		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
@@ -153,7 +161,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					
 					if foundNextSweepingDay {
 						DispatchQueue.main.async {
-							self.common.styleButton(self.finishedScheduleButton, "calendar_day_white", "FF7832")
 							self.finishedScheduleButton.isHidden = false
 							self.finishedScheduleButton.setTitle("Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear).\nCheck for signage and move your vehicle to avoid tickets.", for: .normal)
 						}
@@ -754,6 +761,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         // Style and add images to buttons
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
+		self.common.styleButton(finishedScheduleButton, "calendar_day_white", "FF7832")
 
     }
 }

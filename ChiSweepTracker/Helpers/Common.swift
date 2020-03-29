@@ -142,7 +142,8 @@ class Common {
         let errorTitle = "Something went wrong..."
         let notFound = "Could not find sweep schedule. Address must reside in Chicago."
 		
-		let finishedScheduleMessage = "Sweeping has ended for _currentYear_. Check back next April for the new schedule and to set up your notifications."
+		let finishedScheduleMessage = "Sweeping has ended for _currentYear_."
+		let beginScheduleMessage = "Sweeping will begin on April 1st in _amount_ day(s)."
 		let noInternetConnectionSearchMessage = "You must be connected to the Internet to find your sweep area."
     }
 	
@@ -493,6 +494,21 @@ extension String {
 }
 
 extension Date {
+	
+	func daysBetween(date: Date) -> Int {
+		return Date.daysBetween(start: self, end: date)
+	}
+	
+	static func daysBetween(start: Date, end: Date) -> Int {
+		let calendar = Calendar.current
+		
+		// Replace the hour (time) of both dates with 00:00
+		let date1 = calendar.startOfDay(for: start)
+		let date2 = calendar.startOfDay(for: end)
+		
+		let a = calendar.dateComponents([.day], from: date1, to: date2)
+		return a.value(for: .day)!
+	}
 	
 	var month: String {
 		

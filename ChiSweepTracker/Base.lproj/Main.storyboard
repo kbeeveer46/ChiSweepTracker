@@ -66,6 +66,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Sweep Schedule Finished Button"/>
@@ -407,7 +408,7 @@
                                                         <string key="content">Enable notifications to avoid street cleaning tickets. You will also be notified every April when the new schedule is released and when any changes are made to the schedule.</string>
                                                         <attributes>
                                                             <color key="NSColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <font key="NSFont" metaFont="menuBar"/>
+                                                            <font key="NSFont" metaFont="menu" size="14"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
