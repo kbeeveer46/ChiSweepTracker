@@ -51,11 +51,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			chicagoMapViewHeightConstraint.constant = 175
 			searchStackView.spacing = 10
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
-			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 12)
+			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 14)
 			infoLabel.font = .systemFont(ofSize: 10)
-		case .iPhone6,
-			 .iPhone6S:
-			searchStackView.spacing = 10
 		default:
 			break
 		}

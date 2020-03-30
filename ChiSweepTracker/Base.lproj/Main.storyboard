@@ -22,8 +22,8 @@
                                     <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
                             </mapView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
-                                <rect key="frame" x="10" y="331" width="394" height="309.66666666666674"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-bJ-ZY7">
+                                <rect key="frame" x="10" y="331" width="394" height="289.66666666666674"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use one of the following options to find your sweep schedule. For your privacy, your address will never be logged." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jad-zx-64x">
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="28.666666666666668"/>
@@ -32,7 +32,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2i0-Qr-vT0">
-                                        <rect key="frame" x="0.0" y="48.666666666666686" width="394" height="32"/>
+                                        <rect key="frame" x="0.0" y="43.666666666666686" width="394" height="32"/>
                                         <segments>
                                             <segment title="Enter Address"/>
                                             <segment title="Drop Pin"/>
@@ -43,7 +43,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <textField opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Address..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iz5-fA-FV8">
-                                        <rect key="frame" x="0.0" y="99.666666666666686" width="394" height="40"/>
+                                        <rect key="frame" x="0.0" y="89.666666666666686" width="394" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="yRh-DP-wdK"/>
                                         </constraints>
@@ -51,7 +51,7 @@
                                         <textInputTraits key="textInputTraits" textContentType="street-address"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
-                                        <rect key="frame" x="0.0" y="159.66666666666669" width="394" height="60"/>
+                                        <rect key="frame" x="0.0" y="144.66666666666669" width="394" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
                                         </constraints>
@@ -62,7 +62,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="I6v-KF-Plh">
-                                        <rect key="frame" x="0.0" y="239.66666666666663" width="394" height="70"/>
+                                        <rect key="frame" x="0.0" y="219.66666666666663" width="394" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="us8-tR-jbb"/>
                                         </constraints>
@@ -394,8 +394,8 @@
                                     <constraint firstAttribute="height" constant="235" id="45C-rY-kFz"/>
                                 </constraints>
                             </mapView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
-                                <rect key="frame" x="0.0" y="323" width="404" height="323.33333333333326"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
+                                <rect key="frame" x="0.0" y="323" width="404" height="308.33333333333326"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4dl-aH-Zkq">
                                         <rect key="frame" x="0.0" y="0.0" width="404" height="90"/>
@@ -405,7 +405,7 @@
                                                 <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                                 <attributedString key="attributedText">
                                                     <fragment>
-                                                        <string key="content">Enable notifications to avoid street cleaning tickets. You will also be notified every April when the new schedule is released and when any changes are made to the schedule.</string>
+                                                        <string key="content">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the new schedule is released and when any changes are made to the schedule.</string>
                                                         <attributes>
                                                             <color key="NSColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <font key="NSFont" metaFont="menu" size="14"/>
@@ -419,7 +419,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="22" bottom="0.0" right="8"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="DFD-zz-Rlg">
-                                        <rect key="frame" x="0.0" y="110" width="404" height="33.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="105" width="404" height="33.333333333333343"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="xsQ-kE-RuZ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="33.333333333333336"/>
@@ -447,7 +447,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fyo-DE-HiD">
-                                        <rect key="frame" x="0.0" y="163.33333333333331" width="404" height="70"/>
+                                        <rect key="frame" x="0.0" y="153.33333333333331" width="404" height="70"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_day" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-Tc-noJ">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="70"/>
@@ -472,7 +472,7 @@
                                         <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="t4Y-7m-4kb">
-                                        <rect key="frame" x="0.0" y="253.33333333333337" width="404" height="70"/>
+                                        <rect key="frame" x="0.0" y="238.33333333333337" width="404" height="70"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="time" translatesAutoresizingMaskIntoConstraints="NO" id="ECS-GF-Q2t">
                                                 <rect key="frame" x="20" y="0.0" width="25" height="70"/>

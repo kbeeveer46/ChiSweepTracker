@@ -48,7 +48,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		case .iPhoneSE:
 			infoLabel.font = .systemFont(ofSize: 11)
 			favoriteMapHeighConstraint.constant = 175
-			favoriteStackView.spacing = 10
 			whenPickerHeightConstraint.constant = 50
 		default:
 			break
