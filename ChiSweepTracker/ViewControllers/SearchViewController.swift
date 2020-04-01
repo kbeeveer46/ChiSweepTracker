@@ -493,9 +493,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		let longitudeFromDefaults = self.common.defaultLongitude()
 		let latitudeFromDefaults = self.common.defaultLatitude()
 		
-		print("Default address: \(addressFromDefaults)")
-		print("Default longitude: \(longitudeFromDefaults)")
-		print("Default latitude: \(latitudeFromDefaults)")
+		//print("Default address: \(addressFromDefaults)")
+		//print("Default longitude: \(longitudeFromDefaults)")
+		//print("Default latitude: \(latitudeFromDefaults)")
 		
 		// Put address in address text box
 		addressTextField.text = addressFromDefaults

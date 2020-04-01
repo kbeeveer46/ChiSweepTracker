@@ -1,5 +1,4 @@
 import Foundation
-import Firebase
 
 public class UpdatesModel {
 	

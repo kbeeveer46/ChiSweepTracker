@@ -12,6 +12,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 	// Shared
 	var updatesList = [UpdatesModel]()
 	var updatesLastViewedDate = ""
+	let dateFormatter = DateFormatter()
 	
     override func viewWillAppear(_ animated: Bool) {
 
@@ -22,18 +23,19 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
+		// Set dateFormatter properties
+		dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
+		dateFormatter.locale = .current
+		
 		updatesLastViewedDate = self.common.updatesLastViewDate()
 		
+		// Get list of latest updates
 		getLatestUpdates()
     }
 	
 	func getLatestUpdates() {
 		
 		let db = Firestore.firestore()
-		//var count = 1
-		
-		// Figure out how to determine if there has been a new news item
-		// If there's a new item set the badge number
 		
 		// Get updates data
 		db.collection(self.common.constants.newsDatabaseName)
@@ -68,15 +70,6 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 							hour = hour - 12
 						}
 						
-						//print(ampm)
-						//print(minute)
-						//print(hour)
-						//print(day)
-						//print(month)
-						//print(year)
-						//print(subject)
-						//print(body)
-						
 						let update = UpdatesModel()
 						update.body = body
 						update.subject = subject
@@ -89,7 +82,6 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 						update.showNewImage = showNewImage
 						self.updatesList.append(update)
 						
-						//count += 1
 					}
 					
 					// Set required properties for table view
@@ -97,35 +89,30 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 					self.newsTableView.delegate = self
 					self.newsTableView.reloadData()
 					
+					// Clear updates tab bar badge
 					self.tabBarController?.tabBar.items?.last!.badgeValue = nil
 					
-					let dateFormatter = DateFormatter()
-					dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
-					dateFormatter.locale = .current
-					let currentDate = dateFormatter.string(from: Date())
+					// Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
+					let currentDate = self.dateFormatter.string(from: Date())
 					defaults.set(currentDate, forKey: "updatesLastViewDate")
 				}
 		}
-		
 	}
 	
 	func showNewImage(_ date: String!) -> Bool {
 		
-		if updatesLastViewedDate != "" {
+		// Compare the update date to the date the user last opened the news page to determine if the new image should show next to the title
 		
-			let dateFormatter = DateFormatter()
-			dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
-			dateFormatter.locale = .current
-			let datecomponents = dateFormatter.date(from: date)
-			
+		if !updatesLastViewedDate.isEmpty {
+		
+			let updateDate = dateFormatter.date(from: date)
 			let lastViewed = dateFormatter.date(from: updatesLastViewedDate)
 			
-			if (datecomponents! > lastViewed!) {
+			if (updateDate! > lastViewed!) {
 				return true
 			} else {
 				return false
 			}
-			
 		}
 		
 		return false
@@ -140,17 +127,18 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "updatesTableCell", for: indexPath)
 		
-		// Get labels from cell
+		// Get labels and new image from cell
 		let subjectLabel = cell.viewWithTag(1) as! UILabel
 		let dateLabel = cell.viewWithTag(2) as! UILabel
 		let bodyLabel = cell.viewWithTag(3) as! UILabel
 		let newImage = cell.viewWithTag(4) as! UIImageView
 		
-		// Set section label text with ward and section number
+		// Set label values
 		subjectLabel.text = self.updatesList[indexPath.row].subject
 		dateLabel.text = "\(self.updatesList[indexPath.row].month)/\(self.updatesList[indexPath.row].day)/\(self.updatesList[indexPath.row].year) \(self.updatesList[indexPath.row].hour) \(self.updatesList[indexPath.row].ampm)"
 		bodyLabel.text = self.updatesList[indexPath.row].body
 		
+		// Hide or show new image
 		if self.updatesList[indexPath.row].showNewImage == false {
 			newImage.isHidden = true
 		}
@@ -160,5 +148,4 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		
 		return cell
 	}
-
 }
