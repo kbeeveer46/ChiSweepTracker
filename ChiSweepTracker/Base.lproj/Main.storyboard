@@ -201,7 +201,7 @@
         <!--Updates-->
         <scene sceneID="KJg-72-Sya">
             <objects>
-                <viewController id="RJq-PV-M2k" customClass="UpdatesViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UpdatesViewController" id="RJq-PV-M2k" customClass="UpdatesViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sLR-2b-jsR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -218,19 +218,19 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MtH-5Z-qQL">
-                                                    <rect key="frame" x="25" y="15" width="364" height="111"/>
+                                                    <rect key="frame" x="25" y="10" width="364" height="126"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ul-Yn-chi">
-                                                            <rect key="frame" x="0.0" y="0.0" width="364" height="25.666666666666668"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="364" height="33.333333333333336"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="new" translatesAutoresizingMaskIntoConstraints="NO" id="0EQ-mU-2ue">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="25" height="25.666666666666668"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="25" height="33.333333333333336"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="25" id="kgA-ue-Bp9"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wdx-96-TJ3">
-                                                                    <rect key="frame" x="25" y="0.0" width="339" height="25.666666666666668"/>
+                                                                    <rect key="frame" x="25" y="0.0" width="339" height="33.333333333333336"/>
                                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -238,7 +238,7 @@
                                                             </subviews>
                                                         </stackView>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcx-Ln-46z">
-                                                            <rect key="frame" x="0.0" y="25.666666666666661" width="364" height="60.333333333333343"/>
+                                                            <rect key="frame" x="0.0" y="33.333333333333336" width="364" height="67.666666666666657"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment>
                                                                     <string key="content">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. </string>
@@ -253,7 +253,7 @@
                                                             <string key="userLabel">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. </string>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4/1/2020" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hT-ef-dwK">
-                                                            <rect key="frame" x="0.0" y="86" width="364" height="25"/>
+                                                            <rect key="frame" x="0.0" y="101" width="364" height="25"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="25" id="d6l-13-4SK"/>
                                                             </constraints>
@@ -265,10 +265,10 @@
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="MtH-5Z-qQL" firstAttribute="top" secondItem="xY4-9U-Z6O" secondAttribute="top" constant="15" id="K2R-eU-Oa4"/>
+                                                <constraint firstItem="MtH-5Z-qQL" firstAttribute="top" secondItem="xY4-9U-Z6O" secondAttribute="top" constant="10" id="K2R-eU-Oa4"/>
                                                 <constraint firstAttribute="trailing" secondItem="MtH-5Z-qQL" secondAttribute="trailing" constant="25" id="RzJ-KT-aJC"/>
                                                 <constraint firstItem="MtH-5Z-qQL" firstAttribute="leading" secondItem="xY4-9U-Z6O" secondAttribute="leading" constant="25" id="jMy-Bw-kv2"/>
-                                                <constraint firstAttribute="bottom" secondItem="MtH-5Z-qQL" secondAttribute="bottom" constant="25" id="w90-Zy-VIG"/>
+                                                <constraint firstAttribute="bottom" secondItem="MtH-5Z-qQL" secondAttribute="bottom" constant="15" id="w90-Zy-VIG"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1858,7 +1858,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="lRu-XB-8Bj"/>
+        <segue reference="eEQ-YS-Bae"/>
         <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
     <resources>

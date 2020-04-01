@@ -423,29 +423,32 @@ class Common {
 		}
 		
 		let lastUpdatesViewDateString = self.updatesLastViewDate()
+		if !lastUpdatesViewDateString.isEmpty {
 		
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
-		dateFormatter.locale = .current
-		let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
+			dateFormatter.locale = .current
+			let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)
 		
-		db.collection(self.constants.newsDatabaseName)
-			.whereField("date", isGreaterThan: lastUpdatesViewDate!)
-			.getDocuments() { (querySnapshot, err) in
-				if let err = err {
-					print("Could not get updates from Firebase: \(err)")
-				} else {
+			db.collection(self.constants.newsDatabaseName)
+				.whereField("date", isGreaterThan: lastUpdatesViewDate!)
+				.limit(to: 5)
+				.getDocuments() { (querySnapshot, err) in
+					if let err = err {
+						print("Could not get updates from Firebase: \(err)")
+					} else {
+							
+						let badgeCount = querySnapshot!.documents.count
 						
-					let badgeCount = querySnapshot!.documents.count
-					
-					if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-						if let navigationController = rootViewController as? UINavigationController {
-							if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
-								tabBarController.tabBar.items?.last!.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
+						if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+							if let navigationController = rootViewController as? UINavigationController {
+								if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
+									tabBarController.tabBar.items?.last!.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
+								}
 							}
 						}
 					}
-				}
+			}
 		}
 		
 		completion("Finished getting data from Firebase")

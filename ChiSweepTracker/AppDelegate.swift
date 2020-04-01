@@ -146,9 +146,15 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         let userInfo = response.notification.request.content.userInfo
         
-        // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-            print("Message ID: \(messageID)")
+        // Send the user to the updates tab if they opened a Cloud Messaging notification from Firebase
+		if userInfo[gcmMessageIDKey] != nil {
+            if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+				if let navigationController = rootViewController as? UINavigationController {
+					if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
+						tabBarController.selectedIndex = 3
+					}
+				}
+			}
         }
         
         // Print full message.
