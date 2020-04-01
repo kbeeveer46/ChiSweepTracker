@@ -119,6 +119,7 @@ class Common {
 		let divvysDatabaseName = "Divvys_Dev"
 		let towedDatabaseName = "TowedVehicles_Dev"
 		let relocatedDatabaseName = "RelocatedVehicles_Dev"
+		let newsDatabaseName = "News_Dev"
 		#else
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
@@ -126,6 +127,7 @@ class Common {
 		let divvysDatabaseName = "Divvys"
 		let towedDatabaseName = "TowedVehicles"
 		let relocatedDatabaseName = "RelocatedVehicles"
+		let newsDatabaseName = "News"
 		#endif
 	
 		// SODA

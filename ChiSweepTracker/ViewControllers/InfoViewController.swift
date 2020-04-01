@@ -2,7 +2,7 @@ import UIKit
 import MessageUI
 import StoreKit
 
-class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate {
+class InfoViewController: UIViewController {
 
 	// Controls
     @IBOutlet weak var infoButton: UIButton!
@@ -11,8 +11,6 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 	@IBOutlet weak var signsButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ticketButton: UIButton!
 	@IBOutlet weak var ticketButtonHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var contactButton: UIButton!
-	@IBOutlet weak var contactButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var infoStackView: UIStackView!
 	@IBOutlet weak var rateButton: UIButton!
 	@IBOutlet weak var rateButtonHeightConstraint: NSLayoutConstraint!
@@ -35,7 +33,6 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
         self.common.styleButton(infoButton, "sweeper", "007AFF")
         self.common.styleButton(signsButton, "warning", "FF7832")
         self.common.styleButton(ticketButton, "dollar_circle", "008577")
-		//self.common.styleButton(contactButton, "mail", "BF1A2F")
 		self.common.styleButton(rateButton, "star_rate", "BF1A2F")
 		
 		// Initialize controls per device
@@ -57,9 +54,6 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 			ticketButton.titleLabel?.font = .systemFont(ofSize: 13)
 			ticketButtonHeightConstraint.constant = 100
 			
-			//contactButton.titleLabel?.font = .systemFont(ofSize: 13)
-			//contactButtonHeightConstraint.constant = 55
-			
 			rateButton.titleLabel?.font = .systemFont(ofSize: 13)
 			rateButtonHeightConstraint.constant = 65
 			
@@ -76,11 +70,6 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 		}
 	}
 	
-	// Close email client after message is sent
-	func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-		controller.dismiss(animated: true)
-	}
-	
 	// MARK: Actions
 	
 	@IBAction func rateButtonTapped(_ sender: Any) {
@@ -89,31 +78,6 @@ class InfoViewController: UIViewController, MFMailComposeViewControllerDelegate 
 			SKStoreReviewController.requestReview()
 		} else {
 			// Fallback on earlier versions
-		}
-	}
-	
-	
-	@IBAction func contactButtonTapped(_ sender: Any) {
-		
-		// Open email client and prompt user to send email
-		if MFMailComposeViewController.canSendMail() {
-			
-			// Create mail object
-			let mail = MFMailComposeViewController()
-			
-			// Set mail properties
-			mail.mailComposeDelegate = self
-			mail.setToRecipients([self.common.contactEmail()])
-			mail.setSubject("Chicago Sweep Tracker")
-			
-			// Open email client using mail object
-			present(mail, animated: true)
-			
-		}
-		else {
-			
-			// Show error message if no email client is found
-			self.common.showAlert(self.common.constants.errorTitle, "Unable to find email app to send message")
 		}
 	}
 }

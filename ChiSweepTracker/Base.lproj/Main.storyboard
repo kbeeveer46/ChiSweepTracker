@@ -170,19 +170,6 @@
                                             <string key="title">The City of Chicago will write a $60 street cleaning ticket if your vehicle is parked on a Chicago street scheduled for cleaning. Furthermore, tow trucks are authorized by the City of Chicago to tow your vehicle. </string>
                                         </state>
                                     </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="uz5-ux-x00">
-                                        <rect key="frame" x="0.0" y="449" width="400" height="55"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="55" id="1b4-Uj-pvT"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
-                                        <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="5" maxY="0.0"/>
-                                        <state key="normal" title="Click here to contact Sweep Tracker with any issues, comments, or suggestions with this app."/>
-                                        <connections>
-                                            <action selector="contactButtonTapped:" destination="Rwe-fk-VdI" eventType="touchUpInside" id="aq7-kM-SZf"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -196,8 +183,6 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Info" image="info_circle" id="o9n-IO-1rG"/>
                     <connections>
-                        <outlet property="contactButton" destination="uz5-ux-x00" id="o1I-XO-7G8"/>
-                        <outlet property="contactButtonHeightConstraint" destination="1b4-Uj-pvT" id="DxQ-gi-8eI"/>
                         <outlet property="infoButton" destination="gxI-gL-upq" id="mu1-f0-rKX"/>
                         <outlet property="infoButtonHeightConstraint" destination="caP-lb-bSu" id="QYq-GQ-nYf"/>
                         <outlet property="infoStackView" destination="yYl-5I-4u5" id="aAY-R4-b8g"/>
@@ -212,6 +197,92 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xdv-P9-ilq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1169" y="760"/>
+        </scene>
+        <!--News-->
+        <scene sceneID="KJg-72-Sya">
+            <objects>
+                <viewController id="RJq-PV-M2k" customClass="NewsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sLR-2b-jsR">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tGf-oR-39W">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="newsTableCell" rowHeight="151" id="4de-84-cGv">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="151"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4de-84-cGv" id="xY4-9U-Z6O">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="151"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MtH-5Z-qQL">
+                                                    <rect key="frame" x="25" y="25" width="364" height="101"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wdx-96-TJ3">
+                                                            <rect key="frame" x="0.0" y="0.0" width="364" height="25"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="25" id="YeM-QF-lNe"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4/1/2020" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hT-ef-dwK">
+                                                            <rect key="frame" x="0.0" y="25" width="364" height="25"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="25" id="d6l-13-4SK"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                            <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcx-Ln-46z">
+                                                            <rect key="frame" x="0.0" y="50" width="364" height="51"/>
+                                                            <attributedString key="attributedText">
+                                                                <fragment>
+                                                                    <string key="content">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. </string>
+                                                                    <attributes>
+                                                                        <font key="NSFont" metaFont="system" size="14"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="MtH-5Z-qQL" firstAttribute="top" secondItem="xY4-9U-Z6O" secondAttribute="top" constant="25" id="K2R-eU-Oa4"/>
+                                                <constraint firstAttribute="trailing" secondItem="MtH-5Z-qQL" secondAttribute="trailing" constant="25" id="RzJ-KT-aJC"/>
+                                                <constraint firstItem="MtH-5Z-qQL" firstAttribute="leading" secondItem="xY4-9U-Z6O" secondAttribute="leading" constant="25" id="jMy-Bw-kv2"/>
+                                                <constraint firstAttribute="bottom" secondItem="MtH-5Z-qQL" secondAttribute="bottom" constant="25" id="w90-Zy-VIG"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="QES-Ct-ust" firstAttribute="bottom" secondItem="tGf-oR-39W" secondAttribute="bottom" id="8Ga-3a-92Z"/>
+                            <constraint firstItem="tGf-oR-39W" firstAttribute="leading" secondItem="QES-Ct-ust" secondAttribute="leading" id="UV0-2Z-rfl"/>
+                            <constraint firstItem="QES-Ct-ust" firstAttribute="trailing" secondItem="tGf-oR-39W" secondAttribute="trailing" id="eSx-Kg-abv"/>
+                            <constraint firstItem="tGf-oR-39W" firstAttribute="top" secondItem="QES-Ct-ust" secondAttribute="top" id="x0L-V1-wnS"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QES-Ct-ust"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="News" image="mail_outline" id="JDO-ZO-kRJ"/>
+                    <navigationItem key="navigationItem" id="uhY-SB-0n1"/>
+                    <connections>
+                        <outlet property="newsTableView" destination="tGf-oR-39W" id="dDg-NX-U1P"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ML8-lT-Ewd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1179.7101449275362" y="1419.6428571428571"/>
         </scene>
         <!--Sweep Schedule-->
         <scene sceneID="3K6-sD-hJN">
@@ -408,7 +479,7 @@
                                                         <string key="content">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the new schedule is released and when any changes are made to the schedule.</string>
                                                         <attributes>
                                                             <color key="NSColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <font key="NSFont" metaFont="menu" size="14"/>
+                                                            <font key="NSFont" metaFont="system" size="14"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
@@ -1616,6 +1687,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="m9a-aF-K6k"/>
                         <segue destination="aNg-gl-cTZ" kind="relationship" relationship="viewControllers" id="lRu-XB-8Bj"/>
                         <segue destination="Rwe-fk-VdI" kind="relationship" relationship="viewControllers" id="uPs-7d-wtO"/>
+                        <segue destination="RJq-PV-M2k" kind="relationship" relationship="viewControllers" id="zne-ax-tPm"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfT-z8-xpg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1776,12 +1848,13 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="eEQ-YS-Bae"/>
+        <segue reference="lRu-XB-8Bj"/>
         <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar_day" width="33.333332061767578" height="33.333332061767578"/>
         <image name="info_circle" width="33.333332061767578" height="33.333332061767578"/>
+        <image name="mail_outline" width="33.333332061767578" height="33.333332061767578"/>
         <image name="phone" width="33.333332061767578" height="33.333332061767578"/>
         <image name="star_border" width="33.333332061767578" height="33.333332061767578"/>
         <image name="time" width="33.333332061767578" height="33.333332061767578"/>
