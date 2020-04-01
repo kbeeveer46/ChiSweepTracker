@@ -3,7 +3,9 @@ import Firebase
 
 public class NewsModel {
 	
-	var date = Timestamp()
+	var ampm = ""
+	var minute = 0
+	var hour = 0
 	var day = 0
 	var month = 0
 	var year = 0

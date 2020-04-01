@@ -198,7 +198,7 @@
             </objects>
             <point key="canvasLocation" x="1169" y="760"/>
         </scene>
-        <!--News-->
+        <!--Updates-->
         <scene sceneID="KJg-72-Sya">
             <objects>
                 <viewController id="RJq-PV-M2k" customClass="NewsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -207,7 +207,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tGf-oR-39W">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="93" width="414" height="720"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="newsTableCell" rowHeight="151" id="4de-84-cGv">
@@ -218,14 +218,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MtH-5Z-qQL">
-                                                    <rect key="frame" x="25" y="25" width="364" height="101"/>
+                                                    <rect key="frame" x="25" y="15" width="364" height="111"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wdx-96-TJ3">
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wdx-96-TJ3">
                                                             <rect key="frame" x="0.0" y="0.0" width="364" height="25"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="25" id="YeM-QF-lNe"/>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="YeM-QF-lNe"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -239,23 +239,24 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcx-Ln-46z">
-                                                            <rect key="frame" x="0.0" y="50" width="364" height="51"/>
+                                                            <rect key="frame" x="0.0" y="50" width="364" height="61"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment>
                                                                     <string key="content">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. </string>
                                                                     <attributes>
-                                                                        <font key="NSFont" metaFont="system" size="14"/>
+                                                                        <font key="NSFont" metaFont="menu" size="14"/>
                                                                         <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
                                                                     </attributes>
                                                                 </fragment>
                                                             </attributedString>
                                                             <nil key="highlightedColor"/>
+                                                            <string key="userLabel">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body.</string>
                                                         </label>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="MtH-5Z-qQL" firstAttribute="top" secondItem="xY4-9U-Z6O" secondAttribute="top" constant="25" id="K2R-eU-Oa4"/>
+                                                <constraint firstItem="MtH-5Z-qQL" firstAttribute="top" secondItem="xY4-9U-Z6O" secondAttribute="top" constant="15" id="K2R-eU-Oa4"/>
                                                 <constraint firstAttribute="trailing" secondItem="MtH-5Z-qQL" secondAttribute="trailing" constant="25" id="RzJ-KT-aJC"/>
                                                 <constraint firstItem="MtH-5Z-qQL" firstAttribute="leading" secondItem="xY4-9U-Z6O" secondAttribute="leading" constant="25" id="jMy-Bw-kv2"/>
                                                 <constraint firstAttribute="bottom" secondItem="MtH-5Z-qQL" secondAttribute="bottom" constant="25" id="w90-Zy-VIG"/>
@@ -270,11 +271,11 @@
                             <constraint firstItem="QES-Ct-ust" firstAttribute="bottom" secondItem="tGf-oR-39W" secondAttribute="bottom" id="8Ga-3a-92Z"/>
                             <constraint firstItem="tGf-oR-39W" firstAttribute="leading" secondItem="QES-Ct-ust" secondAttribute="leading" id="UV0-2Z-rfl"/>
                             <constraint firstItem="QES-Ct-ust" firstAttribute="trailing" secondItem="tGf-oR-39W" secondAttribute="trailing" id="eSx-Kg-abv"/>
-                            <constraint firstItem="tGf-oR-39W" firstAttribute="top" secondItem="QES-Ct-ust" secondAttribute="top" id="x0L-V1-wnS"/>
+                            <constraint firstItem="tGf-oR-39W" firstAttribute="top" secondItem="QES-Ct-ust" secondAttribute="top" constant="5" id="x0L-V1-wnS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QES-Ct-ust"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="News" image="mail_outline" id="JDO-ZO-kRJ"/>
+                    <tabBarItem key="tabBarItem" title="Updates" image="mail_outline" id="JDO-ZO-kRJ"/>
                     <navigationItem key="navigationItem" id="uhY-SB-0n1"/>
                     <connections>
                         <outlet property="newsTableView" destination="tGf-oR-39W" id="dDg-NX-U1P"/>
@@ -479,7 +480,7 @@
                                                         <string key="content">Enable notifications to avoid street cleaning tickets. You will also be notified every year when the new schedule is released and when any changes are made to the schedule.</string>
                                                         <attributes>
                                                             <color key="NSColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <font key="NSFont" metaFont="system" size="14"/>
+                                                            <font key="NSFont" metaFont="menu" size="14"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>

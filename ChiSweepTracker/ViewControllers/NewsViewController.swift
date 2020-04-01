@@ -21,7 +21,12 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
+		
 		let db = Firestore.firestore()
+		//var count = 1
+		
+		// Figure out how to determine if there has been a new news item
+		// If there's a new item set the badge number
 		
 		// Get schedule data
 		db.collection(self.common.constants.newsDatabaseName)
@@ -31,6 +36,9 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 				if let err = err {
 					print("Could not get news from Firebase: \(err)")
 				} else {
+					
+					self.newsList.removeAll()
+					
 					for document in querySnapshot!.documents {
 						
 						let data = document.data()
@@ -38,10 +46,23 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 						let subject = data["subject"] as! String
 						let body = data["body"] as! String
 						let date = data["date"] as! Timestamp
+						let ampm = Calendar.current.component(.hour, from: date.dateValue()) < 12 ? "AM" : "PM"
+						let minute = Calendar.current.component(.minute, from: date.dateValue())
+						var hour = Calendar.current.component(.hour, from: date.dateValue())
 						let day = Calendar.current.component(.day, from: date.dateValue())
 						let month = Calendar.current.component(.month, from: date.dateValue())
 						let year = Calendar.current.component(.year, from: date.dateValue())
 						
+						if hour == 0 {
+							hour = 12
+						}
+						else if hour > 12 {
+							hour = hour - 12
+						}
+						
+						//print(ampm)
+						//print(minute)
+						//print(hour)
 						//print(day)
 						//print(month)
 						//print(year)
@@ -54,13 +75,20 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 						news.year = year
 						news.month = month
 						news.day = day
+						news.hour = hour
+						news.minute = minute
+						news.ampm = ampm
 						self.newsList.append(news)
+						
+						//count += 1
 					}
 					
 					// Set required properties for table view
 					self.newsTableView.dataSource = self
 					self.newsTableView.delegate = self
 					self.newsTableView.reloadData()
+					
+					self.tabBarController?.tabBar.items?.last!.badgeValue = nil
 				}
 		}
     }
@@ -81,22 +109,10 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 		
 		// Set section label text with ward and section number
 		subjectLabel.text = self.newsList[indexPath.row].subject
-		dateLabel.text = "\(self.newsList[indexPath.row].month)/\(self.newsList[indexPath.row].day)/\(self.newsList[indexPath.row].year)"
+		dateLabel.text = "\(self.newsList[indexPath.row].month)/\(self.newsList[indexPath.row].day)/\(self.newsList[indexPath.row].year) \(self.newsList[indexPath.row].hour):\(self.newsList[indexPath.row].minute) \(self.newsList[indexPath.row].ampm)"
 		bodyLabel.text = self.newsList[indexPath.row].body
 		
 		return cell
 	}
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		tableView.deselectRow(at: indexPath, animated: true)
-		
-		// Get schedule and go to schedule view when a user selects a section
-		
-		//let row = indexPath.row
-		
-		//self.schedule.section = sections[row]
-		
-		//getSchedule()
-		
-	}
+
 }
