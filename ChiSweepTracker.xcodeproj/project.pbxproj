@@ -35,7 +35,7 @@
 		FAD25E2923A325F5004FD3B9 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */; };
 		FAD5595B242FB49200F11DA1 /* logo-trash-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD5595A242FB49100F11DA1 /* logo-trash-1024.png */; };
 		FAD5595D2433D8E800F11DA1 /* UpdatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5595C2433D8E800F11DA1 /* UpdatesViewController.swift */; };
-		FAD5595F2433E75700F11DA1 /* NewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5595E2433E75700F11DA1 /* NewsModel.swift */; };
+		FAD5595F2433E75700F11DA1 /* UpdatesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5595E2433E75700F11DA1 /* UpdatesModel.swift */; };
 		FAD706A023E26B930017A14D /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7069F23E26B930017A14D /* CustomAnnotation.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,7 +73,7 @@
 		FAD25E2823A325F5004FD3B9 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		FAD5595A242FB49100F11DA1 /* logo-trash-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-trash-1024.png"; sourceTree = "<group>"; };
 		FAD5595C2433D8E800F11DA1 /* UpdatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesViewController.swift; sourceTree = "<group>"; };
-		FAD5595E2433E75700F11DA1 /* NewsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModel.swift; sourceTree = "<group>"; };
+		FAD5595E2433E75700F11DA1 /* UpdatesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesModel.swift; sourceTree = "<group>"; };
 		FAD7069F23E26B930017A14D /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,7 +141,7 @@
 				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
 				FA3F869023E48DBB00194C47 /* VehicleModel.swift */,
 				FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */,
-				FAD5595E2433E75700F11DA1 /* NewsModel.swift */,
+				FAD5595E2433E75700F11DA1 /* UpdatesModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -335,7 +335,7 @@
 				FA3F869323E4DAD200194C47 /* TowedDetailViewController.swift in Sources */,
 				FA6AFEE823A1E40800F7E177 /* DateCollectionViewCell.swift in Sources */,
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
-				FAD5595F2433E75700F11DA1 /* NewsModel.swift in Sources */,
+				FAD5595F2433E75700F11DA1 /* UpdatesModel.swift in Sources */,
 				FA5B0D9923F9E7FB00D90316 /* DivvyDetailViewController.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
 				FA3F869123E48DBB00194C47 /* VehicleModel.swift in Sources */,

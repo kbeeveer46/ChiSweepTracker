@@ -10,7 +10,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 	let common = Common()
 	
 	// Shared
-	var newsList = [NewsModel]()
+	var updatesList = [UpdatesModel]()
 	var updatesLastViewedDate = ""
 	
     override func viewWillAppear(_ animated: Bool) {
@@ -44,7 +44,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 					print("Could not get updates from Firebase: \(err)")
 				} else {
 					
-					self.newsList.removeAll()
+					self.updatesList.removeAll()
 					
 					for document in querySnapshot!.documents {
 						
@@ -59,6 +59,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 						let day = Calendar.current.component(.day, from: date.dateValue())
 						let month = Calendar.current.component(.month, from: date.dateValue())
 						let year = Calendar.current.component(.year, from: date.dateValue())
+						let showNewImage = self.showNewImage("\(month)/\(day)/\(year) \(hour):\(minute):00")
 						
 						if hour == 0 {
 							hour = 12
@@ -76,16 +77,17 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 						//print(subject)
 						//print(body)
 						
-						let news = NewsModel()
-						news.body = body
-						news.subject = subject
-						news.year = year
-						news.month = month
-						news.day = day
-						news.hour = hour
-						news.minute = minute
-						news.ampm = ampm
-						self.newsList.append(news)
+						let update = UpdatesModel()
+						update.body = body
+						update.subject = subject
+						update.year = year
+						update.month = month
+						update.day = day
+						update.hour = hour
+						update.minute = minute
+						update.ampm = ampm
+						update.showNewImage = showNewImage
+						self.updatesList.append(update)
 						
 						//count += 1
 					}
@@ -98,7 +100,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 					self.tabBarController?.tabBar.items?.last!.badgeValue = nil
 					
 					let dateFormatter = DateFormatter()
-					dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+					dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
 					dateFormatter.locale = .current
 					let currentDate = dateFormatter.string(from: Date())
 					defaults.set(currentDate, forKey: "updatesLastViewDate")
@@ -107,40 +109,54 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		
 	}
 	
-	func checkTimeStamp(date: String!) -> Bool {
+	func showNewImage(_ date: String!) -> Bool {
 		
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-		dateFormatter.locale = .current
-		let datecomponents = dateFormatter.date(from: date)
+		if updatesLastViewedDate != "" {
 		
-		let now = Date()
-		
-		if (datecomponents! >= now) {
-			return true
-		} else {
-			return false
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
+			dateFormatter.locale = .current
+			let datecomponents = dateFormatter.date(from: date)
+			
+			let lastViewed = dateFormatter.date(from: updatesLastViewedDate)
+			
+			if (datecomponents! > lastViewed!) {
+				return true
+			} else {
+				return false
+			}
+			
 		}
+		
+		return false
 	}
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return newsList.count
+		return updatesList.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
 		// Get cell from table view
-		let cell = tableView.dequeueReusableCell(withIdentifier: "newsTableCell", for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: "updatesTableCell", for: indexPath)
 		
 		// Get labels from cell
 		let subjectLabel = cell.viewWithTag(1) as! UILabel
 		let dateLabel = cell.viewWithTag(2) as! UILabel
 		let bodyLabel = cell.viewWithTag(3) as! UILabel
+		let newImage = cell.viewWithTag(4) as! UIImageView
 		
 		// Set section label text with ward and section number
-		subjectLabel.text = self.newsList[indexPath.row].subject
-		dateLabel.text = "\(self.newsList[indexPath.row].month)/\(self.newsList[indexPath.row].day)/\(self.newsList[indexPath.row].year) \(self.newsList[indexPath.row].hour):\(self.newsList[indexPath.row].minute) \(self.newsList[indexPath.row].ampm)"
-		bodyLabel.text = self.newsList[indexPath.row].body
+		subjectLabel.text = self.updatesList[indexPath.row].subject
+		dateLabel.text = "\(self.updatesList[indexPath.row].month)/\(self.updatesList[indexPath.row].day)/\(self.updatesList[indexPath.row].year) \(self.updatesList[indexPath.row].hour) \(self.updatesList[indexPath.row].ampm)"
+		bodyLabel.text = self.updatesList[indexPath.row].body
+		
+		if self.updatesList[indexPath.row].showNewImage == false {
+			newImage.isHidden = true
+		}
+		else {
+			newImage.isHidden = false
+		}
 		
 		return cell
 	}

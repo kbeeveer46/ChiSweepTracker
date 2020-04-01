@@ -1,7 +1,7 @@
 import Foundation
 import Firebase
 
-public class NewsModel {
+public class UpdatesModel {
 	
 	var ampm = ""
 	var minute = 0
@@ -11,5 +11,6 @@ public class NewsModel {
 	var year = 0
 	var subject = ""
 	var body = ""
+	var showNewImage = false
 	
 }
