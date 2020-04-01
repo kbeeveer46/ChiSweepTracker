@@ -2,7 +2,7 @@ import UIKit
 import CoreLocation
 import MapKit
 import Firebase
-import  THLabel
+import THLabel
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
@@ -61,14 +61,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showFinishedScheduleButton() {
 		
-		// Get month and year from current date
+		// Get calendar components from current date
 		let currentDay = Calendar.current.component(.day, from: Date())
 		let currentMonth = Calendar.current.component(.month, from: Date())
 		let currentYear = Calendar.current.component(.year, from: Date())
 		
 		if currentMonth > 11 {
 			
-			// Show finished button if month is 4, 5, 6, 7, 8, 9, 10, or 11
 			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
 		}
 		else if currentMonth < 4 {
@@ -86,6 +85,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			if self.common.favoriteAddress() != "" {
 				getNextSweepingDate()
+			}
+			else {
+				self.finishedScheduleButton.isHidden = true
 			}
 		}
 	}

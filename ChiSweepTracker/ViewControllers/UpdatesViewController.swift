@@ -1,7 +1,7 @@
 import UIKit
 import Firebase
 
-class NewsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
 	// Controls
 	@IBOutlet weak var newsTableView: UITableView!
@@ -11,16 +11,23 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	
 	// Shared
 	var newsList = [NewsModel]()
+	var updatesLastViewedDate = ""
 	
     override func viewWillAppear(_ animated: Bool) {
 
 		// Set title
-		self.tabBarController?.navigationItem.title = "Sweeping News"
+		self.tabBarController?.navigationItem.title = "Latest Sweeping Updates"
 		
 		// Clear top navigation items
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
+		updatesLastViewedDate = self.common.updatesLastViewDate()
+		
+		getLatestUpdates()
+    }
+	
+	func getLatestUpdates() {
 		
 		let db = Firestore.firestore()
 		//var count = 1
@@ -28,13 +35,13 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 		// Figure out how to determine if there has been a new news item
 		// If there's a new item set the badge number
 		
-		// Get schedule data
+		// Get updates data
 		db.collection(self.common.constants.newsDatabaseName)
 			.order(by: "date", descending: true)
 			.limit(to: 5)
 			.getDocuments() { (querySnapshot, err) in
 				if let err = err {
-					print("Could not get news from Firebase: \(err)")
+					print("Could not get updates from Firebase: \(err)")
 				} else {
 					
 					self.newsList.removeAll()
@@ -89,9 +96,32 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 					self.newsTableView.reloadData()
 					
 					self.tabBarController?.tabBar.items?.last!.badgeValue = nil
+					
+					let dateFormatter = DateFormatter()
+					dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+					dateFormatter.locale = .current
+					let currentDate = dateFormatter.string(from: Date())
+					defaults.set(currentDate, forKey: "updatesLastViewDate")
 				}
 		}
-    }
+		
+	}
+	
+	func checkTimeStamp(date: String!) -> Bool {
+		
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+		dateFormatter.locale = .current
+		let datecomponents = dateFormatter.date(from: date)
+		
+		let now = Date()
+		
+		if (datecomponents! >= now) {
+			return true
+		} else {
+			return false
+		}
+	}
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return newsList.count

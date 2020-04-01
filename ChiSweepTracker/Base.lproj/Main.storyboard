@@ -201,13 +201,13 @@
         <!--Updates-->
         <scene sceneID="KJg-72-Sya">
             <objects>
-                <viewController id="RJq-PV-M2k" customClass="NewsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="RJq-PV-M2k" customClass="UpdatesViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sLR-2b-jsR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tGf-oR-39W">
-                                <rect key="frame" x="0.0" y="93" width="414" height="720"/>
+                                <rect key="frame" x="0.0" y="49" width="414" height="813"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="newsTableCell" rowHeight="151" id="4de-84-cGv">
@@ -1688,7 +1688,6 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="m9a-aF-K6k"/>
                         <segue destination="aNg-gl-cTZ" kind="relationship" relationship="viewControllers" id="lRu-XB-8Bj"/>
                         <segue destination="Rwe-fk-VdI" kind="relationship" relationship="viewControllers" id="uPs-7d-wtO"/>
-                        <segue destination="RJq-PV-M2k" kind="relationship" relationship="viewControllers" id="zne-ax-tPm"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfT-z8-xpg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -102,9 +102,13 @@ class Common {
 	func notificationsToggled() -> Bool {return defaults.bool(forKey: "notificationsToggled")}
 	func notificationsYear() -> Int {return defaults.integer(forKey: "notificationsYear")}
 	
+	// Updates
+	
+	func updatesLastViewDate() -> String {return defaults.string(forKey: "updatesLastViewDate") ?? ""}
+	
 	// Settings
 	
-	func contactEmail() -> String {return defaults.string(forKey: "contactEmail") ?? "admin@chicagosweeptracker.info"}
+	//func contactEmail() -> String {return defaults.string(forKey: "contactEmail") ?? "admin@chicagosweeptracker.info"}
 	
 	//MARK: Constants
 	
@@ -135,8 +139,8 @@ class Common {
 		let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
         
-		let streetSweepingBeginHour = 9
-		let streetSweepingEndHour = 2
+		//let streetSweepingBeginHour = 9
+		//let streetSweepingEndHour = 2
 		
 		// Strings
 		
@@ -224,22 +228,22 @@ class Common {
 		}
 		
 		// Get settings data
-		db.collection(self.constants.settingsDatabaseName)
-			.limit(to: 1)
-			.getDocuments() { (querySnapshot, err) in
-				if let err = err {
-					print("Could not get settings data from Firebase: \(err)")
-				} else {
-					for document in querySnapshot!.documents {
-						
-						let data = document.data()
-						
-						let contactEmail = data["contactEmail"] as! String
-						
-						defaults.set(contactEmail, forKey: "contactEmail")
-					}
-				}
-		}
+//		db.collection(self.constants.settingsDatabaseName)
+//			.limit(to: 1)
+//			.getDocuments() { (querySnapshot, err) in
+//				if let err = err {
+//					print("Could not get settings data from Firebase: \(err)")
+//				} else {
+//					for document in querySnapshot!.documents {
+//
+//						let data = document.data()
+//
+//						let contactEmail = data["contactEmail"] as! String
+//
+//						defaults.set(contactEmail, forKey: "contactEmail")
+//					}
+//				}
+//		}
 		
 		// Get Divvys data
 		db.collection(self.constants.divvysDatabaseName)
