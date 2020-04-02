@@ -138,9 +138,6 @@ class Common {
 		
 		let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
-        
-		//let streetSweepingBeginHour = 9
-		//let streetSweepingEndHour = 2
 		
 		// Strings
 		
