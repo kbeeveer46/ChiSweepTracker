@@ -50,6 +50,14 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			favoriteMapHeighConstraint.constant = 175
 			whenPickerHeightConstraint.constant = 50
 			favoriteStackView.spacing = 5
+		case .iPhone5,
+			 .iPhone5S,
+			 .iPhone5C,
+			 .iPhone6,
+			 .iPhone6S,
+			 .iPhone7,
+			 .iPhone8:
+			favoriteStackView.spacing = 8
 		default:
 			break
 		}

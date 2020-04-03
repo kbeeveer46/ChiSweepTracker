@@ -52,7 +52,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			searchStackView.spacing = 10
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
 			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 14)
-			infoLabel.font = .systemFont(ofSize: 10)
+			infoLabel.font = .systemFont(ofSize: 11)
 		default:
 			break
 		}
