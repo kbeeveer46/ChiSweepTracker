@@ -226,7 +226,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         self.schedule.months.removeAll()
         self.schedule.polygonCoordinates.removeAll()
         
-        print("searchForSchedule address: \(address)")
+        //print("searchForSchedule address: \(address)")
         
 		// Set schedule address
         self.schedule.address = address
@@ -258,11 +258,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
                 defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
                 
-                print("searchForSchedule latitude: \(self.schedule.locationCoordinate.latitude)")
-                print("searchForSchedule longitude: \(self.schedule.locationCoordinate.longitude)")
+                //print("searchForSchedule latitude: \(self.schedule.locationCoordinate.latitude)")
+                //print("searchForSchedule longitude: \(self.schedule.locationCoordinate.longitude)")
                 
-				print("searchForSchedule geom: \(self.common.geomTitle())")
-				print("searchForSchedule ward dataset: \(self.common.wardDataset())")
+				//print("searchForSchedule geom: \(self.common.geomTitle())")
+				//print("searchForSchedule ward dataset: \(self.common.wardDataset())")
 				
 				// Create SODA client using domain and token
 				let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
@@ -285,8 +285,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             let coordinatesWrapper = the_geom[self.common.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
-							print("searchForSchedule ward: \(ward)")
-							print("searchForSchedule section: \(section)")
+							//print("searchForSchedule ward: \(ward)")
+							//print("searchForSchedule section: \(section)")
 							
 							// Set default polygon array to be used in all the views
                             defaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
@@ -341,8 +341,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             let dates = item[self.common.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
-                                            print("searchForSchedule month name: \(monthName)")
-                                            print("searchForSchedule dates: \(datesArray)")
+                                            //print("searchForSchedule month name: \(monthName)")
+                                            //print("searchForSchedule dates: \(datesArray)")
                                             
 											// Create month object
                                             let month = MonthModel()
@@ -352,7 +352,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 											// Loop through dates
                                             for day in datesArray {
                                                 
-                                                print("searchForSchedule date: \(day)")
+                                                //print("searchForSchedule date: \(day)")
                                                 
 												// Add date to month
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -452,7 +452,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				defaults.set(location.coordinate.latitude, forKey: "defaultLatitude")
 				defaults.set(location.coordinate.longitude, forKey: "defaultLongitude")
 				
-				print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
+				//print("getAddressFromCoordinates: \(self.addressFromCoordinates)")
 						
 			}
         })
@@ -604,7 +604,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Enter address
 		if searchTypeSegment.selectedSegmentIndex == 0 {
 			
-			print("Enter address selected and stopped updating location")
+			//print("Enter address selected and stopped updating location")
 			
 			// Clear search text box
 			addressTextField.text = ""
@@ -619,18 +619,18 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			// Stop updating location if user selects "drop pin"
 			locationManager.stopUpdatingLocation()
 			
-			print("Drop pin selected and stopped updating location")
+			//print("Drop pin selected and stopped updating location")
 			
 		}
 		// Use my location
 		else if searchTypeSegment.selectedSegmentIndex == 2 {
 			
-			print("Use my location selected")
+			//print("Use my location selected")
 			
 			// Request location access. If access granted, start updating location and update map
 			locationManager.requestWhenInUseAuthorization()
 			
-			print("Requested location access")
+			//print("Requested location access")
 			
 			// Check if location services in enabled
 			if CLLocationManager.locationServicesEnabled() {
@@ -642,10 +642,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				// Start getting user's location
 				locationManager.startUpdatingLocation()
 				
-				print("Location services enabled and started updating location")
+				//print("Location services enabled and started updating location")
 			}
 			else {
-				print("Location services are not enabled")
+				//print("Location services are not enabled")
 			}
 		}
 	}
@@ -653,7 +653,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Search address button is tapped
 	@IBAction func searchAddressTapped(_ sender: Any) {
 		
-		print("Find schedule pressed")
+		//print("Find schedule pressed")
 
 		// Add haptic feedback
 		let generator = UISelectionFeedbackGenerator()
@@ -663,7 +663,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Stop updating user's location to save battery
 		locationManager.stopUpdatingLocation()
 		
-		print("Stopped updating location")
+		//print("Stopped updating location")
 		
 		// Get address from text field for searching
 		var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""

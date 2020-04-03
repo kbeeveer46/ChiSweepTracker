@@ -69,7 +69,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Unregister from Firebase Cloud Messaging notifications
 		//UIApplication.shared.unregisterForRemoteNotifications()
 		
-		print("Deleted user's local notifications")
+		//print("Deleted user's local notifications")
 		
         // Set user favorites
         defaults.set(schedule.address, forKey: "favoriteAddress")
@@ -136,7 +136,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
 			
-			print("Deleted user's local notifications")
+			//print("Deleted user's local notifications")
 			
 			// Set right bar button to add now that a favorite has been removed
 			//self.navigationItem.rightBarButtonItem = self.addFavoriteButton

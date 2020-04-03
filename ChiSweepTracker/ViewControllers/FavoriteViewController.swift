@@ -363,7 +363,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				// Unregister from Firebase Cloud Messaging notifications
 				UIApplication.shared.unregisterForRemoteNotifications()
 				
-				print("Deleted user's local notifications")
+				//print("Deleted user's local notifications")
 				
 				// If on a view with a tab control then use it to go to the search view
 				self.tabBarController?.selectedIndex = 0
@@ -654,7 +654,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
 												granted, error in
                                             
-                                                print("requestAuthorization granted: \(granted)")
+                                                //print("requestAuthorization granted: \(granted)")
                                                 
                                                 if granted == false {
                                                     
@@ -697,7 +697,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 													// Clear current notifications and re-add them in case they changed
 													UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 													
-													print("Deleted user's local notifications")
+													//print("Deleted user's local notifications")
 													
 													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
@@ -1041,7 +1041,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
 			
-			print("Deleted user's local notifications")
+			//print("Deleted user's local notifications")
 			
 		}
 	}
