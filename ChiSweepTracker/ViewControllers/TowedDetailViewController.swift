@@ -16,6 +16,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var towedToAddressButton: UIButton!
 	@IBOutlet weak var towedToPhoneButton: UIButton!
 	@IBOutlet weak var inventoryNumberLabel: UILabel!
+	@IBOutlet weak var towedVehicleStackView: UIStackView!
 	
 	// Shared
 	var towedVehicle = VehicleModel()
@@ -60,6 +61,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		switch UIDevice().type {
 		case .iPhoneSE:
 			towedDetailMapViewHeightConstraint.constant = 175
+			towedVehicleStackView.spacing = 13
 		default:
 			break
 		}

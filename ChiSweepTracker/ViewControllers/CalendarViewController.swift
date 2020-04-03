@@ -302,8 +302,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         event.calendar = eventStore.defaultCalendarForNewEvents
                         
 						// Add reminder 30 minutes before event startDate
-						let reminder = EKAlarm(relativeOffset: -1800)
-						event.addAlarm(reminder)
+//						let reminder = EKAlarm(relativeOffset: -1800)
+//						event.addAlarm(reminder)
 						
 						// Add event to calendar
 						do {
