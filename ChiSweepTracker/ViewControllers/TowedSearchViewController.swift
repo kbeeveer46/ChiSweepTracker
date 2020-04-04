@@ -213,9 +213,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		let towedQuery = towedClient.query(dataset: self.common.towedDataset())
 			.filter(filter)
 			.orderAscending(self.common.towedMakeTitle())
-			//.orderAscending(self.common.towedStateTitle())
-			//.orderAscending(self.common.towedPlateTitle())
-		    .limit(10000)
+		    .limit(500)
 			
 			towedQuery.get { res in
 			switch res {
