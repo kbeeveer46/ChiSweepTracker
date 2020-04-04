@@ -109,7 +109,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			let polygons = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
 			
 			// Add polygons to map
-			favoriteMapView.removeOverlays(favoriteMapView.overlays)
 			favoriteMapView.addOverlay(polygons)
 
 			// Create location using lat and long
@@ -406,6 +405,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				defaults.set(true, forKey: "showDivvyStations")
 				self.loadFavoriteMap()
 			})
+			let showDivvyStationsImage = UIImage(named: "bike")
+			if let icon = showDivvyStationsImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+				showDivvyAction.setValue(icon, forKey: "image")
+			}
 			optionsAlert.addAction(showDivvyAction)
 		}
 		else {
@@ -413,15 +416,23 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				defaults.set(false, forKey: "showDivvyStations")
 				self.loadFavoriteMap()
 			})
+			let hideDivvyStationsImage = UIImage(named: "bike")
+			if let icon = hideDivvyStationsImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+				hideDivvyAction.setValue(icon, forKey: "image")
+			}
 			optionsAlert.addAction(hideDivvyAction)
 		}
 		
 		// Create nearby towed/relocated vehicle options for alert
 		if (showTowedVehicles == false) {
-			let showRelocatedAction = UIAlertAction(title: "Vehicle Missing? Show Relocated Vehicles", style: .default, handler:{ action in
+			let showRelocatedAction = UIAlertAction(title: "Show Nearby Relocated Vehicles", style: .default, handler:{ action in
 				defaults.set(true, forKey: "showTowedVehicles")
 				self.loadFavoriteMap()
 			})
+			let showRelocatedVehiclesImage = UIImage(named: "pin-address")
+			if let icon = showRelocatedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+				showRelocatedAction.setValue(icon, forKey: "image")
+			}
 			optionsAlert.addAction(showRelocatedAction)
 		}
 		else {
@@ -429,11 +440,14 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				defaults.set(false, forKey: "showTowedVehicles")
 				self.loadFavoriteMap()
 			})
+			let hideRelocatedVehiclesImage = UIImage(named: "pin-address")
+			if let icon = hideRelocatedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+				hideRelocatedAction.setValue(icon, forKey: "image")
+			}
 			optionsAlert.addAction(hideRelocatedAction)
 		}
 		
-		let showTowedAction = UIAlertAction(title: "Vehicle Missing? Search Towed Vehicles", style: .default, handler:{ action in
-			
+		let showTowedAction = UIAlertAction(title: "Search Towed Vehicles", style: .default, handler:{ action in
 			// Segue to towed search view
 			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedSearchViewController") as? TowedSearchViewController {
 				//destinationViewController.schedule = self.schedule
@@ -441,6 +455,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			}
 			
 		})
+		let searchTowedVehiclesImage = UIImage(named: "search-fill")
+		if let icon = searchTowedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+			showTowedAction.setValue(icon, forKey: "image")
+		}
 		optionsAlert.addAction(showTowedAction)
 		
 		// Create cancel option for options alert
@@ -448,8 +466,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		
 		// Add options to options alert
 		optionsAlert.addAction(cancelAction)
+		
+		let removeFavoriteImage = UIImage(named: "star")
+		if let icon = removeFavoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+			removeFavoriteAction.setValue(icon, forKey: "image")
+		}
 		optionsAlert.addAction(removeFavoriteAction)
-        
+		
 		// Present options alert
         self.present(optionsAlert, animated: true, completion: nil)
         
@@ -789,7 +812,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                         print("Error adding notification: \(error.localizedDescription)")
                                                                     }
                                                                     else {
-                                                                        print("Notification added: \(date!.description(with: Locale.current))")
+                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
                                                                     }
                                                                 })
                                                             }
@@ -880,7 +903,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				print("Unable to create test notification with error: \(error.localizedDescription)")
 			}
 			else {
-				print("Test notification added: \(identifier)")
+				//print("Test notification added: \(identifier)")
 			}
 		})
 	}

@@ -101,10 +101,10 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
         schedule.months.removeAll()
         
 		// Create SODA client using domain and token
-        let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+        let sodaClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
         
 		// Query SODA API to get schedule
-        let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
+        let scheduleQuery = sodaClient.query(dataset: self.common.scheduleDataset())
             .filter("\(self.common.wardTitle()) = '\(self.schedule.ward)' \(self.schedule.section != "" ? "AND \(self.common.sectionTitle()) = '\(self.schedule.section)'" : "") ")
 			.orderAscending(self.common.monthNumberTitle())
 		
@@ -123,8 +123,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
                         let dates = item[self.common.dates()] as? String ?? ""
                         let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                         
-                        print("getSchedule month name: \(monthName)")
-                        print("getSchedule dates: \(datesArray)")
+                        //print("getSchedule month name: \(monthName)")
+                        //print("getSchedule dates: \(datesArray)")
                         
 						// Create month object
                         let month = MonthModel()
@@ -134,7 +134,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 						// Loop through dates
                         for day in datesArray {
                             
-                            print("getSchedule date: \(day)")
+                            //print("getSchedule date: \(day)")
                             
 							// Add date to month
                             if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -178,8 +178,27 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		let addressFromDefaults = self.common.defaultAddress()
 		let longitudeFromDefaults = self.common.defaultLongitude()
 		let latitudeFromDefaults = self.common.defaultLatitude()
+		let coordinatesFromDefaults = self.common.defaultCoordinatesArray()
+		var mapOverlayCoordinates = [CLLocationCoordinate2D]()
 		
 		if longitudeFromDefaults != 0 && latitudeFromDefaults != 0 {
+			
+			// Loop through default coordinates array
+			if coordinatesFromDefaults.count > 0 {
+				for(_, coordinate) in coordinatesFromDefaults.enumerated() {
+					for item in coordinate {
+						
+						// Add coordinates to array for map
+						var coordinate = CLLocationCoordinate2D()
+						coordinate.longitude = item[0] as? Double ?? 0
+						coordinate.latitude = item[1] as? Double ?? 0
+						mapOverlayCoordinates.append(coordinate)
+					}
+				}
+			}
+			
+			// Create polygons from coordinates
+			let polygons = MKPolygon(coordinates: mapOverlayCoordinates, count: mapOverlayCoordinates.count)
 			
 			// Create location from default lat and long
 			let location: CLLocation = CLLocation(latitude: latitudeFromDefaults, longitude: longitudeFromDefaults)
@@ -198,9 +217,30 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			selectSectionMap.removeAnnotations(selectSectionMap.annotations)
 			selectSectionMap.addAnnotation(annotation)
 			
+			// Add polygon overlays
+			selectSectionMap.addOverlay(polygons)
+			
 			// Set region
 			selectSectionMap.setRegion(region, animated: false)
 		}
+	}
+	
+	// Method required to add polygons to section map
+	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+		
+		if overlay is MKPolygon {
+			
+			if let polygon = overlay as? MKPolygon {
+				
+				let renderer = MKPolygonRenderer(polygon: polygon)
+				renderer.fillColor = .red
+				renderer.alpha = 0.4
+				return renderer
+				
+			}
+		}
+		
+		return MKOverlayRenderer(overlay: overlay)
 	}
 	
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

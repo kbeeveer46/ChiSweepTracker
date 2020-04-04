@@ -14,9 +14,11 @@ class Common {
 	func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
 	func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
 	func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
+	
 	func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
 	func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
 	func defaultLatitude() -> Double {return defaults.double(forKey: "defaultLatitude")}
+	func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
 	
 	// SODA SDK
 	
@@ -513,6 +515,19 @@ class Common {
 
 // MARK: Extensions
 
+extension UIImage {
+	
+	func imageWithSize(scaledToSize newSize: CGSize) -> UIImage {
+		
+		UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+		self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+		let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+		UIGraphicsEndImageContext()
+		return newImage
+	}
+	
+}
+
 // Capitalize first lett of month name
 extension String {
 	
@@ -571,12 +586,15 @@ extension Date {
 
 // Enable the use of hex strings to color views
 extension UIColor {
+	
     convenience init(hexString: String, alpha: CGFloat = 1.0) {
+		
         let hexString: String = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         let scanner = Scanner(string: hexString)
         if (hexString.hasPrefix("#")) {
             scanner.scanLocation = 1
         }
+		
         var color: UInt32 = 0
         scanner.scanHexInt32(&color)
         let mask = 0x000000FF
@@ -587,8 +605,11 @@ extension UIColor {
         let green = CGFloat(g) / 255.0
         let blue  = CGFloat(b) / 255.0
         self.init(red:red, green:green, blue:blue, alpha:alpha)
+		
     }
+	
     func toHexString() -> String {
+		
         var r:CGFloat = 0
         var g:CGFloat = 0
         var b:CGFloat = 0
@@ -596,6 +617,7 @@ extension UIColor {
         getRed(&r, green: &g, blue: &b, alpha: &a)
         let rgb:Int = (Int)(r*255)<<16 | (Int)(g*255)<<8 | (Int)(b*255)<<0
         return String(format:"#%06x", rgb)
+		
     }
 }
 
