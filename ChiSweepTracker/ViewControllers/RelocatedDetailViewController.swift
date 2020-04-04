@@ -117,12 +117,12 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 				
 				// Create from and to annotation from location coordinate
 				let fromAnnotation = CustomAnnotation()
-				fromAnnotation.customImageName = "pin-orange"
+				fromAnnotation.customImageName = "pin-relocated"
 				fromAnnotation.coordinate = fromLocation.coordinate
 				fromAnnotation.title = "Relocated From: \(self.relocatedVehicle.relocatedFromAddress)"
 			
 				let toAnnotation = CustomAnnotation()
-				toAnnotation.customImageName = "pin-orange"
+				toAnnotation.customImageName = "pin-relocated"
 				toAnnotation.coordinate = toLocation.coordinate
 				toAnnotation.title = "Relocated To: \(self.relocatedVehicle.relocatedToAddress)"
 				
@@ -180,7 +180,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
-		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
 		annotationLabel.lineBreakMode = .byWordWrapping
 		annotationLabel.textAlignment = .center
 		annotationLabel.font = .boldSystemFont(ofSize: 11)

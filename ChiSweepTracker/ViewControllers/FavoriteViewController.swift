@@ -75,6 +75,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	// Load map with default lat, long, and polygon coordinates or load Chicago map
     func loadFavoriteMap() {
         
+		
 		// Set required properties for map
         favoriteMapView.delegate = self
 		favoriteMapView.removeOverlays(favoriteMapView.overlays)
@@ -113,10 +114,16 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 
 			// Create location using lat and long
 			let location =  CLLocation(latitude: favoriteLatitude, longitude: favoriteLongitude)
+			
+			// Add Divvy stations to map
+			addDivvyStationsToMap(location)
+			
+			// Ad relocated vehicles to map
+			addRelocationVehiclesToMap(location)
 
 			// Create annotation using location coordinate
 			let annotation = CustomAnnotation()
-			annotation.customImageName = "pin-red"
+			annotation.customImageName = "pin-address"
 			annotation.coordinate = location.coordinate
 			annotation.title = favoriteAddress
 			annotation.subtitle = "Ward: \(favoriteWard) - Section: \(favoriteSection)"
@@ -134,12 +141,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Set map region
 			favoriteMapView.setRegion(region, animated: false)
-			
-			// Add Divvy stations to map
-			addDivvyStationsToMap(location)
-			
-			// Ad relocated vehicles to map
-			addRelocationVehiclesToMap(location)
 			
         }
         else {
@@ -218,7 +219,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									
 									// Create annotation for relocated location
 									let relocatedAnnotation = CustomAnnotation()
-									relocatedAnnotation.customImageName = "pin-orange"
+									relocatedAnnotation.customImageName = "pin-relocated"
 									relocatedAnnotation.coordinate = relocatedLocation.coordinate
 									relocatedAnnotation.subtitle = "Click on magnifying glass for details" //"#:\(plate) State:\(state) Make:\(make) Color:\(color)"
 									relocatedAnnotation.title = "Make: \(make) - Plate #: \(plate)" //"\(relocatedDate) To: \(relocatedToAddressNumber) \(relocatedToDirection) \(relocatedToStreet)"
@@ -302,7 +303,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 									
 									// Create annotation for divvy station
 									let divvyAnnotation = CustomAnnotation()
-									divvyAnnotation.customImageName = "pin-blue"
+									divvyAnnotation.customImageName = "pin-divvy"
 									divvyAnnotation.coordinate = stationLocation.coordinate
 									divvyAnnotation.title = name
 									divvyAnnotation.subtitle = "Click on magnifying glass for details" //"Status: \(status) - Docks In Service: \(docksInService)"
@@ -949,9 +950,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		annotationView?.leftCalloutAccessoryView = nil
 		
-		if (customPointAnnotation.customImageName == "pin-red") {
+		if (customPointAnnotation.customImageName == "pin-address") {
 		
-			let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+			let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
 			annotationLabel.lineBreakMode = .byWordWrapping
 			annotationLabel.textAlignment = .center
 			annotationLabel.font = .boldSystemFont(ofSize: 11)
@@ -961,13 +962,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			annotationView?.addSubview(annotationLabel)
 			
 		}
-		else if (customPointAnnotation.customImageName == "pin-orange" || customPointAnnotation.customImageName == "pin-blue") {
+		else if (customPointAnnotation.customImageName == "pin-relocated" || customPointAnnotation.customImageName == "pin-divvy") {
 			
 			let detailsButton = UIButton()
 			detailsButton.frame.size.width = 35
 			detailsButton.frame.size.height = 35
 			
-			if (customPointAnnotation.customImageName == "pin-orange") {
+			if (customPointAnnotation.customImageName == "pin-relocated") {
 				detailsButton.setImage(UIImage(named: "search-orange"), for: .normal)
 			}
 			else {
@@ -985,7 +986,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		
 		if let annotation = view.annotation as? CustomAnnotation {
 			
-			if (annotation.customImageName == "pin-orange") {
+			if (annotation.customImageName == "pin-relocated") {
 			
 				// Segue to relocated detail view
 				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
@@ -994,7 +995,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				}
 				
 			}
-			else if (annotation.customImageName == "pin-blue") {
+			else if (annotation.customImageName == "pin-divvy") {
 				
 				// Segue to divvy detail view
 				if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "DivvyDetailViewController") as? DivvyDetailViewController {

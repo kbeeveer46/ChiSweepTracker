@@ -2,7 +2,7 @@ import UIKit
 import CoreLocation
 import MapKit
 import Firebase
-import THLabel
+//import THLabel
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
@@ -206,7 +206,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			// Create annotation
 			let annotation = CustomAnnotation()
-			annotation.customImageName = "pin-red"
+			annotation.customImageName = "pin-address"
 			annotation.coordinate = location.coordinate
 
 			// Add annotation to map
@@ -515,9 +515,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			
 			// Create map annotation
 			let annotation = CustomAnnotation()
-			annotation.customImageName = "pin-red"
+			annotation.customImageName = "pin-address"
 			annotation.coordinate = location.coordinate
-			annotation.title = addressFromDefaults
+			//annotation.title = addressFromDefaults
 			
 			// Create map span from coordinates
 			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
@@ -571,14 +571,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
-		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
-		annotationLabel.lineBreakMode = .byWordWrapping
-		annotationLabel.textAlignment = .center
-		annotationLabel.font = .boldSystemFont(ofSize: 11)
-		annotationLabel.text = annotation.title!
-		annotationLabel.strokeSize = 1
-		annotationLabel.strokeColor = UIColor.white
-		annotationView?.addSubview(annotationLabel)
+//		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
+//		annotationLabel.lineBreakMode = .byWordWrapping
+//		annotationLabel.textAlignment = .center
+//		annotationLabel.font = .boldSystemFont(ofSize: 11)
+//		annotationLabel.text = annotation.title!
+//		annotationLabel.strokeSize = 1
+//		annotationLabel.strokeColor = UIColor.white
+//		annotationView?.addSubview(annotationLabel)
 		
 		return annotationView
 	}
@@ -705,7 +705,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
 			// Create map annotation
 			let annotation = CustomAnnotation()
-			annotation.customImageName = "pin-red"
+			annotation.customImageName = "pin-address"
 			annotation.coordinate = location.coordinate
 			
 			// Create map span

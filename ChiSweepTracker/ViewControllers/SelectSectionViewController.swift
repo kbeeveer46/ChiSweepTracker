@@ -186,7 +186,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 			
 			// Create annotation from location coordinate
 			let annotation = CustomAnnotation()
-			annotation.customImageName = "pin-red"
+			annotation.customImageName = "pin-address"
 			annotation.coordinate = location.coordinate
 			annotation.title = addressFromDefaults
 			
@@ -226,7 +226,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
-		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
 		annotationLabel.lineBreakMode = .byWordWrapping
 		annotationLabel.textAlignment = .center
 		annotationLabel.font = .boldSystemFont(ofSize: 11)

@@ -96,7 +96,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
 		// Create map annotation
         let annotation = CustomAnnotation()
-		annotation.customImageName = "pin-red"
+		annotation.customImageName = "pin-address"
 		annotation.coordinate = self.schedule.locationCoordinate
         annotation.title = "\(self.schedule.address)"
 		annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
@@ -160,7 +160,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
-		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
 		annotationLabel.lineBreakMode = .byWordWrapping
 		annotationLabel.textAlignment = .center
 		annotationLabel.font = .boldSystemFont(ofSize: 11)

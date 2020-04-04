@@ -113,7 +113,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 				
 				// Create annotation from location coordinate
 				let annotation = CustomAnnotation()
-				annotation.customImageName = "pin-red"
+				annotation.customImageName = "pin-address"
 				annotation.coordinate = location.coordinate
 				annotation.title = "Towed To: \(self.towedVehicle.towedToAddress)"
 				annotation.subtitle = "Phone: \(self.towedVehicle.towedToPhone) - Inventory #: \(self.towedVehicle.inventoryNumber)"
@@ -152,7 +152,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
-		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 40, width: 125, height: 30))
+		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
 		annotationLabel.lineBreakMode = .byWordWrapping
 		annotationLabel.textAlignment = .center
 		annotationLabel.font = .boldSystemFont(ofSize: 11)
