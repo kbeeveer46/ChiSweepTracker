@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "placemark_fill-orange@1x.png",
+      "filename" : "placemark_fill@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "placemark_fill-orange@2x.png",
+      "filename" : "placemark_fill@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "placemark_fill-orange@3x.png",
+      "filename" : "placemark_fill@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -10,8 +10,14 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	@IBOutlet weak var colorPicker: UIPickerView!
 	@IBOutlet weak var statePicker: UIPickerView!
 	@IBOutlet weak var licensePlateTextField: UITextField!
+	@IBOutlet weak var licensePlateTextFieldWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var towedSearchStackView: UIStackView!
 	@IBOutlet weak var searchTowedVehiclesHeaderLabel: UILabel!
+	@IBOutlet weak var makeImageView: UIImageView!
+	@IBOutlet weak var modelImageView: UIImageView!
+	@IBOutlet weak var colorImageView: UIImageView!
+	@IBOutlet weak var stateImageView: UIImageView!
+	@IBOutlet weak var plateImageView: UIImageView!
 	
 	// Classes
 	let common = Common()
@@ -36,6 +42,25 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
 
+	}
+	
+	// Change constraints and sizes per device
+	func initializeControlsPerDevice() {
+		
+		switch UIDevice().type {
+		case .iPhoneSE:
+			towedSearchStackView.spacing = 0
+			searchTowedVehiclesHeaderLabel.font = .systemFont(ofSize: 11)
+			searchTowedVehiclesButtonPaddingConstraint.constant = 7
+			makeImageView.isHidden = true
+			modelImageView.isHidden = true
+			colorImageView.isHidden = true
+			stateImageView.isHidden = true
+			plateImageView.isHidden = true
+			licensePlateTextFieldWidthConstraint.constant = 190
+		default:
+			break
+		}
 	}
     
 	func getTowedVehicleData() {
@@ -166,19 +191,6 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		self.view.endEditing(true)
 		return false
-	}
-	
-	// Change constraints and sizes per device
-	func initializeControlsPerDevice() {
-		
-		switch UIDevice().type {
-		case .iPhoneSE:
-			towedSearchStackView.spacing = 0
-			searchTowedVehiclesHeaderLabel.font = .systemFont(ofSize: 11)
-			searchTowedVehiclesButtonPaddingConstraint.constant = 7
-		default:
-			break
-		}
 	}
 	
 	// MARK: Actions

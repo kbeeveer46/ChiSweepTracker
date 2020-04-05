@@ -349,7 +349,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
 			
 			// Create remove favorite alert
-			let removeFavoriteAlert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications", preferredStyle: .alert)
+			let removeFavoriteAlert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
 			
 			// Create yes option for remove favorite alert
 			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in

@@ -150,6 +150,10 @@ class Common {
 		let finishedScheduleMessage = "Sweeping has ended for _currentYear_."
 		let beginScheduleMessage = "Sweeping will begin on April 1st in _amount_ day(s)."
 		let noInternetConnectionSearchMessage = "You must be connected to the Internet to find your sweep area."
+		
+		// Colors
+		let systemRed = "#ff3b30"
+		let divvy = "#3fb5e7"
     }
 	
 	//MARK: Methods

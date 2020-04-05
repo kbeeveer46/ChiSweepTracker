@@ -114,7 +114,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.selectionChanged()
         
         // Create alert
-        let alert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
         
 		// Yes option
 		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -181,10 +181,17 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 				favoriteAddress != schedule.address ||
 				favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section
 		   ) {
+			
 			optionsAlert.addAction(saveFavoriteAction)
 		}
 		else {
 			optionsAlert.addAction(removeFavoriteAction)
+		}
+		
+		let favoriteImage = UIImage(named: "star")
+		if let icon = favoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+			saveFavoriteAction.setValue(icon, forKey: "image")
+			removeFavoriteAction.setValue(icon, forKey: "image")
 		}
 		
 		// Create cancel option for options alert
