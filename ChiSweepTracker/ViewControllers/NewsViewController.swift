@@ -86,6 +86,7 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 					}
 					
 					// Set required properties for table view
+					self.newsTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
 					self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
 					self.newsTableView.dataSource = self
 					self.newsTableView.delegate = self

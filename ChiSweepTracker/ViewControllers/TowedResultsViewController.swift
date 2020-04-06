@@ -14,6 +14,8 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
         super.viewDidLoad()
 		
 		// Set required properties for table view
+		self.towedVehiclesTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
+		self.towedVehiclesTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
 		self.towedVehiclesTableView.dataSource = self
 		self.towedVehiclesTableView.delegate = self
 		
@@ -30,6 +32,8 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 		
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "towedVehicleTableCell", for: indexPath)
+		
+		cell.contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
 		
 		// Get labels from cell
 		let makeLabel = cell.viewWithTag(1) as! UILabel

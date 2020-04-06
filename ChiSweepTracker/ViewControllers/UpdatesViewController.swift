@@ -85,6 +85,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 					}
 					
 					// Set required properties for table view
+					self.newsTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
 					self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
 					self.newsTableView.dataSource = self
 					self.newsTableView.delegate = self
@@ -127,6 +128,8 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "updatesTableCell", for: indexPath)
+		
+		cell.contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
 		
 		// Get labels and new image from cell
 		let subjectLabel = cell.viewWithTag(1) as! UILabel

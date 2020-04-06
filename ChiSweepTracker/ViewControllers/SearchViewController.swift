@@ -2,7 +2,6 @@ import UIKit
 import CoreLocation
 import MapKit
 import Firebase
-//import THLabel
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
@@ -12,7 +11,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	@IBOutlet weak var chicagoMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
-    @IBOutlet weak var finishedScheduleButton: UIButton!
 	@IBOutlet weak var searchStackView: UIStackView!
 	@IBOutlet weak var infoLabel: UILabel!
 	@IBOutlet weak var messageLabel: UILabel!
@@ -33,7 +31,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         super.viewWillAppear(animated)
 		
 		// Show finished schedule button if month is < 4 or greater than 11
-		self.showFinishedScheduleButton()
+		self.showStatusMessage()
 		
 		// Load map with user default lat and long or Chicago
 		self.loadSearchMap()
@@ -53,8 +51,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			chicagoMapViewHeightConstraint.constant = 175
 			searchStackView.spacing = 9
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
-			//finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 14)
-			messageLabel.font = .systemFont(ofSize: 14)
+			//messageLabel.font = .systemFont(ofSize: 14)
 			infoLabel.font = .systemFont(ofSize: 11)
 		default:
 			break
@@ -62,7 +59,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
 	
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
-	func showFinishedScheduleButton() {
+	func showStatusMessage() {
 		
 		// Get calendar components from current date
 		let currentDay = Calendar.current.component(.day, from: Date())
@@ -71,7 +68,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		if currentMonth > 11 {
 			
-			//self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
 			self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
 		}
 		else if currentMonth < 4 {
@@ -83,7 +79,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			let end = dateFormatter.date(from: "4/1/\(currentYear)")!
 			let diff = Date.daysBetween(start: start, end: end)
 			
-			//self.finishedScheduleButton.setTitle(self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)"), for: .normal)
 			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
@@ -92,7 +87,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				getNextSweepingDate()
 			}
 			else {
-				//self.finishedScheduleButton.isHidden = true
 				self.messageCardView.isHidden = true
 			}
 		}
@@ -107,7 +101,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		var nextSweepingDay = 0
 		var nextSweepingMonth = 0
 		
-		//self.finishedScheduleButton.isHidden = true
 		self.messageCardView.isHidden = true
 		
 		// Create SODA client using domain and token
@@ -167,10 +160,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					
 					if foundNextSweepingDay {
 						DispatchQueue.main.async {
-							//self.finishedScheduleButton.isHidden = false
-							//self.finishedScheduleButton.setTitle("Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear).\nCheck for signage and move your vehicle to avoid tickets.", for: .normal)
 							self.messageCardView.isHidden = false
-							self.messageLabel.text = "Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear)."
+							self.messageLabel.text = "Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear)"
 						}
 					}
 					
@@ -580,24 +571,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
 		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
 		
-//		let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
-//		annotationLabel.lineBreakMode = .byWordWrapping
-//		annotationLabel.textAlignment = .center
-//		annotationLabel.font = .boldSystemFont(ofSize: 11)
-//		annotationLabel.text = annotation.title!
-//		annotationLabel.strokeSize = 1
-//		annotationLabel.strokeColor = UIColor.white
-//		annotationView?.addSubview(annotationLabel)
-		
 		return annotationView
 	}
 	
 	// MARK: Actions
-	
-	@IBAction func finishedScheduleTapped(_ sender: Any) {
-		
-		
-	}
 	
 	// Search type segmented control option changed event
 	@IBAction func searchTypeTapped(_ sender: Any) {
@@ -769,7 +746,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         // Style and add images to buttons
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
-		//self.common.styleButton(finishedScheduleButton, "calendar_day_white", "FF7832")
 
     }
 }
