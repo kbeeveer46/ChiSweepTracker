@@ -1,7 +1,7 @@
 import UIKit
 import Firebase
 
-class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class NewsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
 	// Controls
 	@IBOutlet weak var newsTableView: UITableView!
@@ -14,7 +14,8 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 	var updatesLastViewedDate = ""
 	let dateFormatter = DateFormatter()
 	
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
 		// Set title
 		self.tabBarController?.navigationItem.title = "Latest Sweeping Updates"
@@ -105,7 +106,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		// Compare the update date to the date the user last opened the news page to determine if the new image should show next to the title
 		
 		if !updatesLastViewedDate.isEmpty {
-		
+			
 			let updateDate = dateFormatter.date(from: date)
 			let lastViewed = dateFormatter.date(from: updatesLastViewedDate)
 			
@@ -118,7 +119,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		
 		return false
 	}
-
+    
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return updatesList.count
 	}
@@ -126,7 +127,9 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
 		// Get cell from table view
-		let cell = tableView.dequeueReusableCell(withIdentifier: "updatesTableCell", for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: "newsTableCell", for: indexPath)
+		
+		cell.contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
 		
 		// Get labels and new image from cell
 		let subjectLabel = cell.viewWithTag(1) as! UILabel

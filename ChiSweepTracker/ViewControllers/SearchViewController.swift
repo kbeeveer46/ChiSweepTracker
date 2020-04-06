@@ -15,7 +15,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     @IBOutlet weak var finishedScheduleButton: UIButton!
 	@IBOutlet weak var searchStackView: UIStackView!
 	@IBOutlet weak var infoLabel: UILabel!
-
+	@IBOutlet weak var messageLabel: UILabel!
+	@IBOutlet weak var messageCardView: CardView!
+	
 	// Classes
     let schedule = ScheduleModel()
     let common = Common()
@@ -49,9 +51,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		switch UIDevice().type {
 		case .iPhoneSE:
 			chicagoMapViewHeightConstraint.constant = 175
-			searchStackView.spacing = 10
+			searchStackView.spacing = 9
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
-			finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 14)
+			//finishedScheduleButton.titleLabel?.font = .systemFont(ofSize: 14)
+			messageLabel.font = .systemFont(ofSize: 14)
 			infoLabel.font = .systemFont(ofSize: 11)
 		default:
 			break
@@ -68,7 +71,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		if currentMonth > 11 {
 			
-			self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
+			//self.finishedScheduleButton.setTitle(self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)"), for: .normal)
+			self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
 		}
 		else if currentMonth < 4 {
 
@@ -79,7 +83,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			let end = dateFormatter.date(from: "4/1/\(currentYear)")!
 			let diff = Date.daysBetween(start: start, end: end)
 			
-			self.finishedScheduleButton.setTitle(self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)"), for: .normal)
+			//self.finishedScheduleButton.setTitle(self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)"), for: .normal)
+			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
 			
@@ -87,7 +92,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				getNextSweepingDate()
 			}
 			else {
-				self.finishedScheduleButton.isHidden = true
+				//self.finishedScheduleButton.isHidden = true
+				self.messageCardView.isHidden = true
 			}
 		}
 	}
@@ -101,7 +107,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		var nextSweepingDay = 0
 		var nextSweepingMonth = 0
 		
-		self.finishedScheduleButton.isHidden = true
+		//self.finishedScheduleButton.isHidden = true
+		self.messageCardView.isHidden = true
 		
 		// Create SODA client using domain and token
 		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
@@ -160,8 +167,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					
 					if foundNextSweepingDay {
 						DispatchQueue.main.async {
-							self.finishedScheduleButton.isHidden = false
-							self.finishedScheduleButton.setTitle("Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear).\nCheck for signage and move your vehicle to avoid tickets.", for: .normal)
+							//self.finishedScheduleButton.isHidden = false
+							//self.finishedScheduleButton.setTitle("Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear).\nCheck for signage and move your vehicle to avoid tickets.", for: .normal)
+							self.messageCardView.isHidden = false
+							self.messageLabel.text = "Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear)."
 						}
 					}
 					
@@ -760,7 +769,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
         // Style and add images to buttons
         self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
-		self.common.styleButton(finishedScheduleButton, "calendar_day_white", "FF7832")
+		//self.common.styleButton(finishedScheduleButton, "calendar_day_white", "FF7832")
 
     }
 }
