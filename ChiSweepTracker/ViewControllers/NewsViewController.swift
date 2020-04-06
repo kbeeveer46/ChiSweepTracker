@@ -14,8 +14,7 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
 	var updatesLastViewedDate = ""
 	let dateFormatter = DateFormatter()
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewWillAppear(_ animated: Bool) {
 
 		// Set title
 		self.tabBarController?.navigationItem.title = "Latest Sweeping Updates"

@@ -13,8 +13,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	// Shared
 	var infoList = [InfoModel]()
 	
-	override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewWillAppear(_ animated: Bool) {
        
 		// Set title
 		self.tabBarController?.navigationItem.title = "Sweeping Info"
@@ -23,28 +22,10 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
-		// Add rate card view tap gesture
-		//let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.rateCardTapped (_:)))
-		//rateCardView.addGestureRecognizer(gesture)
-		
-		//initializeControlsPerDevice()
-		
 		getInfo()
-		
 		
     }
 	
-//	func initializeControlsPerDevice() {
-		
-//		switch UIDevice().type {
-//		case .iPhoneSE:
-//			
-//		default:
-//			break
-//		}
-		
-//	}
-    
 	func getInfo() {
 		
 		let db = Firestore.firestore()
@@ -108,7 +89,6 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		let cell = tableView.dequeueReusableCell(withIdentifier: "infoTableCell", for: indexPath)
 		
 		cell.contentView.backgroundColor =  UIColor(white: 0.95, alpha: 1)
-		//cell.tintColor = UIColor(hexString: "#\(self.infoList[indexPath.row].color)")
 
 		// Get label and image from cell
 		let image = cell.viewWithTag(1) as! UIImageView
