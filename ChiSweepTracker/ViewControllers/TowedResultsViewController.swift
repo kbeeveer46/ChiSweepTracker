@@ -33,7 +33,7 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "towedVehicleTableCell", for: indexPath)
 		
-		cell.contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+		cell.contentView.backgroundColor = UIColor(hexString: "#F2F2F2")
 		
 		// Get labels from cell
 		let makeLabel = cell.viewWithTag(1) as! UILabel

@@ -110,7 +110,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "infoTableCell", for: indexPath)
 		
-		cell.contentView.backgroundColor =  UIColor(white: 0.95, alpha: 1)
+		cell.contentView.backgroundColor = UIColor(hexString: "#F2F2F2")
 
 		// Get label and image from cell
 		let image = cell.viewWithTag(1) as! UIImageView

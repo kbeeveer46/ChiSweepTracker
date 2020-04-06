@@ -129,7 +129,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "updatesTableCell", for: indexPath)
 		
-		cell.contentView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+		cell.contentView.backgroundColor = UIColor(hexString: "#F2F2F2")
 		
 		// Get labels and new image from cell
 		let subjectLabel = cell.viewWithTag(1) as! UILabel

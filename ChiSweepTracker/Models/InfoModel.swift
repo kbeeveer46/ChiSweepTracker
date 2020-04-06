@@ -1,4 +1,3 @@
-
 import Foundation
 
 public class InfoModel {
@@ -7,4 +6,5 @@ public class InfoModel {
 	var image = ""
 	var color = ""
 	var order = 0
+	
 }
