@@ -83,6 +83,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					}
 					
 					// Set required properties for table view
+					self.sectionTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
 					self.sectionTableView.dataSource = self
 					self.sectionTableView.delegate = self
 					self.sectionTableView.reloadData()

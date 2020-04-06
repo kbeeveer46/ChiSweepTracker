@@ -39,6 +39,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.initializeControlsPerDevice()
 		
 		// Set required properties for schedule table view
+		self.scheduleTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
 		self.scheduleTableView.dataSource = self
 		self.scheduleTableView.delegate = self
 		self.scheduleTableView.reloadData()
