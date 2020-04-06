@@ -15,6 +15,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var addressButton: UIButton!
 	@IBOutlet weak var relocatedFromAddressButton: UIButton!
 	@IBOutlet weak var reasonLabel: UILabel!
+	@IBOutlet weak var relocatedDetailStackView: UIStackView!
 	
 	// Shared
 	var relocatedVehicle = VehicleModel()
@@ -43,6 +44,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		switch UIDevice().type {
 		case .iPhoneSE:
 			relocatedDetailMapHeightConstraint.constant = 175
+			relocatedDetailStackView.spacing = 15
 		default:
 			break
 		}

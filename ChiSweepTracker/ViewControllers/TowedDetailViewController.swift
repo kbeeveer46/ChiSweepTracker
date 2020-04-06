@@ -61,7 +61,7 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		switch UIDevice().type {
 		case .iPhoneSE:
 			towedDetailMapViewHeightConstraint.constant = 175
-			towedVehicleStackView.spacing = 13
+			towedVehicleStackView.spacing = 11
 		default:
 			break
 		}

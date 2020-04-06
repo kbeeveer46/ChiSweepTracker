@@ -15,6 +15,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	@IBOutlet weak var infoLabel: UILabel!
 	@IBOutlet weak var favoriteStackView: UIStackView!
 	@IBOutlet weak var whenPickerHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var whenPickerWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var timePickerWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var cardViewRightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var cardViewLeftConstraint: NSLayoutConstraint!
+	@IBOutlet weak var cardViewBottomConstraint: NSLayoutConstraint!
+	@IBOutlet weak var cardViewTopConstraint: NSLayoutConstraint!
 	
 	// Classes
     let common = Common()
@@ -49,7 +55,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			infoLabel.font = .systemFont(ofSize: 11)
 			favoriteMapHeighConstraint.constant = 175
 			whenPickerHeightConstraint.constant = 50
+			whenPickerWidthConstraint.constant = 155
 			favoriteStackView.spacing = 5
+			timePickerWidthConstraint.constant = 150
+			cardViewLeftConstraint.constant = 5
+			cardViewRightConstraint.constant = 5
+			cardViewTopConstraint.constant = 5
+			cardViewBottomConstraint.constant = 5
 		case .iPhone5,
 			 .iPhone5S,
 			 .iPhone5C,
@@ -57,7 +69,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			 .iPhone6S,
 			 .iPhone7,
 			 .iPhone8:
-			favoriteStackView.spacing = 8
+			favoriteStackView.spacing = 7
 		default:
 			break
 		}
