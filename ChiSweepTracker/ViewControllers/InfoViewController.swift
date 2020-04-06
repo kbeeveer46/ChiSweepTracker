@@ -12,6 +12,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	
 	// Shared
 	var infoList = [InfoModel]()
+	var rateCardView = CardView()
 	
 	override func viewWillAppear(_ animated: Bool) {
        
@@ -72,8 +73,29 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	@objc func rateCardTapped(_ sender:UITapGestureRecognizer){
 		
 		if #available(iOS 10.3, *) {
-			SKStoreReviewController.requestReview()
-		} else {
+			
+			// Add haptic feedback
+			let generator = UISelectionFeedbackGenerator()
+			generator.prepare()
+			generator.selectionChanged()
+			
+			rateCardView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+			
+			UIView.animate(withDuration: 1.0,
+						   delay: 0,
+						   usingSpringWithDamping: 1.0,
+						   initialSpringVelocity: 2.0,
+						   options: .allowUserInteraction,
+						   animations: { [weak self] in
+							self?.rateCardView.transform = .identity
+				},
+						   completion: { (_) -> Void in
+							SKStoreReviewController.requestReview()
+							
+			})
+			
+		}
+		else {
 			// Fallback on earlier versions
 		}
 		
@@ -106,6 +128,8 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		
 		if self.infoList[indexPath.row].order == 1 {
 		
+			rateCardView = cardView
+			
 			// Add rate card view tap gesture
 			let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.rateCardTapped (_:)))
 			cardView.addGestureRecognizer(gesture)
