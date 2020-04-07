@@ -50,7 +50,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		switch UIDevice().type {
 		case .iPhoneSE:
 			towedSearchStackView.spacing = 0
-			searchTowedVehiclesHeaderLabel.font = .systemFont(ofSize: 11)
+			//searchTowedVehiclesHeaderLabel.font = .systemFont(ofSize: 11)
 			searchTowedVehiclesButtonPaddingConstraint.constant = 7
 			makeImageView.isHidden = true
 			modelImageView.isHidden = true

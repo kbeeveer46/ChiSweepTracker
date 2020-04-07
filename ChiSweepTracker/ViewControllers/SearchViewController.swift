@@ -12,7 +12,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	@IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
 	@IBOutlet weak var searchStackView: UIStackView!
-	@IBOutlet weak var infoLabel: UILabel!
 	@IBOutlet weak var messageLabel: UILabel!
 	@IBOutlet weak var messageCardView: CardView!
 	
@@ -24,6 +23,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	let locationManager = CLLocationManager()
     var addressFromTextField = ""
     var addressFromCoordinates = ""
+	let currentDay = Calendar.current.component(.day, from: Date())
+	let currentMonth = Calendar.current.component(.month, from: Date())
+	let currentYear = Calendar.current.component(.year, from: Date())
     
 	// MARK: Methods
 	
@@ -51,8 +53,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			chicagoMapViewHeightConstraint.constant = 175
 			searchStackView.spacing = 9
 			searchTypeSegment.setTitle("My Location", forSegmentAt: 2)
-			//messageLabel.font = .systemFont(ofSize: 14)
-			infoLabel.font = .systemFont(ofSize: 11)
 		default:
 			break
 		}
@@ -61,14 +61,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
 	func showStatusMessage() {
 		
-		// Get calendar components from current date
-		let currentDay = Calendar.current.component(.day, from: Date())
-		let currentMonth = Calendar.current.component(.month, from: Date())
-		let currentYear = Calendar.current.component(.year, from: Date())
-		
 		if currentMonth > 11 {
 			
 			self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
+		
 		}
 		else if currentMonth < 4 {
 
@@ -93,10 +89,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
 	
 	func getNextSweepingDate(_ count: Int = 0) {
-		
-		let currentYear = Calendar.current.component(.year, from: Date())
-		let currentMonthNumber = Calendar.current.component(.month, from: Date())
-		let currentDay = Calendar.current.component(.day, from: Date())
+
 		var foundNextSweepingDay = false
 		var nextSweepingDay = 0
 		var nextSweepingMonth = 0
@@ -108,7 +101,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Query SODA API to get months and days
 		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-			.filter("\(self.common.wardTitle()) = '\(self.common.favoriteWard())' AND \(self.common.sectionTitle()) = '\(self.common.favoriteSection())' AND \(self.common.monthNumberTitle()) >= '\(currentMonthNumber)'")
+			.filter("\(self.common.wardTitle()) = '\(self.common.favoriteWard())' AND \(self.common.sectionTitle()) = '\(self.common.favoriteSection())' AND \(self.common.monthNumberTitle()) >= '\(currentMonth)'")
 			.orderAscending(self.common.monthNumberTitle())
 		
 		scheduleQuery.get { res in
@@ -124,7 +117,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						let dates = item[self.common.dates()] as? String ?? ""
 						let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
 						
-						if (Int(monthNumber) == (currentMonthNumber + count)) {
+						if (Int(monthNumber) == (self.currentMonth + count)) {
 							
 							// Loop through dates
 							for day in datesArray {
@@ -133,7 +126,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 									
 									if count == 0 {
 										
-										if Int(day)! >= currentDay {
+										if Int(day)! >= self.currentDay {
 											
 											nextSweepingDay = Int(day)!
 											nextSweepingMonth = Int(monthNumber)!
@@ -161,7 +154,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 					if foundNextSweepingDay {
 						DispatchQueue.main.async {
 							self.messageCardView.isHidden = false
-							self.messageLabel.text = "Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(currentYear)"
+							self.messageLabel.text = "Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(self.currentYear)"
 						}
 					}
 					

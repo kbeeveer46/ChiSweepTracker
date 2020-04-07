@@ -12,7 +12,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var favoriteMapView: MKMapView!
 	@IBOutlet weak var favoriteMapHeighConstraint: NSLayoutConstraint!
-	@IBOutlet weak var infoLabel: UILabel!
 	@IBOutlet weak var favoriteStackView: UIStackView!
 	@IBOutlet weak var whenPickerHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var whenPickerWidthConstraint: NSLayoutConstraint!
@@ -52,7 +51,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		
 		switch UIDevice().type {
 		case .iPhoneSE:
-			infoLabel.font = .systemFont(ofSize: 11)
 			favoriteMapHeighConstraint.constant = 175
 			whenPickerHeightConstraint.constant = 50
 			whenPickerWidthConstraint.constant = 155
