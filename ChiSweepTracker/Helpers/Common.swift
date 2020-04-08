@@ -155,7 +155,9 @@ class Common {
 		
 		// Colors
 		let systemRed = "#ff3b30"
+		let systemBlue = "#007aff"
 		let divvy = "#3fb5e7"
+		let background = "#f2f2f2"
     }
 	
 	//MARK: Methods
@@ -490,11 +492,11 @@ class Common {
 	}
 	
 	// Style button with image and background color
-	func styleButton(_ button: UIButton, _ image: String?,_ color: String?) {
+	func styleButton(_ button: UIButton, _ image: String?, _ color: String? = nil) {
 		
 		button.backgroundColor = .systemBlue
 		if color != nil {
-			button.backgroundColor = UIColor(hexString: "#\(color!)")
+			button.backgroundColor = UIColor(hexString: "\(color!)")
 		}
 		button.layer.cornerRadius = 7.0
 		button.tintColor = .white

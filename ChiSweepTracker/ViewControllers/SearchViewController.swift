@@ -738,7 +738,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         // Style and add images to buttons
-        self.common.styleButton(searchAddressButton, "search_circle", "007AFF")
+        self.common.styleButton(searchAddressButton, "search_circle")
 
     }
 }

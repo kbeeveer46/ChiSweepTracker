@@ -84,7 +84,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
 	// Load map with default lat, long, and polygon coordinates or load Chicago map
     func loadFavoriteMap() {
-        
 		
 		// Set required properties for map
         favoriteMapView.delegate = self

@@ -12,7 +12,6 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	@IBOutlet weak var licensePlateTextField: UITextField!
 	@IBOutlet weak var licensePlateTextFieldWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var towedSearchStackView: UIStackView!
-	@IBOutlet weak var searchTowedVehiclesHeaderLabel: UILabel!
 	@IBOutlet weak var makeImageView: UIImageView!
 	@IBOutlet weak var modelImageView: UIImageView!
 	@IBOutlet weak var colorImageView: UIImageView!
@@ -50,7 +49,6 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		switch UIDevice().type {
 		case .iPhoneSE:
 			towedSearchStackView.spacing = 0
-			//searchTowedVehiclesHeaderLabel.font = .systemFont(ofSize: 11)
 			searchTowedVehiclesButtonPaddingConstraint.constant = 7
 			makeImageView.isHidden = true
 			modelImageView.isHidden = true
@@ -69,7 +67,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 
 		// Create SODA query
-		let towedQuery = towedClient.query(dataset: self.common.towedDataset()).limit(10000)
+		let towedQuery = towedClient.query(dataset: self.common.towedDataset()).limit(500)
 
 		towedQuery.get { res in
 			switch res {
@@ -183,7 +181,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		self.navigationItem.title = "Search For Towed Vehicles"
 		
 		// Style and add images to button
-		self.common.styleButton(searchTowedVehiclesButton, "search_circle", "007AFF")
+		self.common.styleButton(searchTowedVehiclesButton, "search_circle")
 		
 	}
 	

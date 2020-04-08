@@ -83,7 +83,7 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 					}
 					
 					// Set required properties for table view
-					self.sectionTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
+					self.sectionTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
 					self.sectionTableView.dataSource = self
 					self.sectionTableView.delegate = self
 					self.sectionTableView.reloadData()
@@ -290,7 +290,8 @@ class SelectSectionViewController: UIViewController, UITableViewDelegate, UITabl
 		// Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTableCell", for: indexPath)
 		
-		cell.contentView.backgroundColor = UIColor(hexString: "#F2F2F2")
+		// Set cell background color
+		cell.contentView.backgroundColor = UIColor(hexString: self.common.constants.background)
 		
 		// Get section label from cell
         let sectionLabel = cell.viewWithTag(1) as! UILabel

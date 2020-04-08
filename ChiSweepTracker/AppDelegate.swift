@@ -33,15 +33,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
 		
-		// Clear badge number
+		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
 		
-		// Get the latest schedule from Chicago and update notifications
+		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
     }
     
     func application(_ application: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+		
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
         // TODO: Handle data of notification
@@ -62,6 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+		
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
         // TODO: Handle data of notification
@@ -83,6 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
+		// This is not used when getting a test device token from Firebase
+		
 		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
         //let token = tokenParts.joined()
@@ -100,6 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @available(iOS 13.0, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+		
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -107,6 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @available(iOS 13.0, *)
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+		
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
@@ -115,11 +121,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
-    // This method runs before the notification is presented on the screen when the app is in the foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
+		 // This method runs before the notification is presented on the screen when the app is in the foreground
+		
         let userInfo = notification.request.content.userInfo
         
         // With swizzling disabled you must let Messaging know about the message, for Analytics
@@ -137,16 +144,19 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         completionHandler([.alert, .badge, .sound])
     }
     
-	// This method runs when a notification is opened when the app is in the background and foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         
+		// This method runs when a notification is opened when the app is in the background and foreground
+		
+		// Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
         
         let userInfo = response.notification.request.content.userInfo
         
         // Send the user to the updates tab if they opened a Cloud Messaging notification from Firebase
+		// This only works when notification is opened while app is in the foreground
 		if userInfo[gcmMessageIDKey] != nil {
             if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
 				if let navigationController = rootViewController as? UINavigationController {
@@ -164,20 +174,20 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 //			print("adress: \(address)")
 //		}
 //
-//		if let address = userInfo["address"] as? String {
-//
-//			print("Notification address: \(address)")
-//
-//			if (address != "") {
-//
+		if let address = userInfo["address"] as? String {
+
+			print("Notification address: \(address)")
+
+			if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
+
 //				let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 //				let initialViewController = mainStoryboard.instantiateViewController(withIdentifier: "ScheduleViewController") as! ScheduleViewController
 //				let rootViewController = UIApplication.shared.windows.first!.rootViewController as! UINavigationController
 //				initialViewController.address = address
 //				rootViewController.pushViewController(initialViewController, animated: true);
 //
-//			}
-//		}
+			}
+		}
         
         completionHandler()
         
@@ -190,7 +200,7 @@ extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging,
                    didReceiveRegistrationToken fcmToken: String) {
         
-		// This callback is fired at each app startup and whenever a new token is generated.
+		// This method runs each time the app opens and whenever a new Firebase token is generated.
 		
         //print("Firebase registration token: \(fcmToken)")
         

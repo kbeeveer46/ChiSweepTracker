@@ -191,7 +191,6 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		let mapItem = MKMapItem(placemark: placemark)
 
 		mapItem.name = towedVehicle.towedToAddress
-
 		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
 
 	}

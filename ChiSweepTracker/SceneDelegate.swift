@@ -29,10 +29,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
 		
-	    // Clear badge number
+	    // Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0;
 		
-		// Get the latest schedule from Chicago and update notifications
+		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
 		
     }

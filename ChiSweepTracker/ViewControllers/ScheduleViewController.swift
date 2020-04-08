@@ -39,7 +39,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.initializeControlsPerDevice()
 		
 		// Set required properties for schedule table view
-		self.scheduleTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
+		self.scheduleTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
 		self.scheduleTableView.dataSource = self
 		self.scheduleTableView.delegate = self
 		self.scheduleTableView.reloadData()
@@ -86,7 +86,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Toggled off notifications when user adds a new favorite
         defaults.set(false, forKey: "notificationsToggled")
 		
-		print("Added favorite address: \(self.common.favoriteAddress())")
+		//print("Added favorite address: \(self.common.favoriteAddress())")
         
         // Set right bar button to remove now that a favorite has been set
         //self.navigationItem.rightBarButtonItem = removeFavoriteButton
@@ -108,51 +108,51 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     }
     
 	// Method is called when user chooses yes to remove a favorite
-    @objc func removeFavorite() {
-        
-		// Add haptic feedback
-        generator.prepare()
-        generator.selectionChanged()
-        
-        // Create alert
-        let alert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
-        
-		// Yes option
-		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
-			
-			print("Deleted favorite address: \(self.common.favoriteAddress())")
-			
-			// Clear favorites from defaults
-			defaults.set("", forKey: "favoriteAddress")
-			defaults.set("", forKey: "favoriteWard")
-			defaults.set("", forKey: "favoriteSection")
-			defaults.set(0.0, forKey: "favoriteLatitude")
-			defaults.set(0.0, forKey: "favoriteLongitude")
-			defaults.set(nil, forKey: "favoriteCoordinatesArray")
-			defaults.set(false, forKey: "notificationsToggled")
-			
-			// Remove any notifications set from their previous favorite
-			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-			
-			// Unregister from Firebase Cloud Messaging notifications
-			UIApplication.shared.unregisterForRemoteNotifications()
-			
-			//print("Deleted user's local notifications")
-			
-			// Set right bar button to add now that a favorite has been removed
-			//self.navigationItem.rightBarButtonItem = self.addFavoriteButton
-			
-		})
-		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
-		alert.addAction(yesAction)
-		
-		// No option
-        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-		
-		// Present alert
-        self.present(alert, animated: true, completion: nil)
-        
-    }
+//    @objc func removeFavorite() {
+//
+//		// Add haptic feedback
+//        generator.prepare()
+//        generator.selectionChanged()
+//
+//        // Create alert
+//        let alert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+//
+//		// Yes option
+//		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+//
+//			print("Deleted favorite address: \(self.common.favoriteAddress())")
+//
+//			// Clear favorites from defaults
+//			defaults.set("", forKey: "favoriteAddress")
+//			defaults.set("", forKey: "favoriteWard")
+//			defaults.set("", forKey: "favoriteSection")
+//			defaults.set(0.0, forKey: "favoriteLatitude")
+//			defaults.set(0.0, forKey: "favoriteLongitude")
+//			defaults.set(nil, forKey: "favoriteCoordinatesArray")
+//			defaults.set(false, forKey: "notificationsToggled")
+//
+//			// Remove any notifications set from their previous favorite
+//			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+//
+//			// Unregister from Firebase Cloud Messaging notifications
+//			UIApplication.shared.unregisterForRemoteNotifications()
+//
+//			//print("Deleted user's local notifications")
+//
+//			// Set right bar button to add now that a favorite has been removed
+//			//self.navigationItem.rightBarButtonItem = self.addFavoriteButton
+//
+//		})
+//		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
+//		alert.addAction(yesAction)
+//
+//		// No option
+//        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+//
+//		// Present alert
+//        self.present(alert, animated: true, completion: nil)
+//
+//    }
 	
 	@objc func openOptionsMenu() {
 		
@@ -168,31 +168,29 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
 		// Create remove favorite option for options alert
-		let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
-			self.removeFavorite()
-		})
-		removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
+		//let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
+		//	self.removeFavorite()
+		//})
+		//removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
 		
 		// Create add favorite option for options alert
 		let saveFavoriteAction = UIAlertAction(title: "Save As Favorite Address", style: .default, handler:{ action in
 			self.addFavorite()
 		})
 		
-		if (
-				favoriteAddress != schedule.address ||
-				favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section
-		   ) {
+		if favoriteAddress != schedule.address ||
+		   (favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section) {
 			
 			optionsAlert.addAction(saveFavoriteAction)
 		}
-		else {
-			optionsAlert.addAction(removeFavoriteAction)
-		}
+		//else {
+		//	optionsAlert.addAction(removeFavoriteAction)
+		//}
 		
 		let favoriteImage = UIImage(named: "star")
 		if let icon = favoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
 			saveFavoriteAction.setValue(icon, forKey: "image")
-			removeFavoriteAction.setValue(icon, forKey: "image")
+			//removeFavoriteAction.setValue(icon, forKey: "image")
 		}
 		
 		// Create cancel option for options alert
@@ -245,10 +243,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "scheduleTableCell", for: indexPath)
         
-		// Get month name from cell
+		// Get labels from cell
 		let monthNameLabel = cell.viewWithTag(1) as! UILabel
-		
-		// Get days label from cell
         let daysLabel = cell.viewWithTag(2) as! UILabel
 
         // Concatenate dates in one string and add padding between days
@@ -257,17 +253,16 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             dates = dates + String(date.date).padding(toLength: 5, withPad: " ", startingAt: 0)
         }
 
-		// Set month label text
+		// Set label text
         monthNameLabel.text = schedule.months[indexPath.row].name
+		daysLabel.text = dates
 		
-		// Set days label text
-        daysLabel.text = dates
-		
+		// If month equals the current month then change the labels to blue
 		let date = Date()
 		if date.month.uppercased() == schedule.months[indexPath.row].name.uppercased() {
-			daysLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
-			daysLabel.textColor = UIColor(hexString: "#007AFF")
-			monthNameLabel.textColor = UIColor(hexString: "#007AFF")
+			daysLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
+			daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
+			monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
 		}
 
         return cell

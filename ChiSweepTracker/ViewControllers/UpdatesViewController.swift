@@ -27,6 +27,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
 		dateFormatter.locale = .current
 		
+		// Get the date and time the last time the user views the updates page
 		updatesLastViewedDate = self.common.updatesLastViewDate()
 		
 		// Get list of latest updates
@@ -85,7 +86,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 					}
 					
 					// Set required properties for table view
-					self.newsTableView.backgroundColor = UIColor(hexString: "#f2f2f2")
+					self.newsTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
 					self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
 					self.newsTableView.dataSource = self
 					self.newsTableView.delegate = self
@@ -110,7 +111,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 			let updateDate = dateFormatter.date(from: date)
 			let lastViewed = dateFormatter.date(from: updatesLastViewedDate)
 			
-			if (updateDate! > lastViewed!) {
+			if updateDate! > lastViewed! {
 				return true
 			} else {
 				return false
@@ -129,7 +130,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		// Get cell from table view
 		let cell = tableView.dequeueReusableCell(withIdentifier: "updatesTableCell", for: indexPath)
 		
-		cell.contentView.backgroundColor = UIColor(hexString: "#F2F2F2")
+		cell.contentView.backgroundColor = UIColor(hexString: self.common.constants.background)
 		
 		// Get labels and new image from cell
 		let subjectLabel = cell.viewWithTag(1) as! UILabel
