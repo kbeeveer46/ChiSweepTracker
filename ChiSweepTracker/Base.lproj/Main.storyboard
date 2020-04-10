@@ -18,6 +18,7 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5K-mm-59I">
                                 <rect key="frame" x="0.0" y="88" width="414" height="235"/>
+                                <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="XJi-jr-BwO"/>
                                 </constraints>
@@ -151,26 +152,26 @@
                                 <color key="sectionIndexBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="infoTableCell" id="1v4-pe-yoq">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="112.33333587646484"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="112.66666412353516"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1v4-pe-yoq" id="E2N-7N-TpW">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="112.33333587646484"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="112.66666412353516"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rv1-F9-GEl" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="11" width="374" height="90.333333333333329"/>
+                                                    <rect key="frame" x="20" y="11" width="374" height="90.666666666666671"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Bvx-z0-bLp">
-                                                            <rect key="frame" x="10" y="10" width="354" height="70.333333333333329"/>
+                                                            <rect key="frame" x="10" y="10" width="354" height="70.666666666666671"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lx2-i5-maY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="70.333333333333329"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="70.666666666666671"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="35" id="fEK-0M-cYB"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vIW-6H-5pr">
-                                                                    <rect key="frame" x="45" y="0.0" width="309" height="70.333333333333329"/>
+                                                                    <rect key="frame" x="45" y="0.0" width="309" height="70.666666666666671"/>
                                                                     <attributedString key="attributedText">
                                                                         <fragment content="Enjoying Sweep Tracker? Click here to give it a 5-star rating. Your positive rating will help others in Chicago avoid tickets.">
                                                                             <attributes>
@@ -185,7 +186,7 @@
                                                             </subviews>
                                                         </stackView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstItem="Bvx-z0-bLp" firstAttribute="leading" secondItem="Rv1-F9-GEl" secondAttribute="leading" constant="10" id="1Dp-2N-Iy3"/>
                                                         <constraint firstItem="Bvx-z0-bLp" firstAttribute="top" secondItem="Rv1-F9-GEl" secondAttribute="top" constant="10" id="iZC-so-yYd"/>
@@ -249,17 +250,17 @@
                                                             <rect key="frame" x="10" y="10" width="354" height="109"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ul-Yn-chi">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="354" height="23.666666666666668"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="354" height="28.666666666666668"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="new" translatesAutoresizingMaskIntoConstraints="NO" id="0EQ-mU-2ue">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="25" height="23.666666666666668"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="25" height="28.666666666666668"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="25" id="kgA-ue-Bp9"/>
                                                                             </constraints>
                                                                             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Wdx-96-TJ3">
-                                                                            <rect key="frame" x="25" y="0.0" width="329" height="23.666666666666668"/>
+                                                                            <rect key="frame" x="25" y="0.0" width="329" height="28.666666666666668"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                                             <nil key="textColor"/>
                                                                             <nil key="highlightedColor"/>
@@ -267,7 +268,7 @@
                                                                     </subviews>
                                                                 </stackView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcx-Ln-46z">
-                                                                    <rect key="frame" x="0.0" y="23.666666666666661" width="354" height="60.333333333333343"/>
+                                                                    <rect key="frame" x="0.0" y="28.666666666666661" width="354" height="60.333333333333343"/>
                                                                     <attributedString key="attributedText">
                                                                         <fragment>
                                                                             <string key="content">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. </string>
@@ -282,9 +283,9 @@
                                                                     <string key="userLabel">This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. This is a test body. </string>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4/1/2020" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8hT-ef-dwK">
-                                                                    <rect key="frame" x="0.0" y="84" width="354" height="25"/>
+                                                                    <rect key="frame" x="0.0" y="89" width="354" height="20"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="25" id="d6l-13-4SK"/>
+                                                                        <constraint firstAttribute="height" constant="20" id="d6l-13-4SK"/>
                                                                     </constraints>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                     <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

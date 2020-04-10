@@ -184,7 +184,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			let relocatedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 			
 			// Create SODA query
-			let relocatedQuery = relocatedClient.query(dataset: self.common.relocatedDataset()).limit(5000)
+			let relocatedQuery = relocatedClient.query(dataset: self.common.relocatedDataset())
+				.filter("\(self.common.relocatedFromLatitudeTitle()) IS NOT NULL AND \(self.common.relocatedFromLongitudeTitle()) IS NOT NULL")
+				.limit(5000)
 			
 			relocatedQuery.get { res in
 				switch res {
@@ -218,7 +220,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 								// Get distance from favorite address to relocated vehicle
 								let distance = relocatedLocation.distance(from: favoriteLocation)
 								
-								// Show relocated vehicle on map if distance is less than or equal to 300 meters
+								// Show relocated vehicle on map if distance is less than or equal to 200 meters
 								if (distance <= 200) {
 								
 									self.relocatedVehicleCount += 1
