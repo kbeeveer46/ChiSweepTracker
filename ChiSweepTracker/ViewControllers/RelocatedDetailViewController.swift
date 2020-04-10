@@ -68,8 +68,6 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		
 		// Set properties for map
 		self.relocatedDetailMap.delegate = self
-		self.relocatedDetailMap.subviews[1].isHidden = true
-		self.relocatedDetailMap.subviews[2].isHidden = true
 		self.relocatedDetailMap.layoutMargins = UIEdgeInsets(top: 60, left: 60, bottom: 60, right: 60)
 		self.relocatedDetailMap.removeAnnotations(self.relocatedDetailMap.annotations)
 		self.relocatedDetailMap.removeOverlays(self.relocatedDetailMap.overlays)
