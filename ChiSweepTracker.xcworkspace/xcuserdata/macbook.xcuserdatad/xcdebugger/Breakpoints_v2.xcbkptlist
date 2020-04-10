@@ -142,8 +142,8 @@
             filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "326"
-            endingLineNumber = "326"
+            startingLineNumber = "323"
+            endingLineNumber = "323"
             landmarkName = "searchForSchedule(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1023,6 +1023,22 @@
             startingLineNumber = "262"
             endingLineNumber = "262"
             landmarkName = "addRelocationVehiclesToMap(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BE15FEC3-C86D-4A97-93D0-8C04E909CFF3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "315"
+            endingLineNumber = "315"
+            landmarkName = "searchForSchedule(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

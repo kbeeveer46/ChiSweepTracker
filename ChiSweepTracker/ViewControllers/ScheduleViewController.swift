@@ -203,6 +203,39 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.present(optionsAlert, animated: true, completion: nil)
 		
 	}
+	
+	// Load schedule map with annotation and polygons
+	func loadScheduleMap() {
+		
+		// Set required map properties
+		scheduleMapView.delegate = self
+		
+		// Create polygons
+		let coordinates = self.schedule.polygonCoordinates
+		let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
+		
+		// Create annotation
+		let annotation = CustomAnnotation()
+		annotation.customImageName = "pin-address"
+		annotation.coordinate = self.schedule.locationCoordinate
+		annotation.title = "\(self.schedule.address)"
+		annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
+		
+		// Create span and region
+		let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+		let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
+		
+		// Set region
+		scheduleMapView.setRegion(region, animated: false)
+		
+		// Add polygons to map
+		scheduleMapView.removeOverlays(scheduleMapView.overlays)
+		scheduleMapView.addOverlay(polygon)
+		
+		// Add annotation to map
+		scheduleMapView.addAnnotation(annotation)
+		
+	}
 
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -266,39 +299,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		}
 
         return cell
-        
-    }
-    
-	// Load schedule map with annotation and polygons
-    func loadScheduleMap() {
-        
-		// Set required map properties
-        scheduleMapView.delegate = self
-        
-		// Create polygons
-        let coordinates = self.schedule.polygonCoordinates
-        let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
-        
-		// Create annotation
-		let annotation = CustomAnnotation()
-		annotation.customImageName = "pin-address"
-		annotation.coordinate = self.schedule.locationCoordinate
-		annotation.title = "\(self.schedule.address)"
-		annotation.subtitle = "Ward: \(self.schedule.ward) - Section: \(self.schedule.section)"
-        
-		// Create span and region
-        let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
-        let region = MKCoordinateRegion(center: self.schedule.locationCoordinate, span: span)
-        
-		// Set region
-        scheduleMapView.setRegion(region, animated: false)
-        
-		// Add polygons to map
-		scheduleMapView.removeOverlays(scheduleMapView.overlays)
-        scheduleMapView.addOverlay(polygon)
-		
-		// Add annotation to map
-        scheduleMapView.addAnnotation(annotation)
         
     }
     

@@ -305,12 +305,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             self.schedule.ward = ward
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
-							// If there are multiple sections then segue to select section view
+							// If there is no section that means the address does not have a schedule. Show no schedule alert.
                             if self.schedule.section.isEmpty {
-								if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SelectSectionViewController") as? SelectSectionViewController {
-									destinationViewController.schedule = self.schedule
-									self.navigationController?.pushViewController(destinationViewController, animated: true)
-								}
+								self.showNoScheduleFoundAlert()
                                 return
                             }
                             
@@ -391,6 +388,27 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             }
         }
     }
+	
+	func showNoScheduleFoundAlert() {
+		
+		// Create alert
+		let alert = UIAlertController(title: "No Schedule Found", message: "Your address is in an area without a sweep schedule. You may request a street cleaning by calling the City of Chicago's request line at 3-1-1.", preferredStyle: .alert)
+		
+		// Call option
+		alert.addAction(UIAlertAction(title: "Call 3-1-1", style: .default, handler:{ action in
+			
+			let url = URL(string: "tel://311")
+			UIApplication.shared.open(url!, options: [:], completionHandler:nil)
+			
+		}))
+		
+		// Cancel option
+		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+		
+		// Present alert
+		self.present(alert, animated: true, completion: nil)
+		
+	}
 
     // Get address from coordinates after location manager retrieves user's location
     func getAddressFromCoordinates(_ location: CLLocation) {
