@@ -13,6 +13,8 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	// Shared
 	var infoList = [InfoModel]()
 	var rateCardView = CardView()
+	var requestCardView = CardView()
+	let generator = UISelectionFeedbackGenerator()
 	
 	override func viewWillAppear(_ animated: Bool) {
        
@@ -75,7 +77,6 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		if #available(iOS 10.3, *) {
 			
 			// Add haptic feedback
-			let generator = UISelectionFeedbackGenerator()
 			generator.prepare()
 			generator.selectionChanged()
 			
@@ -98,6 +99,32 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		else {
 			// Fallback on earlier versions
 		}
+		
+	}
+	
+	@objc func requestCardTapped(_ sender:UITapGestureRecognizer){
+					
+		// Add haptic feedback
+		generator.prepare()
+		generator.selectionChanged()
+		
+		requestCardView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+		
+		UIView.animate(withDuration: 1.0,
+					   delay: 0,
+					   usingSpringWithDamping: 1.0,
+					   initialSpringVelocity: 2.0,
+					   options: .allowUserInteraction,
+					   animations: { [weak self] in
+						self?.requestCardView.transform = .identity
+			},
+					   completion: { (_) -> Void in
+						
+						let url = URL(string: "tel://311")
+						UIApplication.shared.open(url!, options: [:], completionHandler:nil)
+						
+						
+		})
 		
 	}
 	
@@ -133,6 +160,14 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 			
 			// Add rate card view tap gesture
 			let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.rateCardTapped (_:)))
+			cardView.addGestureRecognizer(gesture)
+		}
+		else if self.infoList[indexPath.row].order == 5 {
+			
+			requestCardView = cardView
+			
+			// Add rate card view tap gesture
+			let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.requestCardTapped (_:)))
 			cardView.addGestureRecognizer(gesture)
 		}
 		

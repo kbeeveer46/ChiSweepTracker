@@ -375,7 +375,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             }
                         }
                         else {
-                            self.common.showAlert("Could Not Find Schedule", "Address must reside in Chicago")
+                            self.common.showAlert("No Sweep Schedule Found", "Address must reside in Chicago")
                         }
                     case .error (let err):
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
@@ -384,7 +384,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 }
             }
             else {
-                self.common.showAlert("Could Not Find Schedule", "Address must reside in Chicago")
+                self.common.showAlert("No Sweep Schedule Found", "Address must reside in Chicago")
             }
         }
     }

@@ -145,7 +145,7 @@ class Common {
 		
 		// Strings
 		
-        let successTitle = "Success"
+        //let successTitle = "Success"
         let errorTitle = "Something went wrong..."
         let notFound = "Could not find sweep schedule. Address must reside in Chicago."
 		
