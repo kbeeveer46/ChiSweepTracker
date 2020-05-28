@@ -1030,7 +1030,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BE15FEC3-C86D-4A97-93D0-8C04E909CFF3"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
