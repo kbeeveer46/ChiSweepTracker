@@ -166,6 +166,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Set map region
             favoriteMapView.setRegion(region, animated: false)
+			
+			// Remove an annotations leftover from having a favorite saved
+			favoriteMapView.removeAnnotations(favoriteMapView.annotations)
             
         }
     }
