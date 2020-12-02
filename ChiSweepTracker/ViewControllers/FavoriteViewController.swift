@@ -13,10 +13,11 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     @IBOutlet weak var favoriteMapView: MKMapView!
 	@IBOutlet weak var favoriteMapHeighConstraint: NSLayoutConstraint!
 	@IBOutlet weak var favoriteStackView: UIStackView!
-	@IBOutlet weak var whenPickerHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var whenPickerWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var timePickerWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var cardViewRightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var whenPickerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var timePickerWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var timePickerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var cardViewRightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var cardViewLeftConstraint: NSLayoutConstraint!
 	@IBOutlet weak var cardViewBottomConstraint: NSLayoutConstraint!
 	@IBOutlet weak var cardViewTopConstraint: NSLayoutConstraint!
@@ -50,16 +51,17 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	func initializeControlsPerDevice() {
 		
 		switch UIDevice().type {
-		case .iPhoneSE:
+		case .iPhoneSE,
+             .iPhoneSE2:
 			favoriteMapHeighConstraint.constant = 175
-			whenPickerHeightConstraint.constant = 50
+			//whenPickerHeightConstraint.constant = 50
 			whenPickerWidthConstraint.constant = 155
 			favoriteStackView.spacing = 5
 			timePickerWidthConstraint.constant = 150
-			cardViewLeftConstraint.constant = 5
-			cardViewRightConstraint.constant = 5
-			cardViewTopConstraint.constant = 5
-			cardViewBottomConstraint.constant = 5
+			//cardViewLeftConstraint.constant = 5
+			//cardViewRightConstraint.constant = 5
+			//cardViewTopConstraint.constant = 5
+			//cardViewBottomConstraint.constant = 5
 		case .iPhone5,
 			 .iPhone5S,
 			 .iPhone5C,
@@ -68,6 +70,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			 .iPhone7,
 			 .iPhone8:
 			favoriteStackView.spacing = 7
+            //whenPickerHeightConstraint.constant = 60
+            //timePickerHeightConstraint.constant = 60
+            favoriteMapHeighConstraint.constant = 175
 		default:
 			break
 		}
