@@ -51,17 +51,19 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	func initializeControlsPerDevice() {
 		
 		switch UIDevice().type {
-		case .iPhoneSE,
-             .iPhoneSE2:
+		case .iPhoneSE:
 			favoriteMapHeighConstraint.constant = 175
-			//whenPickerHeightConstraint.constant = 50
-			whenPickerWidthConstraint.constant = 155
-			favoriteStackView.spacing = 5
-			timePickerWidthConstraint.constant = 150
-			//cardViewLeftConstraint.constant = 5
-			//cardViewRightConstraint.constant = 5
-			//cardViewTopConstraint.constant = 5
-			//cardViewBottomConstraint.constant = 5
+            cardViewRightConstraint.constant = 0
+            cardViewLeftConstraint.constant = 0
+            cardViewTopConstraint.constant = 0
+            cardViewBottomConstraint.constant = 0
+			whenPickerWidthConstraint.constant = 165
+			timePickerWidthConstraint.constant = 165
+            timePickerHeightConstraint.constant = 60
+            whenPickerHeightConstraint.constant = 60
+            favoriteStackView.spacing = 0
+        case .iPhoneSE2:
+            favoriteMapHeighConstraint.constant = 175
 		case .iPhone5,
 			 .iPhone5S,
 			 .iPhone5C,
@@ -70,8 +72,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			 .iPhone7,
 			 .iPhone8:
 			favoriteStackView.spacing = 7
-            //whenPickerHeightConstraint.constant = 60
-            //timePickerHeightConstraint.constant = 60
             favoriteMapHeighConstraint.constant = 175
 		default:
 			break
