@@ -1,4 +1,5 @@
 import UIKit
+import MapKit
 import Firebase
 
 let defaults = UserDefaults.standard
@@ -19,7 +20,9 @@ class Common {
 	func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
 	func defaultLatitude() -> Double {return defaults.double(forKey: "defaultLatitude")}
 	func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
-	
+    func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
+    func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
+    
 	// SODA SDK
 	
 	// Schedule
