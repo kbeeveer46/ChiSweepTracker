@@ -162,9 +162,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						self.getNextSweepingDate(count + 1)
 					}
 				}
-                else {
-                    self.messageCardView.isHidden = true
-                }
 			case .error (let err):
 				print("getNextSweepingDate error: \(err.localizedDescription)")
 			}
