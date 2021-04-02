@@ -101,7 +101,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Query SODA API to get months and days
 		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-			.filter("\(self.common.wardTitle()) = '\(self.common.favoriteWard())' AND \(self.common.sectionTitle()) = '\(self.common.favoriteSection())' AND \(self.common.monthNumberTitle()) >= '\(currentMonth)'")
+            .filter("\(self.common.wardTitle()) = '\(self.common.favoriteWard())' AND \(self.common.sectionTitle()) = '\(self.common.favoriteSection())' AND \(self.common.monthNumberTitle()) >= '\(currentMonth)' AND \(self.common.latestAppVersion()) == \(self.currentYear)")
 			.orderAscending(self.common.monthNumberTitle())
 		
 		scheduleQuery.get { res in
@@ -162,6 +162,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 						self.getNextSweepingDate(count + 1)
 					}
 				}
+                else {
+                    self.messageCardView.isHidden = true
+                }
 			case .error (let err):
 				print("getNextSweepingDate error: \(err.localizedDescription)")
 			}
