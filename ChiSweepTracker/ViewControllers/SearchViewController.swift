@@ -78,13 +78,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
-			
-			if self.common.favoriteAddress() != "" {
-				getNextSweepingDate()
-			}
-			else {
-				self.messageCardView.isHidden = true
-			}
+
+            if self.common.favoriteAddress() != "" {
+                getNextSweepingDate()
+            }
+            else {
+                self.messageCardView.isHidden = true
+            }
+            
 		}
 	}
 	

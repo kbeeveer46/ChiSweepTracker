@@ -9,10 +9,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     @IBOutlet weak var scheduleMapView: MKMapView!
 	@IBOutlet weak var scheduleMapViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scheduleTableView: UITableView!
-	
+    @IBOutlet weak var comingSoonStackView: UIStackView!
+    @IBOutlet weak var comingSoonYearLabel: UILabel!
+    
 	// Shared
     let generator = UISelectionFeedbackGenerator()
-	
+    let currentYear = Calendar.current.component(.year, from: Date())
+    
 	// Classes
 	let common = Common()
     var schedule = ScheduleModel()
@@ -234,6 +237,14 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Add annotation to map
 		scheduleMapView.addAnnotation(annotation)
+        
+        if (self.currentYear != self.common.latestAppVersion()) {
+            self.comingSoonStackView.isHidden = false
+            self.comingSoonYearLabel.text = "The \(self.currentYear) sweeping schedule is coming soon."
+        }
+        else {
+            self.comingSoonStackView.isHidden = true
+        }
 		
 	}
 
