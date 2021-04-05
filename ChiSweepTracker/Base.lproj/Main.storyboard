@@ -351,23 +351,16 @@
                                         </constraints>
                                     </mapView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="h3M-Di-oO4">
-                                        <rect key="frame" x="0.0" y="235" width="414" height="61"/>
+                                        <rect key="frame" x="0.0" y="235" width="414" height="56"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dwr-j3-pqf" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="8" y="8" width="398" height="45"/>
+                                                <rect key="frame" x="8" y="8" width="398" height="40"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="qtL-EJ-TTS">
-                                                        <rect key="frame" x="0.0" y="0.0" width="398" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="398" height="40"/>
                                                         <subviews>
-                                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Ebz-Ik-qXK">
-                                                                <rect key="frame" x="0.0" y="0.5" width="25" height="44"/>
-                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="25" id="WK7-Re-G3h"/>
-                                                                </constraints>
-                                                            </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The 2021 sweeping schedule is coming soon." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="PCg-mV-hLt">
-                                                                <rect key="frame" x="0.0" y="0.0" width="398" height="45"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="398" height="40"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -377,7 +370,7 @@
                                                 </subviews>
                                                 <color key="backgroundColor" red="1" green="0.47058823529999999" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="45" id="1Aw-yY-TmQ"/>
+                                                    <constraint firstAttribute="height" constant="40" id="1Aw-yY-TmQ"/>
                                                     <constraint firstItem="qtL-EJ-TTS" firstAttribute="top" secondItem="Dwr-j3-pqf" secondAttribute="top" id="T5d-Lb-Ocy"/>
                                                     <constraint firstAttribute="bottom" secondItem="qtL-EJ-TTS" secondAttribute="bottom" id="YBx-mx-IRP"/>
                                                     <constraint firstAttribute="trailing" secondItem="qtL-EJ-TTS" secondAttribute="trailing" id="lt7-Zh-RgU"/>
@@ -388,7 +381,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on month to view calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKs-pP-ihq">
-                                        <rect key="frame" x="0.0" y="296" width="414" height="25"/>
+                                        <rect key="frame" x="0.0" y="291" width="414" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="XTR-2y-nQs"/>
                                         </constraints>
@@ -397,7 +390,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                        <rect key="frame" x="0.0" y="321" width="414" height="487"/>
+                                        <rect key="frame" x="0.0" y="316" width="414" height="492"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <color key="sectionIndexBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
@@ -2004,7 +1997,6 @@
         <image name="calendar_day" width="33.5" height="33.5"/>
         <image name="calendar_day_white" width="33.5" height="33.5"/>
         <image name="color" width="33.5" height="33.5"/>
-        <image name="info.circle.fill" catalog="system" width="128" height="121"/>
         <image name="info_circle" width="33.5" height="33.5"/>
         <image name="license_plate" width="33.5" height="33.5"/>
         <image name="mail_outline" width="33.5" height="33.5"/>
