@@ -238,7 +238,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Add annotation to map
 		scheduleMapView.addAnnotation(annotation)
         
-        if (self.currentYear != self.common.latestAppVersion()) {
+        if (self.currentYear > self.common.latestAppVersion()) {
             self.comingSoonStackView.isHidden = false
             self.comingSoonYearLabel.text = "The \(self.currentYear) sweeping schedule is coming soon."
         }
