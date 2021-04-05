@@ -303,7 +303,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// If month equals the current month then change the labels to blue
 		let date = Date()
-		if date.month.uppercased() == schedule.months[indexPath.row].name.uppercased() {
+		if (date.month.uppercased() == schedule.months[indexPath.row].name.uppercased()) &&
+           (self.currentYear == self.common.latestAppVersion()) {
 			daysLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
 			daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
 			monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
