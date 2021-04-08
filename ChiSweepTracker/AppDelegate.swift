@@ -87,11 +87,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 		// This is not used when getting a test device token from Firebase
 		
-		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+		let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
-        //let token = tokenParts.joined()
+        let token = tokenParts.joined()
         
-        //print("Device Token: \(token)")
+        print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
     }
     
     func application(_ application: UIApplication,
@@ -202,7 +202,7 @@ extension AppDelegate: MessagingDelegate {
         
 		// This method runs each time the app opens and whenever a new Firebase token is generated.
 		
-        //print("Firebase registration token: \(fcmToken)")
+        print("didReceiveRegistrationToken: \(fcmToken)")
         
         let dataDict:[String: String] = ["token": fcmToken]
         

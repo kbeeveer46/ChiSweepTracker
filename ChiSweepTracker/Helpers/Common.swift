@@ -509,7 +509,6 @@ class Common {
 		}
 	}
 
-	
 	func UTCToLocal(date:String) -> String {
 		
 		let dateFormatter = DateFormatter()

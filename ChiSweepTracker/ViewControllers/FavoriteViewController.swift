@@ -750,13 +750,16 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                 }
                                                 else {
 													
-													// Clear current notifications and re-add them in case they changed
-													UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-													
-													//print("Deleted user's local notifications")
-													
 													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
+                                                        
+                                                        // Register for Firebase Cloud Messaging and APN notifications
+                                                        UIApplication.shared.registerForRemoteNotifications()
+                                                        
+                                                        // Clear current notifications and re-add them in case they changed
+                                                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                                                        
+                                                        //print("Deleted user's local notifications")
 														
 														#if DEBUG
 														//self.sendTestNotifications()
@@ -1065,9 +1068,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Save form values to defaults
 			saveDefaultNotificationValues()
-			
-			// Register for Firebase Cloud Messaging notifications
-			UIApplication.shared.registerForRemoteNotifications()
 			
 			// Get schedule and update user's local notifications
 			self.getSchedule(true)
