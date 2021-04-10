@@ -342,19 +342,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJE-QJ-UFJ">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="235"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="235"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="235" id="HPG-BM-ixl"/>
+                                    <constraint firstAttribute="height" constant="235" id="Oj9-Ck-tDx"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="245" width="414" height="573"/>
+                                <rect key="frame" x="0.0" y="323" width="414" height="549"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ept-1V-WV1" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="10" width="384" height="543"/>
+                                        <rect key="frame" x="15" y="10" width="384" height="519"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jmO-QO-Dx0">
-                                                <rect key="frame" x="0.0" y="0.0" width="384" height="543"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="384" height="519"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="h3M-Di-oO4">
                                                         <rect key="frame" x="0.0" y="0.0" width="384" height="56"/>
@@ -396,11 +396,10 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                                        <rect key="frame" x="0.0" y="81" width="384" height="462"/>
+                                                        <rect key="frame" x="0.0" y="81" width="384" height="438"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <prototypes>
-                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
+                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
                                                                 <rect key="frame" x="0.0" y="28" width="384" height="43"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gue-Fp-3PN" id="Lge-eF-dGr">
@@ -434,6 +433,7 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                             </subviews>
+                                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </stackView>
                                                                     </subviews>
                                                                     <constraints>
@@ -451,10 +451,10 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="jmO-QO-Dx0" secondAttribute="bottom" id="PkX-QU-tXa"/>
                                             <constraint firstItem="jmO-QO-Dx0" firstAttribute="leading" secondItem="Ept-1V-WV1" secondAttribute="leading" id="U83-MB-NEi"/>
                                             <constraint firstItem="jmO-QO-Dx0" firstAttribute="top" secondItem="Ept-1V-WV1" secondAttribute="top" id="VXI-Lm-ON2"/>
                                             <constraint firstAttribute="trailing" secondItem="jmO-QO-Dx0" secondAttribute="trailing" id="cHu-rt-TsG"/>
+                                            <constraint firstItem="jmO-QO-Dx0" firstAttribute="bottom" secondItem="Ept-1V-WV1" secondAttribute="bottom" id="he9-bw-bI8"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -464,13 +464,13 @@
                         <viewLayoutGuide key="safeArea" id="ORo-iT-5MZ"/>
                         <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="leading" secondItem="n6l-LK-poC" secondAttribute="leading" id="DhF-UE-5a5"/>
-                            <constraint firstItem="S5W-Ye-frp" firstAttribute="leading" secondItem="n6l-LK-poC" secondAttribute="leading" id="Dv7-13-uWY"/>
-                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="top" secondItem="n6l-LK-poC" secondAttribute="top" id="FGb-XI-PYT"/>
-                            <constraint firstItem="S5W-Ye-frp" firstAttribute="top" secondItem="IJE-QJ-UFJ" secondAttribute="bottom" constant="10" id="Gt7-w7-Edd"/>
+                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="leading" secondItem="ORo-iT-5MZ" secondAttribute="leading" id="DhF-UE-5a5"/>
+                            <constraint firstItem="S5W-Ye-frp" firstAttribute="leading" secondItem="ORo-iT-5MZ" secondAttribute="leading" id="Dv7-13-uWY"/>
+                            <constraint firstItem="IJE-QJ-UFJ" firstAttribute="top" secondItem="ORo-iT-5MZ" secondAttribute="top" id="FGb-XI-PYT"/>
+                            <constraint firstItem="S5W-Ye-frp" firstAttribute="top" secondItem="IJE-QJ-UFJ" secondAttribute="bottom" id="Gt7-w7-Edd"/>
                             <constraint firstItem="S5W-Ye-frp" firstAttribute="bottom" secondItem="ORo-iT-5MZ" secondAttribute="bottom" constant="10" id="JRu-H1-eXG"/>
                             <constraint firstItem="S5W-Ye-frp" firstAttribute="trailing" secondItem="ORo-iT-5MZ" secondAttribute="trailing" id="j5K-Sj-9Z0"/>
-                            <constraint firstAttribute="trailing" secondItem="IJE-QJ-UFJ" secondAttribute="trailing" id="pB6-v5-cFj"/>
+                            <constraint firstItem="ORo-iT-5MZ" firstAttribute="trailing" secondItem="IJE-QJ-UFJ" secondAttribute="trailing" id="pB6-v5-cFj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Sweep Schedule" id="2XM-h4-1eB"/>
@@ -478,7 +478,6 @@
                         <outlet property="comingSoonStackView" destination="h3M-Di-oO4" id="cg1-fZ-MOb"/>
                         <outlet property="comingSoonYearLabel" destination="PCg-mV-hLt" id="Syz-8F-qSv"/>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
-                        <outlet property="scheduleMapViewHeightConstraint" destination="HPG-BM-ixl" id="Ooq-z7-R99"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
                         <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationsFromScheduleSegue" id="eEQ-YS-Bae"/>
                         <segue destination="a8Y-hK-Ycy" kind="show" identifier="showCalendarSegue" id="OPE-t2-YWO"/>
@@ -493,17 +492,17 @@
             <objects>
                 <viewController storyboardIdentifier="FavoriteViewController" id="aNg-gl-cTZ" customClass="FavoriteViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="g2a-sW-vq5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1r-6W-RMh">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="235"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="45C-rY-kFz"/>
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x6j-dw-x16" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="245" width="384" height="553"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
                                         <rect key="frame" x="0.0" y="5" width="384" height="336"/>
@@ -665,11 +664,11 @@
             <objects>
                 <viewController storyboardIdentifier="TowedSearchViewController" id="0Np-di-K2M" customClass="TowedSearchViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gWO-hG-nPS">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="bGr-IJ-eIs">
-                                <rect key="frame" x="20" y="10" width="374" height="471.5"/>
+                                <rect key="frame" x="20" y="98" width="374" height="471.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="UD6-d1-HE3">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="38.5"/>
@@ -830,7 +829,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WcB-Ef-2bU">
-                                <rect key="frame" x="20" y="511.5" width="374" height="60"/>
+                                <rect key="frame" x="20" y="599.5" width="374" height="60"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="K4q-bV-Jup"/>
@@ -882,17 +881,17 @@
             <objects>
                 <viewController storyboardIdentifier="TowedResultsViewController" id="yL8-7X-4Ow" customClass="TowedResultsViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lFY-78-xMd">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on vehicle to view map of location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UKo-L7-B4k">
-                                <rect key="frame" x="10" y="4" width="394" height="17"/>
+                                <rect key="frame" x="10" y="92" width="394" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7aX-lO-kbB">
-                                <rect key="frame" x="0.0" y="21" width="414" height="787"/>
+                                <rect key="frame" x="0.0" y="109" width="414" height="753"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" systemColor="systemGray6Color"/>
                                 <prototypes>
@@ -1151,17 +1150,17 @@
             <objects>
                 <viewController storyboardIdentifier="DivvyDetailViewController" id="Nty-Tc-DnF" customClass="DivvyDetailViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0lB-Tx-HHX">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5eL-H6-udm">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="235"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="dMf-gM-1PA"/>
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RLM-1F-Awx" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="245" width="384" height="553"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="OEz-kq-mDE">
                                         <rect key="frame" x="10" y="10" width="364" height="193"/>
@@ -1330,17 +1329,17 @@
             <objects>
                 <viewController storyboardIdentifier="RelocatedDetailViewController" id="NuG-xh-ACk" customClass="RelocatedDetailViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AYd-Rh-fh8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y6c-AZ-1wW">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="235"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="EKg-7a-wGS"/>
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jYz-zq-ilD" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="245" width="384" height="553"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="QEU-mg-Rro">
                                         <rect key="frame" x="10" y="10" width="364" height="265"/>
@@ -1564,17 +1563,17 @@
             <objects>
                 <viewController storyboardIdentifier="TowedDetailViewController" id="3Vw-rl-u6h" customClass="TowedDetailViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yd5-2v-am5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vGJ-YO-mr6">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="235"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="Vw1-Oc-mZQ"/>
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sV3-7a-rvC" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="245" width="384" height="553"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="DQR-gl-Vmu">
                                         <rect key="frame" x="10" y="8" width="364" height="300"/>
@@ -1860,20 +1859,20 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarViewController" id="a8Y-hK-Ycy" customClass="CalendarViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="izA-kT-NUo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZFy-60-zB9">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="235"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="235"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="235" id="3NZ-tU-kmZ"/>
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSm-ie-em0" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="245" width="384" height="553"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                        <rect key="frame" x="8" y="8" width="368" height="537"/>
+                                        <rect key="frame" x="8" y="8" width="368" height="503"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on sweep day to add calendar event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSJ-e6-OHu">
                                                 <rect key="frame" x="50" y="0.0" width="268" height="17"/>
@@ -1882,7 +1881,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
-                                                <rect key="frame" x="23" y="37" width="322.5" height="50.5"/>
+                                                <rect key="frame" x="23" y="37" width="322.5" height="20.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Mon" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkh-Lj-Eec">
                                                         <rect key="frame" x="0.0" y="0.0" width="35.5" height="20.5"/>
@@ -1930,7 +1929,7 @@
                                                 </subviews>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pG9-ck-JRR">
-                                                <rect key="frame" x="21.5" y="107.5" width="325" height="429.5"/>
+                                                <rect key="frame" x="21.5" y="77.5" width="325" height="425.5"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="325" id="FCV-rp-zgs"/>
@@ -2015,12 +2014,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pge-xr-71M" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2561" y="79"/>
+            <point key="canvasLocation" x="2560.8695652173915" y="78.348214285714278"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="eEQ-YS-Bae"/>
-        <segue reference="maw-XV-A0s"/>
+        <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar_day" width="33.5" height="33.5"/>
