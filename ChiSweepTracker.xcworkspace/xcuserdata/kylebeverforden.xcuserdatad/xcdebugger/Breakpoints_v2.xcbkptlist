@@ -288,8 +288,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "205"
             endingLineNumber = "205"
-            landmarkName = "getDataFromDatabase(completion:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -304,8 +304,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "183"
             endingLineNumber = "183"
-            landmarkName = "getDataFromDatabase(completion:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -320,8 +320,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "241"
             endingLineNumber = "241"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadScheduleMap()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
