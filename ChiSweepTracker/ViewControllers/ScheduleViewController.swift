@@ -7,8 +7,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
 	// Controls
     @IBOutlet weak var scheduleMapView: MKMapView!
-	@IBOutlet weak var scheduleMapViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scheduleTableView: UITableView!
+    @IBOutlet weak var scheduleMapViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var comingSoonStackView: UIStackView!
     @IBOutlet weak var comingSoonYearLabel: UILabel!
     

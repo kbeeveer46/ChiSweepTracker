@@ -479,6 +479,7 @@
                         <outlet property="comingSoonStackView" destination="h3M-Di-oO4" id="cg1-fZ-MOb"/>
                         <outlet property="comingSoonYearLabel" destination="PCg-mV-hLt" id="Syz-8F-qSv"/>
                         <outlet property="scheduleMapView" destination="IJE-QJ-UFJ" id="SpQ-hD-AVu"/>
+                        <outlet property="scheduleMapViewHeightConstraint" destination="Oj9-Ck-tDx" id="17i-GG-vhc"/>
                         <outlet property="scheduleTableView" destination="LBw-Gl-6Ol" id="Un2-z6-fid"/>
                         <segue destination="aNg-gl-cTZ" kind="show" identifier="viewNotificationsFromScheduleSegue" id="eEQ-YS-Bae"/>
                         <segue destination="a8Y-hK-Ycy" kind="show" identifier="showCalendarSegue" id="OPE-t2-YWO"/>
