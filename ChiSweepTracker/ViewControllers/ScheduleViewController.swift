@@ -34,6 +34,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		   ) {
 			self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
 		}
+        else {
+            self.navigationItem.rightBarButtonItem = nil
+        }
 		
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
@@ -42,7 +45,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.initializeControlsPerDevice()
 		
 		// Set required properties for schedule table view
-		//self.scheduleTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
 		self.scheduleTableView.dataSource = self
 		self.scheduleTableView.delegate = self
 		self.scheduleTableView.reloadData()
