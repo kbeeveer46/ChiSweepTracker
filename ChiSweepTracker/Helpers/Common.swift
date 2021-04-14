@@ -23,7 +23,7 @@ class Common {
     func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
     func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
     
-    func selectedAnnotationStrokeSize() -> CGFloat {return defaults.object(forKey: "annotationStrokeSize") as! CGFloat}
+    //func selectedAnnotationStrokeSize() -> CGFloat {return defaults.object(forKey: "annotationStrokeSize") as! CGFloat}
     
 	// SODA SDK
 	

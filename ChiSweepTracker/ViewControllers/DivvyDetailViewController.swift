@@ -157,7 +157,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		annotationLabel.textAlignment = .center
 		annotationLabel.font = .boldSystemFont(ofSize: 11)
 		annotationLabel.text = annotation.title!
-		annotationLabel.strokeSize = self.common.selectedAnnotationStrokeSize()
+		annotationLabel.strokeSize = 1 //self.common.selectedAnnotationStrokeSize()
 		annotationLabel.strokeColor = UIColor.white
 		annotationView?.addSubview(annotationLabel)
 		

@@ -31,7 +31,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-		
+        
 		// Show finished schedule button if month is < 4 or greater than 11
 		self.showStatusMessage()
 		

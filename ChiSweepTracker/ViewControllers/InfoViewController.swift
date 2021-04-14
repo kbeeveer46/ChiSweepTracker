@@ -17,7 +17,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	let generator = UISelectionFeedbackGenerator()
 	
 	override func viewWillAppear(_ animated: Bool) {
-       
+        
 		// Set title
 		self.tabBarController?.navigationItem.title = "Sweeping Info"
 		
