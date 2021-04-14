@@ -348,7 +348,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
 		// Set cell properties
         cell.backgroundColor = UIColor.clear
-        cell.DateLabel.textColor = UIColor.black
+        //cell.DateLabel.textColor = UIColor.black
         cell.Circle.isHidden = true
 
         if cell.isHidden {
