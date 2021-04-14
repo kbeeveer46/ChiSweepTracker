@@ -46,8 +46,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
 		
+        // Remove the stroke on the map annotation labels is dark mode is enabled
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                defaults.set(0, forKey: "annotationStrokeSize")
+            }
+            else {
+                defaults.set(1, forKey: "annotationStrokeSize")
+            }
+        }
+        
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
+
     }
     
     func application(_ application: UIApplication,

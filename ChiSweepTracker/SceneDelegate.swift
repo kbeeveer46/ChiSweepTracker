@@ -31,7 +31,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 	    // Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0;
-		
+        
+        // Remove the stroke on the map annotation labels is dark mode is enabled
+        if UITraitCollection.current.userInterfaceStyle == .dark {
+            defaults.set(0, forKey: "annotationStrokeSize")
+        }
+        else {
+            defaults.set(1, forKey: "annotationStrokeSize")
+        }
+        
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
 		
