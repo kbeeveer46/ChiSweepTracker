@@ -17,6 +17,9 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var reasonLabel: UILabel!
 	@IBOutlet weak var relocatedDetailStackView: UIStackView!
 	
+    // Classes
+    let common = Common()
+    
 	// Shared
 	var relocatedVehicle = VehicleModel()
 	var toLatitude = 0.0
@@ -187,7 +190,7 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		annotationLabel.textAlignment = .center
 		annotationLabel.font = .boldSystemFont(ofSize: 11)
 		annotationLabel.text = annotation.title!
-		annotationLabel.strokeSize = 1
+		annotationLabel.strokeSize = self.common.selectedAnnotationStrokeSize()
 		annotationLabel.strokeColor = UIColor.white
 		annotationView?.addSubview(annotationLabel)
 		

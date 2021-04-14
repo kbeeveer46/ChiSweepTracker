@@ -995,8 +995,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			annotationLabel.textAlignment = .center
 			annotationLabel.font = .boldSystemFont(ofSize: 11)
 			annotationLabel.text = annotation.title!
-			annotationLabel.strokeSize = 1
-			annotationLabel.strokeColor = UIColor.white
+            annotationLabel.strokeColor = UIColor.white
+            annotationLabel.strokeSize = self.common.selectedAnnotationStrokeSize()
             annotationView.addSubview(annotationLabel)
 			
 		}

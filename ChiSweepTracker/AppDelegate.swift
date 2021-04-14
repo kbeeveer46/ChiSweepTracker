@@ -28,6 +28,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
+        // Remove the stroke on the map annotation labels is dark mode is enabled
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                defaults.set(0, forKey: "annotationStrokeSize")
+            }
+            else {
+                defaults.set(1, forKey: "annotationStrokeSize")
+            }
+        }
+        
         return true
     }
     
