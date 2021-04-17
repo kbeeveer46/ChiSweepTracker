@@ -859,7 +859,38 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 														let latestDatasetVersion = self.common.latestDatasetVersion()
 														let userDatasetVersion = self.common.userDatasetVersion()
 														if userDatasetVersion < latestDatasetVersion {
-															self.common.showAlert("Notifications Updated", "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
+                                                            
+                                                            // Create dataset updated alert
+                                                            let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.", preferredStyle: .alert)
+
+                                                            // Create view schedule option for dataset updated alert
+                                                            let viewScheduleAction = UIAlertAction(title: "View Schedule", style: .default, handler:{ action in
+
+                                                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+                                                                if let destinationViewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                                                                    destinationViewController.schedule = self.schedule
+                                                                    
+                                                                    let navigationController = UIApplication.shared.keyWindow?.rootViewController as! UINavigationController
+                                                                    navigationController.pushViewController(destinationViewController, animated: true)
+                                                                }
+                                                            })
+
+                                                            // Create and add OK option for dataset updated alert
+                                                            datasetUpdatedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+
+                                                            // Add view shedule option to dataset updated alert
+                                                            datasetUpdatedAlert.addAction(viewScheduleAction)
+
+                                                            var rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                                                            
+                                                            if let navigationController = rootViewController as? UINavigationController {
+                                                                rootViewController = navigationController.viewControllers.first
+                                                            }
+                                                            
+                                                            // Present dataset updated alert
+                                                            rootViewController?.present(datasetUpdatedAlert, animated: true, completion: nil)
+                                                                                                                        
 														}
 														defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
 													}
