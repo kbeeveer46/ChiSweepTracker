@@ -371,7 +371,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
-                                    self.common.showAlert(self.common.constants.errorTitle, "Unable to get schedule data from the City of Chicago")
+                                    self.common.showAlert(self.common.constants.errorTitle, "Unable to get schedule data from the City of Chicago. This usually means the Chicago API is down for scheduled maintenance. Please try again in a few hours.")
                                 }
                             }
                         }
@@ -380,7 +380,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         }
                     case .error (let err):
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
-                        self.common.showAlert(self.common.constants.errorTitle, "Unable to get ward data from the City of Chicago")
+                        self.common.showAlert(self.common.constants.errorTitle, "Unable to get ward data from the City of Chicago. This usually means the Chicago API is down for scheduled maintenance. Please try again in a few hours.")
                     }
                 }
             }
