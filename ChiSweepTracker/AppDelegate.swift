@@ -30,17 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		IQKeyboardManager.shared.enable = true
         
         // Remove this method to stop OneSignal Debugging
-        //OneSignal.setLogLevel(.LL_VERBOSE, visualLevel: .LL_NONE)
+        OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
 
         // OneSignal initialization
         OneSignal.initWithLaunchOptions(launchOptions)
         OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
-
-        // promptForPushNotifications will show the native iOS notification permission prompt.
-        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 8)
-//        OneSignal.promptForPushNotifications(userResponse: { accepted in
-//            print("User accepted notifications: \(accepted)")
-//        })
         
         return true
     }
@@ -170,6 +164,9 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         let userInfo = response.notification.request.content.userInfo
         
+        // Print full message.
+        //print(userInfo)
+        
         // Send the user to the updates tab if they opened a Cloud Messaging notification from Firebase
 		// This only works when notification is opened while app is in the foreground
 		if userInfo[gcmMessageIDKey] != nil {
@@ -181,33 +178,16 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 				}
 			}
         }
-        
-        // Print full message.
-        //print(userInfo)
 		
-//		if let address = userInfo["address"] {
-//			print("adress: \(address)")
-//		}
-//
 		if let address = userInfo["address"] as? String {
-
-			print("Notification address: \(address)")
-
 			if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
-
-//				let mainStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//				let initialViewController = mainStoryboard.instantiateViewController(withIdentifier: "ScheduleViewController") as! ScheduleViewController
-//				let rootViewController = UIApplication.shared.windows.first!.rootViewController as! UINavigationController
-//				initialViewController.address = address
-//				rootViewController.pushViewController(initialViewController, animated: true);
-//
+                self.common.goToScheduleFromNotification(address)
 			}
 		}
         
         completionHandler()
         
     }
-    
 }
 
 extension AppDelegate: MessagingDelegate {

@@ -22,9 +22,7 @@ class Common {
 	func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
     func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
     func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
-    
-    //func selectedAnnotationStrokeSize() -> CGFloat {return defaults.object(forKey: "annotationStrokeSize") as! CGFloat}
-    
+        
 	// SODA SDK
 	
 	// Schedule
@@ -475,6 +473,154 @@ class Common {
 			notificationViewController.getSchedule(true, true)
 		}
 	}
+    
+    func goToScheduleFromNotification(_ address: String) {
+        
+        let schedule = ScheduleModel()
+        
+        // Set schedule address
+        schedule.address = address
+        
+        // Get coordinates from address
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            
+            // No internet connection will cause an error
+            if error != nil {
+                //self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
+                return
+            }
+            
+            if placemarks != nil {
+            
+                // Get first placemark in list
+                let placemark = placemarks?.first
+                
+                // Create coorindates from placemark
+                var coordinates = CLLocationCoordinate2D()
+                coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                
+                // Set schedule location coordinates
+                schedule.locationCoordinate = coordinates
+                
+                // Create SODA client using domain and token
+                let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                
+                // Query SODA API to get ward and section
+                let wardQuery = wardClient.query(dataset: self.wardDataset())
+                    .filter("intersects(\(self.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
+                    .limit(1)
+                
+                wardQuery.get { res in
+                    switch res {
+                    case .dataset (let data):
+                        
+                        if data.count > 0 {
+                            
+                            // Get values from json query
+                            let ward = data[0][self.wardTitle()] as? String ?? ""
+                            let section = data[0][self.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.coordinatesTitle()] as? NSMutableArray
+                            let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                            
+                            // Loop through coordinates array
+                            for(_, coordinate) in coordinatesArray!.enumerated() {
+                                
+                                // Loop through each pair of coordinates
+                                for item in coordinate {
+                                    
+                                    // Create coorindate from lat and long in array
+                                    var coordinate = CLLocationCoordinate2D()
+                                    coordinate.longitude = item[0] as? Double ?? 0
+                                    coordinate.latitude = item[1] as? Double ?? 0
+                                    
+                                    // Add coordinates to schedule polygon coordinates
+                                    schedule.polygonCoordinates.append(coordinate)
+                                    
+                                }
+                            }
+                            
+                            // Set schedule ward and section
+                            schedule.ward = ward
+                            schedule.section = String(section).trimmingCharacters(in: .whitespaces)
+                            
+                            // Query SODA API to get months and days
+                            let scheduleQuery = wardClient.query(dataset: self.scheduleDataset())
+                                .filter("\(self.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.sectionTitle()) = '\(section)'" : "") ")
+                                .orderAscending(self.monthNumberTitle())
+                            
+                            scheduleQuery.get { res in
+                                switch res {
+                                case .dataset (let data):
+                                    
+                                    if data.count > 0 {
+                                        
+                                        // Loop through months
+                                        for (_, item) in data.enumerated() {
+                                            
+                                            // Get values from json data
+                                            let monthName = item[self.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.dates()] as? String ?? ""
+                                            let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
+                                            
+                                            // Create month object
+                                            let month = MonthModel()
+                                            month.name = monthName
+                                            month.number = monthNumber
+                                            
+                                            // Loop through dates
+                                            for day in datesArray {
+                                                                                                
+                                                // Add date to month
+                                                if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                                    
+                                                    let date = DateModel()
+                                                    date.date = Int(day) ?? 0
+                                                    
+                                                    if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
+                                                        month.dates.append(date)
+                                                    }
+                                                }
+                                            }
+                                            
+                                            // Add month to schedule
+                                            schedule.months.append(month)
+                                            
+                                        }
+                                                                                
+                                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                        if let destinationViewController = storyboard.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                                            destinationViewController.schedule = schedule
+                                            
+                                            let navigationController = UIApplication.shared.keyWindow?.rootViewController as! UINavigationController
+                                            
+                                            if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
+                                                tabBarController.selectedIndex = 0
+                                            }
+                                            
+                                            navigationController.pushViewController(destinationViewController, animated: true)
+                                        }
+                                
+                                    }
+                                case .error (let err):
+                                    print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
+                                }
+                            }
+                        }
+                        else {
+                        }
+                    case .error (let err):
+                        print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
+                    }
+                }
+            }
+            else {
+            }
+        }
+    }
 	
 	// Alert with custom title and message
 	func showAlert(_ title: String, _ message: String) {

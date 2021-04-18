@@ -21,6 +21,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
 	// Shared
 	let locationManager = CLLocationManager()
+    var addressFromNotification = ""
     var addressFromTextField = ""
     var addressFromCoordinates = ""
 	let currentDay = Calendar.current.component(.day, from: Date())
@@ -31,6 +32,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if (self.addressFromNotification != "") {
+            let address = self.addressFromNotification
+            self.addressFromNotification = ""
+            self.searchForSchedule(address)
+        }
         
 		// Show finished schedule button if month is < 4 or greater than 11
 		self.showStatusMessage()
