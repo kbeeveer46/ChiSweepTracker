@@ -43,6 +43,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
+        
+        // Create a gesture recognizer (tap gesture) for message card view
+        let messageCardViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMessageCardViewTap(sender:)))
+                
+        // Add the gesture recognizer to the message card view
+        messageCardView.addGestureRecognizer(messageCardViewTapGesture)
 		
 	}
 	
@@ -62,9 +68,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	func showStatusMessage() {
 		
 		if currentMonth > 11 {
-			
 			self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
-		
 		}
 		else if currentMonth < 4 {
 
@@ -78,14 +82,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
-
             if self.common.favoriteAddress() != "" {
                 getNextSweepingDate()
             }
             else {
                 self.messageCardView.isHidden = true
             }
-            
 		}
 	}
 	
@@ -169,7 +171,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
 
-	// Add annotation when Chicago map is tapped
+    // Search for schedule when message card view is tapped
+    @objc func handleMessageCardViewTap(sender: UITapGestureRecognizer) {
+        if (self.common.favoriteAddress() != "") {
+            self.searchForSchedule(self.common.favoriteAddress())
+        }
+    }
+    
+    // Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
 		
 		if gesture.state == .ended {
