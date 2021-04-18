@@ -150,13 +150,12 @@ class Common {
 		
 		// Strings
 		
-        //let successTitle = "Success"
         let errorTitle = "Something went wrong..."
-        let notFound = "Could not find sweep schedule. Address must reside in Chicago."
+        let notFound = "Unable to find sweep schedule. Address must reside in Chicago."
 		
 		let finishedScheduleMessage = "Sweeping has ended for _currentYear_."
 		let beginScheduleMessage = "Sweeping will begin on April 1st in _amount_ day(s)."
-		let noInternetConnectionSearchMessage = "You must be connected to the Internet to find your sweep area."
+		let noInternetConnectionSearchMessage = "Unable to find sweep schedule. This may be caused by not having an internet connection or the Chicago API may be down for scheduled maintenance. Please try again in a few hours."
 		
 		// Colors
 		let systemRed = "#ff3b30"

@@ -380,21 +380,21 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
-                                    self.common.showAlert(self.common.constants.errorTitle, "Unable to get schedule data from the City of Chicago. This usually means the Chicago API is down for scheduled maintenance. Please try again in a few hours.")
+                                    self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
                                 }
                             }
                         }
                         else {
-                            self.common.showAlert("No Sweep Schedule Found", "Address must reside in Chicago")
+                            self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                         }
                     case .error (let err):
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
-                        self.common.showAlert(self.common.constants.errorTitle, "Unable to get ward data from the City of Chicago. This usually means the Chicago API is down for scheduled maintenance. Please try again in a few hours.")
+                        self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
                     }
                 }
             }
             else {
-                self.common.showAlert("No Sweep Schedule Found", "Address must reside in Chicago")
+                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
             }
         }
     }
@@ -441,7 +441,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				
 				// Stop updating location if user appears to be offline
 				self.locationManager.stopUpdatingLocation()
-				self.common.showAlert(self.common.constants.errorTitle, "You must be connected to the Internet to find your sweep area.")
+                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
 				return
 			}
 			
