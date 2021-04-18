@@ -3,6 +3,7 @@ import UserNotifications
 import Firebase
 import FirebaseMessaging
 import IQKeyboardManagerSwift
+import OneSignal
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,15 +29,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
-        // Remove the stroke on the map annotation labels is dark mode is enabled
-//        if #available(iOS 13.0, *) {
-//            if UITraitCollection.current.userInterfaceStyle == .dark {
-//                defaults.set(0, forKey: "annotationStrokeSize")
-//            }
-//            else {
-//                defaults.set(1, forKey: "annotationStrokeSize")
-//            }
-//        }
+        // Remove this method to stop OneSignal Debugging
+        //OneSignal.setLogLevel(.LL_VERBOSE, visualLevel: .LL_NONE)
+
+        // OneSignal initialization
+        OneSignal.initWithLaunchOptions(launchOptions)
+        OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
+
+        // promptForPushNotifications will show the native iOS notification permission prompt.
+        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 8)
+//        OneSignal.promptForPushNotifications(userResponse: { accepted in
+//            print("User accepted notifications: \(accepted)")
+//        })
         
         return true
     }
@@ -45,16 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
-		
-        // Remove the stroke on the map annotation labels is dark mode is enabled
-//        if #available(iOS 13.0, *) {
-//            if UITraitCollection.current.userInterfaceStyle == .dark {
-//                defaults.set(0, forKey: "annotationStrokeSize")
-//            }
-//            else {
-//                defaults.set(1, forKey: "annotationStrokeSize")
-//            }
-//        }
         
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })

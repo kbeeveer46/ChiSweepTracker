@@ -15,4 +15,11 @@ target 'ChiSweepTracker' do
 	pod 'IQKeyboardManagerSwift'
 	pod 'THLabel', '~> 1.4.0'
 
+  pod 'OneSignal', '>= 3.0.0', '< 4.0'
+
+end
+
+target 'OneSignalNotificationServiceExtension' do
+  use_frameworks!
+  pod 'OneSignal', '>= 3.0.0', '< 4.0'
 end
