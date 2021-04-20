@@ -41,7 +41,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		// Fill in notification form values with user defaults
 		self.loadNotificationControlValues()
     
-		// Load map using user favorite lat, long, and polygon coorndinates
+		// Load map using user favorite lat, long, and polygon coordinates
 		self.loadFavoriteMap()
 		
 		// Initialize controls per device

@@ -181,6 +181,7 @@
 				FA6AFEE223A1E11D00F7E177 /* CalendarViewController.swift */,
 				FA5B0D9823F9E7FA00D90316 /* DivvyDetailViewController.swift */,
 				FA184FA22398709100AB2FF6 /* FavoriteViewController.swift */,
+				20931B30262F8CC900D6EFBE /* FavoriteListViewController.swift */,
 				FA11425C243A806600E7E798 /* InfoViewController.swift */,
 				FA2890D823F443A400695F0A /* RelocatedDetailViewController.swift */,
 				FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */,
@@ -189,7 +190,6 @@
 				FA3F868C23E47C7C00194C47 /* TowedSearchViewController.swift */,
 				FA3F868E23E48BEF00194C47 /* TowedResultsViewController.swift */,
 				FAD5595C2433D8E800F11DA1 /* UpdatesViewController.swift */,
-				20931B30262F8CC900D6EFBE /* FavoriteListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
