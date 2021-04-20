@@ -61,6 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         //if let playerId = stateChanges.to.userId {
         //    print("Current playerId \(playerId)")
         //}
+        
+        
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
