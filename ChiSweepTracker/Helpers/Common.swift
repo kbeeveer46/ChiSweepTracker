@@ -106,6 +106,8 @@ class Common {
 	func notificationMinute() -> Int {return defaults.integer(forKey: "notificationMinute")}
 	func notificationsToggled() -> Bool {return defaults.bool(forKey: "notificationsToggled")}
 	func notificationsYear() -> Int {return defaults.integer(forKey: "notificationsYear")}
+    func notificationOneSignalPlayerId() -> String {return defaults.string(forKey: "notificationOneSignalPlayerId") ?? ""}
+    func notificationsOneSignalIsSubscribed() -> Bool {return defaults.bool(forKey: "notificationsOneSignalIsSubscribed")}
 	
 	// Updates
 	
@@ -130,6 +132,7 @@ class Common {
 		let relocatedDatabaseName = "RelocatedVehicles_Dev"
 		let newsDatabaseName = "News_Dev"
 		let infoDatabaseName = "Info_Dev"
+        let notificationsDatabaseName = "Notifications_Dev"
 		#else
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
@@ -139,6 +142,7 @@ class Common {
 		let relocatedDatabaseName = "RelocatedVehicles"
 		let newsDatabaseName = "News"
 		let infoDatabaseName = "Info"
+        let notificationsDatabaseName = "Notifications"
 		#endif
 	
 		// SODA
@@ -189,17 +193,6 @@ class Common {
 						let monthNumberTitle = data["monthNumberTitle"] as! String
 						let sectionTitle = data["sectionTitle"] as! String
 						let wardTitle = data["wardTitle"] as! String
-						
-//						print("latestAppVersion: \(latestAppVersion)")
-//						print("wardDataset: \(wardDataset)")
-//						print("scheduleDataset: \(scheduleDataset)")
-//						print("coordinatesTitle: \(coordinatesTitle)")
-//						print("datesTitle: \(datesTitle)")
-//						print("geomTitle: \(geomTitle)")
-//						print("monthNameTitle: \(monthNameTitle)")
-//						print("monthNumberTitle: \(monthNumberTitle)")
-//						print("sectionTitle: \(sectionTitle)")
-//						print("wardTitle: \(wardTitle)")
 						
 						defaults.set(latestAppVersion, forKey: "latestAppVersion")
 						defaults.set(wardDataset, forKey: "wardDataset")
@@ -463,6 +456,26 @@ class Common {
 		completion("Finished getting data from Firebase")
 	}
 	
+    func deleteNotificationsFromDatabase()
+    {
+        // Delete notification from database
+        
+        let db = Firestore.firestore()
+        
+        db.collection(self.constants.notificationsDatabaseName)
+            .whereField("playerId", isEqualTo: self.notificationOneSignalPlayerId())
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Could not get notifications from Firebase: \(err)")
+                } else {
+                                                
+                    for document in querySnapshot!.documents {
+                        document.reference.delete();
+                    }
+                }
+        }
+    }
+    
 	func updateNotifications() {
 		
 		let favoriteAddress = self.favoriteAddress()
@@ -668,6 +681,7 @@ class Common {
 		
 		return dateFormatter.string(from: dt!)
 	}
+    
 }
 
 // MARK: Extensions

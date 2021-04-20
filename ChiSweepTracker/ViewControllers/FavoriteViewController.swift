@@ -3,6 +3,8 @@ import UserNotifications
 import CoreLocation
 import MapKit
 import THLabel
+import Firebase
+import OneSignal
 
 class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
@@ -753,11 +755,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
                                                         
+                                                        OneSignal.disablePush(false);
+                                                        
                                                         // Register for Firebase Cloud Messaging and APN notifications
                                                         UIApplication.shared.registerForRemoteNotifications()
                                                         
                                                         // Clear current notifications and re-add them in case they changed
                                                         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                                                        
+                                                        //self.common.deleteNotificationsFromDatabase()
                                                         
                                                         //print("Deleted user's local notifications")
 														
@@ -842,6 +848,25 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                         //print("Notification added: \(date!.description(with: Locale.current))")
                                                                     }
                                                                 })
+                                                                
+                                                                // Add notification to database
+                                                                
+                                                                let dateFormatter = DateFormatter()
+                                                                dateFormatter.dateFormat = "MM/dd/yyyy HH:mm:ss"
+                                                                let dateString = dateFormatter.string(from: date!)
+                                                                
+                                                                let db = Firestore.firestore()
+                                                                let autoID = db.collection(self.common.constants.notificationsDatabaseName).document().documentID;
+                                                                db.collection(self.common.constants.notificationsDatabaseName).document(autoID).setData([
+                                                                    "playerId": self.common.notificationOneSignalPlayerId(),
+                                                                    "time": dateString
+                                                                ]) { err in
+                                                                    if let err = err {
+                                                                        print("Error adding notification to database: \(err)")
+                                                                    } else {
+                                                                        //print("Document successfully written!")
+                                                                    }
+                                                                }
                                                             }
                                                         }
 														
@@ -1118,7 +1143,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
-			
+            
+            OneSignal.disablePush(true);
+            
 			//print("Deleted user's local notifications")
 			
 		}

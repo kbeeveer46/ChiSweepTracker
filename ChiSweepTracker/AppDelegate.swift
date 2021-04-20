@@ -6,7 +6,7 @@ import IQKeyboardManagerSwift
 import OneSignal
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     
 	// This line is required or the screen is black on iPhone 8
     var window: UIWindow?
@@ -36,7 +36,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         OneSignal.initWithLaunchOptions(launchOptions)
         OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
         
+        OneSignal.add(self as OSSubscriptionObserver)
+        
         return true
+    }
+    
+    // This method will be called when the notification subscription property changes.
+    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges) {
+        
+        if !stateChanges.from.isSubscribed && stateChanges.to.isSubscribed {
+            print("Subscribed for OneSignal push notifications!")
+        }
+        
+        if stateChanges.from.isSubscribed && !stateChanges.to.isSubscribed {
+            
+            print("Unsubscribed for OneSignal push notifications!")
+            
+            self.common.deleteNotificationsFromDatabase()
+        }
+        
+        //print("SubscriptionStateChange: \n\(stateChanges)")
+        
+        //The player id is inside stateChanges. But be careful, this value can be nil if the user has not granted you permission to send notifications.
+        //if let playerId = stateChanges.to.userId {
+        //    print("Current playerId \(playerId)")
+        //}
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -93,14 +117,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        
-		// This is not used when getting a test device token from Firebase
-		
+        		
 		let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
         let token = tokenParts.joined()
         
         print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
+        
+        if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
+            
+            print("isSubscribed: \(oneSignalDeviceStatus.isSubscribed)")
+            print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
+            
+            defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
+            defaults.set(oneSignalDeviceStatus.isSubscribed, forKey: "notificationsOneSignalIsSubscribed")
+        }
     }
     
     func application(_ application: UIApplication,
@@ -158,6 +189,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         
 		// This method runs when a notification is opened when the app is in the background and foreground
+        // This method runs when clicking on a notification from Firebase and OneSignal
 		
 		// Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
@@ -167,9 +199,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         // Print full message.
         //print(userInfo)
         
-        // Send the user to the updates tab if they opened a Cloud Messaging notification from Firebase
-		// This only works when notification is opened while app is in the foreground
-		if userInfo[gcmMessageIDKey] != nil {
+        // Send the user to the updates tab by default
+		//if userInfo[gcmMessageIDKey] != nil {
             if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
 				if let navigationController = rootViewController as? UINavigationController {
 					if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
@@ -177,8 +208,9 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 					}
 				}
 			}
-        }
+        //}
 		
+        // If the clicks on a sweep notification then get the schedule and redirect them to the schedule page
 		if let address = userInfo["address"] as? String {
 			if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
                 self.common.goToScheduleFromNotification(address)
@@ -196,6 +228,7 @@ extension AppDelegate: MessagingDelegate {
                    didReceiveRegistrationToken fcmToken: String) {
         
 		// This method runs each time the app opens and whenever a new Firebase token is generated.
+        // This token can be used to send test message in the Firebase console
 		
         print("didReceiveRegistrationToken: \(fcmToken)")
         
