@@ -397,6 +397,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				
 				// Unregister from Firebase Cloud Messaging notifications
 				UIApplication.shared.unregisterForRemoteNotifications()
+                
+                OneSignal.disablePush(true)
+                
+                self.common.deleteNotificationsFromDatabase(completion: {completion in })
 				
 				//print("Deleted user's local notifications")
 				
@@ -511,7 +515,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
 		// Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.getSchedule(true)
+            self.common.deleteNotificationsFromDatabase(completion: {completion in
+                self.getSchedule(true)
+            })
         }
     }
     
@@ -755,16 +761,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
                                                         
-                                                        OneSignal.disablePush(false);
-                                                        
-                                                        // Register for Firebase Cloud Messaging and APN notifications
-                                                        UIApplication.shared.registerForRemoteNotifications()
-                                                        
-                                                        // Clear current notifications and re-add them in case they changed
-                                                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                                                        
-                                                        //self.common.deleteNotificationsFromDatabase()
-                                                        
                                                         //print("Deleted user's local notifications")
 														
 														#if DEBUG
@@ -851,22 +847,23 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                 
                                                                 // Add notification to database
                                                                 
-                                                                let dateFormatter = DateFormatter()
-                                                                dateFormatter.dateFormat = "MM/dd/yyyy HH:mm:ss"
-                                                                let dateString = dateFormatter.string(from: date!)
+//                                                                let dateFormatter = DateFormatter()
+//                                                                dateFormatter.dateFormat = "MM/dd/yyyy HH:mm:ss"
+//                                                                let dateString = dateFormatter.string(from: date!)
                                                                 
-                                                                let db = Firestore.firestore()
-                                                                let autoID = db.collection(self.common.constants.notificationsDatabaseName).document().documentID;
-                                                                db.collection(self.common.constants.notificationsDatabaseName).document(autoID).setData([
-                                                                    "playerId": self.common.notificationOneSignalPlayerId(),
-                                                                    "time": dateString
-                                                                ]) { err in
-                                                                    if let err = err {
-                                                                        print("Error adding notification to database: \(err)")
-                                                                    } else {
-                                                                        //print("Document successfully written!")
-                                                                    }
-                                                                }
+//                                                                let db = Firestore.firestore()
+//                                                                let autoID = db.collection(self.common.constants.notificationsDatabaseName).document().documentID;
+//                                                                db.collection(self.common.constants.notificationsDatabaseName).document(autoID).setData([
+//                                                                    "playerId": self.common.notificationOneSignalPlayerId(),
+//                                                                    "time": dateString,
+//                                                                    "address": self.common.favoriteAddress()
+//                                                                ]) { err in
+//                                                                    if let err = err {
+//                                                                        print("Error adding notification to database: \(err)")
+//                                                                    } else {
+//                                                                        //print("Document successfully written!")
+//                                                                    }
+//                                                                }
                                                             }
                                                         }
 														
@@ -1007,7 +1004,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		
 		// Update notifications after picker is changed
 		if self.pushNotificationsSwitch.isOn {
-			self.getSchedule(true)
+            self.common.deleteNotificationsFromDatabase(completion: {completion in
+                self.getSchedule(true)
+            })
 		}
 	}
 	
@@ -1124,10 +1123,20 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Save form values to defaults
 			saveDefaultNotificationValues()
-			
-			// Get schedule and update user's local notifications
-			self.getSchedule(true)
-			
+            
+            OneSignal.disablePush(false);
+            
+            // Register for Firebase Cloud Messaging and APN notifications
+            UIApplication.shared.registerForRemoteNotifications()
+            
+            // Clear current notifications and re-add them in case they changed
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            
+            self.common.deleteNotificationsFromDatabase(completion: {(completion)-> Void in
+                // Get schedule and update user's local notifications
+                self.getSchedule(true)
+            })
+            
 		}
 		else {
 			
@@ -1138,13 +1147,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			self.timePicker.isUserInteractionEnabled = false
 			self.onPicker.isUserInteractionEnabled = false
 			
-			// Delete all location iOS notifications
+			// Delete all local iOS notifications
 			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 			
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
             
             OneSignal.disablePush(true);
+            
+            self.common.deleteNotificationsFromDatabase(completion: {completion in })
             
 			//print("Deleted user's local notifications")
 			

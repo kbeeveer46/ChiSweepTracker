@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             
             print("Unsubscribed for OneSignal push notifications!")
             
-            self.common.deleteNotificationsFromDatabase()
+            //self.common.deleteNotificationsFromDatabase(completion: {completion in })
         }
         
         //print("SubscriptionStateChange: \n\(stateChanges)")

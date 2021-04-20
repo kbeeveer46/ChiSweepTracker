@@ -214,9 +214,6 @@ class Common {
 								let data = document.data()
 								let latestDatasetVersion = data!["version"]!
 								
-								//print("Latest dataset version: \(latestDatasetVersion)")
-								//print("User dataset version: \(self.userDatasetVersion())")
-								
 								defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
 								
 								self.updateNotifications()
@@ -228,24 +225,6 @@ class Common {
 					}
 				}
 		}
-		
-		// Get settings data
-//		db.collection(self.constants.settingsDatabaseName)
-//			.limit(to: 1)
-//			.getDocuments() { (querySnapshot, err) in
-//				if let err = err {
-//					print("Could not get settings data from Firebase: \(err)")
-//				} else {
-//					for document in querySnapshot!.documents {
-//
-//						let data = document.data()
-//
-//						let contactEmail = data["contactEmail"] as! String
-//
-//						defaults.set(contactEmail, forKey: "contactEmail")
-//					}
-//				}
-//		}
 		
 		// Get Divvys data
 		db.collection(self.constants.divvysDatabaseName)
@@ -274,23 +253,6 @@ class Common {
 						let divvyJSONStationsTitle = data["divvyJSONStationsTitle"] as! String
 						let divvyJSONIdTitle = data["divvyJSONIdTitle"] as! String
 						let divvyJSONLastUpdatedTitle = data["divvyJSONLastUpdatedTitle"] as! String
-						
-//						print("divvyDataset: \(divvyDataset)")
-//						print("divvyIdTitle: \(divvyIdTitle)")
-//						print("divvyDocksInServiceTitle: \(divvyDocksInServiceTitle)")
-//						print("divvyLatitudeTitle: \(divvyLatitudeTitle)")
-//						print("divvyLongitudeTitle: \(divvyLongitudeTitle)")
-//						print("divvyStationNameTitle: \(divvyStationNameTitle)")
-//						print("divvyStatusTitle: \(divvyStatusTitle)")
-//
-//						print("divvyJSONUrl: \(divvyJSONUrl)")
-//						print("divvyJSONBikesAvailableTitle: \(divvyJSONBikesAvailableTitle)")
-//						print("divvyJSONEBikesAvailableTitle: \(divvyJSONEBikesAvailableTitle)")
-//						print("divvyJSONDocksAvailableTitle: \(divvyJSONDocksAvailableTitle)")
-//						print("divvyJSONDataTitle: \(divvyJSONDataTitle)")
-//						print("divvyJSONStationsTitle: \(divvyJSONStationsTitle)")
-//						print("divvyJSONIdTitle: \(divvyJSONIdTitle)")
-//						print("divvyJSONLastUpdatedTitle: \(divvyJSONLastUpdatedTitle)")
 						
 						defaults.set(divvyDataset, forKey: "divvyDataset")
 						defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
@@ -338,22 +300,6 @@ class Common {
 						let relocatedToDirectionTitle = data["relocatedToDirectionTitle"] as! String
 						let relocatedToStreetTitle = data["relocatedToStreetTitle"] as! String
 						let relocatedStateTitle = data["stateTitle"] as! String
-
-//						print("relocatedDataset: \(relocatedDataset)")
-//						print("relocatedColorTitle: \(relocatedColorTitle)")
-//						print("relocatedMakeTitle: \(relocatedMakeTitle)")
-//						print("relocatedPlateTitle: \(relocatedPlateTitle)")
-//						print("relocatedDateTitle: \(relocatedDateTitle)")
-//						print("relocatedFromLatitudeTitle: \(relocatedFromLatitudeTitle)")
-//						print("relocatedFromLongitudeTitle: \(relocatedFromLongitudeTitle)")
-//						print("relocatedFromAddressNumberTitle: \(relocatedFromAddressNumberTitle)")
-//						print("relocatedFromDirectionTitle: \(relocatedFromDirectionTitle)")
-//						print("relocatedFromStreetTitle: \(relocatedFromStreetTitle)")
-//						print("relocatedReasonTitle: \(relocatedReasonTitle)")
-//						print("relocatedToAddressNumberTitle: \(relocatedToAddressNumberTitle)")
-//						print("relocatedToDirectionTitle: \(relocatedToDirectionTitle)")
-//						print("relocatedToStreetTitle: \(relocatedToStreetTitle)")
-//						print("relocatedStateTitle: \(relocatedStateTitle)")
 						
 						defaults.set(relocatedDataset, forKey: "relocatedDataset")
 						defaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
@@ -396,18 +342,6 @@ class Common {
 						let towedDateTitle = data["towedDateTitle"] as! String
 						let towedToAddressTitle = data["towedToAddressTitle"] as! String
 						let towedToPhoneTitle = data["towedToPhoneTitle"] as! String
-
-//						print("towedDataset: \(towedDataset)")
-//						print("towedColorTitle: \(towedColorTitle)")
-//						print("towedInventoryNumberTitle: \(towedInventoryNumberTitle)")
-//						print("towedMakeTitle: \(towedMakeTitle)")
-//						print("towedModelTitle: \(towedModelTitle)")
-//						print("towedPlateTitle: \(towedPlateTitle)")
-//						print("towedStateTitle: \(towedStateTitle)")
-//						print("towedStyleTitle: \(towedStyleTitle)")
-//						print("towedDateTitle: \(towedDateTitle)")
-//						print("towedToAddressTitle: \(towedToAddressTitle)")
-//						print("towedToPhoneTitle: \(towedToPhoneTitle)")
 						
 						defaults.set(towedDataset, forKey: "towedDataset")
 						defaults.set(towedColorTitle, forKey: "towedColorTitle")
@@ -456,7 +390,7 @@ class Common {
 		completion("Finished getting data from Firebase")
 	}
 	
-    func deleteNotificationsFromDatabase()
+    func deleteNotificationsFromDatabase(completion: @escaping (_ message: Bool) -> Void)
     {
         // Delete notification from database
         
@@ -472,6 +406,8 @@ class Common {
                     for document in querySnapshot!.documents {
                         document.reference.delete();
                     }
+                    
+                    completion(true)
                 }
         }
     }
@@ -482,8 +418,8 @@ class Common {
 		let notificationsToggled = self.notificationsToggled()
 		
 		if !favoriteAddress.isEmpty && notificationsToggled == true {
-			let notificationViewController = FavoriteViewController()
-			notificationViewController.getSchedule(true, true)
+			let favoriteViewController = FavoriteViewController()
+			favoriteViewController.getSchedule(true, true)
 		}
 	}
     
