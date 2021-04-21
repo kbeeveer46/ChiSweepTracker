@@ -28,15 +28,18 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
 		// Show settings button in the top right
-		if (
-				schedule.address.trimmingCharacters(in: .whitespaces) != self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) ||
-				schedule.address.trimmingCharacters(in: .whitespaces) == self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) && self.common.favoriteSection() != self.schedule.section
-		   ) {
-			self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-		}
-        else {
-            self.navigationItem.rightBarButtonItem = nil
-        }
+        // This doesn't work with mulitple addresses
+        // Use this one line temporarily for testing
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+//		if (
+//				schedule.address.trimmingCharacters(in: .whitespaces) != self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) ||
+//				schedule.address.trimmingCharacters(in: .whitespaces) == self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) && self.common.favoriteSection() != self.schedule.section
+//		   ) {
+//			self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+//		}
+//        else {
+//            self.navigationItem.rightBarButtonItem = nil
+//        }
 		
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
@@ -188,25 +191,19 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Create options alert
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
-		// Create remove favorite option for options alert
-		//let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
-		//	self.removeFavorite()
-		//})
-		//removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
-		
 		// Create add favorite option for options alert
 		let saveFavoriteAction = UIAlertAction(title: "Add To Favorites", style: .default, handler:{ action in
 			self.addFavorite()
 		})
 		
-		if favoriteAddress != schedule.address ||
-		   (favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section) {
-			
-			optionsAlert.addAction(saveFavoriteAction)
-		}
-		//else {
-		//	optionsAlert.addAction(removeFavoriteAction)
-		//}
+        // This doesn't work with multiple address
+        // Use this one line temporarily for testing
+        optionsAlert.addAction(saveFavoriteAction)
+//		if favoriteAddress != schedule.address ||
+//		   (favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section) {
+//
+//			optionsAlert.addAction(saveFavoriteAction)
+//		}
 		
 		let favoriteImage = UIImage(named: "star")
 		if let icon = favoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {

@@ -91,15 +91,22 @@ class Common {
 	// Favorites
 	
 	func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
-	func favoriteWard() -> String {return defaults.string(forKey: "favoriteWard") ?? ""}
-	func favoriteSection() -> String {return defaults.string(forKey: "favoriteSection") ?? ""}
-	func favoriteLatitude() -> Double {return defaults.double(forKey: "favoriteLatitude")}
-	func favoriteLongitude() -> Double {return defaults.double(forKey: "favoriteLongitude")}
-	func favoriteCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()}
+	//func favoriteWard() -> String {return defaults.string(forKey: "favoriteWard") ?? ""}
+	//func favoriteSection() -> String {return defaults.string(forKey: "favoriteSection") ?? ""}
+	//func favoriteLatitude() -> Double {return defaults.double(forKey: "favoriteLatitude")}
+	//func favoriteLongitude() -> Double {return defaults.double(forKey: "favoriteLongitude")}
+	//func favoriteCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()}
 	func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
 	func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
     func favoriteAddresses() -> [[String]] {return defaults.object(forKey: "favoriteAddresses") as? [[String]] ?? [[String]](repeating: [String](repeating: "", count: 5), count: 50)}
-
+    // favoriteAddresses[0] = address
+    // favoriteAddresses[1] = notifications toggled
+    // favoriteAddresses[2] = when
+    // favoriteAddresses[3] = hour
+    // favoriteAddresses[4] = minute
+    // favoriteAddresses[5] = ward
+    // favoriteAddresses[6] = section
+    
 	// Notifications
 	
 	func notificationWhen() -> String {return defaults.string(forKey: "notificationWhen") ?? ""}
@@ -415,13 +422,30 @@ class Common {
     
 	func updateNotifications() {
 		
-		let favoriteAddress = self.favoriteAddress()
-		let notificationsToggled = self.notificationsToggled()
+		//let favoriteAddress = self.favoriteAddress()
+		//let notificationsToggled = self.notificationsToggled()
 		
-		if !favoriteAddress.isEmpty && notificationsToggled == true {
-			let favoriteViewController = FavoriteViewController()
-			favoriteViewController.getSchedule(true, true)
-		}
+        let favoriteViewController = FavoriteViewController()
+        let favoriteAddresses = self.favoriteAddresses()
+        let addresses = favoriteAddresses.filter { $0[0] != "" }
+        
+        for (_, element) in addresses.enumerated() {
+            
+            let address = element[0]
+            let notificationsToggled = Bool(element[1])
+            let notificationsWhen = element[2]
+            let notificationsHour = Int(element[3]) ?? 0
+            let notificationsMinute = Int(element[4]) ?? 0
+            
+            if notificationsToggled == true {
+                favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+            }
+        }
+        
+//		if !favoriteAddress.isEmpty && notificationsToggled == true {
+//			let favoriteViewController = FavoriteViewController()
+//			favoriteViewController.getSchedule(true, true)
+//		}
 	}
     
     func goToScheduleFromNotification(_ address: String) {

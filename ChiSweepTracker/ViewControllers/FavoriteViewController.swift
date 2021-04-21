@@ -339,14 +339,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Create yes option for remove favorite alert
 			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
-			
-				print("Deleted favorite address: \(self.common.favoriteAddress())")
-                
+			                
                 var favoriteAddresses = self.common.favoriteAddresses()
                 
-                let bypassArr = ["\(self.schedule.address)"]
+                let address = ["\(self.schedule.address)"]
                 //if favoriteAddresses.count == bypassArr.count {
-                    favoriteAddresses = bypassArr.enumerated().map({ (index, str) -> [String] in
+                    favoriteAddresses = address.enumerated().map({ (index, str) -> [String] in
                         if let strPos = favoriteAddresses[index].firstIndex(of: str) {
                             favoriteAddresses[index].remove(at: strPos)
                         }
@@ -543,6 +541,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         // Get schedule so we have the most update to date version
         // Used to pass schedule model to schedule view
+        // I don't think this is needed anymore after favorite list page was added
         self.getSchedule(false)
         
         self.pushNotificationsSwitch.isOn = notificationsToggled!
@@ -577,13 +576,23 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 break
             }
         }
+        
+        defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
     }
     
 	// Populate schedule model and add notifications if applicable
 	// useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
-	func getSchedule(_ registerForPushNotifications: Bool, _ useDefaultNotificationValues: Bool = false) {
+    func getSchedule(_ registerForPushNotifications: Bool,
+                     _ useDefaultNotificationValues: Bool = false,
+                     _ address: String = "",
+                     _ when: String = "",
+                     _ hour: Int = 0,
+                     _ minute: Int = 0,
+                     _ favoriteSection: String = "") {
         
-		//self.schedule.address = self.common.favoriteAddress()
+        if (address != "") {
+            self.schedule.address = address
+        }
 		
         let geocoder = CLGeocoder()
         
@@ -645,7 +654,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             if self.schedule.section.isEmpty {
-								self.schedule.section = self.common.favoriteSection()
+								//self.schedule.section = self.common.favoriteSection()
+                                self.schedule.section = favoriteSection
                             }
                             
                             let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
@@ -689,15 +699,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                         }
 										
 										// Show schedule button in the top left in case it was hidden when the user didn't have an Internet connection
-										self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.viewSchedule))
+										self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.viewSchedule))
                                         
                                         if registerForPushNotifications == true {
                                             
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
 												granted, error in
-                                            
-                                                //print("requestAuthorization granted: \(granted)")
-                                                
+                                                                                            
                                                 if granted == false {
                                                     
                                                     // User's notifications are disabled in settings. Prompt them to open settings
@@ -726,7 +734,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                             self.pushNotificationsSwitch.isOn = false
                                                             self.timePicker.isUserInteractionEnabled = false
                                                             self.onPicker.isUserInteractionEnabled = false
-                                                            defaults.set(false, forKey: "notificationsToggled")
+                                                            //defaults.set(false, forKey: "notificationsToggled")
                                                             
                                                         })
                                                         alertController.addAction(cancelAction)
@@ -738,9 +746,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 													
 													 // Do not remove DispatchQueue
                                                      DispatchQueue.main.async {
-                                                        
-                                                        //print("Deleted user's local notifications")
-														
+                                                        														
 														#if DEBUG
 														//self.sendTestNotifications()
 														#endif
@@ -748,9 +754,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                         let center = UNUserNotificationCenter.current()
 														let calendar = Calendar.current
 														let currentYear = self.common.latestAppVersion() 
-														let notificationWhenDefault = self.common.notificationWhen()
-														let notificationHourDefault = self.common.notificationHour()
-														let notificationMinuteDefault = self.common.notificationMinute()
+														let notificationWhenDefault = when //self.common.notificationWhen()
+														let notificationHourDefault = hour //self.common.notificationHour()
+														let notificationMinuteDefault = minute //self.common.notificationMinute()
 														var hour = 0
 														var minute = 0
 														var when = ""
@@ -795,33 +801,33 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                 }
 																
 																// Create notificaton trigger
-																let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
-                                                                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
-                                                                
-																// Create notification contents
-                                                                let content = UNMutableNotificationContent()
-                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
-                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
-                                                                let soundName = UNNotificationSoundName("notification.m4r")
-																content.sound = UNNotificationSound(named: soundName)
-                                                                content.badge = 1
-																content.userInfo = ["address":self.common.favoriteAddress()]
-
-																// Create notificaton identifier
-																let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
-
-																// Create notification request
-                                                                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-                                                                
-																// Add notification
-																center.add(request, withCompletionHandler: { (error) in
-                                                                    if let error = error {
-                                                                        print("Error adding notification: \(error.localizedDescription)")
-                                                                    }
-                                                                    else {
-                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
-                                                                    }
-                                                                })
+//																let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+//                                                                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+//
+//																// Create notification contents
+//                                                                let content = UNMutableNotificationContent()
+//                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
+//                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
+//                                                                let soundName = UNNotificationSoundName("notification.m4r")
+//																content.sound = UNNotificationSound(named: soundName)
+//                                                                content.badge = 1
+//                                                                content.userInfo = ["address":self.schedule.address]
+//
+//																// Create notificaton identifier
+//																let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
+//
+//																// Create notification request
+//                                                                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+//
+//																// Add notification
+//																center.add(request, withCompletionHandler: { (error) in
+//                                                                    if let error = error {
+//                                                                        print("Error adding notification: \(error.localizedDescription)")
+//                                                                    }
+//                                                                    else {
+//                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
+//                                                                    }
+//                                                                })
                                                                 
                                                                 // Add notification to database
                                                                 
@@ -860,6 +866,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 														let userDatasetVersion = self.common.userDatasetVersion()
 														if userDatasetVersion < latestDatasetVersion {
                                                             
+                                                            defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+                                                            
                                                             // Create dataset updated alert
                                                             let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.", preferredStyle: .alert)
 
@@ -892,7 +900,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                             rootViewController?.present(datasetUpdatedAlert, animated: true, completion: nil)
                                                                                                                         
 														}
-														defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
 													}
                                                 }
                                             }
@@ -900,23 +907,23 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                     }
                                 case .error (let err):
                                     print((err as NSError).userInfo.debugDescription)
-									self.tabBarController?.navigationItem.leftBarButtonItem = nil
+									self.navigationItem.leftBarButtonItem = nil
                                 }
                             }
                         }
                         else {
                             print(self.common.constants.notFound)
-							self.tabBarController?.navigationItem.leftBarButtonItem = nil
+							self.navigationItem.leftBarButtonItem = nil
                         }
                     case .error (let err):
                         print((err as NSError).userInfo.debugDescription)
-						self.tabBarController?.navigationItem.leftBarButtonItem = nil
+						self.navigationItem.leftBarButtonItem = nil
                     }
                 }
             }
             else {
                 print(self.common.constants.notFound)
-				self.tabBarController?.navigationItem.leftBarButtonItem = nil
+				self.navigationItem.leftBarButtonItem = nil
             }
         }
     }
@@ -947,7 +954,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
 		content.sound = UNNotificationSound(named: soundName)
 		content.badge = 1
-		content.userInfo = ["address":self.common.favoriteAddress()]
+		content.userInfo = ["address":"750 N Dearborn St. Chicago, IL"]
 		
 		// Create notification id
 		let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
@@ -1085,9 +1092,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	// Push notifications toggle switch event
 	@IBAction func pushNotificationsTapped(_ sender: Any) {
 		
-        var favoriteAddresses = self.common.favoriteAddresses()
-        
-		if pushNotificationsSwitch.isOn == true {
+        if pushNotificationsSwitch.isOn == true {
 			
 			let latestAppVersion = self.common.latestAppVersion()
 			let latestDatasetVersion = self.common.latestDatasetVersion()
@@ -1110,8 +1115,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             UIApplication.shared.registerForRemoteNotifications()
             
             // Clear current notifications and re-add them in case they changed
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
+            var favoriteAddresses = self.common.favoriteAddresses()
             for (index, element) in favoriteAddresses.enumerated() {
                 if element[0] == self.schedule.address {
                     favoriteAddresses[index][1] = "true"
@@ -1119,7 +1125,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 }
             }
             
-            //defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             self.common.deleteNotificationsFromDatabase(completion: {(completion)-> Void in
                 // Get schedule and update user's local notifications
@@ -1132,19 +1138,21 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			// Save toggle setting to defaults
 			//defaults.set(false, forKey: "notificationsToggled")
             
+            var favoriteAddresses = self.common.favoriteAddresses()
             for (index, element) in favoriteAddresses.enumerated() {
                 if element[0] == self.schedule.address {
                     favoriteAddresses[index][1] = "false"
                     break
                 }
             }
+            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
 			
 			// Disable when and time controls
 			self.timePicker.isUserInteractionEnabled = false
 			self.onPicker.isUserInteractionEnabled = false
 			
 			// Delete all local iOS notifications
-			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+			//UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 			
 			// Unregister from Firebase Cloud Messaging notifications
 			UIApplication.shared.unregisterForRemoteNotifications()
@@ -1152,9 +1160,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             OneSignal.disablePush(true);
             
             self.common.deleteNotificationsFromDatabase(completion: {completion in })
-            
-			//print("Deleted user's local notifications")
-			
+            			
 		}
 	}
 }

@@ -39,22 +39,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         OneSignal.add(self as OSSubscriptionObserver)
         
         var favoriteAddresses = self.common.favoriteAddresses()
+        let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }.count
+        
         let favoriteAddress = self.common.favoriteAddress()
         let notificationsToggled = self.common.notificationsToggled()
+        let notificationsWhen = self.common.notificationWhen()
+        let notificationsHour = self.common.notificationHour()
+        let notificationsMinute = self.common.notificationMinute()
         
-        // Temp code for testing
-        //favoriteAddresses = [[String]](repeating: [String](repeating: "", count: 2), count: 1)
-        //defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
-        
-        
-        if favoriteAddresses.count == 0 && favoriteAddress != "" {
-            
-            //favoriteAddresses = [[String]]()
-            //favoriteAddresses = [[String]](repeating: [String](repeating: "", count: 2), count: 1)
-
+        if favoriteAddressCount == 0 && favoriteAddress != "" {
             
             favoriteAddresses[0][0] = favoriteAddress
-            favoriteAddresses[0][1] = "\(notificationsToggled)"
+            favoriteAddresses[0][1] = String(notificationsToggled)
+            favoriteAddresses[0][2] = notificationsWhen
+            favoriteAddresses[0][3] = String(notificationsHour)
+            favoriteAddresses[0][4] = String(notificationsMinute)
             
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
         }
