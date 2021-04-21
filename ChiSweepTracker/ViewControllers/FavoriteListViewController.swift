@@ -9,28 +9,20 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     let generator = UISelectionFeedbackGenerator()
     let common = Common()
-    var favoriteAddresses = [String]()
+    var favoriteAddresses = [[String]]()
     var mapLocations = [CLLocationCoordinate2D]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        favoriteAddresses = self.common.favoriteAddresses().sorted()
+        favoriteAddresses = self.common.favoriteAddresses()
         
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
         self.favoriteListTableView.reloadData()
         
-        // Fill in notification form values with user defaults
-        //self.loadNotificationControlValues()
-
         self.loadFavoriteMap()
-        
-        //self.zoomToFit(mapLocations)
-        
-        // Initialize controls per device
-        //self.initializeControlsPerDevice()
         
     }
     
@@ -41,67 +33,73 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.delegate = self
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
-        if favoriteAddresses.count > 0 {
-            
+        let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }.count
+        
+        if favoriteAddressCount > 0 {
+
             self.tabBarController?.navigationItem.title = "Favorite Addresses"
         
-            for address in favoriteAddresses {
-                            
-                // Get coordinates from address
-                let geocoder = CLGeocoder()
-                geocoder.geocodeAddressString(address) { placemarks, error in
-                    
-                    // No internet connection will cause an error
-                    if error != nil {
-                        return
-                    }
-                    
-                    if placemarks != nil {
-                    
-                        // Get first placemark in list
-                        let placemark = placemarks?.first
+            //for address in favoriteAddresses {
+            for (_, element) in favoriteAddresses.enumerated() {
+                          
+                if element[0] != "" {
+                
+                    // Get coordinates from address
+                    let geocoder = CLGeocoder()
+                    geocoder.geocodeAddressString(element[0]) { placemarks, error in
                         
-                        // Create coorindates from placemark
-                        var coordinates = CLLocationCoordinate2D()
-                        coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
-                        coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
-                        
-                        self.mapLocations.append(coordinates)
-                        
-                        //self.mapAnnotationLocations.append(CLLocation(latitude: schedule.locationCoordinate.latitude, longitude: schedule.locationCoordinate.longitude))
-                        let location = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
-                    
-                        // Create annotation using location coordinate
-                        let annotation = CustomAnnotation()
-                        annotation.customImageName = "pin-address"
-                        annotation.coordinate = location.coordinate
-                        annotation.title = address
-                        //annotation.subtitle = "Ward: \(schedule.ward) - Section: \(schedule.section)"
-                        
-                        // Add annoation to map
-                        let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
-                        self.favoriteListMapView.addAnnotation(annotationView.annotation!)
-                        
-                        if self.favoriteAddresses.count == 1 {
-
-                            // Create map span
-                            let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
-
-                            // Create map region
-                            let region = MKCoordinateRegion(center: location.coordinate, span: span)
-
-                            // Set map region
-                            self.favoriteListMapView.setRegion(region, animated: false)
-
+                        // No internet connection will cause an error
+                        if error != nil {
+                            return
                         }
                         
-                        if self.favoriteAddresses.count != 1 && self.favoriteAddresses.count == self.favoriteListMapView.annotations.count {
+                        if placemarks != nil {
+                        
+                            // Get first placemark in list
+                            let placemark = placemarks?.first
                             
-                            let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
+                            // Create coorindates from placemark
+                            var coordinates = CLLocationCoordinate2D()
+                            coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                            coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                            self.mapLocations.append(coordinates)
                             
+                            let location = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
+                        
+                            // Create annotation using location coordinate
+                            let annotation = CustomAnnotation()
+                            annotation.customImageName = "pin-address"
+                            annotation.coordinate = location.coordinate
+                            annotation.title = element[0]
+                            
+                            // Add annoation to map
+                            let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
+                            self.favoriteListMapView.addAnnotation(annotationView.annotation!)
+                            
+                            if favoriteAddressCount == 1 {
+
+                                // Create map span
+                                let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+
+                                // Create map region
+                                let region = MKCoordinateRegion(center: location.coordinate, span: span)
+
+                                // Set map region
+                                self.favoriteListMapView.setRegion(region, animated: false)
+
+                            }
+                            
+                            if favoriteAddressCount != 1 && favoriteAddressCount == self.favoriteListMapView.annotations.count {
+                                
+                                let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
+                                self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
+                                
+                            }
                         }
                     }
+                }
+                else {
+                    break
                 }
             }
         }
@@ -279,7 +277,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoriteAddresses.count
+        
+        return favoriteAddresses.filter { $0[0] != "" }.count
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -315,7 +315,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 //        }
 
         // Set label text
-        addressLabel.text = favoriteAddresses[indexPath.row]
+        addressLabel.text = favoriteAddresses[indexPath.row][0]
 //        daysLabel.text = dates
         
         // If month equals the current month then change the labels to blue

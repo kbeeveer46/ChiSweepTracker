@@ -343,7 +343,21 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				print("Deleted favorite address: \(self.common.favoriteAddress())")
                 
                 var favoriteAddresses = self.common.favoriteAddresses()
-                favoriteAddresses.removeAll { $0 == self.common.favoriteAddress() }
+                
+                //favoriteAddresses = favoriteAddresses.map { $0.filter { !self.schedule.address.contains($0) }}
+                
+                //var myArr = [["1_2","1_3","1_4"], ["2_1","2_2","2_3"], ["3_1","3_2","3_3"]]
+                let bypassArr = ["\(self.schedule.address)"]
+                //if favoriteAddresses.count == bypassArr.count {
+                    favoriteAddresses = bypassArr.enumerated().map({ (index, str) -> [String] in
+                        if let strPos = favoriteAddresses[index].firstIndex(of: str) {
+                            favoriteAddresses[index].remove(at: strPos)
+                        }
+                        return favoriteAddresses[index]
+                    })
+                //}
+                print(favoriteAddresses)
+                
                 defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
 				
 				// Clear favorite default values
@@ -487,7 +501,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func loadNotificationControlValues() {
         
 		// Set the title or else the title is used from another tab
-		self.tabBarController?.navigationItem.title = "Favorite Address"
+		//self.tabBarController?.navigationItem.title = "Favorite Address"
+        self.tabBarController?.navigationItem.title = self.schedule.address
 		
 		// Set required properties for when picker
 		self.onPicker.delegate = self
@@ -1072,6 +1087,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		
 		if pushNotificationsSwitch.isOn == true {
 			
+            var favoriteAddresses = self.common.favoriteAddresses()
 			let latestAppVersion = self.common.latestAppVersion()
 			let latestDatasetVersion = self.common.latestDatasetVersion()
 
@@ -1094,6 +1110,14 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             // Clear current notifications and re-add them in case they changed
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            
+            for (index, element) in favoriteAddresses.enumerated() {
+              print("Item \(index): \(element)")
+                if favoriteAddresses[index][0] == self.schedule.address {
+                    favoriteAddresses[index][1] = "true"
+                }
+            }
+            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             self.common.deleteNotificationsFromDatabase(completion: {(completion)-> Void in
                 // Get schedule and update user's local notifications

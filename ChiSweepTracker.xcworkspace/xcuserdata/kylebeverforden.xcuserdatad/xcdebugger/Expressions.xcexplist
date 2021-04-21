@@ -39,13 +39,32 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteAddresses.count">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "AppDelegate.application(_:didRegisterForRemoteNotificationsWithDeviceToken:):AppDelegate.swift">
          <PersistentStrings>
             <PersistentString
                value = "OneSignal.getDeviceState()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteViewController.loadFavoriteMap():FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteAddresses[index][0]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

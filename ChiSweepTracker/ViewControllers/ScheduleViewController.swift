@@ -80,12 +80,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         var favoriteAddresses = self.common.favoriteAddresses()
         
-        favoriteAddresses.append(schedule.address)
-        
-        //let favoriteAddress = ScheduleModel()
-        //favoriteAddress.address = schedule.address
-        //favoriteAddresses.append(favoriteAddress)
-        //UserSessionManager.shared.favoriteAddresses = favoriteAddresses
+        for (index, element) in favoriteAddresses.enumerated() {
+            if element[0] == "" {
+                favoriteAddresses[index][0] = schedule.address
+                favoriteAddresses[index][1] = "false"
+                break
+            }
+        }
         
         defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
                     
@@ -124,6 +125,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Present alert
         self.present(alert, animated: true, completion: nil)
     }
+    
+    
     
 	// Method is called when user chooses yes to remove a favorite
 //    @objc func removeFavorite() {

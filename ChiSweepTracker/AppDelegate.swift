@@ -40,8 +40,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         var favoriteAddresses = self.common.favoriteAddresses()
         let favoriteAddress = self.common.favoriteAddress()
+        let notificationsToggled = self.common.notificationsToggled()
+        
+        // Temp code for testing
+        //favoriteAddresses = [[String]](repeating: [String](repeating: "", count: 2), count: 1)
+        //defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+        
+        
         if favoriteAddresses.count == 0 && favoriteAddress != "" {
-            favoriteAddresses.append(favoriteAddress)
+            
+            //favoriteAddresses = [[String]]()
+            //favoriteAddresses = [[String]](repeating: [String](repeating: "", count: 2), count: 1)
+
+            
+            favoriteAddresses[0][0] = favoriteAddress
+            favoriteAddresses[0][1] = "\(notificationsToggled)"
+            
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
         }
         
