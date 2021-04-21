@@ -71,7 +71,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.selectionChanged()
         
         // Clear notifications created by previous favorite
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 		
 		// Unregister from Firebase Cloud Messaging notifications
 		//UIApplication.shared.unregisterForRemoteNotifications()
@@ -195,7 +195,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		//removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
 		
 		// Create add favorite option for options alert
-		let saveFavoriteAction = UIAlertAction(title: "Save As Favorite Address", style: .default, handler:{ action in
+		let saveFavoriteAction = UIAlertAction(title: "Add To Favorites", style: .default, handler:{ action in
 			self.addFavorite()
 		})
 		

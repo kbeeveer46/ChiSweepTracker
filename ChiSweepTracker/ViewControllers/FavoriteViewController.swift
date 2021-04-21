@@ -332,10 +332,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
 		// Create remove favorite option for options alert
-		let removeFavoriteAction = UIAlertAction(title: "Remove Favorite Address", style: .default, handler:{ action in
+		let removeFavoriteAction = UIAlertAction(title: "Remove From Favorites", style: .default, handler:{ action in
 			
 			// Create remove favorite alert
-			let removeFavoriteAlert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+			let removeFavoriteAlert = UIAlertController(title: "Remove Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
 			
 			// Create yes option for remove favorite alert
 			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -344,9 +344,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 
                 var favoriteAddresses = self.common.favoriteAddresses()
                 
-                //favoriteAddresses = favoriteAddresses.map { $0.filter { !self.schedule.address.contains($0) }}
-                
-                //var myArr = [["1_2","1_3","1_4"], ["2_1","2_2","2_3"], ["3_1","3_2","3_3"]]
                 let bypassArr = ["\(self.schedule.address)"]
                 //if favoriteAddresses.count == bypassArr.count {
                     favoriteAddresses = bypassArr.enumerated().map({ (index, str) -> [String] in
@@ -361,13 +358,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
 				
 				// Clear favorite default values
-				defaults.set("", forKey: "favoriteAddress")
+				//defaults.set("", forKey: "favoriteAddress")
 				defaults.set("", forKey: "favoriteWard")
 				defaults.set("", forKey: "favoriteSection")
 				defaults.set(0.0, forKey: "favoriteLongitude")
 				defaults.set(0.0, forKey: "favoriteLatitude")
 				defaults.set(nil, forKey: "favoriteCoordinatesArray")
-				defaults.set(false, forKey: "notificationsToggled")
+				//defaults.set(false, forKey: "notificationsToggled")
 				
 				// Delete future local iOS notifications
 				UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -500,72 +497,71 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     func loadNotificationControlValues() {
         
-		// Set the title or else the title is used from another tab
-		//self.tabBarController?.navigationItem.title = "Favorite Address"
-        self.tabBarController?.navigationItem.title = self.schedule.address
+        self.navigationItem.title = self.schedule.address
 		
 		// Set required properties for when picker
 		self.onPicker.delegate = self
 		self.onPicker.dataSource = self
 		
-		// Set values for when and time pickers
-		let when = self.common.notificationWhen()
-        let index = whenData.firstIndex(of: when) ?? 0
-        let hour = self.common.notificationHour()
-        let minute = self.common.notificationMinute()
+        let favoriteAddresses = self.common.favoriteAddresses()
+        let favoriteAddress = favoriteAddresses.filter { $0[0] == self.schedule.address }
+        let notificationsToggled = Bool(favoriteAddress[0][1])
+        
+        var when = ""
+        var whenIndex = 0
+        var hour = ""
+        var hourInt = 0
+        var minute = ""
+        var minuteInt = 0
+        
+        for (index, element) in favoriteAddresses.enumerated() {
+            if element[0] == self.schedule.address {
+                when = favoriteAddresses[index][2]
+                whenIndex = whenData.firstIndex(of: when) ?? 0
+                hour = favoriteAddresses[index][3]
+                minute = favoriteAddresses[index][4]
+                break
+            }
+        }
+        
+        if hour != "" {
+            hourInt = Int(hour) ?? 0
+        }
+        
+        if minute != "" {
+            minuteInt = Int(minute) ?? 0
+        }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat =  "HH:mm"
-        let date = dateFormatter.date(from: "\(hour):\(minute)")
+        let date = dateFormatter.date(from: "\(hourInt):\(minuteInt)")
         
-        self.onPicker.selectRow(index, inComponent: 0, animated: false)
+        self.onPicker.selectRow(whenIndex, inComponent: 0, animated: false)
         self.timePicker.date = date!
         
         timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
-
-		let favoriteAddress = self.common.favoriteAddress()
-		let notificationsToggled = self.common.notificationsToggled()
-		
-		// Disable form depending if they have notifications toggled on or off
-		if !favoriteAddress.isEmpty {
-			
-			// Get schedule so we have the most update to date version
-			// Used to pass schedule model to schedule view
-			self.getSchedule(false)
-			
-			self.pushNotificationsSwitch.isOn = notificationsToggled
-			self.pushNotificationsSwitch.isUserInteractionEnabled = true
-			self.onPicker.isUserInteractionEnabled = notificationsToggled
-			self.timePicker.isUserInteractionEnabled = notificationsToggled
-			
-			self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
-			self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-			
-			if self.tabBarController == nil {
-				self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-			}
-		}
-		else {
-			
-			self.tabBarController?.navigationItem.title = "No Favorite Address Saved"
-			
-			self.pushNotificationsSwitch.isOn = false
-			self.pushNotificationsSwitch.isUserInteractionEnabled = false
-			self.onPicker.isUserInteractionEnabled = false
-			self.timePicker.isUserInteractionEnabled = false
-			
-			self.tabBarController?.navigationItem.leftBarButtonItem = nil
-			self.tabBarController?.navigationItem.rightBarButtonItem = nil
-			
-			if self.tabBarController == nil {
-				self.navigationItem.leftBarButtonItem = nil
-				self.navigationItem.rightBarButtonItem = nil
-			}
-		}
+        
+        // Get schedule so we have the most update to date version
+        // Used to pass schedule model to schedule view
+        self.getSchedule(false)
+        
+        self.pushNotificationsSwitch.isOn = notificationsToggled!
+        self.pushNotificationsSwitch.isUserInteractionEnabled = true
+        self.onPicker.isUserInteractionEnabled = notificationsToggled!
+        self.timePicker.isUserInteractionEnabled = notificationsToggled!
+        
+        self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
+        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+        
+        if self.tabBarController == nil {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+        }
     }
     
 	// Save form values to defaults
     func saveDefaultNotificationValues() {
+        
+        var favoriteAddresses = self.common.favoriteAddresses()
         
         let time = self.timePicker.date
         let comp = Calendar.current.dateComponents([.hour, .minute], from: time)
@@ -573,17 +569,21 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let minute = comp.minute!
         let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
         
-        defaults.set(when, forKey: "notificationWhen")
-        defaults.set(hour, forKey: "notificationHour")
-        defaults.set(minute, forKey: "notificationMinute")
-        
+        for (index, element) in favoriteAddresses.enumerated() {
+            if element[0] == self.schedule.address {
+                favoriteAddresses[index][2] = String(when)
+                favoriteAddresses[index][3] = String(hour)
+                favoriteAddresses[index][4] = String(minute)
+                break
+            }
+        }
     }
     
 	// Populate schedule model and add notifications if applicable
 	// useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
 	func getSchedule(_ registerForPushNotifications: Bool, _ useDefaultNotificationValues: Bool = false) {
         
-		self.schedule.address = self.common.favoriteAddress()
+		//self.schedule.address = self.common.favoriteAddress()
 		
         let geocoder = CLGeocoder()
         
@@ -595,7 +595,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				
 				// Remove schedule button in the top left if there's an error getting the coordinates
 				// If there's an error getting the coornidates then the schedule won't be populated correctly
-				self.tabBarController?.navigationItem.leftBarButtonItem = nil
+				self.navigationItem.leftBarButtonItem = nil
 				
 			}
             
@@ -1085,14 +1085,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 	// Push notifications toggle switch event
 	@IBAction func pushNotificationsTapped(_ sender: Any) {
 		
+        var favoriteAddresses = self.common.favoriteAddresses()
+        
 		if pushNotificationsSwitch.isOn == true {
 			
-            var favoriteAddresses = self.common.favoriteAddresses()
 			let latestAppVersion = self.common.latestAppVersion()
 			let latestDatasetVersion = self.common.latestDatasetVersion()
 
 			// Save settings to defaults
-			defaults.set(true, forKey: "notificationsToggled")
+			//defaults.set(true, forKey: "notificationsToggled")
 			defaults.set(latestAppVersion, forKey: "notificationsYear")
 			defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
 			
@@ -1112,12 +1113,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
             for (index, element) in favoriteAddresses.enumerated() {
-              print("Item \(index): \(element)")
-                if favoriteAddresses[index][0] == self.schedule.address {
+                if element[0] == self.schedule.address {
                     favoriteAddresses[index][1] = "true"
+                    break
                 }
             }
-            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+            
+            //defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             self.common.deleteNotificationsFromDatabase(completion: {(completion)-> Void in
                 // Get schedule and update user's local notifications
@@ -1128,7 +1130,14 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		else {
 			
 			// Save toggle setting to defaults
-			defaults.set(false, forKey: "notificationsToggled")
+			//defaults.set(false, forKey: "notificationsToggled")
+            
+            for (index, element) in favoriteAddresses.enumerated() {
+                if element[0] == self.schedule.address {
+                    favoriteAddresses[index][1] = "false"
+                    break
+                }
+            }
 			
 			// Disable when and time controls
 			self.timePicker.isUserInteractionEnabled = false
