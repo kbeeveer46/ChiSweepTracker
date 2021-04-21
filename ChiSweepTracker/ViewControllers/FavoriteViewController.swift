@@ -402,6 +402,20 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		})
 		removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
 		
+        // Create view schedule options for alert
+        let viewScheduleAction = UIAlertAction(title: "View Sweep Schedule", style: .default, handler:{ action in
+            // Segue to schedule view
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                destinationViewController.schedule = self.schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        })
+        let viewScheduleImage = UIImage(named: "list")
+        if let icon = viewScheduleImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+            viewScheduleAction.setValue(icon, forKey: "image")
+        }
+        optionsAlert.addAction(viewScheduleAction)
+        
 		// Create nearby Divvy stations options for alert
 		if (showDivvyStations == false) {
 			let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
@@ -455,7 +469,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedSearchViewController") as? TowedSearchViewController {
 				self.navigationController?.pushViewController(destinationViewController, animated: true)
 			}
-			
 		})
 		let searchTowedVehiclesImage = UIImage(named: "search-fill")
 		if let icon = searchTowedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
@@ -549,7 +562,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.onPicker.isUserInteractionEnabled = notificationsToggled!
         self.timePicker.isUserInteractionEnabled = notificationsToggled!
         
-        self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
+        //self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
         self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
         
         if self.tabBarController == nil {
@@ -699,7 +712,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                         }
 										
 										// Show schedule button in the top left in case it was hidden when the user didn't have an Internet connection
-										self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.viewSchedule))
+										//self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.viewSchedule))
                                         
                                         if registerForPushNotifications == true {
                                             
