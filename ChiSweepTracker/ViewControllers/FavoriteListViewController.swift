@@ -41,17 +41,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.delegate = self
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
-        // Create map span
-        //let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
-        
-        // Create map coordinates using Chicago
-        //let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
-        
-        // Create map region using coordinates and span
-        //let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
-        
-        //self.favoriteListMapView.setRegion(region, animated: false)
-        
         if favoriteAddresses.count > 0 {
             
             self.tabBarController?.navigationItem.title = "Favorite Addresses"
@@ -285,49 +274,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         annotationView.subviews.forEach({ $0.removeFromSuperview() })
         annotationView.leftCalloutAccessoryView = nil
         
-//        if (customPointAnnotation.customImageName == "pin-address") {
-//
-//            let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
-//            annotationLabel.lineBreakMode = .byWordWrapping
-//            annotationLabel.textAlignment = .center
-//            annotationLabel.font = .boldSystemFont(ofSize: 11)
-//            annotationLabel.text = annotation.title!
-//            annotationLabel.strokeColor = UIColor.white
-//            annotationLabel.strokeSize = 1
-//            annotationView.addSubview(annotationLabel)
-//
-//        }
-        
         return annotationView
     }
-    
-//    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-//
-//        if let annotation = view.annotation as? CustomAnnotation {
-//
-//            defaults.set(annotation.coordinate.longitude, forKey: "selectedAnnotationLongitude")
-//            defaults.set(annotation.coordinate.latitude, forKey: "selectedAnnotationLatitude")
-//
-//            if (annotation.customImageName == "pin-relocated") {
-//
-//                // Segue to relocated detail view
-//                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "RelocatedDetailViewController") as? RelocatedDetailViewController {
-//                    destinationViewController.relocatedVehicle = annotation.relocatedVehicle
-//                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-//                }
-//
-//            }
-//            else if (annotation.customImageName == "pin-divvy") {
-//
-//                // Segue to divvy detail view
-//                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "DivvyDetailViewController") as? DivvyDetailViewController {
-//                    destinationViewController.station = annotation.divvyStation
-//                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-//                }
-//            }
-//        }
-//    }
-    
+        
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return favoriteAddresses.count
@@ -339,29 +288,15 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         // Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
-        
-        // Get selected month and send user to calendar view
-        
+                
         // Get cell from table view
         let cell = tableView.cellForRow(at: indexPath)!
         
-        // Get days label from cell
         let addressLabel = cell.viewWithTag(1) as! UILabel
-        
-        // Get list of days from days label
         let address = addressLabel.text!.trimmingCharacters(in: .whitespaces)
         
         self.searchForSchedule(address)
         
-//        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
-//            
-//            // Pass month name, number, days, and schededule to calendar view
-//            destinationViewController.selectedMonthNumber = Int(schedule.months[indexPath.row].number) ?? 0
-//            destinationViewController.selectedMonthName = schedule.months[indexPath.row].name
-//            destinationViewController.selectedDates = days
-//            destinationViewController.schedule = self.schedule
-//            self.navigationController?.pushViewController(destinationViewController, animated: true)
-//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
