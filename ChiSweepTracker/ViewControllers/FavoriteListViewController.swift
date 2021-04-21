@@ -37,7 +37,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         if addresses.count > 0 {
 
-            self.tabBarController?.navigationItem.title = "Favorite Addresses"
+            self.tabBarController?.navigationItem.title = "Saved Addresses"
+            self.mapLocations.removeAll()
         
             for (_, element) in addresses.enumerated() {
                                           
@@ -89,7 +90,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         if addresses.count != 1 && addresses.count == self.favoriteListMapView.annotations.count {
                             
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: true)
                             
                         }
                     }
@@ -97,7 +98,20 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             }
         }
         else {
-            self.tabBarController?.navigationItem.title = "No Favorite Addresses Saved"
+            self.tabBarController?.navigationItem.title = "No Saved Addresses"
+            
+            // Create map span using Chicago
+            let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+            
+            // Create coordinates using Chicago
+            let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+            
+            // Create map region from span and coordinates
+            let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+            
+            // Set map region
+            self.favoriteListMapView.setRegion(region, animated: false)
+            
         }
     }
     

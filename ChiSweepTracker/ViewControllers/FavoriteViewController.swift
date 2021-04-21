@@ -332,10 +332,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
 		// Create remove favorite option for options alert
-		let removeFavoriteAction = UIAlertAction(title: "Remove From Favorites", style: .default, handler:{ action in
+		let removeFavoriteAction = UIAlertAction(title: "Remove Address", style: .default, handler:{ action in
 			
 			// Create remove favorite alert
-			let removeFavoriteAlert = UIAlertController(title: "Remove Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+			let removeFavoriteAlert = UIAlertController(title: "Are You Sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
 			
 			// Create yes option for remove favorite alert
 			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -468,7 +468,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		// Add options to options alert
 		optionsAlert.addAction(cancelAction)
 		
-		let removeFavoriteImage = UIImage(named: "star")
+		let removeFavoriteImage = UIImage(named: "house_alt")
 		if let icon = removeFavoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
 			removeFavoriteAction.setValue(icon, forKey: "image")
 		}
@@ -548,10 +548,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.onPicker.isUserInteractionEnabled = notificationsToggled!
         self.timePicker.isUserInteractionEnabled = notificationsToggled!
         
-        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
         
         if self.tabBarController == nil {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
         }
     }
     

@@ -25,6 +25,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #1 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -33,13 +36,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #1 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
-      </ContextState>
-      <ContextState
          contextName = "FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "favoriteAddresses[index][0]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.favoriteListMapView.annotations.count ">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

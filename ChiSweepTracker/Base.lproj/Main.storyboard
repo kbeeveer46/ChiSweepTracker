@@ -159,26 +159,26 @@
                                 <color key="sectionIndexBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="infoTableCell" id="1v4-pe-yoq">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="126"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="126.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1v4-pe-yoq" id="E2N-7N-TpW">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="126"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="126.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rv1-F9-GEl" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="11" width="374" height="104"/>
+                                                    <rect key="frame" x="20" y="11" width="374" height="104.5"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Bvx-z0-bLp">
-                                                            <rect key="frame" x="10" y="10" width="354" height="84"/>
+                                                            <rect key="frame" x="10" y="10" width="354" height="84.5"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lx2-i5-maY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="84"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="84.5"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="35" id="fEK-0M-cYB"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vIW-6H-5pr">
-                                                                    <rect key="frame" x="45" y="0.0" width="309" height="84"/>
+                                                                    <rect key="frame" x="45" y="0.0" width="309" height="84.5"/>
                                                                     <attributedString key="attributedText">
                                                                         <fragment content="Enjoying Sweep Tracker? Click here to give it a 5-star rating. Your positive rating will help others in Chicago avoid tickets.">
                                                                             <attributes>
@@ -355,13 +355,13 @@
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S5W-Ye-frp">
-                                <rect key="frame" x="0.0" y="323" width="414" height="500"/>
+                                <rect key="frame" x="0.0" y="323" width="414" height="539"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ept-1V-WV1" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="10" width="384" height="470"/>
+                                        <rect key="frame" x="15" y="10" width="384" height="519"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jmO-QO-Dx0">
-                                                <rect key="frame" x="0.0" y="0.0" width="384" height="470"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="384" height="519"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="h3M-Di-oO4">
                                                         <rect key="frame" x="0.0" y="0.0" width="384" height="56"/>
@@ -403,7 +403,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="43" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LBw-Gl-6Ol">
-                                                        <rect key="frame" x="0.0" y="81" width="384" height="381"/>
+                                                        <rect key="frame" x="0.0" y="81" width="384" height="430"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <prototypes>
                                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="scheduleTableCell" id="gue-Fp-3PN">
@@ -477,7 +477,7 @@
                             <constraint firstItem="S5W-Ye-frp" firstAttribute="leading" secondItem="ORo-iT-5MZ" secondAttribute="leading" id="Dv7-13-uWY"/>
                             <constraint firstItem="IJE-QJ-UFJ" firstAttribute="top" secondItem="ORo-iT-5MZ" secondAttribute="top" id="FGb-XI-PYT"/>
                             <constraint firstItem="S5W-Ye-frp" firstAttribute="top" secondItem="IJE-QJ-UFJ" secondAttribute="bottom" id="Gt7-w7-Edd"/>
-                            <constraint firstItem="S5W-Ye-frp" firstAttribute="bottom" secondItem="ORo-iT-5MZ" secondAttribute="bottom" constant="10" id="JRu-H1-eXG"/>
+                            <constraint firstItem="S5W-Ye-frp" firstAttribute="bottom" secondItem="ORo-iT-5MZ" secondAttribute="bottom" id="JRu-H1-eXG"/>
                             <constraint firstItem="S5W-Ye-frp" firstAttribute="trailing" secondItem="ORo-iT-5MZ" secondAttribute="trailing" id="j5K-Sj-9Z0"/>
                             <constraint firstItem="ORo-iT-5MZ" firstAttribute="trailing" secondItem="IJE-QJ-UFJ" secondAttribute="trailing" id="pB6-v5-cFj"/>
                         </constraints>
@@ -497,7 +497,7 @@
             </objects>
             <point key="canvasLocation" x="1861" y="80"/>
         </scene>
-        <!--Favorites-->
+        <!--Addresses-->
         <scene sceneID="e56-WC-zhp">
             <objects>
                 <viewController storyboardIdentifier="FavoriteListViewController" id="QN8-7A-CVX" customClass="FavoriteListViewController" customModule="Sweep_Tracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -537,7 +537,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="aHE-iZ-8Xz">
                                                                     <rect key="frame" x="10" y="0.0" width="354" height="43"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="house_fill" translatesAutoresizingMaskIntoConstraints="NO" id="S6K-D4-U3J">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="house_alt" translatesAutoresizingMaskIntoConstraints="NO" id="S6K-D4-U3J">
                                                                             <rect key="frame" x="0.0" y="0.0" width="20" height="43"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="Bx1-Ob-jbh"/>
@@ -590,7 +590,7 @@
                             <constraint firstItem="TI0-dp-aUe" firstAttribute="bottom" secondItem="6Go-u0-pOk" secondAttribute="bottom" constant="10" id="kOi-h1-vr3"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Favorites" image="star_border" id="ejh-pa-u05"/>
+                    <tabBarItem key="tabBarItem" title="Addresses" image="house_alt" id="ejh-pa-u05"/>
                     <navigationItem key="navigationItem" id="kvM-Jc-u41"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -618,7 +618,7 @@
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x6j-dw-x16" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="333" width="384" height="470"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-e5-O3v">
                                         <rect key="frame" x="0.0" y="5" width="384" height="305"/>
@@ -1033,7 +1033,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7aX-lO-kbB">
-                                <rect key="frame" x="0.0" y="109" width="414" height="704"/>
+                                <rect key="frame" x="0.0" y="109" width="414" height="753"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" systemColor="systemGray6Color"/>
                                 <prototypes>
@@ -1302,7 +1302,7 @@
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RLM-1F-Awx" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="333" width="384" height="470"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="OEz-kq-mDE">
                                         <rect key="frame" x="10" y="10" width="364" height="193"/>
@@ -1481,7 +1481,7 @@
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jYz-zq-ilD" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="333" width="384" height="470"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="QEU-mg-Rro">
                                         <rect key="frame" x="10" y="10" width="364" height="265"/>
@@ -1715,7 +1715,7 @@
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sV3-7a-rvC" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="333" width="384" height="470"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="DQR-gl-Vmu">
                                         <rect key="frame" x="10" y="8" width="364" height="300"/>
@@ -2011,10 +2011,10 @@
                                 </constraints>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSm-ie-em0" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="15" y="333" width="384" height="470"/>
+                                <rect key="frame" x="15" y="333" width="384" height="519"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="441-DP-RR8">
-                                        <rect key="frame" x="8" y="8" width="368" height="454"/>
+                                        <rect key="frame" x="8" y="8" width="368" height="503"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click on sweep day to add calendar event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSJ-e6-OHu">
                                                 <rect key="frame" x="50" y="0.0" width="268" height="17"/>
@@ -2023,7 +2023,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-VY-Xlh">
-                                                <rect key="frame" x="23" y="37" width="322.5" height="20.5"/>
+                                                <rect key="frame" x="23" y="37" width="322.5" height="69.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Mon" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkh-Lj-Eec">
                                                         <rect key="frame" x="0.0" y="0.0" width="35.5" height="20.5"/>
@@ -2071,7 +2071,7 @@
                                                 </subviews>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pG9-ck-JRR">
-                                                <rect key="frame" x="21.5" y="77.5" width="325" height="376.5"/>
+                                                <rect key="frame" x="21.5" y="126.5" width="325" height="376.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="325" id="FCV-rp-zgs"/>
@@ -2159,14 +2159,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Nuf-vw-u17"/>
-        <segue reference="maw-XV-A0s"/>
+        <segue reference="eEQ-YS-Bae"/>
+        <segue reference="nuK-lD-YCG"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar_day" width="33.5" height="33.5"/>
         <image name="calendar_day_white" width="33.5" height="33.5"/>
         <image name="color" width="33.5" height="33.5"/>
-        <image name="house_fill" width="33.5" height="33.5"/>
+        <image name="house_alt" width="33.5" height="33.5"/>
         <image name="info_circle" width="33.5" height="33.5"/>
         <image name="license_plate" width="33.5" height="33.5"/>
         <image name="mail_outline" width="33.5" height="33.5"/>

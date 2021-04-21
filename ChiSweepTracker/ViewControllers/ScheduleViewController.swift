@@ -27,20 +27,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Set title using latest app version (year)
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
-		// Show settings button in the top right
-        // This doesn't work with mulitple addresses
-        // Use this one line temporarily for testing
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-//		if (
-//				schedule.address.trimmingCharacters(in: .whitespaces) != self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) ||
-//				schedule.address.trimmingCharacters(in: .whitespaces) == self.common.favoriteAddress().trimmingCharacters(in: .whitespaces) && self.common.favoriteSection() != self.schedule.section
-//		   ) {
-//			self.navigationItem.rightBarButtonItem  = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-//		}
-//        else {
-//            self.navigationItem.rightBarButtonItem = nil
-//        }
-		
+        // Show options menu in the top right
+        self.showOptionsMenu()
+        
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
 		
@@ -67,11 +56,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	}
     
 	// Method is called when user chooses yes to add a favorite
-    @objc func addFavorite() {
+    @objc func addAddress() {
         
 		// Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
+        
+        self.navigationItem.rightBarButtonItem = nil
         
         var favoriteAddresses = self.common.favoriteAddresses()
         for (index, element) in favoriteAddresses.enumerated() {
@@ -98,7 +89,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //defaults.set(false, forKey: "notificationsToggled")
         
         // Create alert
-        let alert = UIAlertController(title: "Favorite Added", message: "Would you like to enable notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Addresses Added", message: "Would you like to enable notifications?", preferredStyle: .alert)
 		
 		// Yes option
 		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -108,9 +99,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 destinationViewController.schedule = self.schedule
                 self.navigationController?.pushViewController(destinationViewController, animated: true)
             }
-            
-            // Segue to notifications view if they select yes
-			//self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
+    
 		}))
 		
 		// No option
@@ -119,56 +108,28 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Present alert
         self.present(alert, animated: true, completion: nil)
     }
-    
-    
-    
-	// Method is called when user chooses yes to remove a favorite
-//    @objc func removeFavorite() {
-//
-//		// Add haptic feedback
-//        generator.prepare()
-//        generator.selectionChanged()
-//
-//        // Create alert
-//        let alert = UIAlertController(title: "Remove Favorite Address?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
-//
-//		// Yes option
-//		let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
-//
-//			print("Deleted favorite address: \(self.common.favoriteAddress())")
-//
-//			// Clear favorites from defaults
-//			defaults.set("", forKey: "favoriteAddress")
-//			defaults.set("", forKey: "favoriteWard")
-//			defaults.set("", forKey: "favoriteSection")
-//			defaults.set(0.0, forKey: "favoriteLatitude")
-//			defaults.set(0.0, forKey: "favoriteLongitude")
-//			defaults.set(nil, forKey: "favoriteCoordinatesArray")
-//			defaults.set(false, forKey: "notificationsToggled")
-//
-//			// Remove any notifications set from their previous favorite
-//			UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-//
-//			// Unregister from Firebase Cloud Messaging notifications
-//			UIApplication.shared.unregisterForRemoteNotifications()
-//
-//			//print("Deleted user's local notifications")
-//
-//			// Set right bar button to add now that a favorite has been removed
-//			//self.navigationItem.rightBarButtonItem = self.addFavoriteButton
-//
-//		})
-//		yesAction.setValue(UIColor.red, forKey: "titleTextColor")
-//		alert.addAction(yesAction)
-//
-//		// No option
-//        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-//
-//		// Present alert
-//        self.present(alert, animated: true, completion: nil)
-//
-//    }
 	
+    // Show settings button in the top right
+    func showOptionsMenu() {
+        
+        let favoriteAddresses = self.common.favoriteAddresses().filter { $0[0] != "" }
+        var doNotShowOptionsMenu = false
+        
+        for (_, element) in favoriteAddresses.enumerated() {
+            if element[0] == self.schedule.address {
+                doNotShowOptionsMenu = true
+                break
+            }
+        }
+        
+        if !doNotShowOptionsMenu {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
+        }
+        else {
+            self.navigationItem.rightBarButtonItem = nil
+        }
+    }
+    
 	@objc func openOptionsMenu() {
 		
 		// Add haptic feedback
@@ -183,8 +144,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
 		// Create add favorite option for options alert
-		let saveFavoriteAction = UIAlertAction(title: "Add To Favorites", style: .default, handler:{ action in
-			self.addFavorite()
+		let saveFavoriteAction = UIAlertAction(title: "Add Address", style: .default, handler:{ action in
+			self.addAddress()
 		})
 		
         // This doesn't work with multiple address
@@ -196,7 +157,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 //			optionsAlert.addAction(saveFavoriteAction)
 //		}
 		
-		let favoriteImage = UIImage(named: "star")
+		let favoriteImage = UIImage(named: "house_alt")
 		if let icon = favoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
 			saveFavoriteAction.setValue(icon, forKey: "image")
 			//removeFavoriteAction.setValue(icon, forKey: "image")

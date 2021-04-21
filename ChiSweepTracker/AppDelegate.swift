@@ -29,15 +29,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
-        // Remove this method to stop OneSignal Debugging
-        OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
-
         // OneSignal initialization
         OneSignal.initWithLaunchOptions(launchOptions)
         OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
-        
         OneSignal.add(self as OSSubscriptionObserver)
+        OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
         
+        // This code is required for old users migrating to multiple address
+        // Do not remove
         var favoriteAddresses = self.common.favoriteAddresses()
         let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }.count
         
@@ -58,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
         }
         
+        // Request permission for notifications when app is first opened
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
             granted, error in
                     
@@ -90,7 +90,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges) {
         
         if !stateChanges.from.isSubscribed && stateChanges.to.isSubscribed {
+            
             print("Subscribed for OneSignal push notifications!")
+            
+            if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
+                
+                print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
+                
+                defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
+                defaults.set(oneSignalDeviceStatus.isSubscribed, forKey: "notificationsOneSignalIsSubscribed")
+            }
+            
         }
         
         if stateChanges.from.isSubscribed && !stateChanges.to.isSubscribed {
@@ -185,14 +195,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
         
-        if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
-            
-            print("isSubscribed: \(oneSignalDeviceStatus.isSubscribed)")
-            print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
-            
-            defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
-            defaults.set(oneSignalDeviceStatus.isSubscribed, forKey: "notificationsOneSignalIsSubscribed")
-        }
     }
     
     func application(_ application: UIApplication,
