@@ -341,18 +341,18 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			                
                 var favoriteAddresses = self.common.favoriteAddresses()
-                
-                let address = ["\(self.schedule.address)"]
-                //if favoriteAddresses.count == bypassArr.count {
-                    favoriteAddresses = address.enumerated().map({ (index, str) -> [String] in
-                        if let strPos = favoriteAddresses[index].firstIndex(of: str) {
-                            favoriteAddresses[index].remove(at: strPos)
-                        }
-                        return favoriteAddresses[index]
-                    })
-                //}
-                print(favoriteAddresses)
-                
+
+                for (index, element) in favoriteAddresses.enumerated() {
+                    if element[0] == self.schedule.address {
+                        favoriteAddresses[index][0] = ""
+                        favoriteAddresses[index][1] = ""
+                        favoriteAddresses[index][2] = ""
+                        favoriteAddresses[index][3] = ""
+                        favoriteAddresses[index][4] = ""
+                        break
+                    }
+                }
+                                
                 defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
 				
 				// Clear favorite default values
@@ -362,29 +362,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 				defaults.set(0.0, forKey: "favoriteLongitude")
 				defaults.set(0.0, forKey: "favoriteLatitude")
 				defaults.set(nil, forKey: "favoriteCoordinatesArray")
-				//defaults.set(false, forKey: "notificationsToggled")
 				
-				// Delete future local iOS notifications
-				UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+				self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
+								
+				// If on a view with a tab control then use it to go to the favorit list view
+				self.tabBarController?.selectedIndex = 1
 				
-				// Unregister from Firebase Cloud Messaging notifications
-				UIApplication.shared.unregisterForRemoteNotifications()
-                
-                OneSignal.disablePush(true)
-                
-                self.common.deleteNotificationsFromDatabase(completion: {completion in })
-				
-				//print("Deleted user's local notifications")
-				
-				// If on a view with a tab control then use it to go to the search view
-				self.tabBarController?.selectedIndex = 0
-				
-				// If not on a view with a tab control, use navigation controller to go to search view
+				// If not on a view with a tab control, use navigation controller to go to favorite list view
 				if self.tabBarController == nil {
-					
-					if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-						self.navigationController?.pushViewController(destinationViewController, animated: true)
-					}
+                    self.navigationController?.popViewController(animated: true)
 				}
 				
 			})
@@ -495,12 +481,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
-		// Save form values to defaults
+		// Save form values
         saveDefaultNotificationValues()
         
 		// Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.common.deleteNotificationsFromDatabase(completion: {completion in
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
                 self.getSchedule(true)
             })
         }
@@ -562,7 +548,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.onPicker.isUserInteractionEnabled = notificationsToggled!
         self.timePicker.isUserInteractionEnabled = notificationsToggled!
         
-        //self.tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(viewSchedule))
         self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
         
         if self.tabBarController == nil {
@@ -710,10 +695,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                             self.schedule.months.append(month)
                                             
                                         }
-										
-										// Show schedule button in the top left in case it was hidden when the user didn't have an Internet connection
-										//self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "list"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.viewSchedule))
-                                        
+										                                        
                                         if registerForPushNotifications == true {
                                             
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
@@ -734,16 +716,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 
                                                             if UIApplication.shared.canOpenURL(settingsUrl) {
                                                                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                                                    print("User opened the settings page")
                                                                 })
                                                             }
                                                         }
                                                         alertController.addAction(settingsAction)
                                                         
                                                         let cancelAction = UIAlertAction(title: "No", style: .cancel, handler:{ action in
-                                                            
-															print("User declined to go to settings page")
-															
+                                                            															
                                                             self.pushNotificationsSwitch.isOn = false
                                                             self.timePicker.isUserInteractionEnabled = false
                                                             self.onPicker.isUserInteractionEnabled = false
@@ -1002,7 +981,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		
 		// Update notifications after picker is changed
 		if self.pushNotificationsSwitch.isOn {
-            self.common.deleteNotificationsFromDatabase(completion: {completion in
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
                 self.getSchedule(true)
             })
 		}
@@ -1121,11 +1100,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			
 			// Save form values to defaults
 			saveDefaultNotificationValues()
-            
-            OneSignal.disablePush(false);
-            
-            // Register for Firebase Cloud Messaging and APN notifications
-            UIApplication.shared.registerForRemoteNotifications()
+
             
             // Clear current notifications and re-add them in case they changed
             //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -1140,7 +1115,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
-            self.common.deleteNotificationsFromDatabase(completion: {(completion)-> Void in
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {(completion)-> Void in
                 // Get schedule and update user's local notifications
                 self.getSchedule(true)
             })
@@ -1172,7 +1147,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             OneSignal.disablePush(true);
             
-            self.common.deleteNotificationsFromDatabase(completion: {completion in })
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
             			
 		}
 	}

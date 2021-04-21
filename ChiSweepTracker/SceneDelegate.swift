@@ -1,4 +1,5 @@
 import UIKit
+import OneSignal
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -31,6 +32,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 	    // Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
+        
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+//            granted, error in
+//
+//            if granted == false  {
+//
+//                OneSignal.disablePush(true);
+//
+//                DispatchQueue.main.async {
+//                    // Unregister for Firebase Cloud Messaging and APN notifications
+//                    UIApplication.shared.unregisterForRemoteNotifications()
+//                }
+//
+//            }
+//            else {
+//
+//                OneSignal.disablePush(false);
+//
+//                DispatchQueue.main.async {
+//                    // Register for Firebase Cloud Messaging and APN notifications
+//                    UIApplication.shared.registerForRemoteNotifications()
+//                }
+//
+//            }
+//        }
         
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })

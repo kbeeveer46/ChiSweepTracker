@@ -3,9 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
-      </ContextState>
-      <ContextState
          contextName = "FavoriteListViewController.tableView(_:cellForRowAt:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,7 +11,7 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "FavoriteListViewController.tableView(_:numberOfRowsInSection:):FavoriteListViewController.swift">
+         contextName = "FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
       </ContextState>
       <ContextState
          contextName = "SearchViewController.showStatusMessage():SearchViewController.swift">
@@ -24,6 +21,25 @@
             </PersistentString>
             <PersistentString
                value = "self.common.latestAppVersion()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteAddresses.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteAddresses[index][0]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -39,13 +55,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
+         contextName = "FavoriteListViewController.tableView(_:numberOfRowsInSection:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "favoriteAddresses.count">
+               value = "favoriteAddresses.filter { $0[0] != &quot;&quot; }.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -58,15 +71,27 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #2 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "FavoriteViewController.loadFavoriteMap():FavoriteViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
+         contextName = "FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Common.deleteNotificationsFromDatabase(_:completion:):Common.swift">
          <PersistentStrings>
             <PersistentString
-               value = "favoriteAddresses[index][0]">
+               value = "self.notificationOneSignalPlayerId()">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteViewController.pushNotificationsTapped(_:):FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

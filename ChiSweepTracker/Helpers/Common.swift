@@ -398,7 +398,7 @@ class Common {
 		completion("Finished getting data from Firebase")
 	}
 	
-    func deleteNotificationsFromDatabase(completion: @escaping (_ message: Bool) -> Void)
+    func deleteNotificationsFromDatabase(_ address: String, completion: @escaping (_ message: Bool) -> Void)
     {
         // Delete notification from database
         
@@ -406,6 +406,7 @@ class Common {
         
         db.collection(self.constants.notificationsDatabaseName)
             .whereField("playerId", isEqualTo: self.notificationOneSignalPlayerId())
+            .whereField("address", isEqualTo: address)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
                     print("Could not get notifications from Firebase: \(err)")

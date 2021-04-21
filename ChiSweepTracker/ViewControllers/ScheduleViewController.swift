@@ -73,16 +73,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         generator.prepare()
         generator.selectionChanged()
         
-        // Clear notifications created by previous favorite
-        //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-		
-		// Unregister from Firebase Cloud Messaging notifications
-		//UIApplication.shared.unregisterForRemoteNotifications()
-		
-		//print("Deleted user's local notifications")
-        
         var favoriteAddresses = self.common.favoriteAddresses()
-        
         for (index, element) in favoriteAddresses.enumerated() {
             if element[0] == "" {
                 favoriteAddresses[index][0] = schedule.address
@@ -90,12 +81,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 break
             }
         }
-        
         defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
                     
-		
         // Set user favorites
-        defaults.set(schedule.address, forKey: "favoriteAddress")
+        //defaults.set(schedule.address, forKey: "favoriteAddress")
         defaults.set(schedule.ward, forKey: "favoriteWard")
         defaults.set(schedule.section, forKey: "favoriteSection") // Used when creating location notifications so we know the section in case there are multiple
         defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
@@ -106,20 +95,22 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
 		
 		// Toggled off notifications when user adds a new favorite
-        defaults.set(false, forKey: "notificationsToggled")
-		
-		//print("Added favorite address: \(self.common.favoriteAddress())")
-        
-        // Set right bar button to remove now that a favorite has been set
-        //self.navigationItem.rightBarButtonItem = removeFavoriteButton
+        //defaults.set(false, forKey: "notificationsToggled")
         
         // Create alert
-        let alert = UIAlertController(title: "Favorite Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Favorite Added", message: "Would you like to enable notifications?", preferredStyle: .alert)
 		
 		// Yes option
 		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-			// Segue to notifications view if they select yes
-			self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
+			
+            // Segue to schedule view
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                destinationViewController.schedule = self.schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+            
+            // Segue to notifications view if they select yes
+			//self.performSegue(withIdentifier: "viewNotificationsFromScheduleSegue", sender: self)
 		}))
 		
 		// No option

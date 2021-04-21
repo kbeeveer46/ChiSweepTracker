@@ -60,13 +60,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
             granted, error in
-        
-            //print("requestAuthorization granted: \(granted)")
-            
+                    
             if granted == false  {
+                
+                OneSignal.disablePush(true);
+                
+                DispatchQueue.main.async {
+                    // Unregister for Firebase Cloud Messaging and APN notifications
+                    UIApplication.shared.unregisterForRemoteNotifications()
+                }
                 
             }
             else {
+                
+                OneSignal.disablePush(false);
+                
+                DispatchQueue.main.async {
+                    // Register for Firebase Cloud Messaging and APN notifications
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
                 
             }
         }
@@ -82,26 +94,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         
         if stateChanges.from.isSubscribed && !stateChanges.to.isSubscribed {
-            
             print("Unsubscribed for OneSignal push notifications!")
-            
-            //self.common.deleteNotificationsFromDatabase(completion: {completion in })
         }
-        
-        //print("SubscriptionStateChange: \n\(stateChanges)")
-        
-        //The player id is inside stateChanges. But be careful, this value can be nil if the user has not granted you permission to send notifications.
-        //if let playerId = stateChanges.to.userId {
-        //    print("Current playerId \(playerId)")
-        //}
-        
-        
+    
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
 		
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            granted, error in
+                    
+            if granted == false  {
+                
+                OneSignal.disablePush(true);
+                
+                DispatchQueue.main.async {
+                    // Unregister for Firebase Cloud Messaging and APN notifications
+                    UIApplication.shared.unregisterForRemoteNotifications()
+                }
+                
+            }
+            else {
+                
+                OneSignal.disablePush(false);
+                
+                DispatchQueue.main.async {
+                    // Register for Firebase Cloud Messaging and APN notifications
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+                
+            }
+        }
         
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })

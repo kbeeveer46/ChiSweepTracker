@@ -15,7 +15,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        favoriteAddresses = self.common.favoriteAddresses()
+        favoriteAddresses = self.common.favoriteAddresses().sorted(by: {($0[0]) > ($1[0]) })
         
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
@@ -39,7 +39,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
             self.tabBarController?.navigationItem.title = "Favorite Addresses"
         
-            //for address in favoriteAddresses {
             for (_, element) in addresses.enumerated() {
                                           
                 // Get coordinates from address
@@ -237,23 +236,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
     
-    // Required to load polygons on favorites map
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        
-        if overlay is MKPolygon {
-            
-            if let polygon = overlay as? MKPolygon {
-                
-                let renderer = MKPolygonRenderer(polygon: polygon)
-                renderer.fillColor = .red
-                renderer.alpha = 0.4
-                return renderer
-            }
-        }
-        
-        return MKOverlayRenderer(overlay: overlay)
-    }
-    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
@@ -300,26 +282,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         // Get labels from cell
         let addressLabel = cell.viewWithTag(1) as! UILabel
-        //let daysLabel = cell.viewWithTag(2) as! UILabel
-
-        // Concatenate dates in one string and add padding between days
-//        var dates = ""
-//        for date in schedule.months[indexPath.row].dates  {
-//            dates = dates + String(date.date).padding(toLength: 5, withPad: " ", startingAt: 0)
-//        }
 
         // Set label text
-        addressLabel.text = favoriteAddresses[indexPath.row][0]
-//        daysLabel.text = dates
-        
-        // If month equals the current month then change the labels to blue
-//        let date = Date()
-//        if (date.month.uppercased() == schedule.months[indexPath.row].name.uppercased()) &&
-//           (self.currentYear == self.common.latestAppVersion()) {
-//            daysLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
-//            daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
-//            monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
-//        }
+        addressLabel.text = self.favoriteAddresses[indexPath.row][0]
 
         return cell
         
