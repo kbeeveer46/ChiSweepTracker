@@ -10,12 +10,12 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     let generator = UISelectionFeedbackGenerator()
     let common = Common()
     var favoriteAddresses = [String]()
-    var mapAnnotationLocations = [CLLocation]()
+    var mapLocations = [CLLocationCoordinate2D]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        favoriteAddresses = self.common.favoriteAddresses()
+        favoriteAddresses = self.common.favoriteAddresses().sorted()
         
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
@@ -26,6 +26,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         //self.loadNotificationControlValues()
 
         self.loadFavoriteMap()
+        
+        //self.zoomToFit(mapLocations)
         
         // Initialize controls per device
         //self.initializeControlsPerDevice()
@@ -40,41 +42,77 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
         // Create map span
-        let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
+        //let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
         
         // Create map coordinates using Chicago
-        let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
+        //let chicagoCoordinate = CLLocationCoordinate2D(latitude: 41.846647, longitude: -87.629576)
         
         // Create map region using coordinates and span
-        let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
+        //let region = MKCoordinateRegion(center: chicagoCoordinate, span: span)
         
-        self.favoriteListMapView.setRegion(region, animated: false)
+        //self.favoriteListMapView.setRegion(region, animated: false)
         
         if favoriteAddresses.count > 0 {
             
             self.tabBarController?.navigationItem.title = "Favorite Addresses"
         
             for address in favoriteAddresses {
-                
-                self.searchForSchedule(address, true) { schedule in
+                            
+                // Get coordinates from address
+                let geocoder = CLGeocoder()
+                geocoder.geocodeAddressString(address) { placemarks, error in
                     
-                    self.mapAnnotationLocations.append(CLLocation(latitude: schedule.locationCoordinate.latitude, longitude: schedule.locationCoordinate.longitude))
-                
-                    for location in self.mapAnnotationLocations {
-                     
+                    // No internet connection will cause an error
+                    if error != nil {
+                        return
+                    }
+                    
+                    if placemarks != nil {
+                    
+                        // Get first placemark in list
+                        let placemark = placemarks?.first
+                        
+                        // Create coorindates from placemark
+                        var coordinates = CLLocationCoordinate2D()
+                        coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                        coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                        
+                        self.mapLocations.append(coordinates)
+                        
+                        //self.mapAnnotationLocations.append(CLLocation(latitude: schedule.locationCoordinate.latitude, longitude: schedule.locationCoordinate.longitude))
+                        let location = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
+                    
                         // Create annotation using location coordinate
                         let annotation = CustomAnnotation()
                         annotation.customImageName = "pin-address"
                         annotation.coordinate = location.coordinate
-                        annotation.title = schedule.address
-                        annotation.subtitle = "Ward: \(schedule.ward) - Section: \(schedule.section)"
+                        annotation.title = address
+                        //annotation.subtitle = "Ward: \(schedule.ward) - Section: \(schedule.section)"
                         
                         // Add annoation to map
                         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
                         self.favoriteListMapView.addAnnotation(annotationView.annotation!)
+                        
+                        if self.favoriteAddresses.count == 1 {
+
+                            // Create map span
+                            let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
+
+                            // Create map region
+                            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+
+                            // Set map region
+                            self.favoriteListMapView.setRegion(region, animated: false)
+
+                        }
+                        
+                        if self.favoriteAddresses.count != 1 && self.favoriteAddresses.count == self.favoriteListMapView.annotations.count {
+                            
+                            let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
+                            
+                        }
                     }
-                    
-                    return schedule
                 }
             }
         }
@@ -83,7 +121,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
     
-    func searchForSchedule(_ address: String, _ forMap: Bool = false, completion: @escaping (_ schedule: ScheduleModel) -> (ScheduleModel)) {
+    func searchForSchedule(_ address: String) {
         
         let schedule = ScheduleModel()
 
@@ -197,19 +235,13 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                                             schedule.months.append(month)
                                             
                                         }
-                                        
-                                        if forMap == false {
-                                        
-                                            // Segue to schedule view
-                                            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
-                                                destinationViewController.schedule = schedule
-                                                self.navigationController?.pushViewController(destinationViewController, animated: true)
-                                            }
+                                                                                
+                                        // Segue to schedule view
+                                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                                            destinationViewController.schedule = schedule
+                                            self.navigationController?.pushViewController(destinationViewController, animated: true)
                                         }
-
-                                        
-                                        completion(schedule)
-                                
+                                                            
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
@@ -253,18 +285,18 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         annotationView.subviews.forEach({ $0.removeFromSuperview() })
         annotationView.leftCalloutAccessoryView = nil
         
-        if (customPointAnnotation.customImageName == "pin-address") {
-        
-            let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
-            annotationLabel.lineBreakMode = .byWordWrapping
-            annotationLabel.textAlignment = .center
-            annotationLabel.font = .boldSystemFont(ofSize: 11)
-            annotationLabel.text = annotation.title!
-            annotationLabel.strokeColor = UIColor.white
-            annotationLabel.strokeSize = 1
-            annotationView.addSubview(annotationLabel)
-            
-        }
+//        if (customPointAnnotation.customImageName == "pin-address") {
+//
+//            let annotationLabel = THLabel(frame: CGRect(x: -40, y: 50, width: 125, height: 30))
+//            annotationLabel.lineBreakMode = .byWordWrapping
+//            annotationLabel.textAlignment = .center
+//            annotationLabel.font = .boldSystemFont(ofSize: 11)
+//            annotationLabel.text = annotation.title!
+//            annotationLabel.strokeColor = UIColor.white
+//            annotationLabel.strokeSize = 1
+//            annotationView.addSubview(annotationLabel)
+//
+//        }
         
         return annotationView
     }
@@ -319,9 +351,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         // Get list of days from days label
         let address = addressLabel.text!.trimmingCharacters(in: .whitespaces)
         
-        self.searchForSchedule(address) { schedule in
-            return schedule
-        }
+        self.searchForSchedule(address)
         
 //        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
 //            

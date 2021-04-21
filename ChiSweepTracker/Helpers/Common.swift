@@ -99,7 +99,6 @@ class Common {
 	func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
 	func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
     func favoriteAddresses() -> [String] {return defaults.object(forKey: "favoriteAddresses") as? [String] ?? [String]()}
-    //func favoriteAddresses() -> [ScheduleModel] {return defaults.object(forKey: "favoriteAddresses") as? [ScheduleModel] ?? [ScheduleModel]()}
 
 	// Notifications
 	

@@ -45,7 +45,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 		self.loadFavoriteMap()
 		
 		// Initialize controls per device
-		self.initializeControlsPerDevice()
+		//self.initializeControlsPerDevice()
         
     }
 	
@@ -382,6 +382,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 			let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
 			
 				print("Deleted favorite address: \(self.common.favoriteAddress())")
+                
+                var favoriteAddresses = self.common.favoriteAddresses()
+                favoriteAddresses.removeAll { $0 == self.common.favoriteAddress() }
+                defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
 				
 				// Clear favorite default values
 				defaults.set("", forKey: "favoriteAddress")

@@ -38,6 +38,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         OneSignal.add(self as OSSubscriptionObserver)
         
+        var favoriteAddresses = self.common.favoriteAddresses()
+        let favoriteAddress = self.common.favoriteAddress()
+        if favoriteAddresses.count == 0 && favoriteAddress != "" {
+            favoriteAddresses.append(favoriteAddress)
+            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+        }
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            granted, error in
+        
+            //print("requestAuthorization granted: \(granted)")
+            
+            if granted == false  {
+                
+            }
+            else {
+                
+            }
+        }
+        
         return true
     }
     
