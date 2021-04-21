@@ -77,6 +77,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		//UIApplication.shared.unregisterForRemoteNotifications()
 		
 		//print("Deleted user's local notifications")
+        
+        var favoriteAddresses = self.common.favoriteAddresses()
+        
+        favoriteAddresses.append(schedule.address)
+        
+        defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+                    
 		
         // Set user favorites
         defaults.set(schedule.address, forKey: "favoriteAddress")

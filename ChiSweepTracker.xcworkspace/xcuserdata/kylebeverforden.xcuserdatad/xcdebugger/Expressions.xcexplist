@@ -3,12 +3,18 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "AppDelegate.application(_:didRegisterForRemoteNotificationsWithDeviceToken:):AppDelegate.swift">
+         contextName = "FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteListViewController.tableView(_:cellForRowAt:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "OneSignal.getDeviceState()">
+               value = "favoriteAddresses[indexPath.row]">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteListViewController.tableView(_:numberOfRowsInSection:):FavoriteListViewController.swift">
       </ContextState>
       <ContextState
          contextName = "SearchViewController.showStatusMessage():SearchViewController.swift">
@@ -29,6 +35,17 @@
             </PersistentString>
             <PersistentString
                value = " self.common.notificationOneSignalPlayerId()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.application(_:didRegisterForRemoteNotificationsWithDeviceToken:):AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "OneSignal.getDeviceState()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

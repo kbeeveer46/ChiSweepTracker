@@ -98,7 +98,8 @@ class Common {
 	func favoriteCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()}
 	func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
 	func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
-	
+    func favoriteAddresses() -> [String] {return defaults.object(forKey: "favoriteAddresses") as? [String] ?? [String]()}
+
 	// Notifications
 	
 	func notificationWhen() -> String {return defaults.string(forKey: "notificationWhen") ?? ""}
