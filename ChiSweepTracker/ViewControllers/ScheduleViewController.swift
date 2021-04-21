@@ -82,6 +82,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         favoriteAddresses.append(schedule.address)
         
+        //let favoriteAddress = ScheduleModel()
+        //favoriteAddress.address = schedule.address
+        //favoriteAddresses.append(favoriteAddress)
+        //UserSessionManager.shared.favoriteAddresses = favoriteAddresses
+        
         defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
                     
 		

@@ -534,18 +534,18 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="43"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="aHE-iZ-8Xz">
+                                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="aHE-iZ-8Xz">
                                                                     <rect key="frame" x="10" y="0.0" width="354" height="43"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="house_fill" translatesAutoresizingMaskIntoConstraints="NO" id="S6K-D4-U3J">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="25" height="43"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="20" height="43"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="height" constant="25" id="Bx1-Ob-jbh"/>
-                                                                                <constraint firstAttribute="width" constant="25" id="aZs-2G-gwL"/>
+                                                                                <constraint firstAttribute="height" constant="20" id="Bx1-Ob-jbh"/>
+                                                                                <constraint firstAttribute="width" constant="20" id="aZs-2G-gwL"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Main St., Chicago, IL 60654" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="hjI-Ly-mxo">
-                                                                            <rect key="frame" x="30" y="0.0" width="324" height="43"/>
+                                                                            <rect key="frame" x="27" y="0.0" width="327" height="43"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
