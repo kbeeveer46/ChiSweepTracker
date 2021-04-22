@@ -743,7 +743,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
 														//self.sendTestNotifications()
 														#endif
                                                     
-                                                        let center = UNUserNotificationCenter.current()
+                                                        //let center = UNUserNotificationCenter.current()
 														let calendar = Calendar.current
 														let currentYear = self.common.latestAppVersion() 
 														let notificationWhenDefault = when //self.common.notificationWhen()

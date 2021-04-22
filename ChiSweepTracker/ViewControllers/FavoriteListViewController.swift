@@ -90,7 +90,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         if addresses.count != 1 && addresses.count == self.favoriteListMapView.annotations.count {
                             
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: true)
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
                             
                         }
                     }

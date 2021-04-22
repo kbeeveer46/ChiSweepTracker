@@ -137,9 +137,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		generator.prepare()
 		generator.selectionChanged()
 		
-		// Get favorite address
-		let favoriteAddress = self.common.favoriteAddress()
-		
 		// Create options alert
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
@@ -147,20 +144,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		let saveFavoriteAction = UIAlertAction(title: "Add Address", style: .default, handler:{ action in
 			self.addAddress()
 		})
-		
-        // This doesn't work with multiple address
-        // Use this one line temporarily for testing
         optionsAlert.addAction(saveFavoriteAction)
-//		if favoriteAddress != schedule.address ||
-//		   (favoriteAddress == schedule.address && self.common.favoriteSection() != self.schedule.section) {
-//
-//			optionsAlert.addAction(saveFavoriteAction)
-//		}
 		
 		let favoriteImage = UIImage(named: "house_alt")
 		if let icon = favoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
 			saveFavoriteAction.setValue(icon, forKey: "image")
-			//removeFavoriteAction.setValue(icon, forKey: "image")
 		}
 		
 		// Create cancel option for options alert
