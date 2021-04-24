@@ -140,7 +140,7 @@ class Common {
 		let relocatedDatabaseName = "RelocatedVehicles_Dev"
 		let newsDatabaseName = "News_Dev"
 		let infoDatabaseName = "Info_Dev"
-        let notificationsDatabaseName = "Notifications_Dev"
+        let notificationsDatabaseName = "notifications_dev"
 		#else
 		let schedulesDatabaseName = "Schedules"
 		let updatesDatabaseName = "Updates"
@@ -150,7 +150,7 @@ class Common {
 		let relocatedDatabaseName = "RelocatedVehicles"
 		let newsDatabaseName = "News"
 		let infoDatabaseName = "Info"
-        let notificationsDatabaseName = "Notifications"
+        let notificationsDatabaseName = "notifications"
 		#endif
 	
 		// SODA
@@ -160,6 +160,8 @@ class Common {
 		
 		// Strings
 		
+        let websiteURL = "https://chicagosweeptracker.info"
+        
         let errorTitle = "Something went wrong..."
         let notFound = "Unable to find sweep schedule. Address must reside in Chicago."
 		

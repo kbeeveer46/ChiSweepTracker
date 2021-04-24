@@ -253,7 +253,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
 		// This method runs when a notification is opened when the app is in the background and foreground
         // This method runs when clicking on a notification from Firebase and OneSignal
-		
+        
 		// Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
         

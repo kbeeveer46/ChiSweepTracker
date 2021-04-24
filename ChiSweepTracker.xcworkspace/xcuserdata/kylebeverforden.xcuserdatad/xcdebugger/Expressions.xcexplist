@@ -3,6 +3,17 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "&quot;\(self.common.constants.websiteURL)/insert-notification.php?playerId=\(self.common.notificationOneSignalPlayerId())&amp;address=\(address)&amp;notificationTime=\(notificationTime)&amp;sweepDay=\(sweepDay)&amp;tableName=\(tableName)&quot;">
+            </PersistentString>
+            <PersistentString
+               value = "self.common.constants.websiteURL">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FavoriteListViewController.tableView(_:cellForRowAt:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -36,18 +47,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favoriteAddresses[index][0]">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "closure #2 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "self.favoriteListMapView.annotations.count ">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteAddresses[index][0]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -97,6 +108,17 @@
       </ContextState>
       <ContextState
          contextName = "FavoriteViewController.pushNotificationsTapped(_:):FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoriteViewController.getSchedule(_:_:_:_:_:_:_:):FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in closure #3 in closure #1 in closure #1 in closure #1 in FavoriteViewController.getSchedule(_:_:_:_:_:_:_:):FavoriteViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "registerForPushNotifications">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "closure #1 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
