@@ -137,8 +137,8 @@ class Common {
         let divvysDatabaseName = "divvys_dev"
         let towedDatabaseName = "TowedVehicles_Dev"
         let relocatedDatabaseName = "RelocatedVehicles_Dev"
-        let newsDatabaseName = "News_Dev"
-        let infoDatabaseName = "Info_Dev"
+        let newsDatabaseName = "news_dev"
+        let infoDatabaseName = "info_dev"
         let notificationsDatabaseName = "notifications_dev"
         #else
         let schedulesDatabaseName = "Schedules"
@@ -177,12 +177,11 @@ class Common {
     
     //MARK: Methods
     
-    func sendRequest(_ url: String, parameters: [String: String], completion: @escaping ([[String: Any]]?, Error?) -> Void) {
+    func getRequest(_ url: String, parameters: [String: String], completion: @escaping ([[String: Any]]?, Error?) -> Void) {
         var components = URLComponents(string: url)!
         components.queryItems = parameters.map { (key, value) in
             URLQueryItem(name: key, value: value)
         }
-        //components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         let request = URLRequest(url: components.url!)
 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -194,7 +193,7 @@ class Common {
                     return
             }
 
-            let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [[String: String]]
+            let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [[String: Any]]
             completion(responseObject, nil)
         }
         task.resume()
@@ -259,14 +258,14 @@ class Common {
             }
         
         // Get Divvys data
-        sendRequest(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]) { responseObject, error in
+        getRequest(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]) { responseObject, error in
             guard let responseObject = responseObject, error == nil else {
                 print(error ?? "Unknown error")
                 return
             }
 
             if responseObject.count > 0 {
-                let divvyDataset = responseObject[0]["divvyDataset"]
+                print(responseObject[0]["divvyDataset"] as! String)
             }
         }
         

@@ -36,70 +36,135 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 	
 	func getLatestUpdates() {
 		
-		let db = Firestore.firestore()
-		
-		// Get updates data
-		db.collection(self.common.constants.newsDatabaseName)
-			.order(by: "date", descending: true)
-			.limit(to: 5)
-			.getDocuments() { (querySnapshot, err) in
-				if let err = err {
-					print("Could not get updates from Firebase: \(err)")
-				} else {
-					
-					self.updatesList.removeAll()
-					
-					for document in querySnapshot!.documents {
-						
-						let data = document.data()
-						
-						let subject = data["subject"] as! String
-						let body = data["body"] as! String
-						let date = data["date"] as! Timestamp
-						let ampm = Calendar.current.component(.hour, from: date.dateValue()) < 12 ? "AM" : "PM"
-						let minute = Calendar.current.component(.minute, from: date.dateValue())
-						var hour = Calendar.current.component(.hour, from: date.dateValue())
-						let day = Calendar.current.component(.day, from: date.dateValue())
-						let month = Calendar.current.component(.month, from: date.dateValue())
-						let year = Calendar.current.component(.year, from: date.dateValue())
-						let showNewImage = self.showNewImage("\(month)/\(day)/\(year) \(hour):\(minute):00")
-						
-						if hour == 0 {
-							hour = 12
-						}
-						else if hour > 12 {
-							hour = hour - 12
-						}
-						
-						let update = UpdatesModel()
-						update.body = body
-						update.subject = subject
-						update.year = year
-						update.month = month
-						update.day = day
-						update.hour = hour
-						update.minute = minute
-						update.ampm = ampm
-						update.showNewImage = showNewImage
-						self.updatesList.append(update)
-						
-					}
-					
-					// Set required properties for table view
-					self.newsTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
-					self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
-					self.newsTableView.dataSource = self
-					self.newsTableView.delegate = self
-					self.newsTableView.reloadData()
-					
-					// Clear updates tab bar badge
-					self.tabBarController?.tabBar.items?.last!.badgeValue = nil
-					
-					// Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
-					let currentDate = self.dateFormatter.string(from: Date())
-					defaults.set(currentDate, forKey: "updatesLastViewDate")
-				}
-		}
+        self.common.getRequest(self.common.constants.websiteURL + "/get-updates-data.php", parameters: ["tableName": self.common.constants.newsDatabaseName]) { responseObject, error in
+            guard let response = responseObject, error == nil else {
+                print(error ?? "Unknown error")
+                return
+            }
+
+            if response.count > 0 {
+                
+                self.updatesList.removeAll()
+                
+                for update in response.enumerated() {
+                                        
+                    let subject = update.element["subject"] as! String
+                    let body = update.element["body"] as! String
+                    let date = update.element["date"] as! String
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let dateFormatted = dateFormatter.date(from: date)!
+                    let ampm = Calendar.current.component(.hour, from: dateFormatted) < 12 ? "AM" : "PM"
+                    let minute = Calendar.current.component(.minute, from: dateFormatted)
+                    var hour = Calendar.current.component(.hour, from: dateFormatted)
+                    let day = Calendar.current.component(.day, from: dateFormatted)
+                    let month = Calendar.current.component(.month, from: dateFormatted)
+                    let year = Calendar.current.component(.year, from: dateFormatted)
+                    let showNewImage = self.showNewImage("\(month)/\(day)/\(year) \(hour):\(minute):00")
+                    
+                    if hour == 0 {
+                        hour = 12
+                    }
+                    else if hour > 12 {
+                        hour = hour - 12
+                    }
+                    
+                    let update = UpdatesModel()
+                    update.body = body
+                    update.subject = subject
+                    update.year = year
+                    update.month = month
+                    update.day = day
+                    update.hour = hour
+                    update.minute = minute
+                    update.ampm = ampm
+                    update.showNewImage = showNewImage
+                    self.updatesList.append(update)
+                    
+                }
+                
+                DispatchQueue.main.async {
+                    // Set required properties for table view
+                    self.newsTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
+                    self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
+                    self.newsTableView.dataSource = self
+                    self.newsTableView.delegate = self
+                    self.newsTableView.reloadData()
+                
+                    // Clear updates tab bar badge
+                    self.tabBarController?.tabBar.items?.last!.badgeValue = nil
+                }
+                
+                // Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
+                let currentDate = self.dateFormatter.string(from: Date())
+                defaults.set(currentDate, forKey: "updatesLastViewDate")
+            }
+        }
+        
+//		let db = Firestore.firestore()
+//
+//		// Get updates data
+//		db.collection(self.common.constants.newsDatabaseName)
+//			.order(by: "date", descending: true)
+//			.limit(to: 5)
+//			.getDocuments() { (querySnapshot, err) in
+//				if let err = err {
+//					print("Could not get updates from Firebase: \(err)")
+//				} else {
+//
+//					self.updatesList.removeAll()
+//
+//					for document in querySnapshot!.documents {
+//
+//						let data = document.data()
+//
+//						let subject = data["subject"] as! String
+//						let body = data["body"] as! String
+//						let date = data["date"] as! Timestamp
+//						let ampm = Calendar.current.component(.hour, from: date.dateValue()) < 12 ? "AM" : "PM"
+//						let minute = Calendar.current.component(.minute, from: date.dateValue())
+//						var hour = Calendar.current.component(.hour, from: date.dateValue())
+//						let day = Calendar.current.component(.day, from: date.dateValue())
+//						let month = Calendar.current.component(.month, from: date.dateValue())
+//						let year = Calendar.current.component(.year, from: date.dateValue())
+//						let showNewImage = self.showNewImage("\(month)/\(day)/\(year) \(hour):\(minute):00")
+//
+//						if hour == 0 {
+//							hour = 12
+//						}
+//						else if hour > 12 {
+//							hour = hour - 12
+//						}
+//
+//						let update = UpdatesModel()
+//						update.body = body
+//						update.subject = subject
+//						update.year = year
+//						update.month = month
+//						update.day = day
+//						update.hour = hour
+//						update.minute = minute
+//						update.ampm = ampm
+//						update.showNewImage = showNewImage
+//						self.updatesList.append(update)
+//
+//					}
+//
+//					// Set required properties for table view
+//					self.newsTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
+//					self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
+//					self.newsTableView.dataSource = self
+//					self.newsTableView.delegate = self
+//					self.newsTableView.reloadData()
+//
+//					// Clear updates tab bar badge
+//					self.tabBarController?.tabBar.items?.last!.badgeValue = nil
+//
+//					// Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
+//					let currentDate = self.dateFormatter.string(from: Date())
+//					defaults.set(currentDate, forKey: "updatesLastViewDate")
+//				}
+//		}
 	}
 	
 	func showNewImage(_ date: String!) -> Bool {
@@ -140,7 +205,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		
 		// Set label values
 		subjectLabel.text = self.updatesList[indexPath.row].subject
-		dateLabel.text = "\(self.updatesList[indexPath.row].month)/\(self.updatesList[indexPath.row].day)/\(self.updatesList[indexPath.row].year) \(self.updatesList[indexPath.row].hour) \(self.updatesList[indexPath.row].ampm)"
+		dateLabel.text = "\(self.updatesList[indexPath.row].month)/\(self.updatesList[indexPath.row].day)/\(self.updatesList[indexPath.row].year)"
 		bodyLabel.text = self.updatesList[indexPath.row].body
 		
 		// Hide or show new image

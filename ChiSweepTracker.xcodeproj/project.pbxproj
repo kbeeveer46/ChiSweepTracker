@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		203B0F642520E49E00FEBEDA /* TowedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B0F632520E49E00FEBEDA /* TowedDetailViewController.swift */; };
+		2050B3BD2634994A00C0EBC9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2050B3BC2634994800C0EBC9 /* StoreKit.framework */; };
 		20917114262C9C6F004AD1AC /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20917113262C9C6F004AD1AC /* NotificationService.swift */; };
 		20917118262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		20931B31262F8CC900D6EFBE /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20931B30262F8CC900D6EFBE /* FavoriteListViewController.swift */; };
@@ -74,6 +75,7 @@
 		198A3D876EC906A9080C8069 /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B1C203DC06708969BC519CB /* Pods-ChiSweepTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.release.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.release.xcconfig"; sourceTree = "<group>"; };
 		203B0F632520E49E00FEBEDA /* TowedDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TowedDetailViewController.swift; sourceTree = "<group>"; };
+		2050B3BC2634994800C0EBC9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2073AF96262C9F5C008D5086 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		20917113262C9C6F004AD1AC /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2050B3BD2634994A00C0EBC9 /* StoreKit.framework in Frameworks */,
 				FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */,
 				EC1322262FAD3247F257541B /* Pods_ChiSweepTracker.framework in Frameworks */,
 			);
@@ -168,6 +171,7 @@
 		FA0EC354239B105F00DD3127 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2050B3BC2634994800C0EBC9 /* StoreKit.framework */,
 				FA0EC355239B105F00DD3127 /* MapKit.framework */,
 				289531459393EF044AEAC753 /* Pods_ChiSweepTracker.framework */,
 				198A3D876EC906A9080C8069 /* Pods_OneSignalNotificationServiceExtension.framework */,

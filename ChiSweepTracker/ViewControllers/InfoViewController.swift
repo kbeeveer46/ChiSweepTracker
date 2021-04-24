@@ -26,50 +26,46 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
 		getInfo()
-		
+        
     }
 	
 	func getInfo() {
-		
-		let db = Firestore.firestore()
-		
-		// Get updates data
-		db.collection(self.common.constants.infoDatabaseName)
-			.order(by: "order")
-			.getDocuments() { (querySnapshot, err) in
-				if let err = err {
-					print("Could not get info from Firebase: \(err)")
-				} else {
-					
-					self.infoList.removeAll()
-					
-					for document in querySnapshot!.documents {
-						
-						let data = document.data()
-						
-						let message = data["message"] as! String
-						let color = data["color"] as! String
-						let image = data["image"] as! String
-						let order = data["order"] as! Int
-						
-						let info = InfoModel()
-						info.message = message
-						info.color = color
-						info.image = image
-						info.order = order
-						self.infoList.append(info)
-						
-					}
-					
-					// Set required properties for table view
-					self.infoTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
-					self.infoTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
-					self.infoTableView.dataSource = self
-					self.infoTableView.delegate = self
-					self.infoTableView.reloadData()
-					
-				}
-		}
+        
+        self.common.getRequest(self.common.constants.websiteURL + "/get-info-data.php", parameters: ["tableName": self.common.constants.infoDatabaseName]) { responseObject, error in
+            guard let response = responseObject, error == nil else {
+                print(error ?? "Unknown error")
+                return
+            }
+
+            if response.count > 0 {
+                
+                self.infoList.removeAll()
+                
+                for info in response.enumerated() {
+                    
+                    let message = info.element["message"] as! String
+                    let color = info.element["color"] as! String
+                    let image = info.element["image"] as! String
+                    let title = info.element["title"] as! String
+                    
+                    let info = InfoModel()
+                    info.message = message
+                    info.color = color
+                    info.image = image
+                    info.title = title
+                    self.infoList.append(info)
+                }
+                
+                DispatchQueue.main.async {
+                    // Set required properties for table view
+                    self.infoTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
+                    self.infoTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
+                    self.infoTableView.dataSource = self
+                    self.infoTableView.delegate = self
+                    self.infoTableView.reloadData()
+                }
+            }
+        }
 	}
 
 	@objc func rateCardTapped(_ sender:UITapGestureRecognizer){
@@ -154,7 +150,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		// Set card view background color
 		cardView.backgroundColor =  UIColor(hexString: "#\(self.infoList[indexPath.row].color)")
 		
-		if self.infoList[indexPath.row].order == 1 {
+        if self.infoList[indexPath.row].title == "Rate" {
 		
 			rateCardView = cardView
 			
@@ -162,7 +158,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 			let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.rateCardTapped (_:)))
 			cardView.addGestureRecognizer(gesture)
 		}
-		else if self.infoList[indexPath.row].order == 5 {
+        else if self.infoList[indexPath.row].title == "Request" {
 			
 			requestCardView = cardView
 			
