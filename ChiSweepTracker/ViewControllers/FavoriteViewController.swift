@@ -951,9 +951,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 }
                 else
                 {
-                    if let response = String(data: data!, encoding: .utf8) {
-                        print("Response:\(response)")
-                    }
+                    //if let response = String(data: data!, encoding: .utf8) {
+                    //    print("Response:\(response)")
+                    //}
                 }
             }
             task.resume()

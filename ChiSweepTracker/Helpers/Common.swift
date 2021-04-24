@@ -120,10 +120,6 @@ class Common {
     
     func updatesLastViewDate() -> String {return defaults.string(forKey: "updatesLastViewDate") ?? ""}
     
-    // Settings
-    
-    //func contactEmail() -> String {return defaults.string(forKey: "contactEmail") ?? "admin@chicagosweeptracker.info"}
-    
     //MARK: Constants
     
     class Constants {

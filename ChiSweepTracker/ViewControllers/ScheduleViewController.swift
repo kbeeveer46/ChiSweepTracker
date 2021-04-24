@@ -76,14 +76,14 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                     
         // Set user favorites
         //defaults.set(schedule.address, forKey: "favoriteAddress")
-        defaults.set(schedule.ward, forKey: "favoriteWard")
-        defaults.set(schedule.section, forKey: "favoriteSection") // Used when creating location notifications so we know the section in case there are multiple
-        defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
-        defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
+        //defaults.set(schedule.ward, forKey: "favoriteWard")
+        //defaults.set(schedule.section, forKey: "favoriteSection") // Used when creating location notifications so we know the section in case there are multiple
+        //defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
+        //defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
 		
 		// defaultCoordinatesArray is set when user searches. Use its value for user's favorite
-		let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
-		defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
+		//let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
+		//defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
 		
 		// Toggled off notifications when user adds a new favorite
         //defaults.set(false, forKey: "notificationsToggled")

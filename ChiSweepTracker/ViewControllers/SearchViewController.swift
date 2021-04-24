@@ -37,11 +37,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         if (self.addressFromNotification != "") {
             let address = self.addressFromNotification
             self.addressFromNotification = ""
-            self.searchForSchedule(address)
+            self.searchForSchedule(address, completion: { schedule in
+                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                    destinationViewController.schedule = schedule
+                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                }
+            })
         }
         
 		// Show finished schedule button if month is < 4 or greater than 11
-		//self.showStatusMessage()
+		self.showStatusMessage()
 		
 		// Load map with user default lat and long or Chicago
 		self.loadSearchMap()
@@ -53,11 +58,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		self.initializeControlsPerDevice()
         
         // Create a gesture recognizer (tap gesture) for message card view
-        // This does not work with multiple addresses
         //let messageCardViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMessageCardViewTap(sender:)))
                 
         // Add the gesture recognizer to the message card view
-        // This does not work with multiple addresses
         //messageCardView.addGestureRecognizer(messageCardViewTapGesture)
 		
 	}
@@ -75,121 +78,106 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
 	
 	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
-//	func showStatusMessage() {
-//
-//		if currentMonth > 11 {
-//			self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
-//		}
-//		else if currentMonth < 4 {
-//
-//			// Show begin schedule message along with the amount of days until the begin date
-//			let dateFormatter = DateFormatter()
-//			dateFormatter.dateFormat = "M/dd/yyyy"
-//			let start = dateFormatter.date(from: "\(currentMonth)/\(currentDay)/\(currentYear)")!
-//			let end = dateFormatter.date(from: "4/1/\(currentYear)")!
-//			let diff = Date.daysBetween(start: start, end: end)
-//
-//			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
-//		}
-//		else {
-//            if self.common.favoriteAddress() != "" {
-//                // This does not work with multiple addresses
-//                //getNextSweepingDate()
-//            }
-//            else {
-//                self.messageCardView.isHidden = true
-//            }
-//		}
-//	}
+	func showStatusMessage() {
+
+		if currentMonth > 11 {
+			self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
+		}
+		else if currentMonth < 4 {
+
+			// Show begin schedule message along with the amount of days until the begin date
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "M/dd/yyyy"
+			let start = dateFormatter.date(from: "\(currentMonth)/\(currentDay)/\(currentYear)")!
+			let end = dateFormatter.date(from: "4/1/\(currentYear)")!
+			let diff = Date.daysBetween(start: start, end: end)
+
+			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
+		}
+		else {
+            if self.common.favoriteAddresses().filter({ $0[0] != "" }).count > 0 {
+                getNextSweepingDate()
+            }
+            else {
+                self.messageCardView.isHidden = true
+            }
+		}
+	}
 	
-    // This doesn't work with multiple addresses
-//	func getNextSweepingDate(_ count: Int = 0) {
-//
-//		var foundNextSweepingDay = false
-//		var nextSweepingDay = 0
-//		var nextSweepingMonth = 0
-//		
-//		self.messageCardView.isHidden = true
-//		
-//		// Create SODA client using domain and token
-//		let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-//		
-//		// Query SODA API to get months and days
-//		let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-//            .filter("\(self.common.wardTitle()) = '\(self.common.favoriteWard())' AND \(self.common.sectionTitle()) = '\(self.common.favoriteSection())' AND \(self.common.monthNumberTitle()) >= '\(currentMonth)' AND \(self.common.latestAppVersion()) == \(self.currentYear)")
-//			.orderAscending(self.common.monthNumberTitle())
-//		
-//		scheduleQuery.get { res in
-//			switch res {
-//			case .dataset (let data):
-//				
-//				if data.count > 0 {
-//					
-//					// Loop through months
-//					for (_, item) in data.enumerated() {
-//						
-//						let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
-//						let dates = item[self.common.dates()] as? String ?? ""
-//						let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
-//						
-//						if (Int(monthNumber) == (self.currentMonth + count)) {
-//							
-//							// Loop through dates
-//							for day in datesArray {
-//															
-//								if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-//									
-//									if count == 0 {
-//										
-//										if Int(day)! >= self.currentDay {
-//											
-//											nextSweepingDay = Int(day)!
-//											nextSweepingMonth = Int(monthNumber)!
-//											
-//											foundNextSweepingDay = true
-//											break
-//											
-//										}
-//									}
-//									else {
-//										nextSweepingDay = Int(day)!
-//										nextSweepingMonth = Int(monthNumber)!
-//										
-//										foundNextSweepingDay = true
-//										break
-//									}
-//								}
-//							}
-//							if foundNextSweepingDay {
-//								break
-//							}
-//						}
-//					}
-//					
-//					if foundNextSweepingDay {
-//						DispatchQueue.main.async {
-//							self.messageCardView.isHidden = false
-//							self.messageLabel.text = "Your next sweeping is on \(nextSweepingMonth)/\(nextSweepingDay)/\(self.currentYear)"
-//						}
-//					}
-//					
-//					if foundNextSweepingDay == false && count <= 7 {
-//						self.getNextSweepingDate(count + 1)
-//					}
-//				}
-//			case .error (let err):
-//				print("getNextSweepingDate error: \(err.localizedDescription)")
-//			}
-//		}
-//	}
+	func getNextSweepingDate(_ count: Int = 0) {
+
+		self.messageCardView.isHidden = true
+        
+        let group = DispatchGroup()
+        let addresses = self.common.favoriteAddresses().filter { $0[0] != "" }
+        var schedules = [ScheduleModel]()
+        var sweepDates = [Date]()
+        
+        for (_, element) in addresses.enumerated() {
+            
+            group.enter()
+            
+            self.searchForSchedule(element[0], completion: { schedule in
+                schedules.append(schedule)
+                group.leave()
+            })
+        }
+        
+        group.notify(queue: .main) {
+            
+            for schedule in schedules {
+                
+                for month in schedule.months {
+                    
+                    if Int(month.number)! >= self.currentMonth {
+                        
+                        for date in month.dates {
+                            
+                            if Int(month.number)! > self.currentMonth ||
+                                Int(month.number) == self.currentMonth && date.date >= self.currentDay {
+                            
+                                // Specify date components
+                                var dateComponents = DateComponents()
+                                dateComponents.year = self.common.latestAppVersion()
+                                dateComponents.month = Int(month.number)
+                                dateComponents.day = date.date
+
+                                // Create date from components
+                                let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
+                                let sweepDay = userCalendar.date(from: dateComponents)
+                                sweepDates.append(sweepDay!)
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if let earliest = sweepDates.min() {
+                
+                self.messageCardView.isHidden = false
+                
+                let calendar = Calendar.current
+                let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: earliest)
+                self.messageLabel.text = "Your next sweeping is on \(components.month!)/\(components.day!)/\(components.year!)"
+                
+            }
+            
+        }
+	}
 
     // Search for schedule when message card view is tapped
-    // This does not work with multiple addresses
-//    @objc func handleMessageCardViewTap(sender: UITapGestureRecognizer) {
-//        if (self.common.favoriteAddress() != "") {
-//            self.searchForSchedule(self.common.favoriteAddress())
-//        }
-//    }
+    // This doesn't work with multiple addresses
+    @objc func handleMessageCardViewTap(sender: UITapGestureRecognizer) {
+        if (self.common.favoriteAddress() != "") {
+            self.searchForSchedule(self.common.favoriteAddress(), completion: { schedule in
+                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                    destinationViewController.schedule = schedule
+                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                }
+            })
+        }
+    }
     
     // Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
@@ -236,7 +224,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
     
 	// Search for schedule when search button is tapped
-    func searchForSchedule(_ address: String) {
+    func searchForSchedule(_ address: String, completion: @escaping (ScheduleModel)->()) {
         
 		// Clear all months and polygons so there are no duplicates
         self.schedule.months.removeAll()
@@ -370,11 +358,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             
                                         }
                                         
-										// Segue to schedule view
-                                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                                            destinationViewController.schedule = self.schedule
-                                            self.navigationController?.pushViewController(destinationViewController, animated: true)
-                                        }
+                                        completion(self.schedule)
+                                        
+//										// Segue to schedule view
+//                                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//                                            destinationViewController.schedule = self.schedule
+//                                            self.navigationController?.pushViewController(destinationViewController, animated: true)
+//                                        }
                                 
                                     }
                                 case .error (let err):
@@ -669,8 +659,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		defaults.set(address, forKey: "defaultAddress")
 		
 		// Find address and go to select section view or schedule view
-		self.searchForSchedule(address)
-		
+        self.searchForSchedule(address, completion: { schedule in
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                destinationViewController.schedule = schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        })
 	}
 	
     // MARK: Location Manager
