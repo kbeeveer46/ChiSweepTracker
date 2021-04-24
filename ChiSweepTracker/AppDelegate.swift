@@ -122,6 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
         
+        // Request permission for notifications any time app becomes active
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
             granted, error in
                     
