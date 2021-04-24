@@ -29,8 +29,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
+        // Set up an actin to take when a user opens a remote One Signal notification
+        let notificationOpenedBlock: OSNotificationOpenedBlock = { result in
+            if let address = result.notification.additionalData?["address"] as? String {
+                if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
+                    self.common.goToScheduleFromNotification(address)
+                }
+            }
+        }
+        
         // OneSignal initialization
         OneSignal.initWithLaunchOptions(launchOptions)
+        OneSignal.setNotificationOpenedHandler(notificationOpenedBlock)
         OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
         OneSignal.add(self as OSSubscriptionObserver)
         OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
@@ -96,9 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
                 
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
-                
                 defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
-                defaults.set(oneSignalDeviceStatus.isSubscribed, forKey: "notificationsOneSignalIsSubscribed")
             }
             
         }
@@ -186,8 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         completionHandler(UIBackgroundFetchResult.newData)
     }
     
-    func application(_ application: UIApplication,
-                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         		
 		let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
@@ -197,8 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
     }
     
-    func application(_ application: UIApplication,
-                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         
         print("didFailToRegisterForRemoteNotificationsWithError: \(error)")
     }
@@ -287,8 +293,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 
 extension AppDelegate: MessagingDelegate {
     
-    func messaging(_ messaging: Messaging,
-                   didReceiveRegistrationToken fcmToken: String) {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         
 		// This method runs each time the app opens and whenever a new Firebase token is generated.
         // This token can be used to send test message in the Firebase console

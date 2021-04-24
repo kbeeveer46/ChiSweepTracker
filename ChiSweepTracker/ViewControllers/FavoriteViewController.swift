@@ -827,7 +827,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                 // Add notification to database
                                                                 
                                                                 let sweepDay = "\(monthInSchedule.number)/\(dayInMonth.date)"
-                                                                let notificationTime = "\(triggerComponents.month!)/\(triggerComponents.day!)/\(triggerComponents.year!) \(String(format: "%02d", triggerComponents.hour!)):\(String(format: "%02d", triggerComponents.minute!)):\(String(format: "%02d", triggerComponents.second!))"
+                                                                let notificationTime = "\(String(format: "%02d", triggerComponents.month!))/\(String(format: "%02d", triggerComponents.day!))/\(triggerComponents.year!) \(String(format: "%02d", triggerComponents.hour!)):\(String(format: "%02d", triggerComponents.minute!)):\(String(format: "%02d", triggerComponents.second!))"
                                                                 
                                                                 self.insertNotificatinIntoDatabase(address: self.schedule.address, notificationTime: notificationTime, sweepDay: sweepDay, tableName: self.common.constants.notificationsDatabaseName)
                                                                 

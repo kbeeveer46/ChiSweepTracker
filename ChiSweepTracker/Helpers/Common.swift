@@ -115,8 +115,7 @@ class Common {
 	func notificationsToggled() -> Bool {return defaults.bool(forKey: "notificationsToggled")}
 	func notificationsYear() -> Int {return defaults.integer(forKey: "notificationsYear")}
     func notificationOneSignalPlayerId() -> String {return defaults.string(forKey: "notificationOneSignalPlayerId") ?? ""}
-    func notificationsOneSignalIsSubscribed() -> Bool {return defaults.bool(forKey: "notificationsOneSignalIsSubscribed")}
-	
+    
 	// Updates
 	
 	func updatesLastViewDate() -> String {return defaults.string(forKey: "updatesLastViewDate") ?? ""}
