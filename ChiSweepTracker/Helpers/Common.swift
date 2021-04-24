@@ -399,27 +399,55 @@ class Common {
 		completion("Finished getting data from Firebase")
 	}
 	
-    func deleteNotificationsFromDatabase(_ address: String, completion: @escaping (_ message: Bool) -> Void)
+    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void)
     {
-        // Delete notification from database
-        
-        let db = Firestore.firestore()
-        
-        db.collection(self.constants.notificationsDatabaseName)
-            .whereField("playerId", isEqualTo: self.notificationOneSignalPlayerId())
-            .whereField("address", isEqualTo: address)
-            .getDocuments() { (querySnapshot, err) in
-                if let err = err {
-                    print("Could not get notifications from Firebase: \(err)")
-                } else {
-                                                
-                    for document in querySnapshot!.documents {
-                        document.reference.delete();
-                    }
-                    
-                    completion(true)
+        let host = self.constants.websiteURL + "/delete-notification.php"
+        let url = NSURL(string: host)
+        var request = URLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+                        
+        var params = "playerId=\(self.notificationOneSignalPlayerId())"
+        params += "&address=\(address)"
+        params += "&tableName=\(tableName)"
+            
+        let data = params.data(using: .utf8)
+        do
+        {
+            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                
+                if error != nil {
+                    print("Error deleting notification from database")
                 }
+                else
+                {
+                    completion(true)
+                    
+                    if let response = String(data: data!, encoding: .utf8) {
+                        print("Response:\(response)")
+                    }
+                }
+            }
+            task.resume()
         }
+
+        
+//        let db = Firestore.firestore()
+//
+//        db.collection(self.constants.notificationsDatabaseName)
+//            .whereField("playerId", isEqualTo: self.notificationOneSignalPlayerId())
+//            .whereField("address", isEqualTo: address)
+//            .getDocuments() { (querySnapshot, err) in
+//                if let err = err {
+//                    print("Could not get notifications from Firebase: \(err)")
+//                } else {
+//
+//                    for document in querySnapshot!.documents {
+//                        document.reference.delete();
+//                    }
+//
+//                    completion(true)
+//                }
+//        }
     }
     
 	func updateNotifications() {

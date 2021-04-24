@@ -363,7 +363,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 defaults.set(0.0, forKey: "favoriteLatitude")
                 defaults.set(nil, forKey: "favoriteCoordinatesArray")
                 
-                self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
+                self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
                 
                 // If on a view with a tab control then use it to go to the favorit list view
                 self.tabBarController?.selectedIndex = 1
@@ -486,7 +486,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         // Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
                 self.getSchedule(true)
             })
         }
@@ -1021,7 +1021,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         // Update notifications after picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
                 self.getSchedule(true)
             })
         }
@@ -1141,7 +1141,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             // Save form values to defaults
             saveDefaultNotificationValues()
             
-            
             // Clear current notifications and re-add them in case they changed
             //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
@@ -1155,7 +1154,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {(completion)-> Void in
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
                 // Get schedule and update user's local notifications
                 self.getSchedule(true)
             })
@@ -1187,7 +1186,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             OneSignal.disablePush(true);
             
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
+            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
             
         }
     }
