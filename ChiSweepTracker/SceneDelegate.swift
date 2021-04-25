@@ -33,32 +33,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	    // Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
         
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-            granted, error in
-
-            if granted == false  {
-
-                OneSignal.disablePush(true);
-                print("OneSignal disabled")
-
-                DispatchQueue.main.async {
-                    // Unregister for Firebase Cloud Messaging and APN notifications
-                    UIApplication.shared.unregisterForRemoteNotifications()
-                }
-
-            }
-            else {
-
-                OneSignal.disablePush(false);
-                print("OneSignal enabled")
-
-                DispatchQueue.main.async {
-                    // Register for Firebase Cloud Messaging and APN notifications
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            }
-        }
-        
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
 		

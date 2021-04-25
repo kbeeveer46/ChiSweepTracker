@@ -21,7 +21,9 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	let common = Common()
     var schedule = ScheduleModel()
     
+    // In-app purchase
     var myProduct: SKProduct?
+    var price: NSDecimalNumber?
     
 	// MARK: Methods
 	
@@ -44,21 +46,23 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.scheduleTableView.delegate = self
 		self.scheduleTableView.reloadData()
         
-        // Get and populate the multiple addresses in-app purchase so usrs can buy it
+        // Gets and sets the multiple addresses in-app purchase so users can buy it
         getMultipleAddressesInAppPurchase()
         
 	}
     
+    // Gets the multiple addresses in-app purchase
     func getMultipleAddressesInAppPurchase() {
         let request = SKProductsRequest(productIdentifiers: ["com.kylebeverforden.chisweeptracker.multipleaddresses"])
         request.delegate = self
         request.start()
     }
     
-    // Do not remove this. It is required for getMultipleAddressesInAppPurchase
+    // Sets the multiple addresses in-app purchase
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         if let product = response.products.first {
             self.myProduct = product
+            self.price = product.price
         }
     }
     
@@ -68,12 +72,25 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             switch transaction.transactionState {
             case .purchasing:
                 break
-            case .purchased, .restored:
+            case .purchased:
                 defaults.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
+                self.common.showAlert("Purchase Complete", "Saving multiple addresses is now enabled.")
                 SKPaymentQueue.default().remove(self)
                 break
-            case .failed, .deferred:
+            case .restored:
+                defaults.set(true, forKey: "enableMultipleAddresses")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                self.common.showAlert("Purchase Restored", "Saving multiple addresses is now enabled.")
+                SKPaymentQueue.default().remove(self)
+                break
+            case .failed:
+                defaults.set(false, forKey: "enableMultipleAddresses")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                self.common.showAlert("Purchase Did Not Complete", "Your device did not complete the purchase.")
+                SKPaymentQueue.default().remove(self)
+                break
+            case .deferred:
                 defaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
@@ -81,10 +98,18 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             default:
                 defaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
+                //SKPaymentQueue.default().remove(self)
                 break
             }
         }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        print(error.localizedDescription)
+    }
+    
+    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+        print(queue)
     }
 	
 	func initializeControlsPerDevice() {
@@ -98,8 +123,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		}
 		
 	}
-    
- 
     
 	// Method is called when user chooses yes to add a favorite
     @objc func addAddress() {
@@ -149,7 +172,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         else {
             
             // Create alert
-            let alert = UIAlertController(title: "Adding Multiple Addresses Is A Paid Feature", message: "Would you like to purchase?", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one addresses requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
 
             // Yes option
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -164,7 +187,17 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                     SKPaymentQueue.default().add(self)
                     SKPaymentQueue.default().add(payment)
                 }
+                else {
+                    self.common.showAlert("Unable to purchase", "Your device does not have the required permissions to make this purchase.")
+                }
         
+            }))
+            
+            // Restore option
+            alert.addAction(UIAlertAction(title: "Restore Previous Purchase", style: .default, handler:{ action in
+                
+                SKPaymentQueue.default().restoreCompletedTransactions()
+                
             }))
             
             // No option

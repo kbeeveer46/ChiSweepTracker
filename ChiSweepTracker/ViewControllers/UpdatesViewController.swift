@@ -22,6 +22,12 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
+        // Set required properties for table view
+        //self.newsTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
+        self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
+        self.newsTableView.dataSource = self
+        self.newsTableView.delegate = self
+        
 		// Set dateFormatter properties
 		dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
 		dateFormatter.locale = .current
@@ -29,6 +35,10 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 		// Get the date and time the last time the user views the updates page
 		updatesLastViewedDate = self.common.updatesLastViewDate()
 		
+        // Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
+        let currentDate = self.dateFormatter.string(from: Date())
+        defaults.set(currentDate, forKey: "updatesLastViewDate")
+        
 		// Get list of latest updates
 		getLatestUpdates()
     }
@@ -83,20 +93,12 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
                 
                 DispatchQueue.main.async {
-                    // Set required properties for table view
-                    self.newsTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
-                    self.newsTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
-                    self.newsTableView.dataSource = self
-                    self.newsTableView.delegate = self
+ 
                     self.newsTableView.reloadData()
                 
                     // Clear updates tab bar badge
                     self.tabBarController?.tabBar.items?.last!.badgeValue = nil
                 }
-                
-                // Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
-                let currentDate = self.dateFormatter.string(from: Date())
-                defaults.set(currentDate, forKey: "updatesLastViewDate")
             }
         }
 	}

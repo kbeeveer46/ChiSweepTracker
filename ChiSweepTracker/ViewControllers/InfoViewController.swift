@@ -24,6 +24,12 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		self.tabBarController?.navigationItem.leftBarButtonItem = nil
 		self.tabBarController?.navigationItem.rightBarButtonItem = nil
 		
+        // Set required properties for table view
+        //self.infoTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
+        self.infoTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
+        self.infoTableView.dataSource = self
+        self.infoTableView.delegate = self
+        
 		getInfo()
         
     }
@@ -56,11 +62,6 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
                 
                 DispatchQueue.main.async {
-                    // Set required properties for table view
-                    self.infoTableView.backgroundColor = UIColor(hexString: self.common.constants.background)
-                    self.infoTableView.separatorColor = UIColor(white: 0.95, alpha: 1)
-                    self.infoTableView.dataSource = self
-                    self.infoTableView.delegate = self
                     self.infoTableView.reloadData()
                 }
             }

@@ -1033,6 +1033,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             }
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
+            // Do not remove this. This is required in case someone initially doesn't allow notifications but afterwards enables it in settings
+            OneSignal.disablePush(false)
+            UIApplication.shared.registerForRemoteNotifications()
+            
             self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
                 self.getSchedule(true)
             })
