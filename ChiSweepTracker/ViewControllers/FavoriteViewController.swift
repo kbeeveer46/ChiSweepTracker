@@ -44,7 +44,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.loadFavoriteMap()
         
         // Initialize controls per device
-        //self.initializeControlsPerDevice()
+        self.initializeControlsPerDevice()
         
     }
     
@@ -63,17 +63,17 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             timePickerHeightConstraint.constant = 60
             whenPickerHeightConstraint.constant = 60
             favoriteStackView.spacing = 0
-        case .iPhoneSE2:
-            favoriteMapHeighConstraint.constant = 175
-        case .iPhone5,
-             .iPhone5S,
-             .iPhone5C,
-             .iPhone6,
-             .iPhone6S,
-             .iPhone7,
-             .iPhone8:
-            favoriteStackView.spacing = 7
-            favoriteMapHeighConstraint.constant = 175
+//        case .iPhoneSE2:
+//            favoriteMapHeighConstraint.constant = 175
+//        case .iPhone5,
+//             .iPhone5S,
+//             .iPhone5C,
+//             .iPhone6,
+//             .iPhone6S,
+//             .iPhone7,
+//             .iPhone8:
+//            favoriteStackView.spacing = 7
+//            favoriteMapHeighConstraint.constant = 175
         default:
             break
         }
@@ -725,7 +725,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                             self.pushNotificationsSwitch.isOn = false
                                                             self.timePicker.isUserInteractionEnabled = false
                                                             self.onPicker.isUserInteractionEnabled = false
-                                                            //defaults.set(false, forKey: "notificationsToggled")
                                                             
                                                         })
                                                         alertController.addAction(cancelAction)
@@ -737,9 +736,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                     
                                                     // Do not remove DispatchQueue
                                                     DispatchQueue.main.async {
-                                                        
-                                                        // Delete all local iOS notifications
-                                                        //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                                                         
                                                         //let center = UNUserNotificationCenter.current()
                                                         let calendar = Calendar.current
@@ -768,6 +764,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                             
                                                             for dayInMonth in monthInSchedule.dates {
                                                                 
+                                                                let currentDate = Date()
                                                                 let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date, hour: hour, minute: minute, second: 0)
                                                                 var date = calendar.date(from: dateComponents)
                                                                 
@@ -790,7 +787,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                     break
                                                                 }
                                                                 
-                                                                let currentDate = Date()
                                                                 if date! >= currentDate {
                                                                 
                                                                     // Create notificaton trigger
@@ -1127,9 +1123,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             // Save form values to defaults
             saveDefaultNotificationValues()
             
-            // Clear current notifications and re-add them in case they changed
-            //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            
             var favoriteAddresses = self.common.favoriteAddresses()
             for (index, element) in favoriteAddresses.enumerated() {
                 if element[0] == self.schedule.address {
@@ -1148,9 +1141,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         else {
             
-            // Save toggle setting to defaults
-            //defaults.set(false, forKey: "notificationsToggled")
-            
             var favoriteAddresses = self.common.favoriteAddresses()
             for (index, element) in favoriteAddresses.enumerated() {
                 if element[0] == self.schedule.address {
@@ -1164,14 +1154,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             self.timePicker.isUserInteractionEnabled = false
             self.onPicker.isUserInteractionEnabled = false
             
-            // Delete all local iOS notifications
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-            
-            // Unregister from Firebase Cloud Messaging notifications
-            UIApplication.shared.unregisterForRemoteNotifications()
-            
-            OneSignal.disablePush(true);
-            
+            // Delete notifications in database for address that was disabled
             self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
             
         }

@@ -56,7 +56,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     // Register for Firebase Cloud Messaging and APN notifications
                     UIApplication.shared.registerForRemoteNotifications()
                 }
-
             }
         }
         

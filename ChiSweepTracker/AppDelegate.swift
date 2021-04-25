@@ -65,6 +65,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             favoriteAddresses[0][4] = String(notificationsMinute)
             
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+            
+            self.common.updateNotifications()
         }
         
         // Request permission for notifications when app is first opened

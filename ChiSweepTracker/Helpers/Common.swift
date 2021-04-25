@@ -515,6 +515,8 @@ class Common {
             
             if notificationsToggled == true {
                 
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                
                 self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
                   
                     favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
