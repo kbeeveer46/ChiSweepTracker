@@ -1,7 +1,6 @@
 import UIKit
 import CoreLocation
 import MapKit
-import Firebase
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     

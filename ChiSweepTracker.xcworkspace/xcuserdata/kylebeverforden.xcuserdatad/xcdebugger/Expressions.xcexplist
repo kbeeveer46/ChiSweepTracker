@@ -89,6 +89,14 @@
          contextName = "FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #1 in Common.getDataFromDatabase(completion:):Common.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "response[0][&quot;version&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FavoriteListViewController.tableView(_:cellForRowAt:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString

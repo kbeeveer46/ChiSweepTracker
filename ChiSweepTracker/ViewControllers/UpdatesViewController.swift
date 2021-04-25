@@ -1,5 +1,4 @@
 import UIKit
-import Firebase
 
 class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
@@ -36,7 +35,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
 	
 	func getLatestUpdates() {
 		
-        self.common.getRequest(self.common.constants.websiteURL + "/get-updates-data.php", parameters: ["tableName": self.common.constants.newsDatabaseName]) { responseObject, error in
+        self.common.getRequest(self.common.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.common.constants.newsDatabaseName]) { responseObject, error in
             guard let response = responseObject, error == nil else {
                 print(error ?? "Unknown error")
                 return

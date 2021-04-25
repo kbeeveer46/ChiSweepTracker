@@ -74,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if granted == false  {
                 
                 OneSignal.disablePush(true);
+                print("OneSignal disabled")
                 
                 DispatchQueue.main.async {
                     // Unregister for Firebase Cloud Messaging and APN notifications
@@ -84,6 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             else {
                 
                 OneSignal.disablePush(false);
+                print("OneSignal enabled")
                 
                 DispatchQueue.main.async {
                     // Register for Firebase Cloud Messaging and APN notifications
@@ -129,6 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if granted == false  {
                 
                 OneSignal.disablePush(true);
+                print("OneSignal disabled")
                 
                 DispatchQueue.main.async {
                     // Unregister for Firebase Cloud Messaging and APN notifications
@@ -139,6 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             else {
                 
                 OneSignal.disablePush(false);
+                print("OneSignal enabled")
                 
                 DispatchQueue.main.async {
                     // Register for Firebase Cloud Messaging and APN notifications

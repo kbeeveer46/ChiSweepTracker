@@ -3,7 +3,6 @@ import UserNotifications
 import CoreLocation
 import MapKit
 import THLabel
-import Firebase
 import OneSignal
 
 class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {

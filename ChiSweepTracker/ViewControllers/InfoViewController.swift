@@ -1,6 +1,5 @@
 import UIKit
 import StoreKit
-import Firebase
 
 class InfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 

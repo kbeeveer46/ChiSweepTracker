@@ -1,6 +1,5 @@
 import UIKit
 import MapKit
-import Firebase
 
 let defaults = UserDefaults.standard
 
@@ -128,7 +127,7 @@ class Common {
         
         #if DEBUG
         let schedulesDatabaseName = "schedules_dev"
-        let updatesDatabaseName = "Updates_Dev"
+        let updatesDatabaseName = "updates_dev"
         let divvysDatabaseName = "divvys_dev"
         let towedDatabaseName = "towed_vehicles_dev"
         let relocatedDatabaseName = "relocated_vehicles_dev"
@@ -137,7 +136,7 @@ class Common {
         let notificationsDatabaseName = "notifications_dev"
         #else
         let schedulesDatabaseName = "schedules"
-        let updatesDatabaseName = "Updates"
+        let updatesDatabaseName = "updates"
         let divvysDatabaseName = "divvys"
         let towedDatabaseName = "towed_vehicles"
         let relocatedDatabaseName = "relocated_vehicles"
@@ -195,27 +194,6 @@ class Common {
     
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
-        let db = Firestore.firestore()
-        
-        // Get data set version
-        let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.latestAppVersion()))
-        
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                
-                let data = document.data()
-                let latestDatasetVersion = data!["version"]!
-                
-                defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
-                
-                self.updateNotifications()
-                
-            } else {
-                print("Cannot get dataset version from Firebase")
-            }
-        }
-        
-        
         // Get schedule data
         getRequest(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]) { responseObject, error in
             guard let response = responseObject, error == nil else {
@@ -248,61 +226,26 @@ class Common {
                 defaults.set(sectionTitle, forKey: "sectionTitle")
                 defaults.set(wardTitle, forKey: "wardTitle")
                 
+                self.getRequest(self.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.constants.updatesDatabaseName, "year": String(self.latestAppVersion())]) { responseObject, error in
+                    guard let response = responseObject, error == nil else {
+                        print(error ?? "Unknown error")
+                        return
+                    }
+
+                    if response.count > 0 {
+                        
+                        let latestDatasetVersionString = response[0]["version"] as! String
+                        let latestDatasetVersion = Int(latestDatasetVersionString)
+                        
+                        defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
+                        
+                        DispatchQueue.main.async {
+                            self.updateNotifications()
+                        }
+                    }
+                }
             }
         }
-//
-//        db.collection(self.constants.schedulesDatabaseName)
-//            .order(by: "year", descending: true)
-//            .limit(to: 1)
-//            .getDocuments() { (querySnapshot, err) in
-//                if let err = err {
-//                    fatalError("Could not get Chicago data from Firebase: \(err)")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//
-//                        let data = document.data()
-//                        let latestAppVersion = data["year"] as! Int
-//                        let wardDataset = data["wardDataset"] as! String
-//                        let scheduleDataset = data["scheduleDataset"] as! String
-//                        let coordinatesTitle = data["coordinatesTitle"] as! String
-//                        let datesTitle = data["datesTitle"] as! String
-//                        let geomTitle = data["geomTitle"] as! String
-//                        let monthNameTitle = data["monthNameTitle"] as! String
-//                        let monthNumberTitle = data["monthNumberTitle"] as! String
-//                        let sectionTitle = data["sectionTitle"] as! String
-//                        let wardTitle = data["wardTitle"] as! String
-//
-//                        defaults.set(latestAppVersion, forKey: "latestAppVersion")
-//                        defaults.set(wardDataset, forKey: "wardDataset")
-//                        defaults.set(scheduleDataset, forKey: "scheduleDataset")
-//                        defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
-//                        defaults.set(datesTitle, forKey: "datesTitle")
-//                        defaults.set(geomTitle, forKey: "geomTitle")
-//                        defaults.set(monthNameTitle, forKey: "monthNameTitle")
-//                        defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
-//                        defaults.set(sectionTitle, forKey: "sectionTitle")
-//                        defaults.set(wardTitle, forKey: "wardTitle")
-//
-//                        // Get data set version
-//                        let docRef = db.collection(self.constants.updatesDatabaseName).document(String(self.latestAppVersion()))
-//
-//                        docRef.getDocument { (document, error) in
-//                            if let document = document, document.exists {
-//
-//                                let data = document.data()
-//                                let latestDatasetVersion = data!["version"]!
-//
-//                                defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
-//
-//                                self.updateNotifications()
-//
-//                            } else {
-//                                print("Cannot get dataset version from Firebase")
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         
         // Get Divvys data
         getRequest(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]) { responseObject, error in
@@ -350,53 +293,6 @@ class Common {
             }
         }
         
-//        db.collection(self.constants.divvysDatabaseName)
-//            .limit(to: 1)
-//            .getDocuments() { (querySnapshot, err) in
-//                if let err = err {
-//                    print("Could not get Divvys data from Firebase: \(err)")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//
-//                        let data = document.data()
-//
-//                        let divvyDataset = data["divvyDataset"] as! String
-//                        let divvyIdTitle = data["idTitle"] as! String
-//                        let divvyDocksInServiceTitle = data["docksInServiceTitle"] as! String
-//                        let divvyLatitudeTitle = data["latitudeTitle"] as! String
-//                        let divvyLongitudeTitle = data["longitudeTitle"] as! String
-//                        let divvyStationNameTitle = data["stationNameTitle"] as! String
-//                        let divvyStatusTitle = data["statusTitle"] as! String
-//
-//                        let divvyJSONUrl = data["divvyJSONUrl"] as! String
-//                        let divvyJSONBikesAvailableTitle = data["divvyJSONBikesAvailableTitle"] as! String
-//                        let divvyJSONEBikesAvailableTitle = data["divvyJSONEBikesAvailableTitle"] as! String
-//                        let divvyJSONDocksAvailableTitle = data["divvyJSONDocksAvailableTitle"] as! String
-//                        let divvyJSONDataTitle = data["divvyJSONDataTitle"] as! String
-//                        let divvyJSONStationsTitle = data["divvyJSONStationsTitle"] as! String
-//                        let divvyJSONIdTitle = data["divvyJSONIdTitle"] as! String
-//                        let divvyJSONLastUpdatedTitle = data["divvyJSONLastUpdatedTitle"] as! String
-//
-//                        defaults.set(divvyDataset, forKey: "divvyDataset")
-//                        defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
-//                        defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
-//                        defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
-//                        defaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
-//                        defaults.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
-//                        defaults.set(divvyStatusTitle, forKey: "divvyStatusTitle")
-//
-//                        defaults.set(divvyJSONUrl, forKey: "divvyJSONUrl")
-//                        defaults.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
-//                        defaults.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
-//                        defaults.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
-//                        defaults.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
-//                        defaults.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
-//                        defaults.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
-//                        defaults.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
-//                    }
-//                }
-//            }
-        
         // Get relocated vehicles data
         getRequest(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.relocatedDatabaseName]) { responseObject, error in
             guard let response = responseObject, error == nil else {
@@ -440,51 +336,6 @@ class Common {
                 
             }
         }
-//
-//        db.collection(self.constants.relocatedDatabaseName)
-//            .limit(to: 1)
-//            .getDocuments() { (querySnapshot, err) in
-//                if let err = err {
-//                    print("Could not get relocated vehicle data from Firebase: \(err)")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//
-//                        let data = document.data()
-//
-//                        let relocatedDataset = data["relocatedDataset"] as! String
-//                        let relocatedColorTitle = data["colorTitle"] as! String
-//                        let relocatedMakeTitle = data["makeTitle"] as! String
-//                        let relocatedPlateTitle = data["plateTitle"] as! String
-//                        let relocatedDateTitle = data["relocatedDateTitle"] as! String
-//                        let relocatedFromLatitudeTitle = data["relocatedFromLatitudeTitle"] as! String
-//                        let relocatedFromLongitudeTitle = data["relocatedFromLongitudeTitle"] as! String
-//                        let relocatedFromAddressNumberTitle = data["relocatedFromAddressNumberTitle"] as! String
-//                        let relocatedFromDirectionTitle = data["relocatedFromDirectionTitle"] as! String
-//                        let relocatedFromStreetTitle = data["relocatedFromStreetTitle"] as! String
-//                        let relocatedReasonTitle = data["relocatedReasonTitle"] as! String
-//                        let relocatedToAddressNumberTitle = data["relocatedToAddressNumberTitle"] as! String
-//                        let relocatedToDirectionTitle = data["relocatedToDirectionTitle"] as! String
-//                        let relocatedToStreetTitle = data["relocatedToStreetTitle"] as! String
-//                        let relocatedStateTitle = data["stateTitle"] as! String
-//
-//                        defaults.set(relocatedDataset, forKey: "relocatedDataset")
-//                        defaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
-//                        defaults.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
-//                        defaults.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
-//                        defaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
-//                        defaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
-//                        defaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
-//                        defaults.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
-//                        defaults.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
-//                        defaults.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
-//                        defaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
-//                        defaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
-//                        defaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
-//                        defaults.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
-//                        defaults.set(relocatedStateTitle, forKey: "relocatedStateTitle")
-//                    }
-//                }
-//            }
         
         // Get towed vehicles data
         getRequest(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.towedDatabaseName]) { responseObject, error in
@@ -522,43 +373,6 @@ class Common {
             }
         }
         
-//        db.collection(self.constants.towedDatabaseName)
-//            .limit(to: 1)
-//            .getDocuments() { (querySnapshot, err) in
-//                if let err = err {
-//                    print("Could not get towed vehicle data from Firebase: \(err)")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//
-//                        let data = document.data()
-//
-//                        let towedDataset = data["towedDataset"] as! String
-//                        let towedColorTitle = data["colorTitle"] as! String
-//                        let towedInventoryNumberTitle = data["inventoryNumberTitle"] as! String
-//                        let towedMakeTitle = data["makeTitle"] as! String
-//                        let towedModelTitle = data["modelTitle"] as! String
-//                        let towedPlateTitle = data["plateTitle"] as! String
-//                        let towedStateTitle = data["stateTitle"] as! String
-//                        let towedStyleTitle = data["styleTitle"] as! String
-//                        let towedDateTitle = data["towedDateTitle"] as! String
-//                        let towedToAddressTitle = data["towedToAddressTitle"] as! String
-//                        let towedToPhoneTitle = data["towedToPhoneTitle"] as! String
-//
-//                        defaults.set(towedDataset, forKey: "towedDataset")
-//                        defaults.set(towedColorTitle, forKey: "towedColorTitle")
-//                        defaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
-//                        defaults.set(towedMakeTitle, forKey: "towedMakeTitle")
-//                        defaults.set(towedModelTitle, forKey: "towedModelTitle")
-//                        defaults.set(towedPlateTitle, forKey: "towedPlateTitle")
-//                        defaults.set(towedStateTitle, forKey: "towedStateTitle")
-//                        defaults.set(towedStyleTitle, forKey: "towedStyleTitle")
-//                        defaults.set(towedDateTitle, forKey: "towedDateTitle")
-//                        defaults.set(towedToAddressTitle, forKey: "towedToAddressTitle")
-//                        defaults.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
-//                    }
-//                }
-//            }
-        
         let lastUpdatesViewDateString = self.updatesLastViewDate()
         if !lastUpdatesViewDateString.isEmpty {
             
@@ -568,7 +382,7 @@ class Common {
             //dateFormatter.locale = .current
             //let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)
             
-            getRequest(self.constants.websiteURL + "/get-updates-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
+            getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
                 guard let response = responseObject, error == nil else {
                     print(error ?? "Unknown error")
                     return
@@ -688,12 +502,8 @@ class Common {
     
     func updateNotifications() {
         
-        //let favoriteAddress = self.favoriteAddress()
-        //let notificationsToggled = self.notificationsToggled()
-        
         let favoriteViewController = FavoriteViewController()
-        let favoriteAddresses = self.favoriteAddresses()
-        let addresses = favoriteAddresses.filter { $0[0] != "" }
+        let addresses = self.favoriteAddresses().filter { $0[0] != "" }
         
         for (_, element) in addresses.enumerated() {
             
@@ -704,14 +514,14 @@ class Common {
             let notificationsMinute = Int(element[4]) ?? 0
             
             if notificationsToggled == true {
-                favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+                
+                self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                  
+                    favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+
+                })
             }
         }
-        
-        //		if !favoriteAddress.isEmpty && notificationsToggled == true {
-        //			let favoriteViewController = FavoriteViewController()
-        //			favoriteViewController.getSchedule(true, true)
-        //		}
     }
     
     func goToScheduleFromNotification(_ address: String) {
