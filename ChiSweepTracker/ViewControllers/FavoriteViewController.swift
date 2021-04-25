@@ -742,11 +742,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                         // Delete all local iOS notifications
                                                         //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                                                         
-                                                        #if DEBUG
-                                                        //self.sendTestNotifications()
-                                                        #endif
-                                                        
-                                                        let center = UNUserNotificationCenter.current()
+                                                        //let center = UNUserNotificationCenter.current()
                                                         let calendar = Calendar.current
                                                         let currentYear = self.common.latestAppVersion()
                                                         let notificationWhenDefault = when
@@ -795,60 +791,47 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                     break
                                                                 }
                                                                 
-                                                                // Create notificaton trigger
-///                                                               let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
-//                                                                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
-//
-//                                                                // Create notification contents
-//                                                                let content = UNMutableNotificationContent()
-//                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
-//                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
-//                                                                let soundName = UNNotificationSoundName("notification.m4r")
-//                                                                content.sound = UNNotificationSound(named: soundName)
-//                                                                content.badge = 1
-//                                                                content.userInfo = ["address":self.schedule.address]
-//
-//                                                                // Create notificaton identifier
-//                                                                let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
-//
-//                                                                // Create notification request
-//                                                                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-//
-//                                                                // Add notification
-//                                                                center.add(request, withCompletionHandler: { (error) in
-//                                                                    if let error = error {
-//                                                                        print("Error adding notification: \(error.localizedDescription)")
-//                                                                    }
-//                                                                    else {
-//                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
-//                                                                    }
-//                                                                })
+                                                                let currentDate = Date()
+                                                                if date! >= currentDate {
                                                                 
-                                                                // Add notification to database
-                                                                
-                                                                let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
-                                                                let sweepDay = "\(monthInSchedule.number)/\(dayInMonth.date)"
-                                                                let notificationTime = "\(String(format: "%02d", triggerComponents.month!))/\(String(format: "%02d", triggerComponents.day!))/\(triggerComponents.year!) \(String(format: "%02d", triggerComponents.hour!)):\(String(format: "%02d", triggerComponents.minute!)):\(String(format: "%02d", triggerComponents.second!))"
-                                                                
-                                                                self.insertNotificatinIntoDatabase(address: self.schedule.address, notificationTime: notificationTime, sweepDay: sweepDay, tableName: self.common.constants.notificationsDatabaseName)
-                                                                
-                                                                //                                                                let dateFormatter = DateFormatter()
-                                                                //                                                                dateFormatter.dateFormat = "MM/dd/yyyy HH:mm:ss"
-                                                                //                                                                let dateString = dateFormatter.string(from: date!)
-                                                                //
-                                                                //                                                                let db = Firestore.firestore()
-                                                                //                                                                let autoID = db.collection(self.common.constants.notificationsDatabaseName).document().documentID;
-                                                                //                                                                db.collection(self.common.constants.notificationsDatabaseName).document(autoID).setData([
-                                                                //                                                                    "playerId": self.common.notificationOneSignalPlayerId(),
-                                                                //                                                                    "time": dateString,
-                                                                //                                                                    "address": self.common.favoriteAddress()
-                                                                //                                                                ]) { err in
-                                                                //                                                                    if let err = err {
-                                                                //                                                                        print("Error adding notification to database: \(err)")
-                                                                //                                                                    } else {
-                                                                //                                                                        //print("Document successfully written!")
-                                                                //                                                                    }
-                                                                //                                                                }
+                                                                    // Create notificaton trigger
+    ///                                                               let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+    //                                                                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+    //
+    //                                                                // Create notification contents
+    //                                                                let content = UNMutableNotificationContent()
+    //                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
+    //                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
+    //                                                                let soundName = UNNotificationSoundName("notification.m4r")
+    //                                                                content.sound = UNNotificationSound(named: soundName)
+    //                                                                content.badge = 1
+    //                                                                content.userInfo = ["address":self.schedule.address]
+    //
+    //                                                                // Create notificaton identifier
+    //                                                                let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
+    //
+    //                                                                // Create notification request
+    //                                                                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+    //
+    //                                                                // Add notification
+    //                                                                center.add(request, withCompletionHandler: { (error) in
+    //                                                                    if let error = error {
+    //                                                                        print("Error adding notification: \(error.localizedDescription)")
+    //                                                                    }
+    //                                                                    else {
+    //                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
+    //                                                                    }
+    //                                                                })
+                                                                    
+                                                                    // Add notification to database
+                                                                    
+                                                                    let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+                                                                    let sweepDay = "\(monthInSchedule.number)/\(dayInMonth.date)"
+                                                                    let notificationTime = "\(String(format: "%02d", triggerComponents.month!))/\(String(format: "%02d", triggerComponents.day!))/\(triggerComponents.year!) \(String(format: "%02d", triggerComponents.hour!)):\(String(format: "%02d", triggerComponents.minute!)):\(String(format: "%02d", triggerComponents.second!))"
+                                                                    
+                                                                    self.insertNotificatinIntoDatabase(address: self.schedule.address, notificationTime: notificationTime, sweepDay: sweepDay, tableName: self.common.constants.notificationsDatabaseName)
+                                                                    
+                                                                }
                                                             }
                                                         }
                                                         
@@ -931,33 +914,36 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     func insertNotificatinIntoDatabase(address: String, notificationTime: String, sweepDay: String, tableName: String) {
         
-        let host = self.common.constants.websiteURL + "/insert-notification.php"
-        let url = NSURL(string: host)
-        var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
-                        
-        var params = "playerId=\(self.common.notificationOneSignalPlayerId())"
-        params += "&address=\(address)"
-        params += "&notificationTime=\(notificationTime)"
-        params += "&sweepDay=\(sweepDay)"
-        params += "&tableName=\(tableName)"
-            
-        let data = params.data(using: .utf8)
-        do
-        {
-            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+        if self.common.notificationOneSignalPlayerId() != "" {
+        
+            let host = self.common.constants.websiteURL + "/insert-notification.php"
+            let url = NSURL(string: host)
+            var request = URLRequest(url: url! as URL)
+            request.httpMethod = "POST"
+                            
+            var params = "playerId=\(self.common.notificationOneSignalPlayerId())"
+            params += "&address=\(address)"
+            params += "&notificationTime=\(notificationTime)"
+            params += "&sweepDay=\(sweepDay)"
+            params += "&tableName=\(tableName)"
                 
-                if error != nil {
-                    print("Error adding notification to database")
+            let data = params.data(using: .utf8)
+            do
+            {
+                let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                    
+                    if error != nil {
+                        print("Error adding notification to database")
+                    }
+                    else
+                    {
+                        //if let response = String(data: data!, encoding: .utf8) {
+                        //    print("Response:\(response)")
+                        //}
+                    }
                 }
-                else
-                {
-                    //if let response = String(data: data!, encoding: .utf8) {
-                    //    print("Response:\(response)")
-                    //}
-                }
+                task.resume()
             }
-            task.resume()
         }
     }
     

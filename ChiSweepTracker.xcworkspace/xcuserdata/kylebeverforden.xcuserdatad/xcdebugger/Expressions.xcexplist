@@ -113,6 +113,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "FavoriteViewController.addDivvyStationsToMap(_:):FavoriteViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.common.divvyDataset()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #2 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString

@@ -89,7 +89,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //defaults.set(false, forKey: "notificationsToggled")
         
         // Create alert
-        let alert = UIAlertController(title: "Address Added", message: "Would you like to enable notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
 		
 		// Yes option
 		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -141,7 +141,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
 		
 		// Create add favorite option for options alert
-		let saveFavoriteAction = UIAlertAction(title: "Add Address", style: .default, handler:{ action in
+		let saveFavoriteAction = UIAlertAction(title: "Save Address", style: .default, handler:{ action in
 			self.addAddress()
 		})
         optionsAlert.addAction(saveFavoriteAction)
