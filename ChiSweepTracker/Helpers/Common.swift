@@ -140,11 +140,11 @@ class Common {
         let schedulesDatabaseName = "Schedules"
         let updatesDatabaseName = "Updates"
         let settingsDatabaseName = "Settings"
-        let divvysDatabaseName = "Divvys"
+        let divvysDatabaseName = "divvys"
         let towedDatabaseName = "TowedVehicles"
         let relocatedDatabaseName = "RelocatedVehicles"
-        let newsDatabaseName = "News"
-        let infoDatabaseName = "Info"
+        let newsDatabaseName = "news"
+        let infoDatabaseName = "info"
         let notificationsDatabaseName = "notifications"
         #endif
         
@@ -446,14 +446,15 @@ class Common {
                 
                 if error != nil {
                     print("Error deleting notification from database")
+                    completion(true)
                 }
                 else
                 {
                     completion(true)
                     
-                    if let response = String(data: data!, encoding: .utf8) {
-                        print("Response:\(response)")
-                    }
+                    //if let response = String(data: data!, encoding: .utf8) {
+                    //    print("Response:\(response)")
+                    //}
                 }
             }
             task.resume()

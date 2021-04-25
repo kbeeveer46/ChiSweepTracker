@@ -6,6 +6,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
     @IBOutlet weak var favoriteListMapView: MKMapView!
     @IBOutlet weak var favoriteListTableView: UITableView!
+    @IBOutlet weak var favoriteListViewHeaderLabel: UILabel!
     
     let generator = UISelectionFeedbackGenerator()
     let common = Common()
@@ -15,12 +16,19 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        favoriteAddresses = self.common.favoriteAddresses().sorted(by: {($0[0]) > ($1[0]) })
+        self.favoriteAddresses = self.common.favoriteAddresses().sorted(by: {($0[0]) > ($1[0]) })
         
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
         self.favoriteListTableView.reloadData()
+        
+        if self.favoriteAddresses.filter({ $0[0] != "" }).count == 0 {
+            favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
+        }
+        else {
+            favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
+        }
         
         self.loadFavoriteMap()
         

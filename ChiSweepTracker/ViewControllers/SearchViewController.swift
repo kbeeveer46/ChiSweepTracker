@@ -104,7 +104,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
 	
-	func getNextSweepingDate(_ count: Int = 0) {
+	func getNextSweepingDate() {
 
 		self.messageCardView.isHidden = true
         
@@ -162,7 +162,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 self.messageLabel.text = "Your next sweeping is on \(components.month!)/\(components.day!)/\(components.year!)"
                 
             }
-            
         }
 	}
 

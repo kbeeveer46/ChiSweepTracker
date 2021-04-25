@@ -796,36 +796,37 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                 }
                                                                 
                                                                 // Create notificaton trigger
-                                                                let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
-                                                                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
-                                                                
-                                                                // Create notification contents
-                                                                let content = UNMutableNotificationContent()
-                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
-                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
-                                                                let soundName = UNNotificationSoundName("notification.m4r")
-                                                                content.sound = UNNotificationSound(named: soundName)
-                                                                content.badge = 1
-                                                                content.userInfo = ["address":self.schedule.address]
-                                                                
-                                                                // Create notificaton identifier
-                                                                let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
-                                                                
-                                                                // Create notification request
-                                                                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-                                                                
-                                                                // Add notification
-                                                                center.add(request, withCompletionHandler: { (error) in
-                                                                    if let error = error {
-                                                                        print("Error adding notification: \(error.localizedDescription)")
-                                                                    }
-                                                                    else {
-                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
-                                                                    }
-                                                                })
+///                                                               let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+//                                                                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+//
+//                                                                // Create notification contents
+//                                                                let content = UNMutableNotificationContent()
+//                                                                content.title = "Street Sweeping \(monthInSchedule.number)/\(dayInMonth.date)"
+//                                                                content.body = "Check your neighborhood for signage and move your vehicle to avoid tickets."
+//                                                                let soundName = UNNotificationSoundName("notification.m4r")
+//                                                                content.sound = UNNotificationSound(named: soundName)
+//                                                                content.badge = 1
+//                                                                content.userInfo = ["address":self.schedule.address]
+//
+//                                                                // Create notificaton identifier
+//                                                                let identifier = "LocalNotification-\(triggerComponents.month!)-\(triggerComponents.day!)-\(triggerComponents.hour!)-\(triggerComponents.minute!)-\(triggerComponents.second!)"
+//
+//                                                                // Create notification request
+//                                                                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+//
+//                                                                // Add notification
+//                                                                center.add(request, withCompletionHandler: { (error) in
+//                                                                    if let error = error {
+//                                                                        print("Error adding notification: \(error.localizedDescription)")
+//                                                                    }
+//                                                                    else {
+//                                                                        //print("Notification added: \(date!.description(with: Locale.current))")
+//                                                                    }
+//                                                                })
                                                                 
                                                                 // Add notification to database
                                                                 
+                                                                let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
                                                                 let sweepDay = "\(monthInSchedule.number)/\(dayInMonth.date)"
                                                                 let notificationTime = "\(String(format: "%02d", triggerComponents.month!))/\(String(format: "%02d", triggerComponents.day!))/\(triggerComponents.year!) \(String(format: "%02d", triggerComponents.hour!)):\(String(format: "%02d", triggerComponents.minute!)):\(String(format: "%02d", triggerComponents.second!))"
                                                                 

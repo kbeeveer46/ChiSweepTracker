@@ -89,7 +89,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         //defaults.set(false, forKey: "notificationsToggled")
         
         // Create alert
-        let alert = UIAlertController(title: "Addresses Added", message: "Would you like to enable notifications?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Address Added", message: "Would you like to enable notifications?", preferredStyle: .alert)
 		
 		// Yes option
 		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
