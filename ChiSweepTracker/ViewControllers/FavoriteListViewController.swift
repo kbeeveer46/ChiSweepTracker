@@ -16,7 +16,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.favoriteAddresses = self.common.favoriteAddresses().sorted(by: {($0[0]) > ($1[0]) })
+        self.favoriteAddresses = self.common.favoriteAddresses().filter { $0[0] != "" } //.sorted(by: {($0[0]) > ($1[0]) })
         
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self

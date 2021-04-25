@@ -14,6 +14,7 @@ class Common {
     func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
     func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
     func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
+    func enableMultipleAddresses() -> Bool {return defaults.bool(forKey: "enableMultipleAddresses")}
     
     func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
     func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
@@ -90,11 +91,6 @@ class Common {
     // Favorites
     
     func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
-    //func favoriteWard() -> String {return defaults.string(forKey: "favoriteWard") ?? ""}
-    //func favoriteSection() -> String {return defaults.string(forKey: "favoriteSection") ?? ""}
-    //func favoriteLatitude() -> Double {return defaults.double(forKey: "favoriteLatitude")}
-    //func favoriteLongitude() -> Double {return defaults.double(forKey: "favoriteLongitude")}
-    //func favoriteCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "favoriteCoordinatesArray") as? [[NSArray]] ?? [[NSArray]]()}
     func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
     func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
     func favoriteAddresses() -> [[String]] {return defaults.object(forKey: "favoriteAddresses") as? [[String]] ?? [[String]](repeating: [String](repeating: "", count: 5), count: 50)}

@@ -164,6 +164,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ScheduleViewController.productsRequest(_:didReceive:):ScheduleViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "response.products">
+            </PersistentString>
+            <PersistentString
+               value = "response.products.first">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #2 in closure #3 in closure #1 in closure #1 in closure #1 in FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString

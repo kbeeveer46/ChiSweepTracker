@@ -2,8 +2,9 @@ import UIKit
 import CoreLocation
 import MapKit
 import THLabel
+import StoreKit
 
-class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     
 	// Controls
     @IBOutlet weak var scheduleMapView: MKMapView!
@@ -20,10 +21,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	let common = Common()
     var schedule = ScheduleModel()
     
+    var myProduct: SKProduct?
+    
 	// MARK: Methods
 	
     override func viewWillAppear(_ animated: Bool) {
-		
+        
 		// Set title using latest app version (year)
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
@@ -41,7 +44,48 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.scheduleTableView.delegate = self
 		self.scheduleTableView.reloadData()
         
+        // Get and populate the multiple addresses in-app purchase so usrs can buy it
+        getMultipleAddressesInAppPurchase()
+        
 	}
+    
+    func getMultipleAddressesInAppPurchase() {
+        let request = SKProductsRequest(productIdentifiers: ["com.kylebeverforden.chisweeptracker.multipleaddresses"])
+        request.delegate = self
+        request.start()
+    }
+    
+    // Do not remove this. It is required for getMultipleAddressesInAppPurchase
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        if let product = response.products.first {
+            self.myProduct = product
+        }
+    }
+    
+    // Do not remove. Handles the in-app purchasing result
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
+            switch transaction.transactionState {
+            case .purchasing:
+                break
+            case .purchased, .restored:
+                defaults.set(true, forKey: "enableMultipleAddresses")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+                break
+            case .failed, .deferred:
+                defaults.set(false, forKey: "enableMultipleAddresses")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+                break
+            default:
+                defaults.set(false, forKey: "enableMultipleAddresses")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+                break
+            }
+        }
+    }
 	
 	func initializeControlsPerDevice() {
 		
@@ -55,58 +99,81 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 	}
     
+ 
+    
 	// Method is called when user chooses yes to add a favorite
     @objc func addAddress() {
+        
+        var favoriteAddresses = self.common.favoriteAddresses()
+        let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }
         
 		// Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
         
-        self.navigationItem.rightBarButtonItem = nil
+        if favoriteAddressCount.count == 0  ||
+            favoriteAddressCount.count >= 1  && self.common.enableMultipleAddresses() == true {
         
-        var favoriteAddresses = self.common.favoriteAddresses()
-        for (index, element) in favoriteAddresses.enumerated() {
-            if element[0] == "" {
-                favoriteAddresses[index][0] = schedule.address
-                favoriteAddresses[index][1] = "false"
-                break
+            self.navigationItem.rightBarButtonItem = nil
+            
+            for (index, element) in favoriteAddresses.enumerated() {
+                if element[0] == "" {
+                    favoriteAddresses[index][0] = schedule.address
+                    favoriteAddresses[index][1] = "false"
+                    break
+                }
             }
+            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+            
+            // Create alert
+            let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
+            
+            // Yes option
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                
+                // Segue to schedule view
+                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                    destinationViewController.schedule = self.schedule
+                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                }
+        
+            }))
+            
+            // No option
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            // Present alert
+            self.present(alert, animated: true, completion: nil)
+            
         }
-        defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
-                    
-        // Set user favorites
-        //defaults.set(schedule.address, forKey: "favoriteAddress")
-        //defaults.set(schedule.ward, forKey: "favoriteWard")
-        //defaults.set(schedule.section, forKey: "favoriteSection") // Used when creating location notifications so we know the section in case there are multiple
-        //defaults.set(schedule.locationCoordinate.longitude, forKey: "favoriteLongitude")
-        //defaults.set(schedule.locationCoordinate.latitude, forKey: "favoriteLatitude")
-		
-		// defaultCoordinatesArray is set when user searches. Use its value for user's favorite
-		//let defaultCoordinates = defaults.object(forKey: "defaultCoordinatesArray") as? [[NSArray]] ?? nil
-		//defaults.set(defaultCoordinates, forKey: "favoriteCoordinatesArray")
-		
-		// Toggled off notifications when user adds a new favorite
-        //defaults.set(false, forKey: "notificationsToggled")
-        
-        // Create alert
-        let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
-		
-		// Yes option
-		alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-			
-            // Segue to schedule view
-            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
-                destinationViewController.schedule = self.schedule
-                self.navigationController?.pushViewController(destinationViewController, animated: true)
-            }
+        else {
+            
+            // Create alert
+            let alert = UIAlertController(title: "Adding Multiple Addresses Is A Paid Feature", message: "Would you like to purchase?", preferredStyle: .alert)
+
+            // Yes option
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                
+                // Run this code when they want to buy it
+                guard let myProduct = self.myProduct else {
+                    return
+                }
     
-		}))
-		
-		// No option
-		alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                if SKPaymentQueue.canMakePayments() {
+                    let payment = SKPayment(product: myProduct)
+                    SKPaymentQueue.default().add(self)
+                    SKPaymentQueue.default().add(payment)
+                }
         
-		// Present alert
-        self.present(alert, animated: true, completion: nil)
+            }))
+            
+            // No option
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            // Present alert
+            self.present(alert, animated: true, completion: nil)
+            
+        }
     }
 	
     // Show settings button in the top right
