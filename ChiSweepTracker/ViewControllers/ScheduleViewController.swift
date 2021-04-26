@@ -134,17 +134,10 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// Method is called when user chooses yes to add a favorite
     @objc func saveAddress() {
         
-        self.common.getFavoriteAddressCount(address: self.schedule.address, completion: { result in
-        
-            var favoriteAddressCount = 0
+        self.common.getAddresses(completion: { addresses in
             
-            switch result {
-            case .success (let value):
-                favoriteAddressCount = value.count
-            case .failure:
-               favoriteAddressCount = -1
-            }
-                        
+            let favoriteAddressCount = addresses.count
+            
             DispatchQueue.main.async {
                 
                 // Add haptic feedback
@@ -220,7 +213,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                     
                 }
             }
+            
         })
+        
+//        self.common.getFavoriteAddressCount(address: self.schedule.address, completion: { favoriteAddressCount in
+//        
+//            
+//        })
     }
     
     // Show settings button in the top right

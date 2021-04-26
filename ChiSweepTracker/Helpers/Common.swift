@@ -204,43 +204,19 @@ class Common {
         
         AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
             switch response.result {
+            case .failure(let error):
+                print(error)
             case .success:
                 if let value = response.data {
                     
                     let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    
-                    addresses.removeAll()
-                    
+                                        
                     for item in json.enumerated() {
                         addresses.append(item.element["address"]!)
                     }
                 
                     completion(addresses)
-                    
                 }
-            case .failure(let error):
-            print(error)
-            }
-        }
-    }
-    
-    func getFavoriteAddressCount(address: String, completion: @escaping (Result<[[String: String]], Error>) -> Void) {
-        getFavoriteAddressCountRequest(address: address, completion: completion)
-    }
-    
-    func getFavoriteAddressCountRequest(address: String, completion: @escaping (Result<[[String: String]], Error>) -> Void) {
-     
-        let urlTo = self.constants.websiteURL + "/get-address-data.php"
-        let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
-
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
-            switch response.result {
-            case .success (let value as [[String: String]]):
-                completion(.success(value))
-            case .failure(let error):
-                print(error)
-            default:
-                print("")
             }
         }
     }
@@ -263,216 +239,202 @@ class Common {
 
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
         
-//        let host = self.constants.websiteURL + "/insert-address.php"
-//        let url = NSURL(string: host)
-//        var request = URLRequest(url: url! as URL)
-//        request.httpMethod = "POST"
-//
-//        var params = "uuid=\(self.deviceUUID())"
-//        params += "&address=\(address)"
-//        params += "&notificationsEnabled=\(notificationsEnabled)"
-//        params += "&notificationsWhen=\(notificationsWhen)"
-//        params += "&notificationsHour=\(notificationsHour)"
-//        params += "&notificationsMinute=\(notificationsMinute)"
-//        params += "&tableName=\(self.constants.addressesDatabaseName)"
-//
-//        let data = params.data(using: .utf8)
-//        do
-//        {
-//            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-//
-//                if error != nil {
-//                    print("Error adding address to database")
-//                }
-//                else
-//                {
-//                    //if let response = String(data: data!, encoding: .utf8) {
-//                    //    print("Response:\(response)")
-//                    //}
-//                }
-//            }
-//            task.resume()
-//        }
     }
     
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
         // Get schedule data
-        getRequest(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]) { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
+        
+        AF.request(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]).validate().responseJSON() { response in
+            switch response.result {
+            case .failure(let error):
+                print(error)
+            case .success:
+                if let value = response.data {
+                    
+                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    let schedule = json.first!
+    
+                    let latestAppVersionString = schedule["year"]
+                    let latestAppVersion = Int(latestAppVersionString!)
+                    let wardDataset = schedule["wardDataset"]
+                    let scheduleDataset = schedule["scheduleDataset"]
+                    let coordinatesTitle = schedule["coordinatesTitle"]
+                    let datesTitle = schedule["datesTitle"]
+                    let geomTitle = schedule["geomTitle"]
+                    let monthNameTitle = schedule["monthNameTitle"]
+                    let monthNumberTitle = schedule["monthNumberTitle"]
+                    let sectionTitle = schedule["sectionTitle"]
+                    let wardTitle = schedule["wardTitle"]
+                    
+                    defaults.set(latestAppVersion, forKey: "latestAppVersion")
+                    defaults.set(wardDataset, forKey: "wardDataset")
+                    defaults.set(scheduleDataset, forKey: "scheduleDataset")
+                    defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
+                    defaults.set(datesTitle, forKey: "datesTitle")
+                    defaults.set(geomTitle, forKey: "geomTitle")
+                    defaults.set(monthNameTitle, forKey: "monthNameTitle")
+                    defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
+                    defaults.set(sectionTitle, forKey: "sectionTitle")
+                    defaults.set(wardTitle, forKey: "wardTitle")
+                    
+                    AF.request(self.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.constants.updatesDatabaseName, "year": String(self.latestAppVersion())]).validate().responseJSON() { response in
+                        switch response.result {
+                        case .failure(let error):
+                            print(error)
+                        case .success:
+                            if let value = response.data {
+                                
+                                let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                                let update = json.first!
+                                
+                                let latestDatasetVersionString = update["version"]
+                                let latestDatasetVersion = Int(latestDatasetVersionString!)
 
-            if response.count > 0 {
-                
-                let latestAppVersionString = response[0]["year"] as! String
-                let latestAppVersion = Int(latestAppVersionString)
-                let wardDataset = response[0]["wardDataset"] as! String
-                let scheduleDataset = response[0]["scheduleDataset"] as! String
-                let coordinatesTitle = response[0]["coordinatesTitle"] as! String
-                let datesTitle = response[0]["datesTitle"] as! String
-                let geomTitle = response[0]["geomTitle"] as! String
-                let monthNameTitle = response[0]["monthNameTitle"] as! String
-                let monthNumberTitle = response[0]["monthNumberTitle"] as! String
-                let sectionTitle = response[0]["sectionTitle"] as! String
-                let wardTitle = response[0]["wardTitle"] as! String
-                
-                defaults.set(latestAppVersion, forKey: "latestAppVersion")
-                defaults.set(wardDataset, forKey: "wardDataset")
-                defaults.set(scheduleDataset, forKey: "scheduleDataset")
-                defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
-                defaults.set(datesTitle, forKey: "datesTitle")
-                defaults.set(geomTitle, forKey: "geomTitle")
-                defaults.set(monthNameTitle, forKey: "monthNameTitle")
-                defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
-                defaults.set(sectionTitle, forKey: "sectionTitle")
-                defaults.set(wardTitle, forKey: "wardTitle")
-                
-                self.getRequest(self.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.constants.updatesDatabaseName, "year": String(self.latestAppVersion())]) { responseObject, error in
-                    guard let response = responseObject, error == nil else {
-                        print(error ?? "Unknown error")
-                        return
-                    }
+                                defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
 
-                    if response.count > 0 {
-                        
-                        let latestDatasetVersionString = response[0]["version"] as! String
-                        let latestDatasetVersion = Int(latestDatasetVersionString)
-                        
-                        defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
-                        
-                        DispatchQueue.main.async {
-                            self.updateNotifications()
+                                DispatchQueue.main.async {
+                                    self.updateNotifications()
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+    
         
         // Get Divvys data
-        getRequest(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]) { responseObject, error in
-            guard let responseObject = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-
-            if responseObject.count > 0 {
-                                
-                let divvyDataset = responseObject[0]["divvyDataset"] as! String
-                let divvyIdTitle = responseObject[0]["idTitle"] as! String
-                let divvyDocksInServiceTitle = responseObject[0]["docksInServiceTitle"] as! String
-                let divvyLatitudeTitle = responseObject[0]["latitudeTitle"] as! String
-                let divvyLongitudeTitle = responseObject[0]["longitudeTitle"] as! String
-                let divvyStationNameTitle = responseObject[0]["stationNameTitle"] as! String
-                let divvyStatusTitle = responseObject[0]["statusTitle"] as! String
-                
-                let divvyJSONUrl = responseObject[0]["divvyJSONUrl"] as! String
-                let divvyJSONBikesAvailableTitle = responseObject[0]["divvyJSONBikesAvailableTitle"] as! String
-                let divvyJSONEBikesAvailableTitle = responseObject[0]["divvyJSONEBikesAvailableTitle"] as! String
-                let divvyJSONDocksAvailableTitle = responseObject[0]["divvyJSONDocksAvailableTitle"] as! String
-                let divvyJSONDataTitle = responseObject[0]["divvyJSONDataTitle"] as! String
-                let divvyJSONStationsTitle = responseObject[0]["divvyJSONStationsTitle"] as! String
-                let divvyJSONIdTitle = responseObject[0]["divvyJSONIdTitle"] as! String
-                let divvyJSONLastUpdatedTitle = responseObject[0]["divvyJSONLastUpdatedTitle"] as! String
-                
-                defaults.set(divvyDataset, forKey: "divvyDataset")
-                defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
-                defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
-                defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
-                defaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
-                defaults.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
-                defaults.set(divvyStatusTitle, forKey: "divvyStatusTitle")
-                
-                defaults.set(divvyJSONUrl, forKey: "divvyJSONUrl")
-                defaults.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
-                defaults.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
-                defaults.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
-                defaults.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
-                defaults.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
-                defaults.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
-                defaults.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
-                
+        AF.request(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]).validate().responseJSON() { response in
+            switch response.result {
+            case .failure(let error):
+                print(error)
+            case .success:
+                if let value = response.data {
+                    
+                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    let divvy = json.first!
+                    
+                    let divvyDataset = divvy["divvyDataset"]
+                    let divvyIdTitle = divvy["idTitle"]
+                    let divvyDocksInServiceTitle = divvy["docksInServiceTitle"]
+                    let divvyLatitudeTitle = divvy["latitudeTitle"]
+                    let divvyLongitudeTitle = divvy["longitudeTitle"]
+                    let divvyStationNameTitle = divvy["stationNameTitle"]
+                    let divvyStatusTitle = divvy["statusTitle"]
+                    
+                    let divvyJSONUrl = divvy["divvyJSONUrl"]
+                    let divvyJSONBikesAvailableTitle = divvy["divvyJSONBikesAvailableTitle"]
+                    let divvyJSONEBikesAvailableTitle = divvy["divvyJSONEBikesAvailableTitle"]
+                    let divvyJSONDocksAvailableTitle = divvy["divvyJSONDocksAvailableTitle"]
+                    let divvyJSONDataTitle = divvy["divvyJSONDataTitle"]
+                    let divvyJSONStationsTitle = divvy["divvyJSONStationsTitle"]
+                    let divvyJSONIdTitle = divvy["divvyJSONIdTitle"]
+                    let divvyJSONLastUpdatedTitle = divvy["divvyJSONLastUpdatedTitle"]
+                    
+                    defaults.set(divvyDataset, forKey: "divvyDataset")
+                    defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
+                    defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
+                    defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
+                    defaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
+                    defaults.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
+                    defaults.set(divvyStatusTitle, forKey: "divvyStatusTitle")
+                    
+                    defaults.set(divvyJSONUrl, forKey: "divvyJSONUrl")
+                    defaults.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
+                    defaults.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
+                    defaults.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
+                    defaults.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
+                    defaults.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
+                    defaults.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
+                    defaults.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
+                    
+                }
             }
         }
         
         // Get relocated vehicles data
-        getRequest(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.relocatedDatabaseName]) { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-
-            if response.count > 0 {
-                
-                let relocatedDataset = response[0]["relocatedDataset"] as! String
-                let relocatedColorTitle = response[0]["colorTitle"] as! String
-                let relocatedMakeTitle = response[0]["makeTitle"] as! String
-                let relocatedPlateTitle = response[0]["plateTitle"] as! String
-                let relocatedDateTitle = response[0]["relocatedDateTitle"] as! String
-                let relocatedFromLatitudeTitle = response[0]["relocatedFromLatitudeTitle"] as! String
-                let relocatedFromLongitudeTitle = response[0]["relocatedFromLongitudeTitle"] as! String
-                let relocatedFromAddressNumberTitle = response[0]["relocatedFromAddressNumberTitle"] as! String
-                let relocatedFromDirectionTitle = response[0]["relocatedFromDirectionTitle"] as! String
-                let relocatedFromStreetTitle = response[0]["relocatedFromStreetTitle"] as! String
-                let relocatedReasonTitle = response[0]["relocatedReasonTitle"] as! String
-                let relocatedToAddressNumberTitle = response[0]["relocatedToAddressNumberTitle"] as! String
-                let relocatedToDirectionTitle = response[0]["relocatedToDirectionTitle"] as! String
-                let relocatedToStreetTitle = response[0]["relocatedToStreetTitle"] as! String
-                let relocatedStateTitle = response[0]["stateTitle"] as! String
-                
-                defaults.set(relocatedDataset, forKey: "relocatedDataset")
-                defaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
-                defaults.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
-                defaults.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
-                defaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
-                defaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
-                defaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
-                defaults.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
-                defaults.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
-                defaults.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
-                defaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
-                defaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
-                defaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
-                defaults.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
-                defaults.set(relocatedStateTitle, forKey: "relocatedStateTitle")
-                
+        AF.request(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.relocatedDatabaseName]).validate().responseJSON() { response in
+            switch response.result {
+            case .failure(let error):
+                print(error)
+            case .success:
+                if let value = response.data {
+                    
+                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    let relocated = json.first!
+                    
+                    let relocatedDataset = relocated["relocatedDataset"]
+                    let relocatedColorTitle = relocated["colorTitle"]
+                    let relocatedMakeTitle = relocated["makeTitle"]
+                    let relocatedPlateTitle = relocated["plateTitle"]
+                    let relocatedDateTitle = relocated["relocatedDateTitle"]
+                    let relocatedFromLatitudeTitle = relocated["relocatedFromLatitudeTitle"]
+                    let relocatedFromLongitudeTitle = relocated["relocatedFromLongitudeTitle"]
+                    let relocatedFromAddressNumberTitle = relocated["relocatedFromAddressNumberTitle"]
+                    let relocatedFromDirectionTitle = relocated["relocatedFromDirectionTitle"]
+                    let relocatedFromStreetTitle = relocated["relocatedFromStreetTitle"]
+                    let relocatedReasonTitle = relocated["relocatedReasonTitle"]
+                    let relocatedToAddressNumberTitle = relocated["relocatedToAddressNumberTitle"]
+                    let relocatedToDirectionTitle = relocated["relocatedToDirectionTitle"]
+                    let relocatedToStreetTitle = relocated["relocatedToStreetTitle"]
+                    let relocatedStateTitle = relocated["stateTitle"]
+                    
+                    defaults.set(relocatedDataset, forKey: "relocatedDataset")
+                    defaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
+                    defaults.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
+                    defaults.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
+                    defaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
+                    defaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
+                    defaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
+                    defaults.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
+                    defaults.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
+                    defaults.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
+                    defaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
+                    defaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
+                    defaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
+                    defaults.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
+                    defaults.set(relocatedStateTitle, forKey: "relocatedStateTitle")
+                }
             }
         }
         
+        
         // Get towed vehicles data
-        getRequest(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.towedDatabaseName]) { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-
-            if response.count > 0 {
-                
-                let towedDataset = response[0]["towedDataset"] as! String
-                let towedColorTitle = response[0]["colorTitle"] as! String
-                let towedInventoryNumberTitle = response[0]["inventoryNumberTitle"] as! String
-                let towedMakeTitle = response[0]["makeTitle"] as! String
-                let towedModelTitle = response[0]["modelTitle"] as! String
-                let towedPlateTitle = response[0]["plateTitle"] as! String
-                let towedStateTitle = response[0]["stateTitle"] as! String
-                let towedStyleTitle = response[0]["styleTitle"] as! String
-                let towedDateTitle = response[0]["towedDateTitle"] as! String
-                let towedToAddressTitle = response[0]["towedToAddressTitle"] as! String
-                let towedToPhoneTitle = response[0]["towedToPhoneTitle"] as! String
-                
-                defaults.set(towedDataset, forKey: "towedDataset")
-                defaults.set(towedColorTitle, forKey: "towedColorTitle")
-                defaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
-                defaults.set(towedMakeTitle, forKey: "towedMakeTitle")
-                defaults.set(towedModelTitle, forKey: "towedModelTitle")
-                defaults.set(towedPlateTitle, forKey: "towedPlateTitle")
-                defaults.set(towedStateTitle, forKey: "towedStateTitle")
-                defaults.set(towedStyleTitle, forKey: "towedStyleTitle")
-                defaults.set(towedDateTitle, forKey: "towedDateTitle")
-                defaults.set(towedToAddressTitle, forKey: "towedToAddressTitle")
-                defaults.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
-                
+        AF.request(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.towedDatabaseName]).validate().responseJSON() { response in
+            switch response.result {
+            case .failure(let error):
+                print(error)
+            case .success:
+                if let value = response.data {
+                    
+                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    let towed = json.first!
+                    
+                    let towedDataset = towed["towedDataset"]
+                    let towedColorTitle = towed["colorTitle"]
+                    let towedInventoryNumberTitle = towed["inventoryNumberTitle"]
+                    let towedMakeTitle = towed["makeTitle"]
+                    let towedModelTitle = towed["modelTitle"]
+                    let towedPlateTitle = towed["plateTitle"]
+                    let towedStateTitle = towed["stateTitle"]
+                    let towedStyleTitle = towed["styleTitle"]
+                    let towedDateTitle = towed["towedDateTitle"]
+                    let towedToAddressTitle = towed["towedToAddressTitle"]
+                    let towedToPhoneTitle = towed["towedToPhoneTitle"]
+                    
+                    defaults.set(towedDataset, forKey: "towedDataset")
+                    defaults.set(towedColorTitle, forKey: "towedColorTitle")
+                    defaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
+                    defaults.set(towedMakeTitle, forKey: "towedMakeTitle")
+                    defaults.set(towedModelTitle, forKey: "towedModelTitle")
+                    defaults.set(towedPlateTitle, forKey: "towedPlateTitle")
+                    defaults.set(towedStateTitle, forKey: "towedStateTitle")
+                    defaults.set(towedStyleTitle, forKey: "towedStyleTitle")
+                    defaults.set(towedDateTitle, forKey: "towedDateTitle")
+                    defaults.set(towedToAddressTitle, forKey: "towedToAddressTitle")
+                    defaults.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
+                }
             }
         }
         
@@ -532,80 +494,50 @@ class Common {
 //                }
 //            }
             
-//            db.collection(self.constants.newsDatabaseName)
-//                .whereField("date", isGreaterThan: lastUpdatesViewDate!)
-//                .limit(to: 5)
-//                .getDocuments() { (querySnapshot, err) in
-//                    if let err = err {
-//                        print("Could not get updates from Firebase: \(err)")
-//                    } else {
-//
-//                        let badgeCount = querySnapshot!.documents.count
-//
-//                        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-//                            if let navigationController = rootViewController as? UINavigationController {
-//                                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
-//                                    tabBarController.tabBar.items?.last!.badgeValue = badgeCount > 0 ? "\(badgeCount)" : nil
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//        }
         
         completion("Finished getting data from Firebase")
     }
     
     func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void)
     {
-        let host = self.constants.websiteURL + "/delete-notification.php"
-        let url = NSURL(string: host)
-        var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
-        
-        var params = "playerId=\(self.notificationOneSignalPlayerId())"
-        params += "&address=\(address)"
-        params += "&tableName=\(tableName)"
-        
-        let data = params.data(using: .utf8)
-        do
-        {
-            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-                
-                if error != nil {
-                    print("Error deleting notification from database")
-                    completion(true)
-                }
-                else
-                {
-                    completion(true)
-                    
-                    //if let response = String(data: data!, encoding: .utf8) {
-                    //    print("Response:\(response)")
-                    //}
-                }
-            }
-            task.resume()
+        let urlTo = self.constants.websiteURL + "/delete-notification.php"
+        let parameters = ["playerId": self.notificationOneSignalPlayerId(),
+                          "address": address,
+                          "tableName": tableName] as [String : String]
+
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            completion(true)
         }
         
-        
-        //        let db = Firestore.firestore()
-        //
-        //        db.collection(self.constants.notificationsDatabaseName)
-        //            .whereField("playerId", isEqualTo: self.notificationOneSignalPlayerId())
-        //            .whereField("address", isEqualTo: address)
-        //            .getDocuments() { (querySnapshot, err) in
-        //                if let err = err {
-        //                    print("Could not get notifications from Firebase: \(err)")
-        //                } else {
-        //
-        //                    for document in querySnapshot!.documents {
-        //                        document.reference.delete();
-        //                    }
-        //
-        //                    completion(true)
-        //                }
-        //        }
+//        let host = self.constants.websiteURL + "/delete-notification.php"
+//        let url = NSURL(string: host)
+//        var request = URLRequest(url: url! as URL)
+//        request.httpMethod = "POST"
+//
+//        var params = "playerId=\(self.notificationOneSignalPlayerId())"
+//        params += "&address=\(address)"
+//        params += "&tableName=\(tableName)"
+//
+//        let data = params.data(using: .utf8)
+//        do
+//        {
+//            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+//
+//                if error != nil {
+//                    print("Error deleting notification from database")
+//                    completion(true)
+//                }
+//                else
+//                {
+//                    completion(true)
+//
+//                    //if let response = String(data: data!, encoding: .utf8) {
+//                    //    print("Response:\(response)")
+//                    //}
+//                }
+//            }
+//            task.resume()
+//        }
     }
     
     func updateNotifications() {
