@@ -694,8 +694,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                             }
                                                             
                                                             if UIApplication.shared.canOpenURL(settingsUrl) {
-                                                                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                                                })
+                                                                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
                                                             }
                                                         }
                                                         alertController.addAction(settingsAction)
@@ -1033,10 +1032,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             }
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
-            // Do not remove this. This is required in case someone initially doesn't allow notifications but afterwards enables it in settings
-            OneSignal.disablePush(false)
-            UIApplication.shared.registerForRemoteNotifications()
-            
             self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
                 self.getSchedule(true)
             })
@@ -1061,5 +1056,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
             
         }
+        
     }
 }

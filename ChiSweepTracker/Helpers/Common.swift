@@ -11,6 +11,7 @@ class Common {
     
     // Shared
     
+    func deviceUUID() -> String { return defaults.string(forKey: "deviceUUID") ?? ""}
     func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
     func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
     func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
@@ -122,6 +123,8 @@ class Common {
         // Databases
         
         #if DEBUG
+        let debugMode = true
+        let addressesDatabaseName = "addresses_dev"
         let schedulesDatabaseName = "schedules_dev"
         let updatesDatabaseName = "updates_dev"
         let divvysDatabaseName = "divvys_dev"
@@ -131,6 +134,8 @@ class Common {
         let infoDatabaseName = "info_dev"
         let notificationsDatabaseName = "notifications_dev"
         #else
+        let debugMode = false
+        let addressesDatabaseName = "addresses"
         let schedulesDatabaseName = "schedules"
         let updatesDatabaseName = "updates"
         let divvysDatabaseName = "divvys"

@@ -40,6 +40,14 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
+        
+        if (self.currentYear > self.common.latestAppVersion()) {
+            self.comingSoonStackView.isHidden = false
+            self.comingSoonYearLabel.text = "The \(self.currentYear) sweeping schedule is coming soon"
+        }
+        else {
+            self.comingSoonStackView.isHidden = true
+        }
 		
 		// Set required properties for schedule table view
 		self.scheduleTableView.dataSource = self
@@ -104,13 +112,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        print(error.localizedDescription)
-    }
-    
-    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        print(queue)
-    }
+//    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+//        print(error.localizedDescription)
+//    }
+//
+//    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+//        print(queue)
+//    }
 	
 	func initializeControlsPerDevice() {
 		
@@ -125,7 +133,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	}
     
 	// Method is called when user chooses yes to add a favorite
-    @objc func addAddress() {
+    @objc func saveAddress() {
         
         var favoriteAddresses = self.common.favoriteAddresses()
         let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }
@@ -147,6 +155,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 }
             }
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+            
+            insertAddressIntoDatabase(address: self.schedule.address)
             
             // Create alert
             let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
@@ -177,7 +187,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             // Yes option
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
-                // Run this code when they want to buy it
                 guard let myProduct = self.myProduct else {
                     return
                 }
@@ -195,9 +204,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             
             // Restore option
             alert.addAction(UIAlertAction(title: "Restore Previous Purchase", style: .default, handler:{ action in
-                
+                SKPaymentQueue.default().add(self)
                 SKPaymentQueue.default().restoreCompletedTransactions()
-                
             }))
             
             // No option
@@ -209,17 +217,45 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }
     }
 	
+    func insertAddressIntoDatabase(address: String) {
+        
+        let host = self.common.constants.websiteURL + "/insert-address.php"
+        let url = NSURL(string: host)
+        var request = URLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+                        
+        var params = "uuid=\(self.common.deviceUUID())"
+        params += "&address=\(address)"
+        params += "&notificationsEnabled=0"
+        params += "&tableName=\(self.common.constants.addressesDatabaseName)"
+            
+        let data = params.data(using: .utf8)
+        do
+        {
+            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                
+                if error != nil {
+                    print("Error adding address to database")
+                }
+                else
+                {
+                    //if let response = String(data: data!, encoding: .utf8) {
+                    //    print("Response:\(response)")
+                    //}
+                }
+            }
+            task.resume()
+        }
+    }
+    
     // Show settings button in the top right
     func showOptionsMenu() {
         
-        let favoriteAddresses = self.common.favoriteAddresses().filter { $0[0] != "" }
         var doNotShowOptionsMenu = false
         
-        for (_, element) in favoriteAddresses.enumerated() {
-            if element[0] == self.schedule.address {
-                doNotShowOptionsMenu = true
-                break
-            }
+        let matchingFavoriteAddress = self.common.favoriteAddresses().filter { $0[0] == self.schedule.address }
+        if matchingFavoriteAddress.count > 0 {
+            doNotShowOptionsMenu = true
         }
         
         if !doNotShowOptionsMenu {
@@ -242,7 +278,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Create add favorite option for options alert
 		let saveFavoriteAction = UIAlertAction(title: "Save Address", style: .default, handler:{ action in
-			self.addAddress()
+			self.saveAddress()
 		})
         optionsAlert.addAction(saveFavoriteAction)
 		
@@ -292,14 +328,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Add annotation to map
 		scheduleMapView.addAnnotation(annotation)
-        
-        if (self.currentYear > self.common.latestAppVersion()) {
-            self.comingSoonStackView.isHidden = false
-            self.comingSoonYearLabel.text = "The \(self.currentYear) sweeping schedule is coming soon."
-        }
-        else {
-            self.comingSoonStackView.isHidden = true
-        }
 		
 	}
 

@@ -19,6 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+            //print("uuid: \(uuid)")
+            defaults.set(uuid, forKey: "deviceUUID")
+        }
+        
 		// Configure Firebase
 		FirebaseApp.configure()
 		
@@ -111,6 +116,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
                 defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
+                
+                self.common.updateNotifications()
             }
             
         }
@@ -125,6 +132,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
+        
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { (settings) in
+            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
+                OneSignal.disablePush(false)
+            }
+        }
         
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
