@@ -193,6 +193,44 @@ class Common {
         task.resume()
     }
     
+    func insertAddressIntoDatabase(address: String,
+                                   notificationsEnabled: Int,
+                                   notificationsWhen: String,
+                                   notificationsHour: Int,
+                                   notificationsMinute: Int) {
+        
+        let host = self.constants.websiteURL + "/insert-address.php"
+        let url = NSURL(string: host)
+        var request = URLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+                        
+        var params = "uuid=\(self.deviceUUID())"
+        params += "&address=\(address)"
+        params += "&notificationsEnabled=\(notificationsEnabled)"
+        params += "&notificationsWhen=\(notificationsWhen)"
+        params += "&notificationsHour=\(notificationsHour)"
+        params += "&notificationsMinute=\(notificationsMinute)"
+        params += "&tableName=\(self.constants.addressesDatabaseName)"
+            
+        let data = params.data(using: .utf8)
+        do
+        {
+            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                
+                if error != nil {
+                    print("Error adding address to database")
+                }
+                else
+                {
+                    //if let response = String(data: data!, encoding: .utf8) {
+                    //    print("Response:\(response)")
+                    //}
+                }
+            }
+            task.resume()
+        }
+    }
+    
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
         // Get schedule data
@@ -378,10 +416,9 @@ class Common {
         if !lastUpdatesViewDateString.isEmpty {
             
             let dateFormatter = DateFormatter()
-            dateFormatter.locale = .current
-            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
             //dateFormatter.locale = .current
-            //let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)
+            dateFormatter.timeZone = .current
+            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
             
             getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
                 guard let response = responseObject, error == nil else {
@@ -397,15 +434,21 @@ class Common {
                         
                         let date = update.element["date"] as! String
                         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                        let dateFormatted = dateFormatter.date(from: date)!
+                        let dateFormattedDate = dateFormatter.date(from: date)
+                        let dateFormattedString = dateFormatter.string(from: dateFormattedDate!)
                         
                         dateFormatter.dateFormat = "M/dd/yyyy HH:mm:ss"
-                        dateFormatter.timeZone = TimeZone.current
-                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
                         
-                        print(lastUpdatesViewDateString)
+                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
+                        let lastUpdatesViewDateString2 = dateFormatter.string(from: lastUpdatesViewDate)
+                        
+                        print(date)
+                        print(dateFormattedDate!)
+                        print(dateFormattedString)
                         print(lastUpdatesViewDate)
-                        print(dateFormatted)
+                        print(lastUpdatesViewDateString2)
+                        
+                        
                         
                         
                         //if dateFormatted > lastUpdatesViewDate {
@@ -504,27 +547,62 @@ class Common {
     func updateNotifications() {
         
         let favoriteViewController = FavoriteViewController()
-        let addresses = self.favoriteAddresses().filter { $0[0] != "" }
         
-        for (_, element) in addresses.enumerated() {
-            
-            let address = element[0]
-            let notificationsToggled = Bool(element[1])
-            let notificationsWhen = element[2]
-            let notificationsHour = Int(element[3]) ?? 0
-            let notificationsMinute = Int(element[4]) ?? 0
-            
-            if notificationsToggled == true {
-                
-                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                
-                self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-                  
-                    favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+        getRequest(self.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]) { responseObject, error in
+            guard let response = responseObject, error == nil else {
+                print(error ?? "Unknown error")
+                return
+            }
 
-                })
+            if response.count > 0 {
+                
+                for item in response.enumerated() {
+                    
+                    let address = item.element["address"] as! String
+                    let notificationsToggledString = item.element["notificationsEnabled"] as! String
+                    var notificationsToggled = false
+                    if notificationsToggledString == "1" {
+                        notificationsToggled = true
+                    }
+                    let notificationsWhen = item.element["notificationsWhen"] as! String
+                    let notificationsHour = Int(item.element["notificationsHour"] as! String)!
+                    let notificationsMinute = Int(item.element["notificationsMinute"] as! String)!
+                    
+                    if notificationsToggled == true {
+                        
+                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                        
+                        self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                          
+                            favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+
+                        })
+                    }
+                }
             }
         }
+        
+//        let addresses = self.favoriteAddresses().filter { $0[0] != "" }
+//        
+//        for (_, element) in addresses.enumerated() {
+//            
+//            let address = element[0]
+//            let notificationsToggled = Bool(element[1])
+//            let notificationsWhen = element[2]
+//            let notificationsHour = Int(element[3]) ?? 0
+//            let notificationsMinute = Int(element[4]) ?? 0
+//            
+//            if notificationsToggled == true {
+//                
+//                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+//                
+//                self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+//                  
+//                    favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+//
+//                })
+//            }
+//        }
     }
     
     func goToScheduleFromNotification(_ address: String) {

@@ -10,28 +10,63 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     let generator = UISelectionFeedbackGenerator()
     let common = Common()
+    var addresses = [String]()
     var favoriteAddresses = [[String]]()
     var mapLocations = [CLLocationCoordinate2D]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.favoriteAddresses = self.common.favoriteAddresses().filter { $0[0] != "" } //.sorted(by: {($0[0]) > ($1[0]) })
-        
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
-        self.favoriteListTableView.reloadData()
         
-        if self.favoriteAddresses.filter({ $0[0] != "" }).count == 0 {
-            favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
+        getAddresses(completion: { message in
+            
+            DispatchQueue.main.async {
+            
+                if self.addresses.count == 0 {
+                    self.tabBarController?.navigationItem.title = "No Saved Addresses"
+                    self.favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
+                }
+                else {
+                    self.tabBarController?.navigationItem.title = "Saved Addresses"
+                    self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
+                }
+                
+                self.favoriteListTableView.reloadData()
+                self.loadFavoriteMap()
+                
+            }
+        })
+        
+//        self.favoriteAddresses = self.common.favoriteAddresses().filter { $0[0] != "" }
+//
+//        if self.favoriteAddresses.filter({ $0[0] != "" }).count == 0 {
+//            favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
+//        }
+//        else {
+//            favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
+//        }
+    }
+    
+    func getAddresses(completion: @escaping (_ message: Bool) -> Void) {
+        
+        self.common.getRequest(self.common.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]) { responseObject, error in
+            guard let response = responseObject, error == nil else {
+                print(error ?? "Unknown error")
+                return
+            }
+
+            self.addresses.removeAll()
+            
+            if response.count > 0 {
+                for item in response.enumerated() {
+                    self.addresses.append(item.element["address"] as! String)
+                }
+            }
+            completion(true)
         }
-        else {
-            favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
-        }
-        
-        self.loadFavoriteMap()
-        
     }
     
     // Load map with default lat, long, and polygon coordinates or load Chicago map
@@ -41,18 +76,18 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.delegate = self
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
-        let addresses = favoriteAddresses.filter { $0[0] != "" }
+        //let addresses = favoriteAddresses.filter { $0[0] != "" }
         
-        if addresses.count > 0 {
+        if self.addresses.count > 0 {
 
-            self.tabBarController?.navigationItem.title = "Saved Addresses"
+            
             self.mapLocations.removeAll()
         
-            for (_, element) in addresses.enumerated() {
+            for (_, address) in self.addresses.enumerated() {
                                           
                 // Get coordinates from address
                 let geocoder = CLGeocoder()
-                geocoder.geocodeAddressString(element[0]) { placemarks, error in
+                geocoder.geocodeAddressString(address) { placemarks, error in
                     
                     // No internet connection will cause an error
                     if error != nil {
@@ -76,13 +111,13 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         let annotation = CustomAnnotation()
                         annotation.customImageName = "pin-address"
                         annotation.coordinate = location.coordinate
-                        annotation.title = element[0]
+                        annotation.title = address
                         
                         // Add annoation to map
                         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
                         self.favoriteListMapView.addAnnotation(annotationView.annotation!)
                         
-                        if addresses.count == 1 {
+                        if self.addresses.count == 1 {
 
                             // Create map span
                             let span = MKCoordinateSpan(latitudeDelta: 0.007, longitudeDelta: 0.007)
@@ -95,7 +130,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
                         }
                         
-                        if addresses.count != 1 && addresses.count == self.favoriteListMapView.annotations.count {
+                        if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
                             
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
                             self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
@@ -106,7 +141,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             }
         }
         else {
-            self.tabBarController?.navigationItem.title = "No Saved Addresses"
             
             // Create map span using Chicago
             let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
@@ -276,7 +310,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return favoriteAddresses.filter { $0[0] != "" }.count
+        //return favoriteAddresses.filter { $0[0] != "" }.count
+        return self.addresses.count
         
     }
     
@@ -306,7 +341,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         let addressLabel = cell.viewWithTag(1) as! UILabel
 
         // Set label text
-        addressLabel.text = self.favoriteAddresses[indexPath.row][0]
+        addressLabel.text = self.addresses[indexPath.row]
+        //addressLabel.text = self.favoriteAddresses[indexPath.row][0]
 
         return cell
         

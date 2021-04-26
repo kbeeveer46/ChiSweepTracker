@@ -156,7 +156,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             }
             defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
-            insertAddressIntoDatabase(address: self.schedule.address)
+            self.common.insertAddressIntoDatabase(address: self.schedule.address,
+                                                  notificationsEnabled: 0,
+                                                  notificationsWhen: "Day Of Sweep",
+                                                  notificationsHour: 0,
+                                                  notificationsMinute: 0)
             
             // Create alert
             let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
@@ -217,36 +221,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }
     }
 	
-    func insertAddressIntoDatabase(address: String) {
-        
-        let host = self.common.constants.websiteURL + "/insert-address.php"
-        let url = NSURL(string: host)
-        var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
-                        
-        var params = "uuid=\(self.common.deviceUUID())"
-        params += "&address=\(address)"
-        params += "&notificationsEnabled=0"
-        params += "&tableName=\(self.common.constants.addressesDatabaseName)"
-            
-        let data = params.data(using: .utf8)
-        do
-        {
-            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-                
-                if error != nil {
-                    print("Error adding address to database")
-                }
-                else
-                {
-                    //if let response = String(data: data!, encoding: .utf8) {
-                    //    print("Response:\(response)")
-                    //}
-                }
-            }
-            task.resume()
-        }
-    }
+    
     
     // Show settings button in the top right
     func showOptionsMenu() {
