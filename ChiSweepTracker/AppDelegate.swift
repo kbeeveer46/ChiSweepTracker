@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-            //print("uuid: \(uuid)")
             defaults.set(uuid, forKey: "deviceUUID")
         }
         
@@ -52,6 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         // This code is required for old users migrating to multiple address
         // Do not remove
+        
+//        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
+//        defaults.set(true, forKey: "notificationsToggled")
+//        defaults.set("1 Day Prior", forKey: "notificationWhen")
+//        defaults.set(8, forKey: "notificationHour")
+//        defaults.set(30, forKey: "notificationMinute")
+        
         let favoriteAddress = self.common.favoriteAddress()
         
         if favoriteAddress != "" {
@@ -65,29 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             
             self.common.updateNotifications()
             
+            defaults.set("", forKey: "favoriteAddress")
         }
-        
-//        var favoriteAddresses = self.common.favoriteAddresses()
-//        let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }.count
-//
-//        let favoriteAddress = self.common.favoriteAddress()
-//        let notificationsToggled = self.common.notificationsToggled()
-//        let notificationsWhen = self.common.notificationWhen()
-//        let notificationsHour = self.common.notificationHour()
-//        let notificationsMinute = self.common.notificationMinute()
-//
-//        if favoriteAddressCount == 0 && favoriteAddress != "" {
-//
-//            favoriteAddresses[0][0] = favoriteAddress
-//            favoriteAddresses[0][1] = String(notificationsToggled)
-//            favoriteAddresses[0][2] = notificationsWhen
-//            favoriteAddresses[0][3] = String(notificationsHour)
-//            favoriteAddresses[0][4] = String(notificationsMinute)
-//
-//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
-//
-//            self.common.updateNotifications()
-//        }
         
         // Request permission for notifications when app is first opened
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {

@@ -95,14 +95,6 @@ class Common {
     func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
     func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
     func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
-    //func favoriteAddresses() -> [[String]] {return defaults.object(forKey: "favoriteAddresses") as? [[String]] ?? [[String]](repeating: [String](repeating: "", count: 5), count: 50)}
-    // favoriteAddresses[0] = address
-    // favoriteAddresses[1] = notifications toggled
-    // favoriteAddresses[2] = when
-    // favoriteAddresses[3] = hour
-    // favoriteAddresses[4] = minute
-    // favoriteAddresses[5] = ward
-    // favoriteAddresses[6] = section
     
     // Notifications
     
@@ -259,36 +251,48 @@ class Common {
                                    notificationsHour: Int,
                                    notificationsMinute: Int) {
         
-        let host = self.constants.websiteURL + "/insert-address.php"
-        let url = NSURL(string: host)
-        var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
-                        
-        var params = "uuid=\(self.deviceUUID())"
-        params += "&address=\(address)"
-        params += "&notificationsEnabled=\(notificationsEnabled)"
-        params += "&notificationsWhen=\(notificationsWhen)"
-        params += "&notificationsHour=\(notificationsHour)"
-        params += "&notificationsMinute=\(notificationsMinute)"
-        params += "&tableName=\(self.constants.addressesDatabaseName)"
-            
-        let data = params.data(using: .utf8)
-        do
-        {
-            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-                
-                if error != nil {
-                    print("Error adding address to database")
-                }
-                else
-                {
-                    //if let response = String(data: data!, encoding: .utf8) {
-                    //    print("Response:\(response)")
-                    //}
-                }
-            }
-            task.resume()
-        }
+        
+        let urlTo = self.constants.websiteURL + "/insert-address.php"
+        let parameters = ["tableName": self.constants.addressesDatabaseName,
+                          "uuid": self.deviceUUID(),
+                          "address": address,
+                          "notificationsWhen": notificationsWhen,
+                          "notificationsHour": notificationsHour,
+                          "notificationsMinute": notificationsMinute,
+                          "notificationsEnabled": notificationsEnabled] as [String : Any]
+
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+        
+//        let host = self.constants.websiteURL + "/insert-address.php"
+//        let url = NSURL(string: host)
+//        var request = URLRequest(url: url! as URL)
+//        request.httpMethod = "POST"
+//
+//        var params = "uuid=\(self.deviceUUID())"
+//        params += "&address=\(address)"
+//        params += "&notificationsEnabled=\(notificationsEnabled)"
+//        params += "&notificationsWhen=\(notificationsWhen)"
+//        params += "&notificationsHour=\(notificationsHour)"
+//        params += "&notificationsMinute=\(notificationsMinute)"
+//        params += "&tableName=\(self.constants.addressesDatabaseName)"
+//
+//        let data = params.data(using: .utf8)
+//        do
+//        {
+//            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+//
+//                if error != nil {
+//                    print("Error adding address to database")
+//                }
+//                else
+//                {
+//                    //if let response = String(data: data!, encoding: .utf8) {
+//                    //    print("Response:\(response)")
+//                    //}
+//                }
+//            }
+//            task.resume()
+//        }
     }
     
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
