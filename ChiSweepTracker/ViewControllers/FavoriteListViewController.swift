@@ -18,12 +18,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //self.addresses.removeAll()
-        
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
-        //self.favoriteListTableView.reloadData()
         
         getAddresses(completion: { message in
             
@@ -43,15 +40,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                 
             }
         })
-        
-//        self.favoriteAddresses = self.common.favoriteAddresses().filter { $0[0] != "" }
-//
-//        if self.favoriteAddresses.filter({ $0[0] != "" }).count == 0 {
-//            favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
-//        }
-//        else {
-//            favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
-//        }
     }
     
     func getAddresses(completion: @escaping (_ message: Bool) -> Void) {
@@ -61,6 +49,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
             switch response.result {
+            case .failure(let error):
+                print(error)
             case .success:
                 if let value = response.data {
                     
@@ -75,30 +65,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                     DispatchQueue.main.async {
                         completion(true)
                     }
-                    
                 }
-            case .failure(let error):
-            print(error)
+            }
         }
-        
-//        self.common.getRequest(self.common.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]) { responseObject, error in
-//            guard let response = responseObject, error == nil else {
-//                print(error ?? "Unknown error")
-//                return
-//            }
-//
-//            //self.addresses.removeAll()
-//
-//            if response.count > 0 {
-//                for item in response.enumerated() {
-//                    self.addresses.append(item.element["address"] as! String)
-//                }
-//            }
-//            DispatchQueue.main.async {
-//                completion(true)
-//            }
-//        }
-    }
     }
     
     // Load map with default lat, long, and polygon coordinates or load Chicago map
@@ -108,11 +77,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.delegate = self
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
-        //let addresses = favoriteAddresses.filter { $0[0] != "" }
-        
         if self.addresses.count > 0 {
 
-            
             self.mapLocations.removeAll()
         
             for (_, address) in self.addresses.enumerated() {
@@ -379,5 +345,4 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         return cell
         
     }
-
 }

@@ -83,13 +83,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             case .purchased:
                 defaults.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Purchase Complete", "Saving multiple addresses is now enabled.")
+                self.common.showAlert("Purchase Complete", "Saving multiple addresses is now enabled. Click on the plus icon to add this address.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .restored:
                 defaults.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Purchase Restored", "Saving multiple addresses is now enabled.")
+                self.common.showAlert("Purchase Restored", "Saving multiple addresses is now enabled. Click on the plus icon to add this address.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .failed:
@@ -106,7 +106,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             default:
                 defaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
-                //SKPaymentQueue.default().remove(self)
+                SKPaymentQueue.default().remove(self)
                 break
             }
         }

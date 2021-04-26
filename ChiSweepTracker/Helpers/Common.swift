@@ -201,6 +201,7 @@ class Common {
         
         var addresses = [String]()
         var parameters = [String: String]()
+        let urlTo = self.constants.websiteURL + "/get-address-data.php"
         
         if address == "" {
             parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
@@ -209,21 +210,25 @@ class Common {
             parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID(), "address": address]
         }
         
-        self.getRequest(self.constants.websiteURL + "/get-address-data.php", parameters: parameters)
-        { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-
-            addresses.removeAll()
-            
-            if response.count > 0 {
-                for item in response.enumerated() {
-                    addresses.append(item.element["address"] as! String)
+        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+            switch response.result {
+            case .success:
+                if let value = response.data {
+                    
+                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    
+                    addresses.removeAll()
+                    
+                    for item in json.enumerated() {
+                        addresses.append(item.element["address"]!)
+                    }
+                
+                    completion(addresses)
+                    
                 }
+            case .failure(let error):
+            print(error)
             }
-            completion(addresses)
         }
     }
     
@@ -603,61 +608,44 @@ class Common {
         
         let favoriteViewController = FavoriteViewController()
         
-        getRequest(self.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]) { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
+        let urlTo = self.constants.websiteURL + "/get-address-data.php"
+        let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
 
-            if response.count > 0 {
-                
-                for item in response.enumerated() {
+        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+            switch response.result {
+            case .failure(let error):
+                print(error)
+            case .success:
+                if let value = response.data {
                     
-                    let address = item.element["address"] as! String
-                    let notificationsToggledString = item.element["notificationsEnabled"] as! String
-                    var notificationsToggled = false
-                    if notificationsToggledString == "1" {
-                        notificationsToggled = true
-                    }
-                    let notificationsWhen = item.element["notificationsWhen"] as! String
-                    let notificationsHour = Int(item.element["notificationsHour"] as! String)!
-                    let notificationsMinute = Int(item.element["notificationsMinute"] as! String)!
+                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
                     
-                    if notificationsToggled == true {
+                    for item in json.enumerated() {
                         
-                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                        let address = item.element["address"]!
+                        let notificationsToggledString = item.element["notificationsEnabled"]!
+                        var notificationsToggled = false
+                        if notificationsToggledString == "1" {
+                            notificationsToggled = true
+                        }
+                        let notificationsWhen = item.element["notificationsWhen"]!
+                        let notificationsHour = Int(item.element["notificationsHour"]!)
+                        let notificationsMinute = Int(item.element["notificationsMinute"]!)
                         
-                        self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-                          
-                            favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
+                        if notificationsToggled == true {
+                            
+                            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                            
+                            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                              
+                                favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
 
-                        })
+                            })
+                        }
                     }
                 }
             }
         }
-        
-//        let addresses = self.favoriteAddresses().filter { $0[0] != "" }
-//        
-//        for (_, element) in addresses.enumerated() {
-//            
-//            let address = element[0]
-//            let notificationsToggled = Bool(element[1])
-//            let notificationsWhen = element[2]
-//            let notificationsHour = Int(element[3]) ?? 0
-//            let notificationsMinute = Int(element[4]) ?? 0
-//            
-//            if notificationsToggled == true {
-//                
-//                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-//                
-//                self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-//                  
-//                    favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour, notificationsMinute)
-//
-//                })
-//            }
-//        }
     }
     
     func goToScheduleFromNotification(_ address: String) {

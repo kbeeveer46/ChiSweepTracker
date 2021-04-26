@@ -1,5 +1,6 @@
 import UIKit
 import StoreKit
+import Alamofire
 
 class InfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -35,33 +36,38 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	
 	func getInfo() {
         
-        self.common.getRequest(self.common.constants.websiteURL + "/get-info-data.php", parameters: ["tableName": self.common.constants.infoDatabaseName]) { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-
-            if response.count > 0 {
-                
-                self.infoList.removeAll()
-                
-                for info in response.enumerated() {
+        let urlTo = self.common.constants.websiteURL + "/get-info-data.php"
+        let parameters = ["tableName": self.common.constants.infoDatabaseName]
+        
+        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+            switch response.result {
+            case .failure:
+                print("Error getting info from database")
+            case .success:
+                if let value = response.data {
                     
-                    let message = info.element["message"] as! String
-                    let color = info.element["color"] as! String
-                    let image = info.element["image"] as! String
-                    let title = info.element["title"] as! String
+                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
                     
-                    let info = InfoModel()
-                    info.message = message
-                    info.color = color
-                    info.image = image
-                    info.title = title
-                    self.infoList.append(info)
-                }
-                
-                DispatchQueue.main.async {
-                    self.infoTableView.reloadData()
+                    self.infoList.removeAll()
+                    
+                    for info in json.enumerated() {
+                        
+                        let message = info.element["message"]
+                        let color = info.element["color"]
+                        let image = info.element["image"]
+                        let title = info.element["title"]
+                        
+                        let info = InfoModel()
+                        info.message = message!
+                        info.color = color!
+                        info.image = image!
+                        info.title = title!
+                        self.infoList.append(info)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.infoTableView.reloadData()
+                    }
                 }
             }
         }

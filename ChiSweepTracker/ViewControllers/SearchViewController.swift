@@ -94,27 +94,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
-            
-//            var favoriteAddressCount = 0
-//
-//            self.common.getFavoriteAddressCount(address: self.schedule.address, completion: { result in
-//                switch result {
-//                case .success (let value):
-//                    favoriteAddressCount = value
-//                case .failure:
-//                    favoriteAddressCount = 0
-//                }
-//            })
-            
-            //let favoriteAddressCount = self.common.getFavoriteAddressCount(address: self.schedule.address)
-            
-            //if self.common.favoriteAddresses().filter({ $0[0] != "" }).count > 0 {
-            //if favoriteAddressCount > 0 {
-                getNextSweepingDate()
-            //}
-            //else {
-            //    self.messageCardView.isHidden = true
-            //}
+            getNextSweepingDate()
 		}
 	}
 	
@@ -185,7 +165,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 }
             }
         })
-        
 	}
 
     // Search for schedule when message card view is tapped
