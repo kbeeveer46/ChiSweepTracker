@@ -472,61 +472,61 @@ class Common {
             }
         }
         
-        let lastUpdatesViewDateString = self.updatesLastViewDate()
-        if !lastUpdatesViewDateString.isEmpty {
-            
-            let dateFormatter = DateFormatter()
-            //dateFormatter.locale = .current
-            dateFormatter.timeZone = .current
-            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
-            
-            getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
-                guard let response = responseObject, error == nil else {
-                    print(error ?? "Unknown error")
-                    return
-                }
-
-                if response.count > 0 {
-                    
-                    var newCount = 0
-                    
-                    for update in response.enumerated() {
-                        
-                        let date = update.element["date"] as! String
-                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                        let dateFormattedDate = dateFormatter.date(from: date)
-                        let dateFormattedString = dateFormatter.string(from: dateFormattedDate!)
-                        
-                        dateFormatter.dateFormat = "M/dd/yyyy HH:mm:ss"
-                        
-                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
-                        let lastUpdatesViewDateString2 = dateFormatter.string(from: lastUpdatesViewDate)
-                        
-                        print(date)
-                        print(dateFormattedDate!)
-                        print(dateFormattedString)
-                        print(lastUpdatesViewDate)
-                        print(lastUpdatesViewDateString2)
-                        
-                        
-                        
-                        
-                        //if dateFormatted > lastUpdatesViewDate {
-                            newCount += 1
-                        //}
-                    }
-                    
-                    DispatchQueue.main.async {
-                        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-                            if let navigationController = rootViewController as? UINavigationController {
-                                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
-                                    tabBarController.tabBar.items?.last!.badgeValue = newCount > 0 ? "\(newCount)" : nil
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+//        let lastUpdatesViewDateString = self.updatesLastViewDate()
+//        if !lastUpdatesViewDateString.isEmpty {
+//
+//            let dateFormatter = DateFormatter()
+//            //dateFormatter.locale = .current
+//            dateFormatter.timeZone = .current
+//            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
+//
+//            getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
+//                guard let response = responseObject, error == nil else {
+//                    print(error ?? "Unknown error")
+//                    return
+//                }
+//
+//                if response.count > 0 {
+//
+//                    var newCount = 0
+//
+//                    for update in response.enumerated() {
+//
+//                        let date = update.element["date"] as! String
+//                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//                        let dateFormattedDate = dateFormatter.date(from: date)
+//                        let dateFormattedString = dateFormatter.string(from: dateFormattedDate!)
+//
+//                        dateFormatter.dateFormat = "M/dd/yyyy HH:mm:ss"
+//
+//                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
+//                        let lastUpdatesViewDateString2 = dateFormatter.string(from: lastUpdatesViewDate)
+//
+//                        print(date)
+//                        print(dateFormattedDate!)
+//                        print(dateFormattedString)
+//                        print(lastUpdatesViewDate)
+//                        print(lastUpdatesViewDateString2)
+//
+//
+//
+//
+//                        //if dateFormatted > lastUpdatesViewDate {
+//                            newCount += 1
+//                        //}
+//                    }
+//
+//                    DispatchQueue.main.async {
+//                        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+//                            if let navigationController = rootViewController as? UINavigationController {
+//                                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
+//                                    tabBarController.tabBar.items?.last!.badgeValue = newCount > 0 ? "\(newCount)" : nil
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             
 //            db.collection(self.constants.newsDatabaseName)
 //                .whereField("date", isGreaterThan: lastUpdatesViewDate!)
@@ -547,7 +547,7 @@ class Common {
 //                        }
 //                    }
 //                }
-        }
+//        }
         
         completion("Finished getting data from Firebase")
     }

@@ -80,15 +80,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
     }
     
-    // Go to schedule page when top left schedule button is clicked
-    @objc func viewSchedule() {
-        
-        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-            destinationViewController.schedule = self.schedule
-            self.navigationController?.pushViewController(destinationViewController, animated: true)
-        }
-    }
-    
     func loadFavoriteMap() {
         
         // Set required properties for map
@@ -340,31 +331,21 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
-//                var favoriteAddresses = self.common.favoriteAddresses()
-//
-//                for (index, element) in favoriteAddresses.enumerated() {
-//                    if element[0] == self.schedule.address {
-//                        favoriteAddresses[index][0] = ""
-//                        favoriteAddresses[index][1] = ""
-//                        favoriteAddresses[index][2] = ""
-//                        favoriteAddresses[index][3] = ""
-//                        favoriteAddresses[index][4] = ""
-//                        break
-//                    }
-//                }
-//                defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
-                
-                self.deleteAddressFromDatabase(address: self.schedule.address, completion: { message in })
+                self.deleteAddressFromDatabase(address: self.schedule.address, completion: { message in
+                    
+                    DispatchQueue.main.async {
+                    
+                        // If on a view with a tab control then use it to go to the favorite list view
+                        self.tabBarController?.selectedIndex = 1
+                        
+                        // If not on a view with a tab control, use navigation controller to go to favorite list view
+                        if self.tabBarController == nil {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
+                })
                 
                 self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
-                
-                // If on a view with a tab control then use it to go to the favorite list view
-                self.tabBarController?.selectedIndex = 1
-                
-                // If not on a view with a tab control, use navigation controller to go to favorite list view
-                if self.tabBarController == nil {
-                    self.navigationController?.popViewController(animated: true)
-                }
                 
             })
             yesAction.setValue(UIColor.red, forKey: "titleTextColor")
@@ -472,7 +453,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
     }
     
-    func deleteAddressFromDatabase( address: String, completion: @escaping (_ message: Bool) -> Void)
+    func deleteAddressFromDatabase(address: String, completion: @escaping (_ message: Bool) -> Void)
     {
         let host = self.common.constants.websiteURL + "/delete-address.php"
         let url = NSURL(string: host)
@@ -492,13 +473,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                     print("Error deleting notification from database")
                     completion(true)
                 }
-                else
-                {
+                else {
                     completion(true)
-                    
-                    //if let response = String(data: data!, encoding: .utf8) {
-                    //    print("Response:\(response)")
-                    //}
                 }
             }
             task.resume()
@@ -508,7 +484,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     @objc func timePickerChanged(picker: UIDatePicker) {
         
         // Save form values
-        saveDefaultNotificationValues()
+        self.saveDefaultNotificationValues()
         
         // Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
@@ -606,36 +582,33 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let minute = comp.minute!
         let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
         
-        self.updateAddressInDatabase(address: self.schedule.address,
-                                     when: when,
-                                     hour: hour,
-                                     minute: minute,
-                                     enabled: self.pushNotificationsSwitch.isOn == true ? 1 : 0)
-        
-    }
-    
-    func updateAddressInDatabase(address: String, when: String, hour: Int, minute: Int, enabled: Int) {
-        
         let urlTo = self.common.constants.websiteURL + "/update-address.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
                           "uuid": self.common.deviceUUID(),
-                          "address": address,
+                          "address": self.schedule.address,
                           "notificationsWhen": when,
                           "notificationsHour": hour,
                           "notificationsMinute": minute,
-                          "notificationsEnabled": enabled] as [String : Any]
+                          "notificationsEnabled": self.pushNotificationsSwitch.isOn == true ? 1 : 0] as [String : Any]
 
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            switch response.result {
-            case .success:
-                if let value = response.data {
-                    print(value)
-                }
-            case .failure(let error):
-            print(error)
-            }
-        }
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+        
     }
+    
+//    func updateAddressInDatabase(address: String, when: String, hour: Int, minute: Int, enabled: Int) {
+//
+//        let urlTo = self.common.constants.websiteURL + "/update-address.php"
+//        let parameters = ["tableName": self.common.constants.addressesDatabaseName,
+//                          "uuid": self.common.deviceUUID(),
+//                          "address": address,
+//                          "notificationsWhen": when,
+//                          "notificationsHour": hour,
+//                          "notificationsMinute": minute,
+//                          "notificationsEnabled": enabled] as [String : Any]
+//
+//        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+//
+//    }
     
     // Populate schedule model and add notifications if applicable
     // useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
@@ -1096,15 +1069,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             // Save form values to defaults
             self.saveDefaultNotificationValues()
-                        
-//            var favoriteAddresses = self.common.favoriteAddresses()
-//            for (index, element) in favoriteAddresses.enumerated() {
-//                if element[0] == self.schedule.address {
-//                    favoriteAddresses[index][1] = "true"
-//                    break
-//                }
-//            }
-//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
                 self.getSchedule(true)
@@ -1114,15 +1078,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         else {
             
             self.saveDefaultNotificationValues()
-            
-//            var favoriteAddresses = self.common.favoriteAddresses()
-//            for (index, element) in favoriteAddresses.enumerated() {
-//                if element[0] == self.schedule.address {
-//                    favoriteAddresses[index][1] = "false"
-//                    break
-//                }
-//            }
-//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             // Disable when and time controls
             self.timePicker.isUserInteractionEnabled = false

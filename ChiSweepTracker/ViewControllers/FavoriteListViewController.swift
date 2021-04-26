@@ -22,7 +22,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
         
-        getAddresses(completion: { message in
+        self.getAddresses(completion: { message in
             
             DispatchQueue.main.async {
             
@@ -62,9 +62,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         self.addresses.append(item.element["address"]!)
                     }
                     
-                    DispatchQueue.main.async {
-                        completion(true)
-                    }
+                    completion(true)
                 }
             }
         }
@@ -155,7 +153,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
     
-    func searchForSchedule(_ address: String) {
+    func populateScheduleAndGoToFavoritePage(_ address: String) {
         
         let schedule = ScheduleModel()
 
@@ -326,7 +324,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         let addressLabel = cell.viewWithTag(1) as! UILabel
         let address = addressLabel.text!.trimmingCharacters(in: .whitespaces)
         
-        self.searchForSchedule(address)
+        self.populateScheduleAndGoToFavoritePage(address)
         
     }
     
