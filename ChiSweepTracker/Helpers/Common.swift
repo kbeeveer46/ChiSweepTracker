@@ -1,5 +1,6 @@
 import UIKit
 import MapKit
+import Alamofire
 
 let defaults = UserDefaults.standard
 
@@ -94,7 +95,7 @@ class Common {
     func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
     func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
     func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
-    func favoriteAddresses() -> [[String]] {return defaults.object(forKey: "favoriteAddresses") as? [[String]] ?? [[String]](repeating: [String](repeating: "", count: 5), count: 50)}
+    //func favoriteAddresses() -> [[String]] {return defaults.object(forKey: "favoriteAddresses") as? [[String]] ?? [[String]](repeating: [String](repeating: "", count: 5), count: 50)}
     // favoriteAddresses[0] = address
     // favoriteAddresses[1] = notifications toggled
     // favoriteAddresses[2] = when
@@ -196,11 +197,20 @@ class Common {
         task.resume()
     }
     
-    func getAddresses(completion: @escaping (_ message: [String]) -> ()) {
+    func getAddresses(address: String = "", completion: @escaping (_ message: [String]) -> ()) {
         
         var addresses = [String]()
+        var parameters = [String: String]()
         
-        self.getRequest(self.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]) { responseObject, error in
+        if address == "" {
+            parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
+        }
+        else {
+            parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID(), "address": address]
+        }
+        
+        self.getRequest(self.constants.websiteURL + "/get-address-data.php", parameters: parameters)
+        { responseObject, error in
             guard let response = responseObject, error == nil else {
                 print(error ?? "Unknown error")
                 return
@@ -217,9 +227,25 @@ class Common {
         }
     }
     
-    func getFavoriteAddressCount(address: String) -> Int {
+    func getFavoriteAddressCount(address: String, completion: @escaping (Result<[[String: String]], Error>) -> Void) {
+        getFavoriteAddressCountRequest(address: address, completion: completion)
+    }
+    
+    func getFavoriteAddressCountRequest(address: String, completion: @escaping (Result<[[String: String]], Error>) -> Void) {
      
-        return 0
+        let urlTo = self.constants.websiteURL + "/get-address-data.php"
+        let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
+
+        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+            switch response.result {
+            case .success (let value as [[String: String]]):
+                completion(.success(value))
+            case .failure(let error):
+                print(error)
+            default:
+                print("")
+            }
+        }
     }
     
     func insertAddressIntoDatabase(address: String,

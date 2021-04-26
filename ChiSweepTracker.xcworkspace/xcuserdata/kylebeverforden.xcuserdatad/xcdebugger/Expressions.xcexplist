@@ -87,13 +87,10 @@
          contextName = "closure #1 in FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #2 in closure #3 in closure #1 in closure #1 in closure #1 in FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
+         contextName = "closure #1 in Common.updateNotifications():Common.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.constants.notificationsDatabaseName">
-            </PersistentString>
-            <PersistentString
-               value = " self.common.notificationOneSignalPlayerId()">
+               value = "response.count ">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -101,10 +98,13 @@
          contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #1 in Common.updateNotifications():Common.swift">
+         contextName = "closure #2 in closure #3 in closure #1 in closure #1 in closure #1 in FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "response.count ">
+               value = "self.common.constants.notificationsDatabaseName">
+            </PersistentString>
+            <PersistentString
+               value = " self.common.notificationOneSignalPlayerId()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -175,13 +175,13 @@
          contextName = "FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.notificationOneSignalPlayerId()">
+               value = "self.common.constants.websiteURL">
             </PersistentString>
             <PersistentString
                value = "&quot;\(self.common.constants.websiteURL)/insert-notification.php?playerId=\(self.common.notificationOneSignalPlayerId())&amp;address=\(address)&amp;notificationTime=\(notificationTime)&amp;sweepDay=\(sweepDay)&amp;tableName=\(tableName)&quot;">
             </PersistentString>
             <PersistentString
-               value = "self.common.constants.websiteURL">
+               value = "self.common.notificationOneSignalPlayerId()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -192,7 +192,12 @@
          contextName = "FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "InfoViewController.tableView(_:numberOfRowsInSection:):InfoViewController.swift">
+         contextName = "closure #1 in FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "item.element[&quot;address&quot;]">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "FavoriteListViewController.tableView(_:cellForRowAt:):FavoriteListViewController.swift">
@@ -203,10 +208,13 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
+         contextName = "InfoViewController.tableView(_:numberOfRowsInSection:):InfoViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in SearchViewController.getNextSweepingDate():SearchViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "item.element[&quot;address&quot;]">
+               value = "completion.enumerated()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

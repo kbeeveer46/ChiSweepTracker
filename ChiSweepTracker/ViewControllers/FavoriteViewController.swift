@@ -606,14 +606,24 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let minute = comp.minute!
         let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
         
+        self.updateAddressInDatabase(address: self.schedule.address,
+                                     when: when,
+                                     hour: hour,
+                                     minute: minute,
+                                     enabled: self.pushNotificationsSwitch.isOn == true ? 1 : 0)
+        
+    }
+    
+    func updateAddressInDatabase(address: String, when: String, hour: Int, minute: Int, enabled: Int) {
+        
         let urlTo = self.common.constants.websiteURL + "/update-address.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
                           "uuid": self.common.deviceUUID(),
-                          "address": self.schedule.address,
+                          "address": address,
                           "notificationsWhen": when,
                           "notificationsHour": hour,
                           "notificationsMinute": minute,
-                          "notificationsEnabled": self.pushNotificationsSwitch.isOn == true ? 1 : 0] as [String : Any]
+                          "notificationsEnabled": enabled] as [String : Any]
 
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
             switch response.result {
@@ -1086,15 +1096,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             
             // Save form values to defaults
             self.saveDefaultNotificationValues()
-            
-            var favoriteAddresses = self.common.favoriteAddresses()
-            for (index, element) in favoriteAddresses.enumerated() {
-                if element[0] == self.schedule.address {
-                    favoriteAddresses[index][1] = "true"
-                    break
-                }
-            }
-            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+                        
+//            var favoriteAddresses = self.common.favoriteAddresses()
+//            for (index, element) in favoriteAddresses.enumerated() {
+//                if element[0] == self.schedule.address {
+//                    favoriteAddresses[index][1] = "true"
+//                    break
+//                }
+//            }
+//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
                 self.getSchedule(true)
@@ -1103,14 +1113,16 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         else {
             
-            var favoriteAddresses = self.common.favoriteAddresses()
-            for (index, element) in favoriteAddresses.enumerated() {
-                if element[0] == self.schedule.address {
-                    favoriteAddresses[index][1] = "false"
-                    break
-                }
-            }
-            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+            self.saveDefaultNotificationValues()
+            
+//            var favoriteAddresses = self.common.favoriteAddresses()
+//            for (index, element) in favoriteAddresses.enumerated() {
+//                if element[0] == self.schedule.address {
+//                    favoriteAddresses[index][1] = "false"
+//                    break
+//                }
+//            }
+//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             // Disable when and time controls
             self.timePicker.isUserInteractionEnabled = false

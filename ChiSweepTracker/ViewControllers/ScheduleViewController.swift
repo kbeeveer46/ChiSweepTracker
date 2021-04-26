@@ -129,114 +129,109 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		default:
 			break
 		}
-		
 	}
     
 	// Method is called when user chooses yes to add a favorite
     @objc func saveAddress() {
         
-        //var favoriteAddresses = self.common.favoriteAddresses()
-        //let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }
+        self.common.getFavoriteAddressCount(address: self.schedule.address, completion: { result in
         
-        let favoriteAddressCount = self.common.getFavoriteAddressCount(address: self.schedule.address)
-        
-		// Add haptic feedback
-        generator.prepare()
-        generator.selectionChanged()
-        
-        if favoriteAddressCount == 0  ||
-            favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == true {
-        
-            self.navigationItem.rightBarButtonItem = nil
+            var favoriteAddressCount = 0
             
-//            for (index, element) in favoriteAddresses.enumerated() {
-//                if element[0] == "" {
-//                    favoriteAddresses[index][0] = schedule.address
-//                    favoriteAddresses[index][1] = "false"
-//                    break
-//                }
-//            }
-//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
-            
-            self.common.insertAddressIntoDatabase(address: self.schedule.address,
-                                                  notificationsEnabled: 0,
-                                                  notificationsWhen: "Day Of Sweep",
-                                                  notificationsHour: 0,
-                                                  notificationsMinute: 0)
-            
-            // Create alert
-            let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
-            
-            // Yes option
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            switch result {
+            case .success (let value):
+                favoriteAddressCount = value.count
+            case .failure:
+               favoriteAddressCount = -1
+            }
+                        
+            DispatchQueue.main.async {
                 
-                // Segue to schedule view
-                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
-                    destinationViewController.schedule = self.schedule
-                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                // Add haptic feedback
+                self.generator.prepare()
+                self.generator.selectionChanged()
+                
+                if favoriteAddressCount == 0  ||
+                    favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == true {
+                
+                    self.navigationItem.rightBarButtonItem = nil
+                    
+                    self.common.insertAddressIntoDatabase(address: self.schedule.address,
+                                                          notificationsEnabled: 0,
+                                                          notificationsWhen: "Day Of Sweep",
+                                                          notificationsHour: 0,
+                                                          notificationsMinute: 0)
+                    
+                    // Create alert
+                    let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
+                    
+                    // Yes option
+                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                        
+                        // Segue to schedule view
+                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                            destinationViewController.schedule = self.schedule
+                            self.navigationController?.pushViewController(destinationViewController, animated: true)
+                        }
+                
+                    }))
+                    
+                    // No option
+                    alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                    
+                    // Present alert
+                    self.present(alert, animated: true, completion: nil)
+                    
                 }
-        
-            }))
-            
-            // No option
-            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-            
-            // Present alert
-            self.present(alert, animated: true, completion: nil)
-            
-        }
-        else {
-            
-            // Create alert
-            let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one addresses requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
+                else if favoriteAddressCount != -1 {
+                    
+                    // Create alert
+                    let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one addresses requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
 
-            // Yes option
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                    // Yes option
+                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                        
+                        guard let myProduct = self.myProduct else {
+                            return
+                        }
+            
+                        if SKPaymentQueue.canMakePayments() {
+                            let payment = SKPayment(product: myProduct)
+                            SKPaymentQueue.default().add(self)
+                            SKPaymentQueue.default().add(payment)
+                        }
+                        else {
+                            self.common.showAlert("Unable to purchase", "Your device does not have the required permissions to make this purchase.")
+                        }
                 
-                guard let myProduct = self.myProduct else {
-                    return
+                    }))
+                    
+                    // Restore option
+                    alert.addAction(UIAlertAction(title: "Restore Previous Purchase", style: .default, handler:{ action in
+                        SKPaymentQueue.default().add(self)
+                        SKPaymentQueue.default().restoreCompletedTransactions()
+                    }))
+                    
+                    // No option
+                    alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                    
+                    // Present alert
+                    self.present(alert, animated: true, completion: nil)
+                    
                 }
-    
-                if SKPaymentQueue.canMakePayments() {
-                    let payment = SKPayment(product: myProduct)
-                    SKPaymentQueue.default().add(self)
-                    SKPaymentQueue.default().add(payment)
-                }
-                else {
-                    self.common.showAlert("Unable to purchase", "Your device does not have the required permissions to make this purchase.")
-                }
-        
-            }))
-            
-            // Restore option
-            alert.addAction(UIAlertAction(title: "Restore Previous Purchase", style: .default, handler:{ action in
-                SKPaymentQueue.default().add(self)
-                SKPaymentQueue.default().restoreCompletedTransactions()
-            }))
-            
-            // No option
-            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-            
-            // Present alert
-            self.present(alert, animated: true, completion: nil)
-            
-        }
+            }
+        })
     }
-	
-    
     
     // Show settings button in the top right
     func showOptionsMenu() {
         
-        self.common.getAddresses(completion: { addresses in
+        self.common.getAddresses(address: self.schedule.address, completion: { addresses in
             
             var doNotShowOptionsMenu = false
             
-            for address in addresses {
-                if address == self.schedule.address {
-                    doNotShowOptionsMenu = true
-                    break
-                }
+            if addresses.count > 0 {
+                doNotShowOptionsMenu = true
             }
             
             DispatchQueue.main.async {
