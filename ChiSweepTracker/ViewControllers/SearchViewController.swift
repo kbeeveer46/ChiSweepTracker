@@ -94,7 +94,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
-            if self.common.favoriteAddresses().filter({ $0[0] != "" }).count > 0 {
+            
+            let favoriteAddressCount = self.common.getFavoriteAddressCount(address: self.schedule.address)
+            
+            //if self.common.favoriteAddresses().filter({ $0[0] != "" }).count > 0 {
+            if favoriteAddressCount > 0 {
                 getNextSweepingDate()
             }
             else {
@@ -107,61 +111,70 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 
 		self.messageCardView.isHidden = true
         
-        let group = DispatchGroup()
-        let addresses = self.common.favoriteAddresses().filter { $0[0] != "" }
+        var addresses = [String]() 
         var schedules = [ScheduleModel]()
         var sweepDates = [Date]()
         
-        for (_, element) in addresses.enumerated() {
-            
-            group.enter()
-            
-            self.searchForSchedule(element[0], completion: { schedule in
-                schedules.append(schedule)
-                group.leave()
-            })
-        }
+        self.common.getAddresses(completion: {completion in
         
-        group.notify(queue: .main) {
+            let group = DispatchGroup()
             
-            for schedule in schedules {
+            for address in completion.enumerated() {
+                addresses.append(address.element)
+            }
+            
+            for (_, element) in addresses.enumerated() {
                 
-                for month in schedule.months {
+                group.enter()
+                
+                self.searchForSchedule(element, completion: { schedule in
+                    schedules.append(schedule)
+                    group.leave()
+                })
+            }
+            
+            group.notify(queue: .main) {
+                
+                for schedule in schedules {
                     
-                    if Int(month.number)! >= self.currentMonth {
+                    for month in schedule.months {
                         
-                        for date in month.dates {
+                        if Int(month.number)! >= self.currentMonth {
                             
-                            if Int(month.number)! > self.currentMonth ||
-                                Int(month.number) == self.currentMonth && date.date >= self.currentDay {
-                            
-                                // Specify date components
-                                var dateComponents = DateComponents()
-                                dateComponents.year = self.common.latestAppVersion()
-                                dateComponents.month = Int(month.number)
-                                dateComponents.day = date.date
-
-                                // Create date from components
-                                let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
-                                let sweepDay = userCalendar.date(from: dateComponents)
-                                sweepDates.append(sweepDay!)
+                            for date in month.dates {
                                 
+                                if Int(month.number)! > self.currentMonth ||
+                                    Int(month.number) == self.currentMonth && date.date >= self.currentDay {
+                                
+                                    // Specify date components
+                                    var dateComponents = DateComponents()
+                                    dateComponents.year = self.common.latestAppVersion()
+                                    dateComponents.month = Int(month.number)
+                                    dateComponents.day = date.date
+
+                                    // Create date from components
+                                    let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
+                                    let sweepDay = userCalendar.date(from: dateComponents)
+                                    sweepDates.append(sweepDay!)
+                                    
+                                }
                             }
                         }
                     }
                 }
+                
+                if let earliest = sweepDates.min() {
+                    
+                    self.messageCardView.isHidden = false
+                    
+                    let calendar = Calendar.current
+                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: earliest)
+                    self.messageLabel.text = "Your next sweeping is on \(components.month!)/\(components.day!)/\(components.year!)"
+                    
+                }
             }
-            
-            if let earliest = sweepDates.min() {
-                
-                self.messageCardView.isHidden = false
-                
-                let calendar = Calendar.current
-                let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: earliest)
-                self.messageLabel.text = "Your next sweeping is on \(components.month!)/\(components.day!)/\(components.year!)"
-                
-            }
-        }
+        })
+        
 	}
 
     // Search for schedule when message card view is tapped

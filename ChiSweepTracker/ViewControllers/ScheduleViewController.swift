@@ -135,26 +135,28 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// Method is called when user chooses yes to add a favorite
     @objc func saveAddress() {
         
-        var favoriteAddresses = self.common.favoriteAddresses()
-        let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }
+        //var favoriteAddresses = self.common.favoriteAddresses()
+        //let favoriteAddressCount = favoriteAddresses.filter { $0[0] != "" }
+        
+        let favoriteAddressCount = self.common.getFavoriteAddressCount(address: self.schedule.address)
         
 		// Add haptic feedback
         generator.prepare()
         generator.selectionChanged()
         
-        if favoriteAddressCount.count == 0  ||
-            favoriteAddressCount.count >= 1  && self.common.enableMultipleAddresses() == true {
+        if favoriteAddressCount == 0  ||
+            favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == true {
         
             self.navigationItem.rightBarButtonItem = nil
             
-            for (index, element) in favoriteAddresses.enumerated() {
-                if element[0] == "" {
-                    favoriteAddresses[index][0] = schedule.address
-                    favoriteAddresses[index][1] = "false"
-                    break
-                }
-            }
-            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
+//            for (index, element) in favoriteAddresses.enumerated() {
+//                if element[0] == "" {
+//                    favoriteAddresses[index][0] = schedule.address
+//                    favoriteAddresses[index][1] = "false"
+//                    break
+//                }
+//            }
+//            defaults.set(favoriteAddresses, forKey: "favoriteAddresses")
             
             self.common.insertAddressIntoDatabase(address: self.schedule.address,
                                                   notificationsEnabled: 0,
@@ -226,19 +228,26 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     // Show settings button in the top right
     func showOptionsMenu() {
         
-        var doNotShowOptionsMenu = false
-        
-        let matchingFavoriteAddress = self.common.favoriteAddresses().filter { $0[0] == self.schedule.address }
-        if matchingFavoriteAddress.count > 0 {
-            doNotShowOptionsMenu = true
-        }
-        
-        if !doNotShowOptionsMenu {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-        }
-        else {
-            self.navigationItem.rightBarButtonItem = nil
-        }
+        self.common.getAddresses(completion: { addresses in
+            
+            var doNotShowOptionsMenu = false
+            
+            for address in addresses {
+                if address == self.schedule.address {
+                    doNotShowOptionsMenu = true
+                    break
+                }
+            }
+            
+            DispatchQueue.main.async {
+                if !doNotShowOptionsMenu {
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+                }
+                else {
+                    self.navigationItem.rightBarButtonItem = nil
+                }
+            }
+        })
     }
     
 	@objc func openOptionsMenu() {

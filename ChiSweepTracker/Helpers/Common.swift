@@ -188,9 +188,38 @@ class Common {
             }
 
             let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [[String: Any]]
-            completion(responseObject, nil)
+                      
+            DispatchQueue.main.async {
+                completion(responseObject, nil)
+            }
         }
         task.resume()
+    }
+    
+    func getAddresses(completion: @escaping (_ message: [String]) -> ()) {
+        
+        var addresses = [String]()
+        
+        self.getRequest(self.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]) { responseObject, error in
+            guard let response = responseObject, error == nil else {
+                print(error ?? "Unknown error")
+                return
+            }
+
+            addresses.removeAll()
+            
+            if response.count > 0 {
+                for item in response.enumerated() {
+                    addresses.append(item.element["address"] as! String)
+                }
+            }
+            completion(addresses)
+        }
+    }
+    
+    func getFavoriteAddressCount(address: String) -> Int {
+     
+        return 0
     }
     
     func insertAddressIntoDatabase(address: String,

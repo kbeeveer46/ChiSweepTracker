@@ -14,8 +14,8 @@ target 'ChiSweepTracker' do
 	
 	pod 'IQKeyboardManagerSwift'
 	pod 'THLabel', '~> 1.4.0'
-
   pod 'OneSignal', '>= 3.0.0', '< 4.0'
+  pod 'Alamofire', '~> 5.2'
 
 end
 

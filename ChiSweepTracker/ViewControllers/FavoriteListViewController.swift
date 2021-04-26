@@ -1,6 +1,7 @@
 import UIKit
 import MapKit
 import THLabel
+import Alamofire
 
 class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate  {
 
@@ -17,9 +18,12 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        //self.addresses.removeAll()
+        
         // Set required properties for favorite list table view
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
+        //self.favoriteListTableView.reloadData()
         
         getAddresses(completion: { message in
             
@@ -52,21 +56,49 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     func getAddresses(completion: @escaping (_ message: Bool) -> Void) {
         
-        self.common.getRequest(self.common.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]) { responseObject, error in
-            guard let response = responseObject, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-
-            self.addresses.removeAll()
-            
-            if response.count > 0 {
-                for item in response.enumerated() {
-                    self.addresses.append(item.element["address"] as! String)
+        let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
+        let parameters = ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]
+        
+        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+            switch response.result {
+            case .success:
+                if let value = response.data {
+                    
+                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    
+                    self.addresses.removeAll()
+                    
+                    for item in json.enumerated() {
+                        self.addresses.append(item.element["address"]!)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        completion(true)
+                    }
+                    
                 }
-            }
-            completion(true)
+            case .failure(let error):
+            print(error)
         }
+        
+//        self.common.getRequest(self.common.constants.websiteURL + "/get-address-data.php", parameters: ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]) { responseObject, error in
+//            guard let response = responseObject, error == nil else {
+//                print(error ?? "Unknown error")
+//                return
+//            }
+//
+//            //self.addresses.removeAll()
+//
+//            if response.count > 0 {
+//                for item in response.enumerated() {
+//                    self.addresses.append(item.element["address"] as! String)
+//                }
+//            }
+//            DispatchQueue.main.async {
+//                completion(true)
+//            }
+//        }
+    }
     }
     
     // Load map with default lat, long, and polygon coordinates or load Chicago map

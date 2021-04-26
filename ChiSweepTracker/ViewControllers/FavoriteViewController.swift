@@ -4,6 +4,7 @@ import CoreLocation
 import MapKit
 import THLabel
 import OneSignal
+import Alamofire
 
 class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
@@ -525,9 +526,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.onPicker.delegate = self
         self.onPicker.dataSource = self
         
-        let favoriteAddresses = self.common.favoriteAddresses()
-        let favoriteAddress = favoriteAddresses.filter { $0[0] == self.schedule.address }
-        let notificationsToggled = Bool(favoriteAddress[0][1])
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat =  "HH:mm"
         
         var when = ""
         var whenIndex = 0
@@ -535,50 +535,70 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         var hourInt = 0
         var minute = ""
         var minuteInt = 0
+        var notificationsToggled = false
         
-        when = favoriteAddress[0][2]
-        whenIndex = whenData.firstIndex(of: when) ?? 0
-        hour = favoriteAddress[0][3]
-        minute = favoriteAddress[0][4]
+        let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
+        let parameters = ["tableName": self.common.constants.addressesDatabaseName, "address": self.schedule.address]
         
-        if hour != "" {
-            hourInt = Int(hour) ?? 0
+        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+            switch response.result {
+            case .success:
+                if let value = response.data {
+                    
+                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    
+                    for item in json.enumerated() {
+                        
+                        notificationsToggled = (item.element["notificationsEnabled"]! == "1" ? true : false)
+                        when = item.element["notificationsWhen"]!
+                        whenIndex = self.whenData.firstIndex(of: when) ?? 0
+                        hour = item.element["notificationsHour"]!
+                        minute = item.element["notificationsMinute"]!
+                        
+                        if hour != "" {
+                            hourInt = Int(hour) ?? 0
+                        }
+                        
+                        if minute != "" {
+                            minuteInt = Int(minute) ?? 0
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                       
+                        let date = dateFormatter.date(from: "\(hourInt):\(minuteInt)")
+
+                        self.onPicker.selectRow(whenIndex, inComponent: 0, animated: false)
+                        self.timePicker.date = date!
+
+                        self.timePicker.addTarget(self, action: #selector(self.timePickerChanged(picker:)), for: .valueChanged)
+
+                        // Get schedule so we have the most update to date version
+                        // Used to pass schedule model to schedule view
+                        // I don't think this is needed anymore after favorite list page was added
+                        self.getSchedule(false)
+
+                        self.pushNotificationsSwitch.isOn = notificationsToggled
+                        self.pushNotificationsSwitch.isUserInteractionEnabled = true
+                        self.onPicker.isUserInteractionEnabled = notificationsToggled
+                        self.timePicker.isUserInteractionEnabled = notificationsToggled
+
+                        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+
+                        if self.tabBarController == nil {
+                            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+                        }
+                    }
+                }
+            case .failure(let error):
+            print(error)
+            }
         }
-        
-        if minute != "" {
-            minuteInt = Int(minute) ?? 0
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat =  "HH:mm"
-        let date = dateFormatter.date(from: "\(hourInt):\(minuteInt)")
-        
-        self.onPicker.selectRow(whenIndex, inComponent: 0, animated: false)
-        self.timePicker.date = date!
-        
-        timePicker.addTarget(self, action: #selector(timePickerChanged(picker:)), for: .valueChanged)
-        
-        // Get schedule so we have the most update to date version
-        // Used to pass schedule model to schedule view
-        // I don't think this is needed anymore after favorite list page was added
-        self.getSchedule(false)
-        
-        self.pushNotificationsSwitch.isOn = notificationsToggled!
-        self.pushNotificationsSwitch.isUserInteractionEnabled = true
-        self.onPicker.isUserInteractionEnabled = notificationsToggled!
-        self.timePicker.isUserInteractionEnabled = notificationsToggled!
-        
-        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-        
-        if self.tabBarController == nil {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(openOptionsMenu))
-        }
+    
     }
     
     // Save form values to defaults
     func saveDefaultNotificationValues() {
-        
-        var favoriteAddresses = self.common.favoriteAddresses()
         
         let time = self.timePicker.date
         let comp = Calendar.current.dateComponents([.hour, .minute], from: time)
@@ -586,16 +606,25 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let minute = comp.minute!
         let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
         
-        for (index, element) in favoriteAddresses.enumerated() {
-            if element[0] == self.schedule.address {
-                favoriteAddresses[index][2] = String(when)
-                favoriteAddresses[index][3] = String(hour)
-                favoriteAddresses[index][4] = String(minute)
-                break
+        let urlTo = self.common.constants.websiteURL + "/update-address.php"
+        let parameters = ["tableName": self.common.constants.addressesDatabaseName,
+                          "uuid": self.common.deviceUUID(),
+                          "address": self.schedule.address,
+                          "notificationsWhen": when,
+                          "notificationsHour": hour,
+                          "notificationsMinute": minute,
+                          "notificationsEnabled": self.pushNotificationsSwitch.isOn == true ? 1 : 0] as [String : Any]
+
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            switch response.result {
+            case .success:
+                if let value = response.data {
+                    print(value)
+                }
+            case .failure(let error):
+            print(error)
             }
         }
-        
-        defaults.setValue(favoriteAddresses, forKey: "favoriteAddresses")
     }
     
     // Populate schedule model and add notifications if applicable
