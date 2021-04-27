@@ -688,7 +688,7 @@ class Common {
         //            }
         
         
-        completion("Finished getting data from Firebase")
+        completion("Finished getting data from database")
     }
     
     func updateNotifications() {

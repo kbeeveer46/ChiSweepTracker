@@ -286,16 +286,20 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 
 extension AppDelegate: MessagingDelegate {
     
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         
 		// This method runs each time the app opens and whenever a new Firebase token is generated.
         // This token can be used to send test message in the Firebase console
 		
-        print("didReceiveRegistrationToken: \(fcmToken)")
+        if fcmToken != nil {
         
-        let dataDict:[String: String] = ["token": fcmToken]
-        
-        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+            print("didReceiveRegistrationToken: \(fcmToken!)")
+            
+            let dataDict:[String: String] = ["token": fcmToken!]
+            
+            NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+            
+        }
   
     }
 }

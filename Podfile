@@ -6,11 +6,11 @@ target 'ChiSweepTracker' do
   use_frameworks!
 
   pod 'Firebase/Analytics'
-  pod 'Firebase/Crashlytics'
+  # pod 'Firebase/Crashlytics'
   pod 'Firebase/Messaging'
   pod 'Firebase/Core'
-  pod 'Firebase/Firestore'
-  pod 'FirebaseFirestoreSwift'
+  # pod 'Firebase/Firestore'
+  # pod 'FirebaseFirestoreSwift'
 	
 	pod 'IQKeyboardManagerSwift'
 	pod 'THLabel', '~> 1.4.0'
