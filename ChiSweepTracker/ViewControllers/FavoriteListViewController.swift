@@ -73,7 +73,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         if self.addresses.count > 0 {
             
-            let mostRecent = self.addresses.reduce(self.addresses[0], { $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 ? $0 : $1 } )
+            let mostRecent = self.addresses.reduce(self.addresses[0], {
+                $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
+            })
 
             self.tabBarController?.navigationItem.title = "Saved Addresses"
             self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
@@ -110,6 +112,10 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         annotation.coordinate = location.coordinate
                         annotation.subtitle = address.address
                         
+                        self.populateSchedule(address: address.address, goToFavoritePage: false, completion: { schedule in
+                            annotation.schedule = schedule
+                        })
+                        
                         if address.nextSweepDay != nil {
                         
                             let calenderDate = Calendar.current.dateComponents([.day, .year, .month], from: address.nextSweepDay!)
@@ -135,7 +141,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         
                         if self.addresses.count > 1 {
                             if address.nextSweepDay == mostRecent.nextSweepDay {
-                                self.openAnnotation(annotation: annotation)
+                                self.favoriteListMapView.selectAnnotation(annotation, animated: true)
                             }
                         }
                         
@@ -144,8 +150,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                             self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 100.0, left: 60, bottom: 60, right: 60), animated: true)
                         }
                         else if self.addresses.count == 1 {
-                            self.openAnnotation(annotation: annotation)
-                        }
+                            self.favoriteListMapView.selectAnnotation(annotation, animated: true)                        }
                     }
                 }
             }
@@ -170,7 +175,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
     
-    func populateScheduleAndGoToFavoritePage(_ address: String) {
+    func populateSchedule(address: String, goToFavoritePage: Bool, completion: @escaping (ScheduleModel) -> ()) {
         
         let schedule = ScheduleModel()
 
@@ -284,11 +289,16 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                                             schedule.months.append(month)
                                             
                                         }
-                                                                                
+                                        
                                         // Segue to schedule view
-                                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
-                                            destinationViewController.schedule = schedule
-                                            self.navigationController?.pushViewController(destinationViewController, animated: true)
+                                        if goToFavoritePage {
+                                            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                                                destinationViewController.schedule = schedule
+                                                self.navigationController?.pushViewController(destinationViewController, animated: true)
+                                            }
+                                        }
+                                        else {
+                                            completion(schedule)
                                         }
                                                             
                                     }
@@ -305,8 +315,16 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
     
-    func openAnnotation(annotation: MKAnnotation) {
-        self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+        if let annotation = view.annotation as? CustomAnnotation {
+            
+             // Segue to schedule view
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                destinationViewController.schedule = annotation.schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -319,7 +337,14 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         annotationView.image = UIImage(named: customPointAnnotation.customImageName)
         annotationView.centerOffset = CGPoint(x: 0, y: -(annotationView.image!.size.height)/2)
         annotationView.subviews.forEach({ $0.removeFromSuperview() })
-        annotationView.leftCalloutAccessoryView = nil
+        
+        let detailsButton = UIButton()
+        detailsButton.frame.size.width = 35
+        detailsButton.frame.size.height = 35
+        
+        detailsButton.setImage(UIImage(named: "search-red"), for: .normal)
+        
+        annotationView.leftCalloutAccessoryView = detailsButton
         
         return annotationView
     }
@@ -388,7 +413,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         let addressLabel = cell.viewWithTag(1) as! UILabel
         let address = addressLabel.text!.trimmingCharacters(in: .whitespaces)
         
-        self.populateScheduleAndGoToFavoritePage(address)
+        self.populateSchedule(address: address, goToFavoritePage: true, completion: { completion in })
         
     }
     
