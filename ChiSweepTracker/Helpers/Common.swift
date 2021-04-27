@@ -203,6 +203,9 @@ class Common {
                         let address = AddressModel()
                         address.address = item.element["address"]!
                         address.notificationsEnabled = item.element["notificationsEnabled"]!
+                        address.notificationsWhen = item.element["notificationsWhen"]!
+                        address.notificationsHour = item.element["notificationsHour"]!
+                        address.notificationsMinute = item.element["notificationsMinute"]!
                         addresses.append(address)
                     }
                     
@@ -358,7 +361,6 @@ class Common {
                                         else {
                                             completion(nil)
                                         }
-                                        
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
@@ -371,7 +373,6 @@ class Common {
                 }
             }
         }
-        
     }
     
     func deleteAddressFromDatabase(address: String, completion: @escaping (Bool) -> Void)

@@ -62,8 +62,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "712"
-            endingLineNumber = "712"
+            startingLineNumber = "713"
+            endingLineNumber = "713"
             landmarkName = "updateNotifications()"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "789"
-            endingLineNumber = "789"
+            startingLineNumber = "763"
+            endingLineNumber = "763"
             landmarkName = "getSchedule(_:_:_:_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "798"
-            endingLineNumber = "798"
+            startingLineNumber = "772"
+            endingLineNumber = "772"
             landmarkName = "getSchedule(_:_:_:_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "790"
-            endingLineNumber = "790"
+            startingLineNumber = "764"
+            endingLineNumber = "764"
             landmarkName = "getSchedule(_:_:_:_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "800"
-            endingLineNumber = "800"
+            startingLineNumber = "774"
+            endingLineNumber = "774"
             landmarkName = "getSchedule(_:_:_:_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "797"
-            endingLineNumber = "797"
+            startingLineNumber = "771"
+            endingLineNumber = "771"
             landmarkName = "getSchedule(_:_:_:_:_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "435"
-            endingLineNumber = "435"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
             landmarkName = "insertAddressIntoDatabase(address:notificationsEnabled:notificationsWhen:notificationsHour:notificationsMinute:)"
             landmarkType = "7">
             <Locations>
@@ -318,8 +318,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "480"
-            endingLineNumber = "480"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -334,8 +334,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
+            startingLineNumber = "448"
+            endingLineNumber = "448"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -350,8 +350,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "476"
-            endingLineNumber = "476"
+            startingLineNumber = "477"
+            endingLineNumber = "477"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -366,8 +366,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "506"
-            endingLineNumber = "506"
+            startingLineNumber = "507"
+            endingLineNumber = "507"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -382,8 +382,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "528"
-            endingLineNumber = "528"
+            startingLineNumber = "529"
+            endingLineNumber = "529"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -398,8 +398,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "576"
-            endingLineNumber = "576"
+            startingLineNumber = "577"
+            endingLineNumber = "577"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -414,8 +414,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "619"
-            endingLineNumber = "619"
+            startingLineNumber = "620"
+            endingLineNumber = "620"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -430,8 +430,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "859"
-            endingLineNumber = "859"
+            startingLineNumber = "833"
+            endingLineNumber = "833"
             landmarkName = "insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -446,8 +446,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1011"
-            endingLineNumber = "1011"
+            startingLineNumber = "985"
+            endingLineNumber = "985"
             landmarkName = "pushNotificationsTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -462,8 +462,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1028"
-            endingLineNumber = "1028"
+            startingLineNumber = "1002"
+            endingLineNumber = "1002"
             landmarkName = "pushNotificationsTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -478,8 +478,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "726"
-            endingLineNumber = "726"
+            startingLineNumber = "727"
+            endingLineNumber = "727"
             landmarkName = "updateNotifications()"
             landmarkType = "7">
             <Locations>
@@ -622,8 +622,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
+            startingLineNumber = "385"
+            endingLineNumber = "385"
             landmarkName = "deleteAddressFromDatabase(address:completion:)"
             landmarkType = "7">
             <Locations>
@@ -670,8 +670,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "387"
+            endingLineNumber = "387"
             landmarkName = "deleteAddressFromDatabase(address:completion:)"
             landmarkType = "7">
             <Locations>
@@ -718,8 +718,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "getAddresses(address:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -782,8 +782,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "355"
-            endingLineNumber = "355"
+            startingLineNumber = "358"
+            endingLineNumber = "358"
             landmarkName = "getNextSweepDay(address:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -798,8 +798,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
             landmarkName = "getNextSweepDay(address:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -814,8 +814,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
             landmarkName = "loadFavoriteMap()"
             landmarkType = "7">
          </BreakpointContent>
@@ -866,38 +866,6 @@
                   offsetFromSymbolStart = "252">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "69A30ECC-BE45-4564-B45F-5FA453C76F3C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "loadFavoriteMap()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5D0B467A-B632-4F2A-857C-5891F6CF37D2"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "loadFavoriteMap()"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -974,8 +942,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
+            startingLineNumber = "492"
+            endingLineNumber = "492"
             landmarkName = "getDataFromDatabase(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1086,8 +1054,8 @@
             filePath = "ChiSweepTracker/Helpers/Common.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "710"
-            endingLineNumber = "710"
+            startingLineNumber = "711"
+            endingLineNumber = "711"
             landmarkName = "updateNotifications()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1137,6 +1105,118 @@
             startingLineNumber = "48"
             endingLineNumber = "48"
             landmarkName = "getAddresses(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "848836F6-096F-4DBF-8868-355310166754"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/Helpers/Common.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
+            landmarkName = "getAddresses(address:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "32FD6018-57EF-42BF-AE9B-75ED50E58E63"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "488"
+            endingLineNumber = "488"
+            landmarkName = "loadNotificationControlValues()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0E6617D9-4DBE-4126-BA6D-4B0ABCF932DA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
+            landmarkName = "loadNotificationControlValues()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0E6617D9-4DBE-4126-BA6D-4B0ABCF932DA - 2d59b1b460a2f93a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;Sweep_Tracker.AddressModel&gt;) -&gt; () in Sweep_Tracker.FavoriteViewController.loadNotificationControlValues() -&gt; ()"
+                  moduleName = "Sweep Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "506"
+                  endingLineNumber = "506"
+                  offsetFromSymbolStart = "3140">
+               </Location>
+               <Location
+                  uuid = "0E6617D9-4DBE-4126-BA6D-4B0ABCF932DA - b279b191dde4a6be"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Array&lt;Sweep_Tracker.AddressModel&gt;) -&gt; () in Sweep_Tracker.FavoriteViewController.loadNotificationControlValues() -&gt; ()"
+                  moduleName = "Sweep Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "481"
+                  endingLineNumber = "481"
+                  offsetFromSymbolStart = "277">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F8FDC60D-FD17-4465-A578-3417DE0039B0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "497"
+            endingLineNumber = "497"
+            landmarkName = "loadNotificationControlValues()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8E2EEC1D-E790-4197-BBB5-7DDBB09D4902"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/FavoriteViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "493"
+            endingLineNumber = "493"
+            landmarkName = "loadNotificationControlValues()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

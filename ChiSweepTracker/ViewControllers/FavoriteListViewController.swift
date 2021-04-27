@@ -136,21 +136,21 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
                         }
                         
+                        // Set the visible area of the map based on where the annotations are located
+                        if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
+                            let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 80, left: 80, bottom: 80, right: 80), animated: true)
+                        }
+                        // If there is only one address then open the callout by default
+                        else if self.addresses.count == 1 {
+                            self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+                        }
+                        
                         // If the current address in the loop has a sweep day that matches the next sweep day then open the callout by default
                         if self.addresses.count > 1 {
                             if address.nextSweepDay == nextSweepDay.nextSweepDay {
                                 self.favoriteListMapView.selectAnnotation(annotation, animated: true)
                             }
-                        }
-                        
-                        // Set the visible area of the map based on where the annotations are located
-                        if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
-                            let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 100.0, left: 60, bottom: 60, right: 60), animated: true)
-                        }
-                        // If there is only one address then open the callout by default
-                        else if self.addresses.count == 1 {
-                            self.favoriteListMapView.selectAnnotation(annotation, animated: true)
                         }
                     }
                 }

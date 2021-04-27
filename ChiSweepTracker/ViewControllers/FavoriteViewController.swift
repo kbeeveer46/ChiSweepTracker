@@ -64,17 +64,17 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             timePickerHeightConstraint.constant = 60
             whenPickerHeightConstraint.constant = 60
             favoriteStackView.spacing = 0
-//        case .iPhoneSE2:
-//            favoriteMapHeighConstraint.constant = 175
-//        case .iPhone5,
-//             .iPhone5S,
-//             .iPhone5C,
-//             .iPhone6,
-//             .iPhone6S,
-//             .iPhone7,
-//             .iPhone8:
-//            favoriteStackView.spacing = 7
-//            favoriteMapHeighConstraint.constant = 175
+        //        case .iPhoneSE2:
+        //            favoriteMapHeighConstraint.constant = 175
+        //        case .iPhone5,
+        //             .iPhone5S,
+        //             .iPhone5C,
+        //             .iPhone6,
+        //             .iPhone6S,
+        //             .iPhone7,
+        //             .iPhone8:
+        //            favoriteStackView.spacing = 7
+        //            favoriteMapHeighConstraint.constant = 175
         default:
             break
         }
@@ -334,7 +334,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 self.common.deleteAddressFromDatabase(address: self.schedule.address, completion: { message in
                     
                     DispatchQueue.main.async {
-                    
+                        
                         // If on a view with a tab control then use it to go to the favorite list view
                         self.tabBarController?.selectedIndex = 1
                         
@@ -344,7 +344,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         }
                     }
                 })
-                                
+                
             })
             yesAction.setValue(UIColor.red, forKey: "titleTextColor")
             
@@ -477,70 +477,44 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         var when = ""
         var whenIndex = 0
-        var hour = ""
-        var hourInt = 0
-        var minute = ""
-        var minuteInt = 0
+        var hour = 0
+        var minute = 0
         var notificationsToggled = false
         
-        let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
-        let parameters = ["tableName": self.common.constants.addressesDatabaseName, "address": self.schedule.address]
-        
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
-            switch response.result {
-            case .success:
-                if let value = response.data {
+        self.common.getAddresses(address: self.schedule.address, completion: { addresses in
+            
+            if addresses.count > 0 {
+                
+                let address = addresses.first!
+                                
+                notificationsToggled = (address.notificationsEnabled == "1" ? true : false)
+                when = address.notificationsWhen
+                whenIndex = self.whenData.firstIndex(of: when) ?? 0
+                hour = Int(address.notificationsHour)!
+                minute = Int(address.notificationsMinute)!
+                
+                DispatchQueue.main.async {
                     
-                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                    let date = dateFormatter.date(from: "\(hour):\(minute)")
                     
-                    for item in json.enumerated() {
-                        
-                        notificationsToggled = (item.element["notificationsEnabled"]! == "1" ? true : false)
-                        when = item.element["notificationsWhen"]!
-                        whenIndex = self.whenData.firstIndex(of: when) ?? 0
-                        hour = item.element["notificationsHour"]!
-                        minute = item.element["notificationsMinute"]!
-                        
-                        if hour != "" {
-                            hourInt = Int(hour) ?? 0
-                        }
-                        
-                        if minute != "" {
-                            minuteInt = Int(minute) ?? 0
-                        }
-                    }
+                    self.onPicker.selectRow(whenIndex, inComponent: 0, animated: false)
+                    self.onPicker.isUserInteractionEnabled = notificationsToggled
                     
-                    DispatchQueue.main.async {
-                       
-                        let date = dateFormatter.date(from: "\(hourInt):\(minuteInt)")
+                    self.timePicker.date = date!
+                    self.timePicker.addTarget(self, action: #selector(self.timePickerChanged(picker:)), for: .valueChanged)
+                    self.timePicker.isUserInteractionEnabled = notificationsToggled
 
-                        self.onPicker.selectRow(whenIndex, inComponent: 0, animated: false)
-                        self.timePicker.date = date!
-
-                        self.timePicker.addTarget(self, action: #selector(self.timePickerChanged(picker:)), for: .valueChanged)
-
-                        // Get schedule so we have the most update to date version
-                        // Used to pass schedule model to schedule view
-                        // I don't think this is needed anymore after favorite list page was added
-                        self.getSchedule(false)
-
-                        self.pushNotificationsSwitch.isOn = notificationsToggled
-                        self.pushNotificationsSwitch.isUserInteractionEnabled = true
-                        self.onPicker.isUserInteractionEnabled = notificationsToggled
-                        self.timePicker.isUserInteractionEnabled = notificationsToggled
-
-                        self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
-
-                        if self.tabBarController == nil {
-                            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
-                        }
+                    self.pushNotificationsSwitch.isOn = notificationsToggled
+                    self.pushNotificationsSwitch.isUserInteractionEnabled = true
+                    
+                    self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+                    
+                    if self.tabBarController == nil {
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
                     }
                 }
-            case .failure(let error):
-            print(error)
             }
-        }
-    
+        })
     }
     
     // Save form values to defaults
@@ -560,7 +534,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                           "notificationsHour": hour,
                           "notificationsMinute": minute,
                           "notificationsEnabled": self.pushNotificationsSwitch.isOn == true ? 1 : 0] as [String : Any]
-
+        
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
         
     }
@@ -857,18 +831,18 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func insertNotificatinIntoDatabase(address: String, notificationTime: String, sweepDay: String, tableName: String) {
         
         if self.common.notificationOneSignalPlayerId() != "" {
-        
+            
             let host = self.common.constants.websiteURL + "/insert-notification.php"
             let url = NSURL(string: host)
             var request = URLRequest(url: url! as URL)
             request.httpMethod = "POST"
-                            
+            
             var params = "playerId=\(self.common.notificationOneSignalPlayerId())"
             params += "&address=\(address)"
             params += "&notificationTime=\(notificationTime)"
             params += "&sweepDay=\(sweepDay)"
             params += "&tableName=\(tableName)"
-                
+            
             let data = params.data(using: .utf8)
             do
             {
