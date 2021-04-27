@@ -565,21 +565,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
     }
     
-//    func updateAddressInDatabase(address: String, when: String, hour: Int, minute: Int, enabled: Int) {
-//
-//        let urlTo = self.common.constants.websiteURL + "/update-address.php"
-//        let parameters = ["tableName": self.common.constants.addressesDatabaseName,
-//                          "uuid": self.common.deviceUUID(),
-//                          "address": address,
-//                          "notificationsWhen": when,
-//                          "notificationsHour": hour,
-//                          "notificationsMinute": minute,
-//                          "notificationsEnabled": enabled] as [String : Any]
-//
-//        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
-//
-//    }
-    
     // Populate schedule model and add notifications if applicable
     // useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
     func getSchedule(_ registerForPushNotifications: Bool,

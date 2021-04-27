@@ -107,7 +107,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             let addresses = completion
             var schedules = [ScheduleModel]()
             var sweepDates = [Date]()
-            
             let group = DispatchGroup()
             
             for (_, element) in addresses.enumerated() {
@@ -356,12 +355,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         }
                                         
                                         completion(self.schedule)
-                                        
-//										// Segue to schedule view
-//                                        if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-//                                            destinationViewController.schedule = self.schedule
-//                                            self.navigationController?.pushViewController(destinationViewController, animated: true)
-//                                        }
                                 
                                     }
                                 case .error (let err):

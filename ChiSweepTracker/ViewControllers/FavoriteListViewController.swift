@@ -45,9 +45,21 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             case .success (let data):
                 
                 self.addresses = data
+                let group = DispatchGroup()
                 
-                completion(true)
+                for address in self.addresses {
                 
+                    group.enter()
+                    
+                    self.common.getNextSweepDay(address: address.address, completion: { date in
+                        address.nextSweepDay = date
+                        group.leave()
+                    })
+                }
+                
+                group.notify(queue: .main) {
+                    completion(true)
+                }
             }
         }
     }
@@ -61,6 +73,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         if self.addresses.count > 0 {
             
+            let mostRecent = self.addresses.reduce(self.addresses[0], { $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 ? $0 : $1 } )
+
             self.tabBarController?.navigationItem.title = "Saved Addresses"
             self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
 
@@ -94,7 +108,13 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         let annotation = CustomAnnotation()
                         annotation.customImageName = "pin-address"
                         annotation.coordinate = location.coordinate
-                        annotation.title = address.address
+                        annotation.subtitle = address.address
+                        
+                        if address.nextSweepDay != nil {
+                        
+                            let calenderDate = Calendar.current.dateComponents([.day, .year, .month], from: address.nextSweepDay!)
+                            annotation.title = "Next Sweep: \(calenderDate.month!)/\(calenderDate.day!)/\(calenderDate.year!)"
+                        }
                         
                         // Add annoation to map
                         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
@@ -113,11 +133,18 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
                         }
                         
+                        if self.addresses.count > 1 {
+                            if address.nextSweepDay == mostRecent.nextSweepDay {
+                                self.openAnnotation(annotation: annotation)
+                            }
+                        }
+                        
                         if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
-                            
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: true)
-                            
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 100.0, left: 60, bottom: 60, right: 60), animated: true)
+                        }
+                        else if self.addresses.count == 1 {
+                            self.openAnnotation(annotation: annotation)
                         }
                     }
                 }
@@ -278,6 +305,10 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
     
+    func openAnnotation(annotation: MKAnnotation) {
+        self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+    }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
@@ -317,7 +348,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         self.favoriteListTableView.deleteRows(at: [indexPath], with: .automatic)
                         self.favoriteListTableView.endUpdates()
                         self.loadFavoriteMap()
-                        //self.getAddresses(completion: { completion in })
                     }
  
                 })

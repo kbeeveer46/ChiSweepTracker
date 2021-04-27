@@ -175,13 +175,21 @@
          contextName = "FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.constants.websiteURL">
+               value = "self.common.notificationOneSignalPlayerId()">
             </PersistentString>
             <PersistentString
                value = "&quot;\(self.common.constants.websiteURL)/insert-notification.php?playerId=\(self.common.notificationOneSignalPlayerId())&amp;address=\(address)&amp;notificationTime=\(notificationTime)&amp;sweepDay=\(sweepDay)&amp;tableName=\(tableName)&quot;">
             </PersistentString>
             <PersistentString
-               value = "self.common.notificationOneSignalPlayerId()">
+               value = "self.common.constants.websiteURL">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in Common.getNextSweepDay(address:completion:):Common.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "earliest">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -208,15 +216,15 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "InfoViewController.tableView(_:numberOfRowsInSection:):InfoViewController.swift">
-      </ContextState>
-      <ContextState
          contextName = "closure #1 in SearchViewController.getNextSweepingDate():SearchViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "completion.enumerated()">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "InfoViewController.tableView(_:numberOfRowsInSection:):InfoViewController.swift">
       </ContextState>
       <ContextState
          contextName = "SearchViewController.showStatusMessage():SearchViewController.swift">

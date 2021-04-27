@@ -212,6 +212,168 @@ class Common {
         }
     }
     
+    func getNextSweepDay(address: String, completion: @escaping (Date?) -> ()) {
+        
+        let schedule = ScheduleModel()
+        var sweepDates = [Date]()
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        let currentDay = Calendar.current.component(.day, from: Date())
+
+        schedule.address = address
+        
+        // Get coordinates from address
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            
+            // No internet connection will cause an error
+            if error != nil {
+                return
+            }
+            
+            if placemarks != nil {
+            
+                // Get first placemark in list
+                let placemark = placemarks?.first
+                
+                // Create coorindates from placemark
+                var coordinates = CLLocationCoordinate2D()
+                coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
+                coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
+                
+                // Set schedule location coordinates
+                schedule.locationCoordinate = coordinates
+                                
+                // Create SODA client using domain and token
+                let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+                
+                // Query SODA API to get ward and section
+                let wardQuery = wardClient.query(dataset: self.wardDataset())
+                    .filter("intersects(\(self.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
+                    .limit(1)
+                
+                wardQuery.get { res in
+                    switch res {
+                    case .dataset (let data):
+                        
+                        if data.count > 0 {
+                            
+                            // Get values from json query
+                            let ward = data[0][self.wardTitle()] as? String ?? ""
+                            let section = data[0][self.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.coordinatesTitle()] as? NSMutableArray
+                            let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                            
+                            // Loop through coordinates array
+                            for(_, coordinate) in coordinatesArray!.enumerated() {
+                                
+                                // Loop through each pair of coordinates
+                                for item in coordinate {
+                                    
+                                    // Create coorindate from lat and long in array
+                                    var coordinate = CLLocationCoordinate2D()
+                                    coordinate.longitude = item[0] as? Double ?? 0
+                                    coordinate.latitude = item[1] as? Double ?? 0
+                                    
+                                    // Add coordinates to schedule polygon coordinates
+                                    schedule.polygonCoordinates.append(coordinate)
+                                 
+                                }
+                            }
+                            
+                            // Set schedule ward and section
+                            schedule.ward = ward
+                            schedule.section = String(section).trimmingCharacters(in: .whitespaces)
+                            
+                            // Query SODA API to get months and days
+                            let scheduleQuery = wardClient.query(dataset: self.scheduleDataset())
+                                .filter("\(self.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.sectionTitle()) = '\(section)'" : "") ")
+                                .orderAscending(self.monthNumberTitle())
+                            
+                            scheduleQuery.get { res in
+                                switch res {
+                                case .dataset (let data):
+                                    
+                                    if data.count > 0 {
+                                        
+                                        // Loop through months
+                                        for (_, item) in data.enumerated() {
+                                            
+                                            // Get values from json data
+                                            let monthName = item[self.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.dates()] as? String ?? ""
+                                            let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
+                                            
+                                            // Create month object
+                                            let month = MonthModel()
+                                            month.name = monthName
+                                            month.number = monthNumber
+                                            
+                                            // Loop through dates
+                                            for day in datesArray {
+                                                
+                                                // Add date to month
+                                                if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                                    
+                                                    let date = DateModel()
+                                                    date.date = Int(day) ?? 0
+                                                    
+                                                    if !month.dates.contains(where: { $0.date == Int(day) ?? 0}) {
+                                                        month.dates.append(date)
+                                                    }
+                                                }
+                                            }
+                                            
+                                            // Add month to schedule
+                                            schedule.months.append(month)
+                                            
+                                        }
+                                             
+                                        for month in schedule.months {
+                                            
+                                            for date in month.dates {
+                                            
+                                                if Int(month.number)! > currentMonth ||
+                                                    Int(month.number) == currentMonth && date.date >= currentDay {
+                                                
+                                                    // Specify date components
+                                                    var dateComponents = DateComponents()
+                                                    dateComponents.year = self.latestAppVersion()
+                                                    dateComponents.month = Int(month.number)
+                                                    dateComponents.day = date.date
+
+                                                    // Create date from components
+                                                    let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
+                                                    let sweepDay = userCalendar.date(from: dateComponents)
+                                                    sweepDates.append(sweepDay!)
+                                                    
+                                                }
+                                            }
+                                        }
+                                        
+                                        if let earliest = sweepDates.min() {
+                                            completion(earliest)
+                                        }
+                                        else {
+                                            completion(nil)
+                                        }
+                                        
+                                    }
+                                case .error (let err):
+                                    print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
+                                }
+                            }
+                        }
+                    case .error (let err):
+                        print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
+                    }
+                }
+            }
+        }
+        
+    }
+    
     func deleteAddressFromDatabase(address: String, completion: @escaping (Bool) -> Void)
     {
         let urlTo = self.constants.websiteURL + "/delete-address.php"
