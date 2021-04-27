@@ -530,7 +530,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="aHE-iZ-8Xz">
                                                                     <rect key="frame" x="5" y="0.0" width="364" height="43"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="house_alt" translatesAutoresizingMaskIntoConstraints="NO" id="S6K-D4-U3J">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="S6K-D4-U3J">
                                                                             <rect key="frame" x="0.0" y="0.0" width="20" height="43"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="Bx1-Ob-jbh"/>

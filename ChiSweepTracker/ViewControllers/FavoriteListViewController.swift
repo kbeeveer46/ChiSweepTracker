@@ -367,16 +367,16 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         // Get cell from table view
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteListTableCell", for: indexPath)
         
-        // Get labels from cell
+        // Get views from cell
         let addressLabel = cell.viewWithTag(1) as! UILabel
         let image = cell.viewWithTag(2) as! UIImageView
         
         let notificationsEnabled = addresses[indexPath.row].notificationsEnabled == "1" ? true : false
-        if notificationsEnabled {
-            image.image = UIImage(named: "house_alt_green")
+        if notificationsEnabled == false {
+            image.isHidden = true
         }
         else {
-            image.image = UIImage(named: "house_alt")
+            image.isHidden = false
         }
 
         // Set label text
