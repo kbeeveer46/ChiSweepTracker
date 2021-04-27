@@ -20,7 +20,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
 	// Shared
 	let locationManager = CLLocationManager()
-    var addressFromNotification = ""
+    //var addressFromNotification = ""
     var addressFromTextField = ""
     var addressFromCoordinates = ""
 	let currentDay = Calendar.current.component(.day, from: Date())
@@ -33,16 +33,17 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         super.viewWillAppear(animated)
         
         // Go to schedule page if opened from a notification
-        if (self.addressFromNotification != "") {
-            let address = self.addressFromNotification
-            self.addressFromNotification = ""
-            self.searchForSchedule(address, completion: { schedule in
-                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                    destinationViewController.schedule = schedule
-                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-                }
-            })
-        }
+        // I don't think this is required anymore after adding code in AppDelegate
+//        if (self.addressFromNotification != "") {
+//            let address = self.addressFromNotification
+//            self.addressFromNotification = ""
+//            self.searchForSchedule(address, completion: { schedule in
+//                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//                    destinationViewController.schedule = schedule
+//                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+//                }
+//            })
+//        }
         
 		// Show finished schedule button if month is < 4 or greater than 11
 		self.showStatusMessage()
@@ -98,6 +99,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
 	
+    // Get all addresses and find the next sweeping day
 	func getNextSweepingDate() {
 
 		self.messageCardView.isHidden = true
@@ -113,7 +115,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
                 group.enter()
                 
-                self.searchForSchedule(element.address, completion: { schedule in
+                self.populateSchedule(element.address, completion: { schedule in
                     schedules.append(schedule)
                     group.leave()
                 })
@@ -164,16 +166,16 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 
     // Search for schedule when message card view is tapped
     // This doesn't work with multiple addresses
-    @objc func handleMessageCardViewTap(sender: UITapGestureRecognizer) {
-        if (self.common.favoriteAddress() != "") {
-            self.searchForSchedule(self.common.favoriteAddress(), completion: { schedule in
-                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                    destinationViewController.schedule = schedule
-                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-                }
-            })
-        }
-    }
+//    @objc func handleMessageCardViewTap(sender: UITapGestureRecognizer) {
+//        if (self.common.favoriteAddress() != "") {
+//            self.searchForSchedule(self.common.favoriteAddress(), completion: { schedule in
+//                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//                    destinationViewController.schedule = schedule
+//                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+//                }
+//            })
+//        }
+//    }
     
     // Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
@@ -220,7 +222,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
     
 	// Search for schedule when search button is tapped
-    func searchForSchedule(_ address: String, completion: @escaping (ScheduleModel)->()) {
+    func populateSchedule(_ address: String, completion: @escaping (ScheduleModel)->()) {
         
 		// Clear all months and polygons so there are no duplicates
         self.schedule.months.removeAll()
@@ -649,7 +651,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		defaults.set(address, forKey: "defaultAddress")
 		
 		// Find address and go to select section view or schedule view
-        self.searchForSchedule(address, completion: { schedule in
+        self.populateSchedule(address, completion: { schedule in
             if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
                 destinationViewController.schedule = schedule
                 self.navigationController?.pushViewController(destinationViewController, animated: true)

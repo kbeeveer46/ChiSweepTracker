@@ -19,8 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-            defaults.set(uuid, forKey: "deviceUUID")
+        // Get UUID and save it to defaults so it can be used throughout the app and database
+        if self.common.deviceUUID() == "" {
+            if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+                defaults.set(uuid, forKey: "deviceUUID")
+            }
+            else {
+                defaults.set(UUID().uuidString, forKey: "deviceUUID")
+            }
         }
         
 		// Configure Firebase
@@ -49,15 +55,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         OneSignal.add(self as OSSubscriptionObserver)
         OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
         
-        // This code is required for old users migrating to multiple address
-        // Do not remove
-        
+        // Testing code for when old users migrate to the new app with multiple addresses
 //        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
 //        defaults.set(true, forKey: "notificationsToggled")
 //        defaults.set("1 Day Prior", forKey: "notificationWhen")
 //        defaults.set(8, forKey: "notificationHour")
 //        defaults.set(30, forKey: "notificationMinute")
         
+        // Do not remove. This code is required for old users migrating to the new app with multiple address
         let favoriteAddress = self.common.favoriteAddress()
         
         if favoriteAddress != "" {
@@ -69,8 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                                                   notificationsHour: self.common.notificationHour(),
                                                   notificationsMinute: self.common.notificationMinute())
             
+            // Get users' addresses and insert notifications in the database
             self.common.updateNotifications()
             
+            // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
             defaults.set("", forKey: "favoriteAddress")
         }
         
@@ -81,49 +88,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if granted == false  {
                 
                 OneSignal.disablePush(true);
-                print("OneSignal disabled")
+                //print("OneSignal disabled")
                 
+                // Unregister for Firebase Cloud Messaging and APN notifications
                 DispatchQueue.main.async {
-                    // Unregister for Firebase Cloud Messaging and APN notifications
                     UIApplication.shared.unregisterForRemoteNotifications()
                 }
-                
             }
             else {
                 
                 OneSignal.disablePush(false);
-                print("OneSignal enabled")
+                //print("OneSignal enabled")
                 
+                // Register for Firebase Cloud Messaging and APN notifications
                 DispatchQueue.main.async {
-                    // Register for Firebase Cloud Messaging and APN notifications
                     UIApplication.shared.registerForRemoteNotifications()
                 }
-                
             }
         }
         
         return true
     }
     
-    // This method will be called when the notification subscription property changes.
+    // This method will be called when the OneSignal notification subscription property changes.
     func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges) {
         
         if !stateChanges.from.isSubscribed && stateChanges.to.isSubscribed {
             
-            print("Subscribed for OneSignal push notifications!")
+            //print("Subscribed for OneSignal push notifications!")
             
             if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
                 
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
                 defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
-                
+             
                 self.common.updateNotifications()
             }
-            
         }
         
         if stateChanges.from.isSubscribed && !stateChanges.to.isSubscribed {
-            print("Unsubscribed for OneSignal push notifications!")
+            //print("Unsubscribed for OneSignal push notifications!")
         }
     
     }
@@ -133,6 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
         
+        // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it.
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { (settings) in
             if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
@@ -189,11 +194,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         		
-		let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         
-        let token = tokenParts.joined()
+        //let token = tokenParts.joined()
         
-        print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
+        //print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
         
     }
     
@@ -258,20 +263,17 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         let userInfo = response.notification.request.content.userInfo
         
-        // Print full message.
         //print(userInfo)
         
         // Send the user to the updates tab by default
-		//if userInfo[gcmMessageIDKey] != nil {
-            if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-				if let navigationController = rootViewController as? UINavigationController {
-					if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
-						tabBarController.selectedIndex = 3
-					}
-				}
-			}
-        //}
-		
+        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+            if let navigationController = rootViewController as? UINavigationController {
+                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
+                    tabBarController.selectedIndex = 3
+                }
+            }
+        }
+        		
         // If the clicks on a sweep notification then get the schedule and redirect them to the schedule page
 		if let address = userInfo["address"] as? String {
 			if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
@@ -280,7 +282,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 		}
         
         completionHandler()
-        
     }
 }
 
@@ -293,13 +294,12 @@ extension AppDelegate: MessagingDelegate {
 		
         if fcmToken != nil {
         
-            print("didReceiveRegistrationToken: \(fcmToken!)")
+            //print("didReceiveRegistrationToken: \(fcmToken!)")
             
             let dataDict:[String: String] = ["token": fcmToken!]
             
             NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
             
         }
-  
     }
 }

@@ -5,13 +5,17 @@ import Alamofire
 
 class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate  {
 
+    // Controls
     @IBOutlet weak var favoriteListMapView: MKMapView!
     @IBOutlet weak var favoriteListTableView: UITableView!
     @IBOutlet weak var favoriteListViewHeaderLabel: UILabel!
     
-    let generator = UISelectionFeedbackGenerator()
+    // Classes
     let common = Common()
     var addresses = [AddressModel]()
+    
+    // Shared
+    let generator = UISelectionFeedbackGenerator()
     var favoriteAddresses = [[String]]()
     var mapLocations = [CLLocationCoordinate2D]()
     
@@ -22,6 +26,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
         
+        // Get addresses from database and use the data in the map and table
         self.getAddresses(completion: { message in
             
             DispatchQueue.main.async {
@@ -35,33 +40,25 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     func getAddresses(completion: @escaping (_ message: Bool) -> Void) {
         
-        let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
-        let parameters = ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]
-        
-        AF.request(urlTo, parameters: parameters).validate().responseDecodable { (response: DataResponse<[AddressModel], AFError>) in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success (let data):
+        self.common.getAddresses(completion: { addresses in
+            
+            self.addresses = addresses
+            let group = DispatchGroup()
+            
+            for address in self.addresses {
+            
+                group.enter()
                 
-                self.addresses = data
-                let group = DispatchGroup()
-                
-                for address in self.addresses {
-                
-                    group.enter()
-                    
-                    self.common.getNextSweepDay(address: address.address, completion: { date in
-                        address.nextSweepDay = date
-                        group.leave()
-                    })
-                }
-                
-                group.notify(queue: .main) {
-                    completion(true)
-                }
+                self.common.getNextSweepDay(address: address.address, completion: { date in
+                    address.nextSweepDay = date
+                    group.leave()
+                })
             }
-        }
+            
+            group.notify(queue: .main) {
+                completion(true)
+            }
+        })
     }
     
     // Load map with default lat, long, and polygon coordinates or load Chicago map
@@ -73,12 +70,12 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         if self.addresses.count > 0 {
             
-            let mostRecent = self.addresses.reduce(self.addresses[0], {
-                $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
-            })
-
             self.tabBarController?.navigationItem.title = "Saved Addresses"
             self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications.\nClick on magnifying glass to view schedule."
+            
+            let nextSweepDay = self.addresses.reduce(self.addresses[0], {
+                $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
+            })
 
             self.mapLocations.removeAll()
         
@@ -112,15 +109,15 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         annotation.coordinate = location.coordinate
                         annotation.subtitle = address.address
                         
-                        self.populateSchedule(address: address.address, goToFavoritePage: false, completion: { schedule in
-                            annotation.schedule = schedule
-                        })
-                        
                         if address.nextSweepDay != nil {
-                        
                             let calenderDate = Calendar.current.dateComponents([.day, .year, .month], from: address.nextSweepDay!)
                             annotation.title = "Next Sweep: \(calenderDate.month!)/\(calenderDate.day!)/\(calenderDate.year!)"
                         }
+                        
+                        // Populate schedule based on address. This is so the user can click on the callout and go to schedule page
+                        self.populateSchedule(address: address.address, goToFavoritePage: false, completion: { schedule in
+                            annotation.schedule = schedule
+                        })
                         
                         // Add annoation to map
                         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
@@ -139,18 +136,22 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
                         }
                         
+                        // If the current address in the loop has a sweep day that matches the next sweep day then open the callout by default
                         if self.addresses.count > 1 {
-                            if address.nextSweepDay == mostRecent.nextSweepDay {
+                            if address.nextSweepDay == nextSweepDay.nextSweepDay {
                                 self.favoriteListMapView.selectAnnotation(annotation, animated: true)
                             }
                         }
                         
+                        // Set the visible area of the map based on where the annotations are located
                         if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
                             self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 100.0, left: 60, bottom: 60, right: 60), animated: true)
                         }
+                        // If there is only one address then open the callout by default
                         else if self.addresses.count == 1 {
-                            self.favoriteListMapView.selectAnnotation(annotation, animated: true)                        }
+                            self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+                        }
                     }
                 }
             }
@@ -341,7 +342,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         let detailsButton = UIButton()
         detailsButton.frame.size.width = 35
         detailsButton.frame.size.height = 35
-        
         detailsButton.setImage(UIImage(named: "search-red"), for: .normal)
         
         annotationView.leftCalloutAccessoryView = detailsButton
@@ -374,9 +374,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         self.favoriteListTableView.endUpdates()
                         self.loadFavoriteMap()
                     }
- 
                 })
-                                
             })
             yesAction.setValue(UIColor.red, forKey: "titleTextColor")
             
@@ -392,10 +390,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
         
-    // Months/Days table view methods
+    // Table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        //return favoriteAddresses.filter { $0[0] != "" }.count
         return self.addresses.count
         
     }

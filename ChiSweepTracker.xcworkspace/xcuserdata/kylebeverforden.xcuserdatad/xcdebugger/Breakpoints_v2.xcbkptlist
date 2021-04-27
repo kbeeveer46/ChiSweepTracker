@@ -78,58 +78,10 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "84B7A774-E9F5-42B9-B293-54B03A50641A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "getAddresses(completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "84B7A774-E9F5-42B9-B293-54B03A50641A - 342035bb4f161860"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Sweep_Tracker.FavoriteListViewController.getAddresses(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "Sweep Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "41"
-                  endingLineNumber = "41"
-                  offsetFromSymbolStart = "604">
-               </Location>
-               <Location
-                  uuid = "84B7A774-E9F5-42B9-B293-54B03A50641A - f56ac087942adee6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Swift.Array&lt;Sweep_Tracker.AddressModel&gt;, Alamofire.AFError&gt;) -&gt; () in Sweep_Tracker.FavoriteListViewController.getAddresses(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "Sweep Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "248">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -142,8 +94,8 @@
             filePath = "ChiSweepTracker/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -238,8 +190,8 @@
             filePath = "ChiSweepTracker/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -759,22 +711,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "81D024C8-1D76-4D92-93FF-F620049D4589"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "getAddresses(completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "51C5E5A9-FFA0-4E3E-9DA2-B3D3D33D4FAE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -798,25 +734,9 @@
             filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "getNextSweepingDate()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3CB1B189-CFD0-4351-BA05-FC23372ED786"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "getAddresses(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -830,8 +750,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "429"
-            endingLineNumber = "429"
+            startingLineNumber = "426"
+            endingLineNumber = "426"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -846,8 +766,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "427"
-            endingLineNumber = "427"
+            startingLineNumber = "424"
+            endingLineNumber = "424"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -871,22 +791,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F1F12458-1A26-4957-AF63-D068845E1F7D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "loadFavoriteMap()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6CE71A99-BC94-4812-873A-BB584BE40A58"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -898,54 +802,6 @@
             endingLineNumber = "222"
             landmarkName = "getNextSweepDay(address:completion:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1DC2CD25-8F72-45D9-86E3-D69B8FE623A2"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "getAddresses(completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1DC2CD25-8F72-45D9-86E3-D69B8FE623A2 - f56ac087942add30"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Swift.Array&lt;Sweep_Tracker.AddressModel&gt;, Alamofire.AFError&gt;) -&gt; () in Sweep_Tracker.FavoriteListViewController.getAddresses(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "Sweep Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "60"
-                  endingLineNumber = "60"
-                  offsetFromSymbolStart = "1084">
-               </Location>
-               <Location
-                  uuid = "1DC2CD25-8F72-45D9-86E3-D69B8FE623A2 - 46b522f4317ee8f4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 () -&gt; () in closure #1 (Alamofire.DataResponse&lt;Swift.Array&lt;Sweep_Tracker.AddressModel&gt;, Alamofire.AFError&gt;) -&gt; () in Sweep_Tracker.FavoriteListViewController.getAddresses(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "Sweep Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "61"
-                  endingLineNumber = "61"
-                  offsetFromSymbolStart = "40">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1022,8 +878,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
             landmarkName = "loadFavoriteMap()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1038,8 +894,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "loadFavoriteMap()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1054,8 +910,8 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "mapView(_:annotationView:calloutAccessoryControlTapped:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1070,9 +926,217 @@
             filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "loadFavoriteMap()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E1276A2C-5829-4747-8064-BDADFA1D771F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/AppDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "onOSSubscriptionChanged(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8485E8F6-9735-4700-BD02-DA588F7E33AB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/AppDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "39B421FF-A21F-487F-A7AA-138ADFCE8E58"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/Helpers/Common.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "491"
+            endingLineNumber = "491"
+            landmarkName = "getDataFromDatabase(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ED8B76BA-9F9B-4CFE-9004-1F4ACD31B7CE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/AppDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "applicationDidBecomeActive(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "ED8B76BA-9F9B-4CFE-9004-1F4ACD31B7CE - 63d5785aaf3873e8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Sweep_Tracker.AppDelegate.applicationDidBecomeActive(__C.UIApplication) -&gt; ()"
+                  moduleName = "Sweep Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/AppDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "149"
+                  endingLineNumber = "149"
+                  offsetFromSymbolStart = "275">
+               </Location>
+               <Location
+                  uuid = "ED8B76BA-9F9B-4CFE-9004-1F4ACD31B7CE - 49abf42b18eb18c1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.String) -&gt; () in Sweep_Tracker.AppDelegate.applicationDidBecomeActive(__C.UIApplication) -&gt; ()"
+                  moduleName = "Sweep Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/AppDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "149"
+                  endingLineNumber = "149"
+                  offsetFromSymbolStart = "19">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "13E8244F-32FE-4451-BBDE-4F4B46C97BA7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/SceneDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "sceneDidBecomeActive(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "13E8244F-32FE-4451-BBDE-4F4B46C97BA7 - b4ef611b76fe795f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Sweep_Tracker.SceneDelegate.sceneDidBecomeActive(__C.UIScene) -&gt; ()"
+                  moduleName = "Sweep Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/SceneDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "113">
+               </Location>
+               <Location
+                  uuid = "13E8244F-32FE-4451-BBDE-4F4B46C97BA7 - e2fdcb750a0e7574"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.String) -&gt; () in Sweep_Tracker.SceneDelegate.sceneDidBecomeActive(__C.UIScene) -&gt; ()"
+                  moduleName = "Sweep Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kylebeverforden/Google%20Drive/ChiSweepTracker/ChiSweepTracker/SceneDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "19">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "035B0816-B464-4740-8D6D-1095271C322C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/Helpers/Common.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "710"
+            endingLineNumber = "710"
+            landmarkName = "updateNotifications()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7B1DD642-0F94-49A0-88A8-BCBCD1F0B45B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
+            landmarkName = "populateSchedule(_:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8C756B8B-12FD-4D1C-A4BD-43BECD6EA176"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
+            landmarkName = "populateSchedule(_:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0881D550-47FF-4010-A53F-D92B442CA97E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChiSweepTracker/ViewControllers/FavoriteListViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "getAddresses(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
