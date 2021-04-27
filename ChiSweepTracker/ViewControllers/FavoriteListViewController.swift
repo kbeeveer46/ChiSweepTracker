@@ -11,7 +11,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     let generator = UISelectionFeedbackGenerator()
     let common = Common()
-    var addresses = [String]()
+    var addresses = [AddressModel]()
     var favoriteAddresses = [[String]]()
     var mapLocations = [CLLocationCoordinate2D]()
     
@@ -25,15 +25,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.getAddresses(completion: { message in
             
             DispatchQueue.main.async {
-            
-                if self.addresses.count == 0 {
-                    self.tabBarController?.navigationItem.title = "No Saved Addresses"
-                    self.favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
-                }
-                else {
-                    self.tabBarController?.navigationItem.title = "Saved Addresses"
-                    self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
-                }
                 
                 self.favoriteListTableView.reloadData()
                 self.loadFavoriteMap()
@@ -47,23 +38,16 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.deviceUUID()]
         
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+        AF.request(urlTo, parameters: parameters).validate().responseDecodable { (response: DataResponse<[AddressModel], AFError>) in
             switch response.result {
             case .failure(let error):
                 print(error)
-            case .success:
-                if let value = response.data {
-                    
-                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    
-                    self.addresses.removeAll()
-                    
-                    for item in json.enumerated() {
-                        self.addresses.append(item.element["address"]!)
-                    }
-                    
-                    completion(true)
-                }
+            case .success (let data):
+                
+                self.addresses = data
+                
+                completion(true)
+                
             }
         }
     }
@@ -76,6 +60,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
         if self.addresses.count > 0 {
+            
+            self.tabBarController?.navigationItem.title = "Saved Addresses"
+            self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
 
             self.mapLocations.removeAll()
         
@@ -83,7 +70,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                                           
                 // Get coordinates from address
                 let geocoder = CLGeocoder()
-                geocoder.geocodeAddressString(address) { placemarks, error in
+                geocoder.geocodeAddressString(address.address) { placemarks, error in
                     
                     // No internet connection will cause an error
                     if error != nil {
@@ -107,7 +94,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         let annotation = CustomAnnotation()
                         annotation.customImageName = "pin-address"
                         annotation.coordinate = location.coordinate
-                        annotation.title = address
+                        annotation.title = address.address
                         
                         // Add annoation to map
                         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
@@ -129,7 +116,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
                             
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: false)
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 60.0, left: 60.0, bottom: 60.0, right: 60.0), animated: true)
                             
                         }
                     }
@@ -137,6 +124,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             }
         }
         else {
+            
+            self.tabBarController?.navigationItem.title = "No Saved Addresses"
+            self.favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
             
             // Create map span using Chicago
             let span = MKCoordinateSpan(latitudeDelta: 0.45, longitudeDelta: 0.45)
@@ -308,10 +298,10 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if (editingStyle == .delete) {
-            // handle delete (by removing the data from your array and updating the tableview)
-            
-            let address = self.addresses[indexPath.row]
+                    
+            let address = self.addresses[indexPath.row].address
             
             // Create remove favorite alert
             let removeFavoriteAlert = UIAlertController(title: "Are you sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
@@ -327,12 +317,11 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         self.favoriteListTableView.deleteRows(at: [indexPath], with: .automatic)
                         self.favoriteListTableView.endUpdates()
                         self.loadFavoriteMap()
+                        //self.getAddresses(completion: { completion in })
                     }
  
                 })
-                
-                self.common.deleteNotificationsFromDatabase(address, self.common.constants.notificationsDatabaseName, completion: {completion in })
-                
+                                
             })
             yesAction.setValue(UIColor.red, forKey: "titleTextColor")
             
@@ -380,10 +369,18 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         // Get labels from cell
         let addressLabel = cell.viewWithTag(1) as! UILabel
+        let image = cell.viewWithTag(2) as! UIImageView
+        
+        let notificationsEnabled = addresses[indexPath.row].notificationsEnabled == "1" ? true : false
+        if notificationsEnabled {
+            image.image = UIImage(named: "house_alt_green")
+        }
+        else {
+            image.image = UIImage(named: "house_alt")
+        }
 
         // Set label text
-        addressLabel.text = self.addresses[indexPath.row]
-        //addressLabel.text = self.favoriteAddresses[indexPath.row][0]
+        addressLabel.text = self.addresses[indexPath.row].address
 
         return cell
         

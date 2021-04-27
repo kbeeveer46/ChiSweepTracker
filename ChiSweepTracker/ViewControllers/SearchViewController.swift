@@ -102,23 +102,19 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 
 		self.messageCardView.isHidden = true
         
-        var addresses = [String]() 
-        var schedules = [ScheduleModel]()
-        var sweepDates = [Date]()
-        
         self.common.getAddresses(completion: {completion in
         
-            let group = DispatchGroup()
+            let addresses = completion
+            var schedules = [ScheduleModel]()
+            var sweepDates = [Date]()
             
-            for address in completion.enumerated() {
-                addresses.append(address.element)
-            }
+            let group = DispatchGroup()
             
             for (_, element) in addresses.enumerated() {
                 
                 group.enter()
                 
-                self.searchForSchedule(element, completion: { schedule in
+                self.searchForSchedule(element.address, completion: { schedule in
                     schedules.append(schedule)
                     group.leave()
                 })

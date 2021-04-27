@@ -344,9 +344,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         }
                     }
                 })
-                
-                self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
-                
+                                
             })
             yesAction.setValue(UIColor.red, forKey: "titleTextColor")
             

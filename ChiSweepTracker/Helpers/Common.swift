@@ -176,9 +176,9 @@ class Common {
         }
     }
     
-    func getAddresses(address: String = "", completion: @escaping (_ message: [String]) -> ()) {
+    func getAddresses(address: String = "", completion: @escaping (_ message: [AddressModel]) -> ()) {
         
-        var addresses = [String]()
+        var addresses = [AddressModel]()
         var parameters = [String: String]()
         let urlTo = self.constants.websiteURL + "/get-address-data.php"
         
@@ -199,7 +199,11 @@ class Common {
                     let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
                     
                     for item in json.enumerated() {
-                        addresses.append(item.element["address"]!)
+                        
+                        let address = AddressModel()
+                        address.address = item.element["address"]!
+                        address.notificationsEnabled = item.element["notificationsEnabled"]!
+                        addresses.append(address)
                     }
                     
                     completion(addresses)
@@ -208,32 +212,46 @@ class Common {
         }
     }
     
-    func deleteAddressFromDatabase(address: String, completion: @escaping (_ message: Bool) -> Void)
+    func deleteAddressFromDatabase(address: String, completion: @escaping (Bool) -> Void)
     {
-        let host = self.constants.websiteURL + "/delete-address.php"
-        let url = NSURL(string: host)
-        var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
+        let urlTo = self.constants.websiteURL + "/delete-address.php"
+        let parameters = ["tableName": self.constants.addressesDatabaseName,
+                          "uuid": self.deviceUUID(),
+                          "address": address] as [String : Any]
         
-        var params = "uuid=\(self.deviceUUID())"
-        params += "&address=\(address)"
-        params += "&tableName=\(self.constants.addressesDatabaseName)"
-        
-        let data = params.data(using: .utf8)
-        do
-        {
-            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-                
-                if error != nil {
-                    print("Error deleting notification from database")
-                    completion(true)
-                }
-                else {
-                    completion(true)
-                }
-            }
-            task.resume()
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            
+            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in })
+            
+            completion(true)
         }
+        
+//        let host = self.constants.websiteURL + "/delete-address.php"
+//        let url = NSURL(string: host)
+//        var request = URLRequest(url: url! as URL)
+//        request.httpMethod = "POST"
+//
+//        var params = "uuid=\(self.deviceUUID())"
+//        params += "&address=\(address)"
+//        params += "&tableName=\(self.constants.addressesDatabaseName)"
+//
+//        let data = params.data(using: .utf8)
+//        do
+//        {
+//            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+//
+//                if error != nil {
+//                    print("Error deleting notification from database")
+//                    completion(true)
+//                }
+//                else {
+//                    completion(true)
+//                }
+//            }
+//            task.resume()
+//        }
+        
+
     }
     
     func insertAddressIntoDatabase(address: String,
