@@ -331,7 +331,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
-                self.deleteAddressFromDatabase(address: self.schedule.address, completion: { message in
+                self.common.deleteAddressFromDatabase(address: self.schedule.address, completion: { message in
                     
                     DispatchQueue.main.async {
                     
@@ -451,34 +451,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         // Present options alert
         self.present(optionsAlert, animated: true, completion: nil)
         
-    }
-    
-    func deleteAddressFromDatabase(address: String, completion: @escaping (_ message: Bool) -> Void)
-    {
-        let host = self.common.constants.websiteURL + "/delete-address.php"
-        let url = NSURL(string: host)
-        var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
-        
-        var params = "uuid=\(self.common.deviceUUID())"
-        params += "&address=\(address)"
-        params += "&tableName=\(self.common.constants.addressesDatabaseName)"
-        
-        let data = params.data(using: .utf8)
-        do
-        {
-            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-                
-                if error != nil {
-                    print("Error deleting notification from database")
-                    completion(true)
-                }
-                else {
-                    completion(true)
-                }
-            }
-            task.resume()
-        }
     }
     
     @objc func timePickerChanged(picker: UIDatePicker) {

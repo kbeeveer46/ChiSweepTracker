@@ -34,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIApplication.shared.applicationIconBadgeNumber = 0
         
 		// Get data from database tables and update notifications
-		self.common.getDataFromDatabase(completion: { message in })
+        self.common.getDataFromDatabase(completion: { message in })
 		
     }
 

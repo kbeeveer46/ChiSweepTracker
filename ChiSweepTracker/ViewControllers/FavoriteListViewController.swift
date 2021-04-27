@@ -302,6 +302,51 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         return annotationView
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            // handle delete (by removing the data from your array and updating the tableview)
+            
+            let address = self.addresses[indexPath.row]
+            
+            // Create remove favorite alert
+            let removeFavoriteAlert = UIAlertController(title: "Are you sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+            
+            // Create yes option for remove favorite alert
+            let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                
+                self.common.deleteAddressFromDatabase(address: address, completion: { message in
+                    
+                    DispatchQueue.main.async {
+                        self.favoriteListTableView.beginUpdates()
+                        self.addresses.remove(at: indexPath.row)
+                        self.favoriteListTableView.deleteRows(at: [indexPath], with: .automatic)
+                        self.favoriteListTableView.endUpdates()
+                        self.loadFavoriteMap()
+                    }
+ 
+                })
+                
+                self.common.deleteNotificationsFromDatabase(address, self.common.constants.notificationsDatabaseName, completion: {completion in })
+                
+            })
+            yesAction.setValue(UIColor.red, forKey: "titleTextColor")
+            
+            // Create and add no option for remove favorite alert
+            removeFavoriteAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            // Add yes option to remove favorite alert
+            removeFavoriteAlert.addAction(yesAction)
+            
+            // Present remove favorite alert
+            self.present(removeFavoriteAlert, animated: true, completion: nil)
+            
+        }
+    }
         
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

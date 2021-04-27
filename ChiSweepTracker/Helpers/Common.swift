@@ -164,29 +164,16 @@ class Common {
     
     //MARK: Methods
     
-    func getRequest(_ url: String, parameters: [String: String], completion: @escaping ([[String: Any]]?, Error?) -> Void) {
-        var components = URLComponents(string: url)!
-        components.queryItems = parameters.map { (key, value) in
-            URLQueryItem(name: key, value: value)
+    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void)
+    {
+        let urlTo = self.constants.websiteURL + "/delete-notification.php"
+        let parameters = ["playerId": self.notificationOneSignalPlayerId(),
+                          "address": address,
+                          "tableName": tableName] as [String : String]
+        
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            completion(true)
         }
-        let request = URLRequest(url: components.url!)
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data,                            // is there data
-                let response = response as? HTTPURLResponse,  // is there HTTP response
-                (200 ..< 300) ~= response.statusCode,         // is statusCode 2XX
-                error == nil else {                           // was there no error, otherwise ...
-                    completion(nil, error)
-                    return
-            }
-
-            let responseObject = (try? JSONSerialization.jsonObject(with: data)) as? [[String: Any]]
-                      
-            DispatchQueue.main.async {
-                completion(responseObject, nil)
-            }
-        }
-        task.resume()
     }
     
     func getAddresses(address: String = "", completion: @escaping (_ message: [String]) -> ()) {
@@ -210,14 +197,42 @@ class Common {
                 if let value = response.data {
                     
                     let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                                        
+                    
                     for item in json.enumerated() {
                         addresses.append(item.element["address"]!)
                     }
-                
+                    
                     completion(addresses)
                 }
             }
+        }
+    }
+    
+    func deleteAddressFromDatabase(address: String, completion: @escaping (_ message: Bool) -> Void)
+    {
+        let host = self.constants.websiteURL + "/delete-address.php"
+        let url = NSURL(string: host)
+        var request = URLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+        
+        var params = "uuid=\(self.deviceUUID())"
+        params += "&address=\(address)"
+        params += "&tableName=\(self.constants.addressesDatabaseName)"
+        
+        let data = params.data(using: .utf8)
+        do
+        {
+            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                
+                if error != nil {
+                    print("Error deleting notification from database")
+                    completion(true)
+                }
+                else {
+                    completion(true)
+                }
+            }
+            task.resume()
         }
     }
     
@@ -236,15 +251,14 @@ class Common {
                           "notificationsHour": notificationsHour,
                           "notificationsMinute": notificationsMinute,
                           "notificationsEnabled": notificationsEnabled] as [String : Any]
-
+        
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
         
     }
     
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
-        // Get schedule data
-        
+        // Get schedule dat
         AF.request(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]).validate().responseJSON() { response in
             switch response.result {
             case .failure(let error):
@@ -254,7 +268,7 @@ class Common {
                     
                     let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
                     let schedule = json.first!
-    
+                    
                     let latestAppVersionString = schedule["year"]
                     let latestAppVersion = Int(latestAppVersionString!)
                     let wardDataset = schedule["wardDataset"]
@@ -290,9 +304,9 @@ class Common {
                                 
                                 let latestDatasetVersionString = update["version"]
                                 let latestDatasetVersion = Int(latestDatasetVersionString!)
-
+                                
                                 defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
-
+                                
                                 DispatchQueue.main.async {
                                     self.updateNotifications()
                                 }
@@ -302,7 +316,6 @@ class Common {
                 }
             }
         }
-    
         
         // Get Divvys data
         AF.request(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]).validate().responseJSON() { response in
@@ -438,106 +451,64 @@ class Common {
             }
         }
         
-//        let lastUpdatesViewDateString = self.updatesLastViewDate()
-//        if !lastUpdatesViewDateString.isEmpty {
-//
-//            let dateFormatter = DateFormatter()
-//            //dateFormatter.locale = .current
-//            dateFormatter.timeZone = .current
-//            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
-//
-//            getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
-//                guard let response = responseObject, error == nil else {
-//                    print(error ?? "Unknown error")
-//                    return
-//                }
-//
-//                if response.count > 0 {
-//
-//                    var newCount = 0
-//
-//                    for update in response.enumerated() {
-//
-//                        let date = update.element["date"] as! String
-//                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//                        let dateFormattedDate = dateFormatter.date(from: date)
-//                        let dateFormattedString = dateFormatter.string(from: dateFormattedDate!)
-//
-//                        dateFormatter.dateFormat = "M/dd/yyyy HH:mm:ss"
-//
-//                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
-//                        let lastUpdatesViewDateString2 = dateFormatter.string(from: lastUpdatesViewDate)
-//
-//                        print(date)
-//                        print(dateFormattedDate!)
-//                        print(dateFormattedString)
-//                        print(lastUpdatesViewDate)
-//                        print(lastUpdatesViewDateString2)
-//
-//
-//
-//
-//                        //if dateFormatted > lastUpdatesViewDate {
-//                            newCount += 1
-//                        //}
-//                    }
-//
-//                    DispatchQueue.main.async {
-//                        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-//                            if let navigationController = rootViewController as? UINavigationController {
-//                                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
-//                                    tabBarController.tabBar.items?.last!.badgeValue = newCount > 0 ? "\(newCount)" : nil
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-            
+        //        let lastUpdatesViewDateString = self.updatesLastViewDate()
+        //        if !lastUpdatesViewDateString.isEmpty {
+        //
+        //            let dateFormatter = DateFormatter()
+        //            //dateFormatter.locale = .current
+        //            dateFormatter.timeZone = .current
+        //            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
+        //
+        //            getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
+        //                guard let response = responseObject, error == nil else {
+        //                    print(error ?? "Unknown error")
+        //                    return
+        //                }
+        //
+        //                if response.count > 0 {
+        //
+        //                    var newCount = 0
+        //
+        //                    for update in response.enumerated() {
+        //
+        //                        let date = update.element["date"] as! String
+        //                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //                        let dateFormattedDate = dateFormatter.date(from: date)
+        //                        let dateFormattedString = dateFormatter.string(from: dateFormattedDate!)
+        //
+        //                        dateFormatter.dateFormat = "M/dd/yyyy HH:mm:ss"
+        //
+        //                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
+        //                        let lastUpdatesViewDateString2 = dateFormatter.string(from: lastUpdatesViewDate)
+        //
+        //                        print(date)
+        //                        print(dateFormattedDate!)
+        //                        print(dateFormattedString)
+        //                        print(lastUpdatesViewDate)
+        //                        print(lastUpdatesViewDateString2)
+        //
+        //
+        //
+        //
+        //                        //if dateFormatted > lastUpdatesViewDate {
+        //                            newCount += 1
+        //                        //}
+        //                    }
+        //
+        //                    DispatchQueue.main.async {
+        //                        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+        //                            if let navigationController = rootViewController as? UINavigationController {
+        //                                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
+        //                                    tabBarController.tabBar.items?.last!.badgeValue = newCount > 0 ? "\(newCount)" : nil
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        
         
         completion("Finished getting data from Firebase")
-    }
-    
-    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void)
-    {
-        let urlTo = self.constants.websiteURL + "/delete-notification.php"
-        let parameters = ["playerId": self.notificationOneSignalPlayerId(),
-                          "address": address,
-                          "tableName": tableName] as [String : String]
-
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            completion(true)
-        }
-        
-//        let host = self.constants.websiteURL + "/delete-notification.php"
-//        let url = NSURL(string: host)
-//        var request = URLRequest(url: url! as URL)
-//        request.httpMethod = "POST"
-//
-//        var params = "playerId=\(self.notificationOneSignalPlayerId())"
-//        params += "&address=\(address)"
-//        params += "&tableName=\(tableName)"
-//
-//        let data = params.data(using: .utf8)
-//        do
-//        {
-//            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-//
-//                if error != nil {
-//                    print("Error deleting notification from database")
-//                    completion(true)
-//                }
-//                else
-//                {
-//                    completion(true)
-//
-//                    //if let response = String(data: data!, encoding: .utf8) {
-//                    //    print("Response:\(response)")
-//                    //}
-//                }
-//            }
-//            task.resume()
-//        }
     }
     
     func updateNotifications() {
@@ -546,7 +517,7 @@ class Common {
         
         let urlTo = self.constants.websiteURL + "/get-address-data.php"
         let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
-
+        
         AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
             switch response.result {
             case .failure(let error):
@@ -573,9 +544,9 @@ class Common {
                             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                             
                             self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-                              
+                                
                                 favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
-
+                                
                             })
                         }
                     }
@@ -766,20 +737,21 @@ class Common {
         }
     }
     
-    func UTCToLocal(date:String) -> String {
-        
-        let dateFormatter = DateFormatter()
-        //dateFormatter.dateFormat = "MM/dd/yyyy"
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        
-        let dt = dateFormatter.date(from: date)
-        dateFormatter.timeZone = TimeZone.current
-        dateFormatter.dateFormat = "MM/dd/yyyy"
-        
-        return dateFormatter.string(from: dt!)
-    }
+    //    func UTCToLocal(date:String) -> String {
+    //
+    //        let dateFormatter = DateFormatter()
+    //        //dateFormatter.dateFormat = "MM/dd/yyyy"
+    //        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+    //
+    //        let dt = dateFormatter.date(from: date)
+    //        dateFormatter.timeZone = TimeZone.current
+    //        dateFormatter.dateFormat = "MM/dd/yyyy"
+    //
+    //        return dateFormatter.string(from: dt!)
+    //    }
     
 }
+
 
 // MARK: Extensions
 
@@ -1111,4 +1083,7 @@ public extension UIDevice {
         return Model.unrecognized
     }
 }
+
+
+
 
