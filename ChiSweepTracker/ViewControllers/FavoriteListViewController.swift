@@ -78,7 +78,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             })
 
             self.tabBarController?.navigationItem.title = "Saved Addresses"
-            self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications"
+            self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications.\nClick on magnifying glass to view schedule."
 
             self.mapLocations.removeAll()
         

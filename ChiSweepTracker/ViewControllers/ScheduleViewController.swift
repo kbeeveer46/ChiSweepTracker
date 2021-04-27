@@ -145,7 +145,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 self.generator.selectionChanged()
                 
                 if favoriteAddressCount == 0  ||
-                    favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == true {
+                    favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == true ||
+                    favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == false && self.myProduct == nil {
                 
                     self.navigationItem.rightBarButtonItem = nil
                     
