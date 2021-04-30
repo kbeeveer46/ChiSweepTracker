@@ -164,6 +164,43 @@ class Common {
     
     //MARK: Methods
     
+    func displayNewOrUpdatedScheduleAlerts() {
+        
+        // Set the last year when notifications were updated.
+        // Use the value to alert them if they loaded the app after a new year came out
+        let notificationsYear = self.notificationsYear()
+        let latestAppVersion = self.latestAppVersion()
+        if notificationsYear != 0 && notificationsYear < latestAppVersion {
+            self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
+        }
+        defaults.set(latestAppVersion, forKey: "notificationsYear")
+        
+        // Set the latest dataset version when notifications were updated
+        // Use the value to alert them if they loaded the app after Chicago changed the schedule
+        let latestDatasetVersion = self.latestDatasetVersion()
+        let userDatasetVersion = self.userDatasetVersion()
+        if userDatasetVersion != 0 && userDatasetVersion < latestDatasetVersion {
+            
+            // Create dataset updated alert
+            let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.", preferredStyle: .alert)
+            
+            // Create and add OK option for dataset updated alert
+            datasetUpdatedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            
+            var rootViewController = UIApplication.shared.keyWindow?.rootViewController
+            
+            if let navigationController = rootViewController as? UINavigationController {
+                rootViewController = navigationController.viewControllers.first
+            }
+            
+            // Present dataset updated alert
+            rootViewController?.present(datasetUpdatedAlert, animated: true, completion: nil)
+            
+        }
+        defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+        
+    }
+    
     func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void)
     {
         let urlTo = self.constants.websiteURL + "/delete-notification.php"
@@ -731,6 +768,10 @@ class Common {
                             })
                         }
                     }
+                    
+                    DispatchQueue.main.async {
+                        self.displayNewOrUpdatedScheduleAlerts()
+                    }
                 }
             }
         }
@@ -932,7 +973,6 @@ class Common {
     //    }
     
 }
-
 
 // MARK: Extensions
 
