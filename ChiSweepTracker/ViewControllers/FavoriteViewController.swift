@@ -755,8 +755,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                 }
                                                             }
                                                         }
-                                                        
-                                                        
                                                     }
                                                 }
                                             }

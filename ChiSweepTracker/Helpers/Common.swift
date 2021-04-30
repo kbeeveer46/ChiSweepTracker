@@ -384,7 +384,7 @@ class Common {
                                                     dateComponents.day = date.date
 
                                                     // Create date from components
-                                                    let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
+                                                    let userCalendar = Calendar(identifier: .gregorian)
                                                     let sweepDay = userCalendar.date(from: dateComponents)
                                                     sweepDates.append(sweepDay!)
                                                     
@@ -425,40 +425,14 @@ class Common {
             
             completion(true)
         }
-        
-//        let host = self.constants.websiteURL + "/delete-address.php"
-//        let url = NSURL(string: host)
-//        var request = URLRequest(url: url! as URL)
-//        request.httpMethod = "POST"
-//
-//        var params = "uuid=\(self.deviceUUID())"
-//        params += "&address=\(address)"
-//        params += "&tableName=\(self.constants.addressesDatabaseName)"
-//
-//        let data = params.data(using: .utf8)
-//        do
-//        {
-//            let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-//
-//                if error != nil {
-//                    print("Error deleting notification from database")
-//                    completion(true)
-//                }
-//                else {
-//                    completion(true)
-//                }
-//            }
-//            task.resume()
-//        }
-        
-
     }
     
     func insertAddressIntoDatabase(address: String,
                                    notificationsEnabled: Int,
                                    notificationsWhen: String,
                                    notificationsHour: Int,
-                                   notificationsMinute: Int) {
+                                   notificationsMinute: Int,
+                                   nextSweepDay: String) {
         
         
         let urlTo = self.constants.websiteURL + "/insert-address.php"
@@ -468,7 +442,8 @@ class Common {
                           "notificationsWhen": notificationsWhen,
                           "notificationsHour": notificationsHour,
                           "notificationsMinute": notificationsMinute,
-                          "notificationsEnabled": notificationsEnabled] as [String : Any]
+                          "notificationsEnabled": notificationsEnabled,
+                          "nextSweepDay": nextSweepDay] as [String : Any]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
         

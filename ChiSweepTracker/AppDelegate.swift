@@ -56,29 +56,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
         
         // Testing code for when old users migrate to the new app with multiple addresses
-//        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
-//        defaults.set(true, forKey: "notificationsToggled")
-//        defaults.set("1 Day Prior", forKey: "notificationWhen")
-//        defaults.set(8, forKey: "notificationHour")
-//        defaults.set(30, forKey: "notificationMinute")
+        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
+        defaults.set(true, forKey: "notificationsToggled")
+        defaults.set("1 Day Prior", forKey: "notificationWhen")
+        defaults.set(8, forKey: "notificationHour")
+        defaults.set(30, forKey: "notificationMinute")
         
         // Do not remove. This code is required for old users migrating to the new app with multiple address
         let favoriteAddress = self.common.favoriteAddress()
         
         if favoriteAddress != "" {
             
-            // insert address into database
-            self.common.insertAddressIntoDatabase(address: favoriteAddress,
-                                                  notificationsEnabled: self.common.notificationsToggled() ? 1 : 0,
-                                                  notificationsWhen: self.common.notificationWhen(),
-                                                  notificationsHour: self.common.notificationHour(),
-                                                  notificationsMinute: self.common.notificationMinute())
+            self.common.getNextSweepDay(address: favoriteAddress, completion: { date in
+                
+                var nextSweepDayFormatted = ""
+                
+                if date != nil {
+                    let calendar = Calendar.current
+                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+                    nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
+                }
+                
+                // insert address into database
+                self.common.insertAddressIntoDatabase(address: favoriteAddress,
+                                                      notificationsEnabled: self.common.notificationsToggled() ? 1 : 0,
+                                                      notificationsWhen: self.common.notificationWhen(),
+                                                      notificationsHour: self.common.notificationHour(),
+                                                      notificationsMinute: self.common.notificationMinute(),
+                                                      nextSweepDay: nextSweepDayFormatted)
+                
+                // Get users' addresses and insert notifications in the database
+                self.common.updateNotifications()
+                
+                // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
+                defaults.set("", forKey: "favoriteAddress")
+                
+            })
             
-            // Get users' addresses and insert notifications in the database
-            self.common.updateNotifications()
-            
-            // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
-            defaults.set("", forKey: "favoriteAddress")
         }
         
         // Request permission for notifications when app is first opened
