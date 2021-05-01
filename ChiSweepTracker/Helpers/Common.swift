@@ -166,20 +166,14 @@ class Common {
     
     func displayNewOrUpdatedScheduleAlerts() {
         
-        // Set the last year when notifications were updated.
-        // Use the value to alert them if they loaded the app after a new year came out
+        let latestDatasetVersion = self.latestDatasetVersion()
+        let userDatasetVersion = self.userDatasetVersion()
         let notificationsYear = self.notificationsYear()
         let latestAppVersion = self.latestAppVersion()
-        if notificationsYear != 0 && notificationsYear < latestAppVersion {
-            self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
-        }
-        defaults.set(latestAppVersion, forKey: "notificationsYear")
         
         // Set the latest dataset version when notifications were updated
         // Use the value to alert them if they loaded the app after Chicago changed the schedule
-        let latestDatasetVersion = self.latestDatasetVersion()
-        let userDatasetVersion = self.userDatasetVersion()
-        if userDatasetVersion != 0 && userDatasetVersion < latestDatasetVersion {
+        if userDatasetVersion != 0 && userDatasetVersion < latestDatasetVersion && notificationsYear == latestAppVersion {
             
             // Create dataset updated alert
             let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.", preferredStyle: .alert)
@@ -199,10 +193,16 @@ class Common {
         }
         defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
         
+        // Set the last year when notifications were updated.
+        // Use the value to alert them if they loaded the app after a new year came out
+        if notificationsYear != 0 && notificationsYear < latestAppVersion {
+            self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
+        }
+        defaults.set(latestAppVersion, forKey: "notificationsYear")
+        
     }
     
-    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void)
-    {
+    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void) {
         let urlTo = self.constants.websiteURL + "/delete-notification.php"
         let parameters = ["playerId": self.notificationOneSignalPlayerId(),
                           "address": address,
@@ -267,7 +267,7 @@ class Common {
             
             // No internet connection will cause an error
             if error != nil {
-                return
+                completion(nil)
             }
             
             if placemarks != nil {
@@ -401,19 +401,20 @@ class Common {
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
+                                    completion(nil)
                                 }
                             }
                         }
                     case .error (let err):
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
+                        completion(nil)
                     }
                 }
             }
         }
     }
     
-    func deleteAddressFromDatabase(address: String, completion: @escaping (Bool) -> Void)
-    {
+    func deleteAddressFromDatabase(address: String, completion: @escaping (Bool) -> Void) {
         let urlTo = self.constants.websiteURL + "/delete-address.php"
         let parameters = ["tableName": self.constants.addressesDatabaseName,
                           "uuid": self.deviceUUID(),
@@ -432,7 +433,8 @@ class Common {
                                    notificationsWhen: String,
                                    notificationsHour: Int,
                                    notificationsMinute: Int,
-                                   nextSweepDay: String) {
+                                   nextSweepDay: String,
+                                   completion: @escaping (Bool) -> Void) {
         
         
         let urlTo = self.constants.websiteURL + "/insert-address.php"
@@ -445,7 +447,9 @@ class Common {
                           "notificationsEnabled": notificationsEnabled,
                           "nextSweepDay": nextSweepDay] as [String : Any]
         
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            completion(true)
+        }
         
     }
     
@@ -704,52 +708,94 @@ class Common {
         completion("Finished getting data from database")
     }
     
+    func migrateOldUsersToUseDatabase(completion: @escaping (_ message: Bool) -> Void) {
+    
+        
+        // Do not remove. This code is required for old users migrating to the new app with multiple address
+        let favoriteAddress = self.favoriteAddress()
+        
+        if favoriteAddress != "" {
+            
+            self.getNextSweepDay(address: favoriteAddress, completion: { date in
+                
+                var nextSweepDayFormatted = ""
+                
+                if date != nil {
+                    let calendar = Calendar.current
+                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+                    nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
+                }
+                
+                // insert address into database
+                self.insertAddressIntoDatabase(address: favoriteAddress,
+                                               notificationsEnabled: self.notificationsToggled() ? 1 : 0,
+                                               notificationsWhen: self.notificationWhen(),
+                                               notificationsHour: self.notificationHour(),
+                                               notificationsMinute: self.notificationMinute(),
+                                               nextSweepDay: nextSweepDayFormatted,
+                                               completion: { result in
+                                               
+                                                // Get users' addresses and insert notifications in the database
+                                                //self.updateNotifications()
+                                                
+                                                // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
+                                                defaults.set("", forKey: "favoriteAddress")
+                                                completion(true)
+                                               
+                                               })
+            })
+        }
+    }
+    
     func updateNotifications() {
+        
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         let favoriteViewController = FavoriteViewController()
         
-        let urlTo = self.constants.websiteURL + "/get-address-data.php"
-        let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
-        
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success:
-                if let value = response.data {
-                    
-                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    
-                    for item in json.enumerated() {
+        migrateOldUsersToUseDatabase(completion: { completion in
+            
+            let urlTo = self.constants.websiteURL + "/get-address-data.php"
+            let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
+            
+            AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+                switch response.result {
+                case .failure(let error):
+                    print(error)
+                case .success:
+                    if let value = response.data {
                         
-                        let address = item.element["address"]!
-                        let notificationsToggledString = item.element["notificationsEnabled"]!
-                        var notificationsToggled = false
-                        if notificationsToggledString == "1" {
-                            notificationsToggled = true
-                        }
-                        let notificationsWhen = item.element["notificationsWhen"]!
-                        let notificationsHour = Int(item.element["notificationsHour"]!)
-                        let notificationsMinute = Int(item.element["notificationsMinute"]!)
+                        let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
                         
-                        if notificationsToggled == true {
+                        for item in json.enumerated() {
                             
-                            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                            let address = item.element["address"]!
+                            let notificationsToggledString = item.element["notificationsEnabled"]!
+                            var notificationsToggled = false
+                            if notificationsToggledString == "1" {
+                                notificationsToggled = true
+                            }
+                            let notificationsWhen = item.element["notificationsWhen"]!
+                            let notificationsHour = Int(item.element["notificationsHour"]!)
+                            let notificationsMinute = Int(item.element["notificationsMinute"]!)
                             
-                            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                            if notificationsToggled == true {
                                 
-                                favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
-                                
-                            })
+                                self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                                    
+                                    favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
+                                    
+                                })
+                            }
                         }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.displayNewOrUpdatedScheduleAlerts()
+                        
+                        DispatchQueue.main.async {
+                            self.displayNewOrUpdatedScheduleAlerts()
+                        }
                     }
                 }
             }
-        }
+        })
     }
     
     func goToScheduleFromNotification(_ address: String) {

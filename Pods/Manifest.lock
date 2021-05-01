@@ -1,113 +1,11 @@
 PODS:
   - Alamofire (5.4.3)
-  - Firebase/Analytics (7.11.0):
-    - Firebase/Core
-  - Firebase/Core (7.11.0):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 7.11.0)
-  - Firebase/CoreOnly (7.11.0):
-    - FirebaseCore (= 7.11.0)
-  - Firebase/Messaging (7.11.0):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (~> 7.11.0)
-  - FirebaseAnalytics (7.11.0):
-    - FirebaseAnalytics/AdIdSupport (= 7.11.0)
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/MethodSwizzler (~> 7.0)
-    - GoogleUtilities/Network (~> 7.0)
-    - "GoogleUtilities/NSData+zlib (~> 7.0)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (7.11.0):
-    - FirebaseAnalytics/Base (= 7.11.0)
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - GoogleAppMeasurement/AdIdSupport (= 7.11.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/MethodSwizzler (~> 7.0)
-    - GoogleUtilities/Network (~> 7.0)
-    - "GoogleUtilities/NSData+zlib (~> 7.0)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseAnalytics/Base (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/MethodSwizzler (~> 7.0)
-    - GoogleUtilities/Network (~> 7.0)
-    - "GoogleUtilities/NSData+zlib (~> 7.0)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseCore (7.11.0):
-    - FirebaseCoreDiagnostics (~> 7.4)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Logger (~> 7.0)
-  - FirebaseCoreDiagnostics (7.11.0):
-    - GoogleDataTransport (~> 8.4)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Logger (~> 7.0)
-    - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/UserDefaults (~> 7.0)
-    - PromisesObjC (~> 1.2)
-  - FirebaseInstanceID (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/UserDefaults (~> 7.0)
-  - FirebaseMessaging (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - FirebaseInstanceID (~> 7.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Reachability (~> 7.0)
-    - GoogleUtilities/UserDefaults (~> 7.0)
-  - GoogleAppMeasurement/AdIdSupport (7.11.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/MethodSwizzler (~> 7.0)
-    - GoogleUtilities/Network (~> 7.0)
-    - "GoogleUtilities/NSData+zlib (~> 7.0)"
-    - nanopb (~> 2.30908.0)
-  - GoogleDataTransport (8.4.0):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.3.1):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.3.1):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (7.3.1):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (7.3.1):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/Network (7.3.1):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.3.1)"
-  - GoogleUtilities/Reachability (7.3.1):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.3.1):
-    - GoogleUtilities/Logger
   - IQKeyboardManagerSwift (6.5.6)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
-  - OneSignal (3.4.1)
-  - PromisesObjC (1.2.12)
+  - OneSignal (3.4.3)
   - THLabel (1.4.10)
 
 DEPENDENCIES:
   - Alamofire (~> 5.2)
-  - Firebase/Analytics
-  - Firebase/Core
-  - Firebase/Messaging
   - IQKeyboardManagerSwift
   - OneSignal (< 4.0, >= 3.0.0)
   - THLabel (~> 1.4.0)
@@ -115,40 +13,16 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
-    - Firebase
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseCoreDiagnostics
-    - FirebaseInstallations
-    - FirebaseInstanceID
-    - FirebaseMessaging
-    - GoogleAppMeasurement
-    - GoogleDataTransport
-    - GoogleUtilities
     - IQKeyboardManagerSwift
-    - nanopb
     - OneSignal
-    - PromisesObjC
     - THLabel
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
-  Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
-  FirebaseAnalytics: cd3bd84d722a24a8923918af8af8e5236f615d77
-  FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
-  FirebaseCoreDiagnostics: 68ad972f99206cef818230f3f3179d52ccfb7f8c
-  FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
-  FirebaseInstanceID: ad5135045a498d7775903efd39762d2cdfa1be27
-  FirebaseMessaging: 163435fb6db065e3b6228f1e577b10ed2cc506d2
-  GoogleAppMeasurement: fd19169c3034975cb934e865e5667bfdce59df7f
-  GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
-  GoogleUtilities: e1d9ed4e544fc32a93e00e721400cbc3f377200d
   IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  OneSignal: 546f5d10df7277dd271a1c4cde80646167d55cc3
-  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  OneSignal: e4dfb1912410f302dc9661ce98fc829f6c18ff6a
   THLabel: 3fc93a0f01f74e4eec7574df2819e576d57150b3
 
-PODFILE CHECKSUM: 13b9f62f027b74d11cb69b090b51a44c32ceab1f
+PODFILE CHECKSUM: 1c62cf230aebe5f7bf124f2cc3ade61a658aae21
 
 COCOAPODS: 1.10.1

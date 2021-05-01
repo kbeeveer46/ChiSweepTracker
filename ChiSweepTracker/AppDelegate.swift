@@ -1,7 +1,5 @@
 import UIKit
 import UserNotifications
-import Firebase
-import FirebaseMessaging
 import IQKeyboardManagerSwift
 import OneSignal
 
@@ -11,13 +9,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 	// This line is required or the screen is black on iPhone 8
     var window: UIWindow?
 	
-	// Required for Firebase remote notifications
-    let gcmMessageIDKey = "gcm.message_id"
-	
 	// Classes
     let common = Common()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // Testing code for when old users migrate to the new app with multiple addresses
+        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
+        defaults.set(true, forKey: "notificationsToggled")
+        defaults.set("1 Day Prior", forKey: "notificationWhen")
+        defaults.set(8, forKey: "notificationHour")
+        defaults.set(30, forKey: "notificationMinute")
         
         // Get UUID and save it to defaults so it can be used throughout the app and database
         if self.common.deviceUUID() == "" {
@@ -28,18 +30,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 defaults.set(UUID().uuidString, forKey: "deviceUUID")
             }
         }
-        
-		// Configure Firebase
-		FirebaseApp.configure()
+        print("uuid: \(self.common.deviceUUID())")
 		
-		// Initialize Firebase Cloud Messaging
-		Messaging.messaging().delegate = self
 		UNUserNotificationCenter.current().delegate = self
 		
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
-        // Set up an actin to take when a user opens a remote One Signal notification
+        // Set up an actin to take when a user opens a remote One Signal notification from a sweep notificaton (not from a mass send)
         let notificationOpenedBlock: OSNotificationOpenedBlock = { result in
             if let address = result.notification.additionalData?["address"] as? String {
                 if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
@@ -54,46 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
         OneSignal.add(self as OSSubscriptionObserver)
         OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
-        
-        // Testing code for when old users migrate to the new app with multiple addresses
-        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
-        defaults.set(true, forKey: "notificationsToggled")
-        defaults.set("1 Day Prior", forKey: "notificationWhen")
-        defaults.set(8, forKey: "notificationHour")
-        defaults.set(30, forKey: "notificationMinute")
-        
-        // Do not remove. This code is required for old users migrating to the new app with multiple address
-        let favoriteAddress = self.common.favoriteAddress()
-        
-        if favoriteAddress != "" {
-            
-            self.common.getNextSweepDay(address: favoriteAddress, completion: { date in
-                
-                var nextSweepDayFormatted = ""
-                
-                if date != nil {
-                    let calendar = Calendar.current
-                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
-                    nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
-                }
-                
-                // insert address into database
-                self.common.insertAddressIntoDatabase(address: favoriteAddress,
-                                                      notificationsEnabled: self.common.notificationsToggled() ? 1 : 0,
-                                                      notificationsWhen: self.common.notificationWhen(),
-                                                      notificationsHour: self.common.notificationHour(),
-                                                      notificationsMinute: self.common.notificationMinute(),
-                                                      nextSweepDay: nextSweepDayFormatted)
-                
-                // Get users' addresses and insert notifications in the database
-                self.common.updateNotifications()
-                
-                // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
-                defaults.set("", forKey: "favoriteAddress")
-                
-            })
-            
-        }
         
         // Request permission for notifications when app is first opened
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
@@ -128,9 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges) {
         
         if !stateChanges.from.isSubscribed && stateChanges.to.isSubscribed {
-            
-            //print("Subscribed for OneSignal push notifications!")
-            
+                        
             if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
                 
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
@@ -164,48 +120,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 
     }
     
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-		
-        // If you are receiving a notification message while your app is in the background,
-        // this callback will not be fired till the user taps on the notification launching the application.
-        // TODO: Handle data of notification
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // Print message ID.
-        //if let messageID = userInfo[gcmMessageIDKey] {
-		//	print("Message ID: \(messageID)")
-        //}
-        
-        // Print full message.
-        //print(userInfo)
-        
-    }
-    
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-		
-        // If you are receiving a notification message while your app is in the background,
-        // this callback will not be fired till the user taps on the notification launching the application.
-        // TODO: Handle data of notification
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // Print message ID.
-        //if let messageID = userInfo[gcmMessageIDKey] {
-		//	print("Message ID: \(messageID)")
-        //}
-        
-        // Print full message.
-        //print(userInfo)
-        
-        completionHandler(UIBackgroundFetchResult.newData)
-    }
-    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         		
 		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
@@ -217,7 +131,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        
         print("didFailToRegisterForRemoteNotificationsWithError: \(error)")
     }
     
@@ -243,40 +156,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-		 // This method runs before the notification is presented on the screen when the app is in the foreground
-		
-        let userInfo = notification.request.content.userInfo
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // Print message ID.
-        //if let messageID = userInfo[gcmMessageIDKey] {
-		//	print("Message ID: \(messageID)")
-        //}
-        
-        // Print full message.
-        //print(userInfo)
-        
-        // Change this to your preferred presentation option
-        completionHandler([.alert, .badge, .sound])
-    }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         
 		// This method runs when a notification is opened when the app is in the background and foreground
-        // This method runs when clicking on a notification from Firebase and OneSignal
+        // This method runs when clicking on a notification from OneSignal when sending mass notifications (not sweep notifications)
         
 		// Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
         
-        let userInfo = response.notification.request.content.userInfo
-        
+        //let userInfo = response.notification.request.content.userInfo
         //print(userInfo)
         
         // Send the user to the updates tab by default
@@ -287,33 +176,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                 }
             }
         }
-        		
-        // If the clicks on a sweep notification then get the schedule and redirect them to the schedule page
-		if let address = userInfo["address"] as? String {
-			if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
-                self.common.goToScheduleFromNotification(address)
-			}
-		}
         
         completionHandler()
-    }
-}
-
-extension AppDelegate: MessagingDelegate {
-    
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        
-		// This method runs each time the app opens and whenever a new Firebase token is generated.
-        // This token can be used to send test message in the Firebase console
-		
-        if fcmToken != nil {
-        
-            //print("didReceiveRegistrationToken: \(fcmToken!)")
-            
-            let dataDict:[String: String] = ["token": fcmToken!]
-            
-            NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-            
-        }
     }
 }

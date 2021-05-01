@@ -160,35 +160,30 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                             nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
                         }
                             
-                        self.common.insertAddressIntoDatabase(address: self.schedule.address,
-                                                              notificationsEnabled: 0,
-                                                              notificationsWhen: "Day Of Sweep",
-                                                              notificationsHour: 0,
-                                                              notificationsMinute: 0,
-                                                              nextSweepDay: nextSweepDayFormatted)
-                        
-                        // Create alert
-                        let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
-                        
-                        // Yes option
-                        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                        self.common.insertAddressIntoDatabase(address: self.schedule.address, notificationsEnabled: 0, notificationsWhen: "Day Of Sweep", notificationsHour: 0, notificationsMinute: 0, nextSweepDay: nextSweepDayFormatted, completion: { result in
+                                                                
+                            // Create alert
+                            let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
                             
-                            // Segue to schedule view
-                            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
-                                destinationViewController.schedule = self.schedule
-                                self.navigationController?.pushViewController(destinationViewController, animated: true)
-                            }
-                    
-                        }))
+                            // Yes option
+                            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                                
+                                // Segue to schedule view
+                                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                                    destinationViewController.schedule = self.schedule
+                                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                                }
                         
-                        // No option
-                        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-                        
-                        // Present alert
-                        self.present(alert, animated: true, completion: nil)
-                        
+                            }))
+                            
+                            // No option
+                            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                            
+                            // Present alert
+                            self.present(alert, animated: true, completion: nil)
+                                                                
+                        })
                     })
-                    
                 }
                 else if favoriteAddressCount != -1 {
                     

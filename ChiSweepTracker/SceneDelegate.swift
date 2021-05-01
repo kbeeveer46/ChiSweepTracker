@@ -33,6 +33,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	    // Clear badge number when app opens
         UIApplication.shared.applicationIconBadgeNumber = 0
         
+        // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it.
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { (settings) in
+            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
+                OneSignal.disablePush(false)
+            }
+        }
+        
 		// Get data from database tables and update notifications
         self.common.getDataFromDatabase(completion: { message in })
 		

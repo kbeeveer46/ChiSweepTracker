@@ -71,7 +71,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         if self.addresses.count > 0 {
             
             self.tabBarController?.navigationItem.title = "Saved Addresses"
-            self.favoriteListViewHeaderLabel.text = "Click on address to set up notifications.\nClick on magnifying glass to view schedule."
+            self.favoriteListViewHeaderLabel.text = "Click on address below to set up notifications.\nClick on magnifying glass to view schedule."
             
             let nextSweepDay = self.addresses.reduce(self.addresses[0], {
                 $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
