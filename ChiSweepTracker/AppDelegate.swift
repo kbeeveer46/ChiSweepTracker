@@ -80,7 +80,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         
         // Get data from database tables and update notifications
-        self.common.getDataFromDatabase(completion: { message in })
+        let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
+        if gettingValuesFromDatabase == false {
+            self.common.getDataFromDatabase(completion: { message in
+                defaults.setValue(false, forKey: "gettingValuesFromDatabase")
+            })
+        }
         
         return true
         
@@ -120,7 +125,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
 
 		// Get data from database tables and update notifications
-		self.common.getDataFromDatabase(completion: { message in })
+        let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
+        if gettingValuesFromDatabase == false {
+            self.common.getDataFromDatabase(completion: { message in
+                defaults.setValue(false, forKey: "gettingValuesFromDatabase")
+            })
+        }
 
     }
     

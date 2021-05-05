@@ -17,6 +17,7 @@ class Common {
     func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
     func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
     func enableMultipleAddresses() -> Bool {return defaults.bool(forKey: "enableMultipleAddresses")}
+    func gettingValuesFromDatabase() -> Bool {return defaults.bool(forKey: "gettingValuesFromDatabase")}
     
     func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
     func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
@@ -459,6 +460,8 @@ class Common {
     }
     
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
+        
+        defaults.setValue(true, forKey: "gettingValuesFromDatabase")
         
         // Get schedule data
         AF.request(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]).validate().responseJSON() { response in

@@ -42,7 +42,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
 		// Get data from database tables and update notifications
-        self.common.getDataFromDatabase(completion: { message in })
+        let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
+        if gettingValuesFromDatabase == false {
+            self.common.getDataFromDatabase(completion: { message in
+                defaults.setValue(false, forKey: "gettingValuesFromDatabase")
+            })
+        }
 		
     }
 
@@ -57,12 +62,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
         
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { (settings) in
-            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
-                OneSignal.disablePush(false)
-            }
-        }
+//        let center = UNUserNotificationCenter.current()
+//        center.getNotificationSettings { (settings) in
+//            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
+//                OneSignal.disablePush(false)
+//            }
+//        }
     }
 
     @available(iOS 13.0, *)
