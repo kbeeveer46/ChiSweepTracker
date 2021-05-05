@@ -15,11 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // Testing code for when old users migrate to the new app with multiple addresses
-        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
-        defaults.set(true, forKey: "notificationsToggled")
-        defaults.set("1 Day Prior", forKey: "notificationWhen")
-        defaults.set(8, forKey: "notificationHour")
-        defaults.set(30, forKey: "notificationMinute")
+//        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
+//        defaults.set(true, forKey: "notificationsToggled")
+//        defaults.set("1 Day Prior", forKey: "notificationWhen")
+//        defaults.set(8, forKey: "notificationHour")
+//        defaults.set(30, forKey: "notificationMinute")
         
         // Get UUID and save it to defaults so it can be used throughout the app and database
         if self.common.deviceUUID() == "" {
@@ -79,7 +79,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             }
         }
         
+        // Get data from database tables and update notifications
+        self.common.getDataFromDatabase(completion: { message in })
+        
         return true
+        
     }
     
     // This method will be called when the OneSignal notification subscription property changes.
@@ -106,7 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
-        
+
         // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it.
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { (settings) in
@@ -114,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 OneSignal.disablePush(false)
             }
         }
-        
+
 		// Get data from database tables and update notifications
 		self.common.getDataFromDatabase(completion: { message in })
 

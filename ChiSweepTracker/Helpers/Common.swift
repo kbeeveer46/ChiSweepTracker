@@ -230,6 +230,7 @@ class Common {
             switch response.result {
             case .failure(let error):
                 print(error)
+                completion(addresses)
             case .success:
                 if let value = response.data {
                     
@@ -399,6 +400,9 @@ class Common {
                                             completion(nil)
                                         }
                                     }
+                                    else {
+                                        completion(nil)
+                                    }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
                                     completion(nil)
@@ -411,20 +415,22 @@ class Common {
                     }
                 }
             }
+            else {
+                completion(nil)
+            }
         }
     }
     
-    func deleteAddressFromDatabase(address: String, completion: @escaping (Bool) -> Void) {
+    func deleteAddressFromDatabase(address: String, deleteAddressResult: @escaping (Bool) -> Void) {
         let urlTo = self.constants.websiteURL + "/delete-address.php"
         let parameters = ["tableName": self.constants.addressesDatabaseName,
                           "uuid": self.deviceUUID(),
                           "address": address] as [String : Any]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            
-            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in })
-            
-            completion(true)
+            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                deleteAddressResult(completion)
+            })
         }
     }
     
@@ -450,12 +456,11 @@ class Common {
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
             completion(true)
         }
-        
     }
     
     func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
-        // Get schedule dat
+        // Get schedule data
         AF.request(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]).validate().responseJSON() { response in
             switch response.result {
             case .failure(let error):
@@ -506,6 +511,7 @@ class Common {
                                 
                                 DispatchQueue.main.async {
                                     self.updateNotifications()
+                                    self.displayNewOrUpdatedScheduleAlerts()
                                 }
                             }
                         }
@@ -609,7 +615,6 @@ class Common {
             }
         }
         
-        
         // Get towed vehicles data
         AF.request(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.towedDatabaseName]).validate().responseJSON() { response in
             switch response.result {
@@ -708,9 +713,8 @@ class Common {
         completion("Finished getting data from database")
     }
     
-    func migrateOldUsersToUseDatabase(completion: @escaping (_ message: Bool) -> Void) {
+    func migrateOldUsersToUseDatabase(completion: @escaping (_ completion: Bool) -> Void) {
     
-        
         // Do not remove. This code is required for old users migrating to the new app with multiple address
         let favoriteAddress = self.favoriteAddress()
         
@@ -734,9 +738,6 @@ class Common {
                                                notificationsMinute: self.notificationMinute(),
                                                nextSweepDay: nextSweepDayFormatted,
                                                completion: { result in
-                                               
-                                                // Get users' addresses and insert notifications in the database
-                                                //self.updateNotifications()
                                                 
                                                 // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
                                                 defaults.set("", forKey: "favoriteAddress")
@@ -772,25 +773,17 @@ class Common {
                             let address = item.element["address"]!
                             let notificationsToggledString = item.element["notificationsEnabled"]!
                             var notificationsToggled = false
-                            if notificationsToggledString == "1" {
-                                notificationsToggled = true
-                            }
+                            notificationsToggled = (notificationsToggledString == "1" ? true : false)
                             let notificationsWhen = item.element["notificationsWhen"]!
                             let notificationsHour = Int(item.element["notificationsHour"]!)
                             let notificationsMinute = Int(item.element["notificationsMinute"]!)
                             
-                            if notificationsToggled == true {
                                 
-                                self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-                                    
+                            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
+                                if notificationsToggled == true {
                                     favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
-                                    
-                                })
-                            }
-                        }
-                        
-                        DispatchQueue.main.async {
-                            self.displayNewOrUpdatedScheduleAlerts()
+                                }
+                            })
                         }
                     }
                 }

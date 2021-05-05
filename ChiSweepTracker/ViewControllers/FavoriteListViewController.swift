@@ -365,7 +365,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
-                self.common.deleteAddressFromDatabase(address: address, completion: { message in
+                self.common.deleteAddressFromDatabase(address: address, deleteAddressResult: { message in
                     
                     DispatchQueue.main.async {
                         self.favoriteListTableView.beginUpdates()
