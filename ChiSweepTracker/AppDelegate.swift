@@ -23,12 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         // Get UUID and save it to defaults so it can be used throughout the app and database
         if self.common.deviceUUID() == "" {
-            if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-                defaults.set(uuid, forKey: "deviceUUID")
-            }
-            else {
-                defaults.set(UUID().uuidString, forKey: "deviceUUID")
-            }
+            defaults.set(UUID().uuidString, forKey: "deviceUUID")
         }
         print("uuid: \(self.common.deviceUUID())")
 		

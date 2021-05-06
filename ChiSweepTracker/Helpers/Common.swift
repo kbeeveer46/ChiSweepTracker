@@ -749,6 +749,9 @@ class Common {
                                                })
             })
         }
+        else {
+            completion(true)
+        }
     }
     
     func updateNotifications() {

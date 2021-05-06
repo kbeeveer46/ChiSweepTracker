@@ -529,6 +529,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = 29ZYSAUDQH;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -537,6 +538,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 24;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -552,6 +554,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = 29ZYSAUDQH;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -560,6 +563,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 24;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -702,7 +706,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 22;
+				MARKETING_VERSION = 24;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -728,7 +732,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 22;
+				MARKETING_VERSION = 24;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
