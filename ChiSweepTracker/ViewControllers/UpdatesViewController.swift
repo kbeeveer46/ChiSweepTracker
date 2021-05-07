@@ -101,9 +101,8 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
                         self.newsTableView.reloadData()
                         
                         // Clear updates tab bar badge
-                        self.tabBarController?.tabBar.items?.last!.badgeValue = nil
+                        //self.tabBarController?.tabBar.items?.last!.badgeValue = nil
                     }
-                    
                 }
             }
         }

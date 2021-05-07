@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         // OneSignal initialization
         OneSignal.initWithLaunchOptions(launchOptions)
         OneSignal.setNotificationOpenedHandler(notificationOpenedBlock)
-        OneSignal.setAppId("2a6b2ed6-b4a7-4da0-8917-899cef558a0a")
+        OneSignal.setAppId(common.constants.OneSignalAppId)
         OneSignal.add(self as OSSubscriptionObserver)
         OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
         
@@ -126,22 +126,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 defaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
-
     }
     
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        		
-		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
-        
-        //let token = tokenParts.joined()
-        
-        //print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
-        
-    }
+//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+//
+//		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+//
+//        //let token = tokenParts.joined()
+//
+//        //print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
+//
+//    }
     
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("didFailToRegisterForRemoteNotificationsWithError: \(error)")
-    }
+//    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+//        print("didFailToRegisterForRemoteNotificationsWithError: \(error)")
+//    }
     
     // MARK: UISceneSession Lifecycle
     

@@ -20,7 +20,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
 	// Shared
 	let locationManager = CLLocationManager()
-    //var addressFromNotification = ""
     var addressFromTextField = ""
     var addressFromCoordinates = ""
 	let currentDay = Calendar.current.component(.day, from: Date())
@@ -31,19 +30,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Go to schedule page if opened from a notification
-        // I don't think this is required anymore after adding code in AppDelegate
-//        if (self.addressFromNotification != "") {
-//            let address = self.addressFromNotification
-//            self.addressFromNotification = ""
-//            self.searchForSchedule(address, completion: { schedule in
-//                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-//                    destinationViewController.schedule = schedule
-//                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-//                }
-//            })
-//        }
         
 		// Show finished schedule button if month is < 4 or greater than 11
 		self.showStatusMessage()

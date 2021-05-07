@@ -14,8 +14,8 @@
             filePath = "ChiSweepTracker/ViewControllers/SearchViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "populateSchedule(_:completion:)"
             landmarkType = "7">
             <Locations>

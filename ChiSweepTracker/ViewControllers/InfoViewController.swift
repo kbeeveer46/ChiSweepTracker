@@ -95,12 +95,10 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 							SKStoreReviewController.requestReview()
 							
 			})
-			
 		}
 		else {
 			// Fallback on earlier versions
 		}
-		
 	}
 	
 	@objc func requestCardTapped(_ sender:UITapGestureRecognizer){
@@ -126,7 +124,6 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 						
 						
 		})
-		
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -174,5 +171,4 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		
 		return cell
 	}
-
 }

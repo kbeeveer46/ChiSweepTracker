@@ -19,7 +19,6 @@
 		FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC34F239AFB2600DD3127 /* Assets.xcassets */; };
 		FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0EC355239B105F00DD3127 /* MapKit.framework */; };
 		FA0EC358239B263200DD3127 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0EC357239B263200DD3127 /* Common.swift */; };
-		FA0EC391239C31CF00DD3127 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */; };
 		FA11425D243A806600E7E798 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11425C243A806600E7E798 /* InfoViewController.swift */; };
 		FA11425F243B59D400E7E798 /* InfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11425E243B59D400E7E798 /* InfoModel.swift */; };
 		FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */; };
@@ -91,7 +90,6 @@
 		FA0EC355239B105F00DD3127 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA0EC357239B263200DD3127 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		FA0EC38F239C265E00DD3127 /* Sweep Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Sweep Tracker.entitlements"; sourceTree = "<group>"; };
-		FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA11425C243A806600E7E798 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		FA11425E243B59D400E7E798 /* InfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModel.swift; sourceTree = "<group>"; };
 		FA184F9F2398706200AB2FF6 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
@@ -251,7 +249,6 @@
 				FA29464523985FE300A24FFC /* Main.storyboard */,
 				FA29464A23985FE600A24FFC /* LaunchScreen.storyboard */,
 				FA29464D23985FE600A24FFC /* Info.plist */,
-				FA0EC390239C31CF00DD3127 /* GoogleService-Info.plist */,
 				FA29463F23985FE300A24FFC /* AppDelegate.swift */,
 				FA29464123985FE300A24FFC /* SceneDelegate.swift */,
 				FA184FA12398707C00AB2FF6 /* ViewControllers */,
@@ -377,7 +374,6 @@
 			files = (
 				FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */,
 				FA87EFD923AAEB960061DDBC /* notification.m4r in Resources */,
-				FA0EC391239C31CF00DD3127 /* GoogleService-Info.plist in Resources */,
 				FAD5595B242FB49200F11DA1 /* logo-trash-1024.png in Resources */,
 				FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */,
 				FA29464723985FE300A24FFC /* Main.storyboard in Resources */,

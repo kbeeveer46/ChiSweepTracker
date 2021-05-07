@@ -33,7 +33,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
 		
         // Show options menu in the top right
-        self.showOptionsMenu()
+        self.showSaveFavoriteMenuItem()
         
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
@@ -61,7 +61,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     // Gets the multiple addresses in-app purchase
     func getMultipleAddressesInAppPurchase() {
-        let request = SKProductsRequest(productIdentifiers: ["com.kylebeverforden.chisweeptracker.multipleaddresses"])
+        let request = SKProductsRequest(productIdentifiers: [common.constants.multipleAddressIAPurchase])
         request.delegate = self
         request.start()
     }
@@ -222,12 +222,11 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                     
                 }
             }
-            
         })
     }
     
     // Show settings button in the top right
-    func showOptionsMenu() {
+    func showSaveFavoriteMenuItem() {
         
         self.common.getAddresses(address: self.schedule.address, completion: { addresses in
             
@@ -239,7 +238,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             
             DispatchQueue.main.async {
                 if !doNotShowOptionsMenu {
-                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openSaveAddressMenuItem))
                 }
                 else {
                     self.navigationItem.rightBarButtonItem = nil
@@ -248,7 +247,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         })
     }
     
-	@objc func openOptionsMenu() {
+	@objc func openSaveAddressMenuItem() {
 		
 		// Add haptic feedback
 		let generator = UISelectionFeedbackGenerator()

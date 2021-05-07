@@ -507,10 +507,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                     self.pushNotificationsSwitch.isOn = notificationsToggled
                     self.pushNotificationsSwitch.isUserInteractionEnabled = true
                     
-                    self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+                    self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openSaveAddressMenuItem))
                     
                     if self.tabBarController == nil {
-                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openSaveAddressMenuItem))
                     }
                 }
             }

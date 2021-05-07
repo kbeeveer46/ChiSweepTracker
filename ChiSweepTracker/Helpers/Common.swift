@@ -25,9 +25,7 @@ class Common {
     func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
     func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
     func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
-    
-    // SODA SDK
-    
+        
     // Schedule
     
     func dates() -> String {return defaults.string(forKey: "datesTitle") ?? ""}
@@ -114,8 +112,7 @@ class Common {
     
     class Constants {
         
-        // Databases
-        
+        // Database tables
         #if DEBUG
         let debugMode = true
         let addressesDatabaseName = "addresses_dev"
@@ -140,13 +137,17 @@ class Common {
         let notificationsDatabaseName = "notifications"
         #endif
         
-        // SODA
+        // One Signal
+        let OneSignalAppId = "2a6b2ed6-b4a7-4da0-8917-899cef558a0a"
         
+        // Multiple addresses in-app purchase
+        let multipleAddressIAPurchase = "com.kylebeverforden.chisweeptracker.multipleaddresses"
+        
+        // SODA
         let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
         let SODADomain = "data.cityofchicago.org"
         
         // Strings
-        
         let websiteURL = "https://chicagosweeptracker.info"
         
         let errorTitle = "Something went wrong..."

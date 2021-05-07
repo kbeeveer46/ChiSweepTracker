@@ -48,7 +48,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 defaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
-		
     }
 
     @available(iOS 13.0, *)
@@ -61,13 +60,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        
-//        let center = UNUserNotificationCenter.current()
-//        center.getNotificationSettings { (settings) in
-//            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
-//                OneSignal.disablePush(false)
-//            }
-//        }
     }
 
     @available(iOS 13.0, *)
