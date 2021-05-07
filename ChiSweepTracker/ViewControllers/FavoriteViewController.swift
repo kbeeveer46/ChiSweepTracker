@@ -64,17 +64,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             timePickerHeightConstraint.constant = 60
             whenPickerHeightConstraint.constant = 60
             favoriteStackView.spacing = 0
-        //        case .iPhoneSE2:
-        //            favoriteMapHeighConstraint.constant = 175
-        //        case .iPhone5,
-        //             .iPhone5S,
-        //             .iPhone5C,
-        //             .iPhone6,
-        //             .iPhone6S,
-        //             .iPhone7,
-        //             .iPhone8:
-        //            favoriteStackView.spacing = 7
-        //            favoriteMapHeighConstraint.constant = 175
         default:
             break
         }
@@ -507,10 +496,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                     self.pushNotificationsSwitch.isOn = notificationsToggled
                     self.pushNotificationsSwitch.isUserInteractionEnabled = true
                     
-                    self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openSaveAddressMenuItem))
+                    self.tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
                     
                     if self.tabBarController == nil {
-                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openSaveAddressMenuItem))
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "more_vert"), landscapeImagePhone: nil, style: .plain, target: self, action: #selector(self.openOptionsMenu))
                     }
                 }
             }
