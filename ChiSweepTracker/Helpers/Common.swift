@@ -281,7 +281,7 @@ class Common {
         let currentMonth = Calendar.current.component(.month, from: Date())
         let currentDay = Calendar.current.component(.day, from: Date())
 
-        schedule.address = address
+        //schedule.address = address
         
         // Get coordinates from address
         let geocoder = CLGeocoder()
@@ -303,14 +303,14 @@ class Common {
                 coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
                 
                 // Set schedule location coordinates
-                schedule.locationCoordinate = coordinates
+                //schedule.locationCoordinate = coordinates
                                 
                 // Create SODA client using domain and token
                 let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
                 
                 // Query SODA API to get ward and section
                 let wardQuery = wardClient.query(dataset: self.wardDataset())
-                    .filter("intersects(\(self.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
+                    .filter("intersects(\(self.geomTitle()),'POINT(\(coordinates.longitude) \(coordinates.latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -322,30 +322,6 @@ class Common {
                             // Get values from json query
                             let ward = data[0][self.wardTitle()] as? String ?? ""
                             let section = data[0][self.sectionTitle()] as? String ?? ""
-                            let the_geom = data[0][self.geomTitle()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.coordinatesTitle()] as? NSMutableArray
-                            let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
-                            
-                            // Loop through coordinates array
-                            for(_, coordinate) in coordinatesArray!.enumerated() {
-                                
-                                // Loop through each pair of coordinates
-                                for item in coordinate {
-                                    
-                                    // Create coorindate from lat and long in array
-                                    var coordinate = CLLocationCoordinate2D()
-                                    coordinate.longitude = item[0] as? Double ?? 0
-                                    coordinate.latitude = item[1] as? Double ?? 0
-                                    
-                                    // Add coordinates to schedule polygon coordinates
-                                    schedule.polygonCoordinates.append(coordinate)
-                                 
-                                }
-                            }
-                            
-                            // Set schedule ward and section
-                            schedule.ward = ward
-                            schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             // Query SODA API to get months and days
                             let scheduleQuery = wardClient.query(dataset: self.scheduleDataset())
@@ -414,8 +390,8 @@ class Common {
                                             }
                                         }
                                         
-                                        if let earliest = sweepDates.min() {
-                                            completion(earliest)
+                                        if let nextSweepDay = sweepDates.min() {
+                                            completion(nextSweepDay)
                                         }
                                         else {
                                             completion(nil)
@@ -460,26 +436,36 @@ class Common {
                                    notificationsWhen: String,
                                    notificationsHour: Int,
                                    notificationsMinute: Int,
-                                   nextSweepDay: String,
+                                   //nextSweepDay: String,
                                    completion: @escaping (Bool) -> Void) {
         
+        self.getNextSweepDay(address: address, completion: { date in
+            
+            var nextSweepDayFormatted = ""
+            
+            if date != nil {
+                let calendar = Calendar.current
+                let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+                nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
+            }
         
-        let urlTo = self.constants.websiteURL + "/insert-address.php"
-        let parameters = ["tableName": self.constants.addressesDatabaseName,
-                          "uuid": self.deviceUUID(),
-                          "address": address,
-                          "notificationsWhen": notificationsWhen,
-                          "notificationsHour": notificationsHour,
-                          "notificationsMinute": notificationsMinute,
-                          "notificationsEnabled": notificationsEnabled,
-                          "nextSweepDay": nextSweepDay] as [String : Any]
-        
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            completion(true)
-        }
+            let urlTo = self.constants.websiteURL + "/insert-address.php"
+            let parameters = ["tableName": self.constants.addressesDatabaseName,
+                              "uuid": self.deviceUUID(),
+                              "address": address,
+                              "notificationsWhen": notificationsWhen,
+                              "notificationsHour": notificationsHour,
+                              "notificationsMinute": notificationsMinute,
+                              "notificationsEnabled": notificationsEnabled,
+                              "nextSweepDay": nextSweepDayFormatted] as [String : Any]
+            
+            AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+                completion(true)
+            }
+        })
     }
     
-    func getDataFromDatabase(completion: @escaping (_ message: String) -> Void) {
+    func getValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
         defaults.setValue(true, forKey: "gettingValuesFromDatabase")
         
@@ -742,32 +728,20 @@ class Common {
         let favoriteAddress = self.favoriteAddress()
         
         if favoriteAddress != "" {
-            
-            self.getNextSweepDay(address: favoriteAddress, completion: { date in
                 
-                var nextSweepDayFormatted = ""
-                
-                if date != nil {
-                    let calendar = Calendar.current
-                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
-                    nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
-                }
-                
-                // insert address into database
-                self.insertAddressIntoDatabase(address: favoriteAddress,
-                                               notificationsEnabled: self.notificationsToggled() ? 1 : 0,
-                                               notificationsWhen: self.notificationWhen(),
-                                               notificationsHour: self.notificationHour(),
-                                               notificationsMinute: self.notificationMinute(),
-                                               nextSweepDay: nextSweepDayFormatted,
-                                               completion: { result in
-                                                
-                                                // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
-                                                defaults.set("", forKey: "favoriteAddress")
-                                                completion(true)
-                                               
-                                               })
-            })
+            // insert address into database
+            self.insertAddressIntoDatabase(address: favoriteAddress,
+                                           notificationsEnabled: self.notificationsToggled() ? 1 : 0,
+                                           notificationsWhen: self.notificationWhen(),
+                                           notificationsHour: self.notificationHour(),
+                                           notificationsMinute: self.notificationMinute(),
+                                           completion: { result in
+                                            
+                                            // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
+                                            defaults.set("", forKey: "favoriteAddress")
+                                            completion(true)
+                                           
+                                           })
         }
         else {
             completion(true)

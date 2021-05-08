@@ -30,10 +30,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.getAddresses(completion: { message in
             
             DispatchQueue.main.async {
-                
                 self.favoriteListTableView.reloadData()
                 self.loadFavoriteMap()
-                
             }
         })
     }
@@ -145,16 +143,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         
                         // Set the visible area of the map based on where the annotations are located
                         if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
-                            
-                            
-//                            var zoomRect            = MKMapRect.null
-//                            for annotation in self.favoriteListMapView.annotations {
-//                                let annotationPoint = MKMapPoint(annotation.coordinate)
-//                                let pointRect       = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.01, height: 0.01);
-//                                zoomRect            = zoomRect.union(pointRect);
-//                            }
-//                            self.favoriteListMapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), animated: true)
-                            
                             let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
                             self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 80, left: 80, bottom: 80, right: 80), animated: true)
                         }

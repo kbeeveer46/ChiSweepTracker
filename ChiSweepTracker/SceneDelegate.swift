@@ -44,7 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Get data from database tables and update notifications
         let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
-            self.common.getDataFromDatabase(completion: { message in
+            self.common.getValuesFromDatabase(completion: { message in
                 defaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }

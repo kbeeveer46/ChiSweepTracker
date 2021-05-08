@@ -26,12 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         print("uuid: \(self.common.deviceUUID())")
 		
+        // Required for didReceive when mass notification is opened
 		UNUserNotificationCenter.current().delegate = self
 		
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
-        // Set up an actin to take when a user opens a remote One Signal sweep notificaton (not from a mass send)
+        // Set up an action to take when a user opens a remote One Signal sweep notificaton (not from a mass send)
         let notificationOpenedBlock: OSNotificationOpenedBlock = { result in
             if let address = result.notification.additionalData?["address"] as? String {
                 if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
@@ -54,7 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if granted == false  {
                 
                 OneSignal.disablePush(true);
-
                 DispatchQueue.main.async {
                     UIApplication.shared.unregisterForRemoteNotifications()
                 }
@@ -62,7 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             else {
                 
                 OneSignal.disablePush(false);
-
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
@@ -72,13 +71,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         // Get data from database tables and update notifications
         let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
-            self.common.getDataFromDatabase(completion: { message in
+            self.common.getValuesFromDatabase(completion: { message in
                 defaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
         
         return true
-        
     }
     
     // This method will be called when the OneSignal notification subscription property changes.
@@ -88,9 +86,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                         
             if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
                 
+                // Set the playerId in defaults
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
                 defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
              
+                // Update notifications so user has the latest notifications
                 self.common.updateNotifications()
             }
         }
@@ -105,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Clear badge number when app opens
         application.applicationIconBadgeNumber = 0
 
-        // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it.
+        // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it and comes back to the app.
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { (settings) in
             if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Get data from database tables and update notifications
         let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
-            self.common.getDataFromDatabase(completion: { message in
+            self.common.getValuesFromDatabase(completion: { message in
                 defaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
@@ -150,13 +150,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 		// This method runs when a notification is opened when the app is in the background and foreground
         // This method runs when clicking on a notification from OneSignal when sending mass notifications (not sweep notifications)
         
-		// Clear badge number when app opens
-        UIApplication.shared.applicationIconBadgeNumber = 0
-        
         //let userInfo = response.notification.request.content.userInfo
         //print(userInfo)
         
-        // Send the user to the updates tab by default
+		// Clear badge number when app opens
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        // Send the user to the updates tab
         if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
             if let navigationController = rootViewController as? UINavigationController {
                 if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {

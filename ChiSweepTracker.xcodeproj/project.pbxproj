@@ -203,13 +203,13 @@
 		FA184FA623987ADC00AB2FF6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
-				FA3F869023E48DBB00194C47 /* VehicleModel.swift */,
+				20C5B035263797F70003D645 /* AddressModel.swift */,
 				FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */,
-				FAD5595E2433E75700F11DA1 /* UpdatesModel.swift */,
 				FA11425E243B59D400E7E798 /* InfoModel.swift */,
 				20959B322636DDF5000B2E75 /* NewsModel.swift */,
-				20C5B035263797F70003D645 /* AddressModel.swift */,
+				FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */,
+				FAD5595E2433E75700F11DA1 /* UpdatesModel.swift */,
+				FA3F869023E48DBB00194C47 /* VehicleModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
