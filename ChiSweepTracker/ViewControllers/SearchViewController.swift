@@ -81,62 +81,26 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
-            getNextSweepingDate()
+            getNextSweepDay()
 		}
 	}
-	
+    
     // Get all addresses and find the next sweeping day
-	func getNextSweepingDate() {
-
-		self.messageCardView.isHidden = true
+    func getNextSweepDay() {
         
-        self.common.getAddresses(completion: {completion in
+        self.messageCardView.isHidden = true
         
-            let addresses = completion
-            var schedules = [ScheduleModel]()
-            var sweepDates = [Date]()
-            let group = DispatchGroup()
-            
-            for (_, element) in addresses.enumerated() {
-                
-                group.enter()
-                
-                self.populateSchedule(element.address, completion: { schedule in
-                    schedules.append(schedule)
-                    group.leave()
-                })
+        var sweepDates = [Date]()
+        
+        self.common.getAddresses(completion: {addresses in
+        
+            for address in addresses {
+                if address.nextSweepDay != nil {
+                    sweepDates.append(address.nextSweepDay!)
+                }
             }
             
-            group.notify(queue: .main) {
-                
-                for schedule in schedules {
-                    
-                    for month in schedule.months {
-                        
-                        if Int(month.number)! >= self.currentMonth {
-                            
-                            for date in month.dates {
-                                
-                                if Int(month.number)! > self.currentMonth ||
-                                    Int(month.number) == self.currentMonth && date.date >= self.currentDay {
-                                
-                                    // Specify date components
-                                    var dateComponents = DateComponents()
-                                    dateComponents.year = self.common.latestAppVersion()
-                                    dateComponents.month = Int(month.number)
-                                    dateComponents.day = date.date
-
-                                    // Create date from components
-                                    let userCalendar = Calendar(identifier: .gregorian) // since the components above (like year 1980) are for Gregorian
-                                    let sweepDay = userCalendar.date(from: dateComponents)
-                                    sweepDates.append(sweepDay!)
-                                    
-                                }
-                            }
-                        }
-                    }
-                }
-                
+            if sweepDates.count > 0 {
                 if let earliest = sweepDates.min() {
                     
                     self.messageCardView.isHidden = false
@@ -148,7 +112,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 }
             }
         })
-	}
+    }
 
     // Search for schedule when message card view is tapped
     // This doesn't work with multiple addresses

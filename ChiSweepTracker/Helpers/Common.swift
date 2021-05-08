@@ -238,6 +238,12 @@ class Common {
                     
                     let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
                     
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "M/dd/yyyy"
+//                    dateFormatter.dateStyle = .short
+//                    dateFormatter.timeStyle = .none
+//                    dateFormatter.timeZone = TimeZone(abbreviation: "CDT")
+                    
                     for item in json.enumerated() {
                         
                         let address = AddressModel()
@@ -246,6 +252,12 @@ class Common {
                         address.notificationsWhen = item.element["notificationsWhen"]!
                         address.notificationsHour = item.element["notificationsHour"]!
                         address.notificationsMinute = item.element["notificationsMinute"]!
+                        
+                        let nextSweepDay = item.element["nextSweepDay"]!
+                        if nextSweepDay != "" {
+                            address.nextSweepDay = dateFormatter.date(from: nextSweepDay)!
+                        }
+                        
                         addresses.append(address)
                     }
                     
@@ -436,7 +448,6 @@ class Common {
                                    notificationsWhen: String,
                                    notificationsHour: Int,
                                    notificationsMinute: Int,
-                                   //nextSweepDay: String,
                                    completion: @escaping (Bool) -> Void) {
         
         self.getNextSweepDay(address: address, completion: { date in
@@ -1011,6 +1022,13 @@ extension String {
 }
 
 extension Date {
+    
+//    public var removeTimeStamp : Date? {
+//        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else {
+//            return nil
+//        }
+//        return date
+//    }
     
     func daysBetween(date: Date) -> Int {
         return Date.daysBetween(start: self, end: date)
