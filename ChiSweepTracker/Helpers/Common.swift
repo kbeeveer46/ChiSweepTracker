@@ -178,7 +178,7 @@ class Common {
         if userDatasetVersion != 0 && userDatasetVersion < latestDatasetVersion && notificationsYear == latestAppVersion {
             
             // Create dataset updated alert
-            let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated.", preferredStyle: .alert)
+            let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.", preferredStyle: .alert)
             
             // Create and add OK option for dataset updated alert
             datasetUpdatedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -198,7 +198,7 @@ class Common {
         // Set the last year when notifications were updated.
         // Use the value to alert them if they loaded the app after a new year came out
         if notificationsYear != 0 && notificationsYear < latestAppVersion {
-            self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated.")
+            self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
         }
         defaults.set(latestAppVersion, forKey: "notificationsYear")
         
@@ -254,6 +254,25 @@ class Common {
             }
         }
     }
+    
+//    func getAddressNotificationCount(uuid: String, completion: @escaping (_ message: Int) -> ()) {
+//        
+//        let urlTo = self.constants.websiteURL + "/get-address-notification-count.php"
+//        let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
+//
+//        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+//            switch response.result {
+//            case .failure(let error):
+//                print(error)
+//                completion(0)
+//            case .success(let count as Int):
+//                completion(count)
+//            default:
+//                completion(0)
+//            }
+//        }
+//    }
+    
     
     func getNextSweepDay(address: String, completion: @escaping (Date?) -> ()) {
         
@@ -717,9 +736,9 @@ class Common {
         completion("Finished getting data from database")
     }
     
+    // Do not remove. This code is required for old users migrating to the new app with multiple address
     func migrateOldUsersToUseDatabase(completion: @escaping (_ completion: Bool) -> Void) {
     
-        // Do not remove. This code is required for old users migrating to the new app with multiple address
         let favoriteAddress = self.favoriteAddress()
         
         if favoriteAddress != "" {
@@ -779,13 +798,11 @@ class Common {
                             
                             let address = item.element["address"]!
                             let notificationsToggledString = item.element["notificationsEnabled"]!
-                            var notificationsToggled = false
-                            notificationsToggled = (notificationsToggledString == "1" ? true : false)
+                            let notificationsToggled = notificationsToggledString == "1" ? true : false
                             let notificationsWhen = item.element["notificationsWhen"]!
                             let notificationsHour = Int(item.element["notificationsHour"]!)
                             let notificationsMinute = Int(item.element["notificationsMinute"]!)
                             
-                                
                             self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
                                 if notificationsToggled == true {
                                     favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
@@ -798,11 +815,10 @@ class Common {
         })
     }
     
+    // This is run when a sweep notification is opened. It redirects the user to the schedule page
     func goToScheduleFromNotification(_ address: String) {
         
         let schedule = ScheduleModel()
-        
-        // Set schedule address
         schedule.address = address
         
         // Get coordinates from address
@@ -811,7 +827,7 @@ class Common {
             
             // No internet connection will cause an error
             if error != nil {
-                //self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
+                print(error?.localizedDescription ?? "")
                 return
             }
             
@@ -940,8 +956,6 @@ class Common {
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
                     }
                 }
-            }
-            else {
             }
         }
     }

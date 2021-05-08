@@ -95,7 +95,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             case .failed:
                 defaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Purchase Did Not Complete", "Your device did not complete the purchase.")
+                self.common.showAlert("Unable To Purchase", "There was an issue and your device did not complete the purchase.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .deferred:

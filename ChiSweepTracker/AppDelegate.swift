@@ -1,5 +1,4 @@
 import UIKit
-import UserNotifications
 import IQKeyboardManagerSwift
 import OneSignal
 
@@ -32,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
 		IQKeyboardManager.shared.enable = true
         
-        // Set up an actin to take when a user opens a remote One Signal notification from a sweep notificaton (not from a mass send)
+        // Set up an actin to take when a user opens a remote One Signal sweep notificaton (not from a mass send)
         let notificationOpenedBlock: OSNotificationOpenedBlock = { result in
             if let address = result.notification.additionalData?["address"] as? String {
                 if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
@@ -55,9 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if granted == false  {
                 
                 OneSignal.disablePush(true);
-                //print("OneSignal disabled")
-                
-                // Unregister for Firebase Cloud Messaging and APN notifications
+
                 DispatchQueue.main.async {
                     UIApplication.shared.unregisterForRemoteNotifications()
                 }
@@ -65,9 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             else {
                 
                 OneSignal.disablePush(false);
-                //print("OneSignal enabled")
-                
-                // Register for Firebase Cloud Messaging and APN notifications
+
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
@@ -103,7 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         if stateChanges.from.isSubscribed && !stateChanges.to.isSubscribed {
             //print("Unsubscribed for OneSignal push notifications!")
         }
-    
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -127,20 +121,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             })
         }
     }
-    
-//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//
-//		//let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
-//
-//        //let token = tokenParts.joined()
-//
-//        //print("didRegisterForRemoteNotificationsWithDeviceToken: \(token)")
-//
-//    }
-    
-//    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-//        print("didFailToRegisterForRemoteNotificationsWithError: \(error)")
-//    }
     
     // MARK: UISceneSession Lifecycle
     

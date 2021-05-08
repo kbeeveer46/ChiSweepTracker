@@ -1,5 +1,4 @@
 import UIKit
-import UserNotifications
 import CoreLocation
 import MapKit
 import THLabel
