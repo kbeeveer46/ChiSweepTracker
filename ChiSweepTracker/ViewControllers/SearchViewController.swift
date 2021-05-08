@@ -208,7 +208,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
     
 	// Search for schedule when search button is tapped
-    func populateSchedule(_ address: String, completion: @escaping (ScheduleModel)->()) {
+    func populateSchedule(_ address: String,_ setDefaultLatLong: Bool = false, completion: @escaping (ScheduleModel)->()) {
         
 		// Clear all months and polygons so there are no duplicates
         self.schedule.months.removeAll()
@@ -241,8 +241,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 self.schedule.locationCoordinate = coordinates
                 
 				// Set default lat and long to be used when user re-opens the app
-                defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
-                defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
+                if setDefaultLatLong {
+                    defaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
+                    defaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
+                }
 				
 				// Create SODA client using domain and token
 				let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
@@ -637,7 +639,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		defaults.set(address, forKey: "defaultAddress")
 		
 		// Find address and go to select section view or schedule view
-        self.populateSchedule(address, completion: { schedule in
+        self.populateSchedule(address, true,  completion: { schedule in
             if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
                 destinationViewController.schedule = schedule
                 self.navigationController?.pushViewController(destinationViewController, animated: true)
