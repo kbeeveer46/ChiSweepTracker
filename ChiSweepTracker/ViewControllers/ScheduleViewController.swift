@@ -161,15 +161,18 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                         let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
                         
                         // Yes option
-                        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                        let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
                             
                             // Segue to schedule view
                             if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
                                 destinationViewController.schedule = self.schedule
                                 self.navigationController?.pushViewController(destinationViewController, animated: true)
                             }
-                    
-                        }))
+                        })
+                        //yesAction.setValue(UIColor.systemBlue, forKey: "titleTextColor")
+                                                            
+                        // Add yes option to alert
+                        alert.addAction(yesAction)
                         
                         // No option
                         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))

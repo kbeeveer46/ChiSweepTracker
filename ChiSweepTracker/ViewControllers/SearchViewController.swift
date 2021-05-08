@@ -339,7 +339,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		let alert = UIAlertController(title: "No Schedule Found", message: "Your address is in an area without a sweep schedule. You may request a street cleaning by calling the City of Chicago's request line at 3-1-1.", preferredStyle: .alert)
 		
 		// Call option
-		alert.addAction(UIAlertAction(title: "Call 3-1-1", style: .default, handler:{ action in
+        alert.addAction(UIAlertAction(title: "Call 3-1-1", style: .default, handler:{ action in
 			
 			let url = URL(string: "tel://311")
 			UIApplication.shared.open(url!, options: [:], completionHandler:nil)
@@ -422,7 +422,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 		// Yes option. Opening settings only available in iOS 10 and later
 		if #available(iOS 10.0, *) {
-			let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
 				if let url = URL(string: UIApplication.openSettingsURLString) {
 					UIApplication.shared.open(url, options: [:], completionHandler: nil)
 				}

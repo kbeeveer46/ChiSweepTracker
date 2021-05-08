@@ -116,7 +116,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         // If the current address in the loop has a sweep day that matches the next sweep day then open the callout by default
                         if self.addresses.count > 1 {
                             if address.nextSweepDay == addressWithNextSweepDay.nextSweepDay {
-                                //self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+                                self.favoriteListMapView.selectAnnotation(annotation, animated: true)
                             }
                         }
                         // If there is only one address then open the callout by default

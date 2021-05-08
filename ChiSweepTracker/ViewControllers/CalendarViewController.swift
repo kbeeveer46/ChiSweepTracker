@@ -261,7 +261,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 			let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)/\(currentYear).", preferredStyle: .alert)
             
 			// Yes option
-			alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
 				// Create event store
                 let eventStore = EKEventStore()

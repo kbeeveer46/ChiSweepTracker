@@ -181,7 +181,7 @@ class Common {
             let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.", preferredStyle: .alert)
             
             // Create and add OK option for dataset updated alert
-            datasetUpdatedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            datasetUpdatedAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             
             var rootViewController = UIApplication.shared.keyWindow?.rootViewController
             
