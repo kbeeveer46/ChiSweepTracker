@@ -440,33 +440,16 @@ class Common {
         }
     }
     
-    func updateAddressesNextSweepDay() {
+    func updateAddressesNextSweepDay(address: String, day: String) {
         
-        self.getAddresses(completion: { addresses in
-            
-            for address in addresses {
-                
-                self.getNextSweepDay(address: address.address, completion: { date in
-                    
-                    var nextSweepDayFormatted = ""
-                    
-                    if date != nil {
-                        let calendar = Calendar.current
-                        let components = calendar.dateComponents([.year, .month, .day], from: date!)
-                        nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
-                    }
-                    
-                    let urlTo = self.constants.websiteURL + "/update-address-next-sweep-day.php"
-                    let parameters = ["tableName": self.constants.addressesDatabaseName,
-                                      "nextSweepDay": nextSweepDayFormatted,
-                                      "uuid": self.deviceUUID(),
-                                      "address": address.address] as [String : Any]
-                    
-                    AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
-                    
-                })
-            }
-        })
+        let urlTo = self.constants.websiteURL + "/update-address-next-sweep-day.php"
+        let parameters = ["tableName": self.constants.addressesDatabaseName,
+                          "nextSweepDay": day,
+                          "uuid": self.deviceUUID(),
+                          "address": address] as [String : Any]
+        
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+
     }
     
     func insertAddressIntoDatabase(address: String,
@@ -556,7 +539,6 @@ class Common {
                                 defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
                                 
                                 DispatchQueue.main.async {
-                                    self.updateAddressesNextSweepDay()
                                     self.updateNotifications()
                                     self.displayNewOrUpdatedScheduleAlerts()
                                 }
@@ -794,36 +776,37 @@ class Common {
         
         migrateOldUsersToUseDatabase(completion: { completion in
             
-            let urlTo = self.constants.websiteURL + "/get-address-data.php"
-            let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
-            
-            AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
-                switch response.result {
-                case .failure(let error):
-                    print(error)
-                case .success:
-                    if let value = response.data {
+            self.getAddresses(completion: { addresses in
+                
+                for address in addresses {
+                    
+                    // Update next sweep day
+                    self.getNextSweepDay(address: address.address, completion: { date in
                         
-                        let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
+                        var nextSweepDayFormatted = ""
                         
-                        for item in json.enumerated() {
-                            
-                            let address = item.element["address"]!
-                            let notificationsToggledString = item.element["notificationsEnabled"]!
-                            let notificationsToggled = notificationsToggledString == "1" ? true : false
-                            let notificationsWhen = item.element["notificationsWhen"]!
-                            let notificationsHour = Int(item.element["notificationsHour"]!)
-                            let notificationsMinute = Int(item.element["notificationsMinute"]!)
-                            
-                            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-                                if notificationsToggled == true {
-                                    favoriteViewController.getSchedule(true, true, address, notificationsWhen, notificationsHour!, notificationsMinute!)
-                                }
-                            })
+                        if date != nil {
+                            let calendar = Calendar.current
+                            let components = calendar.dateComponents([.year, .month, .day], from: date!)
+                            nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
                         }
-                    }
+
+                        self.updateAddressesNextSweepDay(address: address.address, day: nextSweepDayFormatted)
+                    })
+                    
+                    // Update notifications
+                    let notificationsToggled = address.notificationsEnabled == "1" ? true : false
+                    let notificationsWhen = address.notificationsWhen
+                    let notificationsHour = Int(address.notificationsHour)
+                    let notificationsMinute = Int(address.notificationsMinute)
+                    
+                    self.deleteNotificationsFromDatabase(address.address, self.constants.notificationsDatabaseName, completion: {completion in
+                        if notificationsToggled == true {
+                            favoriteViewController.getSchedule(true, true, address.address, notificationsWhen, notificationsHour!, notificationsMinute!)
+                        }
+                    })
                 }
-            }
+            })
         })
     }
     
