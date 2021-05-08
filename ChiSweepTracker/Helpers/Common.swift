@@ -240,9 +240,6 @@ class Common {
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "M/dd/yyyy"
-//                    dateFormatter.dateStyle = .short
-//                    dateFormatter.timeStyle = .none
-//                    dateFormatter.timeZone = TimeZone(abbreviation: "CDT")
                     
                     for item in json.enumerated() {
                         
@@ -443,6 +440,35 @@ class Common {
         }
     }
     
+    func updateAddressesNextSweepDay() {
+        
+        self.getAddresses(completion: { addresses in
+            
+            for address in addresses {
+                
+                self.getNextSweepDay(address: address.address, completion: { date in
+                    
+                    var nextSweepDayFormatted = ""
+                    
+                    if date != nil {
+                        let calendar = Calendar.current
+                        let components = calendar.dateComponents([.year, .month, .day], from: date!)
+                        nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
+                    }
+                    
+                    let urlTo = self.constants.websiteURL + "/update-address-next-sweep-day.php"
+                    let parameters = ["tableName": self.constants.addressesDatabaseName,
+                                      "nextSweepDay": nextSweepDayFormatted,
+                                      "uuid": self.deviceUUID(),
+                                      "address": address.address] as [String : Any]
+                    
+                    AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+                    
+                })
+            }
+        })
+    }
+    
     func insertAddressIntoDatabase(address: String,
                                    notificationsEnabled: Int,
                                    notificationsWhen: String,
@@ -456,7 +482,7 @@ class Common {
             
             if date != nil {
                 let calendar = Calendar.current
-                let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: date!)
+                let components = calendar.dateComponents([.year, .month, .day], from: date!)
                 nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
             }
         
@@ -530,6 +556,7 @@ class Common {
                                 defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
                                 
                                 DispatchQueue.main.async {
+                                    self.updateAddressesNextSweepDay()
                                     self.updateNotifications()
                                     self.displayNewOrUpdatedScheduleAlerts()
                                 }

@@ -27,40 +27,19 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListTableView.delegate = self
         
         // Get addresses from database and use the data in the map and table
-        self.getAddresses(completion: { message in
-            
-            DispatchQueue.main.async {
-                self.favoriteListTableView.reloadData()
-                self.loadFavoriteMap()
-            }
-        })
-    }
-    
-    func getAddresses(completion: @escaping (_ message: Bool) -> Void) {
-        
         self.common.getAddresses(completion: { addresses in
             
             self.addresses = addresses
-            let group = DispatchGroup()
             
-            for address in self.addresses {
-            
-                group.enter()
-                
-                self.common.getNextSweepDay(address: address.address, completion: { date in
-                    address.nextSweepDay = date
-                    group.leave()
-                })
-            }
-            
-            group.notify(queue: .main) {
-                completion(true)
+            DispatchQueue.main.async {
+                self.favoriteListTableView.reloadData()
+                self.loadFavoriteListMap()
             }
         })
     }
     
-    // Load map with default lat, long, and polygon coordinates or load Chicago map
-    func loadFavoriteMap() {
+    //
+    func loadFavoriteListMap() {
         
         // Set required properties for map
         self.favoriteListMapView.delegate = self
@@ -71,7 +50,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             self.tabBarController?.navigationItem.title = "Saved Addresses"
             self.favoriteListViewHeaderLabel.text = "Click on address below to set up notifications.\nClick on magnifying glass to view schedule."
             
-            let nextSweepDay = self.addresses.reduce(self.addresses[0], {
+            let addressWithNextSweepDay = self.addresses.reduce(self.addresses[0], {
                 $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
             })
 
@@ -84,9 +63,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                 geocoder.geocodeAddressString(address.address) { placemarks, error in
                     
                     // No internet connection will cause an error
-                    if error != nil {
-                        return
-                    }
+                    //if error != nil {
+                        //return
+                    //}
                     
                     if placemarks != nil {
                     
@@ -136,19 +115,19 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         
                         // If the current address in the loop has a sweep day that matches the next sweep day then open the callout by default
                         if self.addresses.count > 1 {
-                            if address.nextSweepDay == nextSweepDay.nextSweepDay {
-                                self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+                            if address.nextSweepDay == addressWithNextSweepDay.nextSweepDay {
+                                //self.favoriteListMapView.selectAnnotation(annotation, animated: true)
                             }
-                        }
-                        
-                        // Set the visible area of the map based on where the annotations are located
-                        if self.addresses.count != 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
-                            let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
-                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 80, left: 80, bottom: 80, right: 80), animated: true)
                         }
                         // If there is only one address then open the callout by default
                         else if self.addresses.count == 1 {
                             self.favoriteListMapView.selectAnnotation(annotation, animated: true)
+                        }
+                        
+                        // Set the visible area of the map based on where the annotations are located
+                        if self.addresses.count > 1 && self.addresses.count == self.favoriteListMapView.annotations.count {
+                            let poly:MKPolygon = MKPolygon(coordinates: self.mapLocations, count: self.mapLocations.count)
+                            self.favoriteListMapView.setVisibleMapRect(poly.boundingMapRect, edgePadding: UIEdgeInsets(top: 80, left: 80, bottom: 80, right: 80), animated: true)
                         }
                     }
                 }
@@ -370,7 +349,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         self.addresses.remove(at: indexPath.row)
                         self.favoriteListTableView.deleteRows(at: [indexPath], with: .automatic)
                         self.favoriteListTableView.endUpdates()
-                        self.loadFavoriteMap()
+                        self.loadFavoriteListMap()
                     }
                 })
             })

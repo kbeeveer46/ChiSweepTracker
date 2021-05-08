@@ -117,10 +117,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "Common.sendRequest(_:parameters:completion:):Common.swift">
+         contextName = "AppDelegate.userNotificationCenter(_:willPresent:withCompletionHandler:):AppDelegate.swift">
       </ContextState>
       <ContextState
-         contextName = "AppDelegate.userNotificationCenter(_:willPresent:withCompletionHandler:):AppDelegate.swift">
+         contextName = "Common.sendRequest(_:parameters:completion:):Common.swift">
       </ContextState>
       <ContextState
          contextName = "closure #2 in FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
@@ -145,15 +145,15 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #2 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
-      </ContextState>
-      <ContextState
          contextName = "Common.getAddresses(address:completion:):Common.swift">
          <PersistentStrings>
             <PersistentString
                value = "self.deviceUUID()">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
       </ContextState>
       <ContextState
          contextName = "InfoViewController.tableView(_:cellForRowAt:):InfoViewController.swift">
@@ -180,10 +180,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteAddresses.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #2 in FavoriteListViewController.loadFavoriteMap():FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "self.favoriteListMapView.annotations.count ">
+            </PersistentString>
+            <PersistentString
+               value = "self.favoriteListMapView.annotations.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -191,21 +202,13 @@
          contextName = "FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.constants.websiteURL">
+               value = "self.common.notificationOneSignalPlayerId()">
             </PersistentString>
             <PersistentString
                value = "&quot;\(self.common.constants.websiteURL)/insert-notification.php?playerId=\(self.common.notificationOneSignalPlayerId())&amp;address=\(address)&amp;notificationTime=\(notificationTime)&amp;sweepDay=\(sweepDay)&amp;tableName=\(tableName)&quot;">
             </PersistentString>
             <PersistentString
-               value = "self.common.notificationOneSignalPlayerId()">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ScheduleViewController.addFavorite():ScheduleViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favoriteAddresses.count">
+               value = "self.common.constants.websiteURL">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

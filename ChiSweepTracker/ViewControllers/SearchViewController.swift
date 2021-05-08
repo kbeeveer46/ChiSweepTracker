@@ -101,12 +101,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             }
             
             if sweepDates.count > 0 {
-                if let earliest = sweepDates.min() {
+                
+                if let nextSweepDay = sweepDates.min() {
                     
                     self.messageCardView.isHidden = false
                     
                     let calendar = Calendar.current
-                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: earliest)
+                    let components = calendar.dateComponents([.year, .month, .day], from: nextSweepDay)
                     self.messageLabel.text = "Your next sweeping is on \(components.month!)/\(components.day!)/\(components.year!)"
                     
                 }
