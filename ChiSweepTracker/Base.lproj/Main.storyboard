@@ -59,20 +59,44 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h1k-Fa-Jcb">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zEI-AC-rXi" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="148" width="408" height="60"/>
-                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="9m1-TN-vHk">
+                                                <rect key="frame" x="71.666666666666657" y="12" width="264.66666666666674" height="36"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Ec3-t3-KMl">
+                                                        <rect key="frame" x="0.0" y="0.0" width="264.66666666666669" height="36"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search_circle" translatesAutoresizingMaskIntoConstraints="NO" id="ONO-Hq-cIJ">
+                                                                <rect key="frame" x="0.0" y="1.3333333333333144" width="35" height="33.333333333333336"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="35" id="yGb-fd-Iob"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find Sweep Schedule" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VrU-yp-1IX">
+                                                                <rect key="frame" x="44.999999999999986" y="4.9999999999999982" width="219.66666666666663" height="26.333333333333329"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="ONO-Hq-cIJ" firstAttribute="centerY" secondItem="Ec3-t3-KMl" secondAttribute="centerY" id="6SN-Ic-5RM"/>
+                                                            <constraint firstItem="VrU-yp-1IX" firstAttribute="centerY" secondItem="Ec3-t3-KMl" secondAttribute="centerY" id="r7b-ue-DfK"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="ySz-xS-V2V"/>
+                                            <constraint firstAttribute="height" constant="60" id="ML1-MY-AeY"/>
+                                            <constraint firstItem="9m1-TN-vHk" firstAttribute="centerX" secondItem="zEI-AC-rXi" secondAttribute="centerX" id="d6m-K2-B8e"/>
+                                            <constraint firstItem="9m1-TN-vHk" firstAttribute="top" secondItem="zEI-AC-rXi" secondAttribute="top" constant="12" id="rLz-xT-zV7"/>
+                                            <constraint firstAttribute="bottom" secondItem="9m1-TN-vHk" secondAttribute="bottom" constant="12" id="uuA-1F-JCI"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                        <state key="normal" title="Find Sweep Schedule">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="searchAddressTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zwg-jT-PAM"/>
-                                        </connections>
-                                    </button>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iso-5u-Tft" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="228" width="408" height="45"/>
                                         <subviews>
@@ -126,9 +150,9 @@
                         <outlet property="addressTextField" destination="iz5-fA-FV8" id="tRP-VG-G6b"/>
                         <outlet property="chicagoMapView" destination="l5K-mm-59I" id="BGk-4u-mPn"/>
                         <outlet property="chicagoMapViewHeightConstraint" destination="XJi-jr-BwO" id="c9k-W2-bHd"/>
+                        <outlet property="findSweepScheduleCardView" destination="zEI-AC-rXi" id="jfi-m5-dcy"/>
                         <outlet property="messageCardView" destination="iso-5u-Tft" id="8FL-lU-tA1"/>
                         <outlet property="messageLabel" destination="wcb-dY-R9C" id="CWU-Ec-Uah"/>
-                        <outlet property="searchAddressButton" destination="h1k-Fa-Jcb" id="7xn-Qg-gPU"/>
                         <outlet property="searchStackView" destination="a0x-bJ-ZY7" id="VDY-wb-0A0"/>
                         <outlet property="searchTypeSegment" destination="2i0-Qr-vT0" id="m6c-7j-X4c"/>
                         <segue destination="Xr8-KD-z2R" kind="show" identifier="viewScheduleFromSearchSegue" id="nuK-lD-YCG"/>
@@ -152,26 +176,26 @@
                                 <color key="sectionIndexBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="infoTableCell" id="1v4-pe-yoq">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="133.33332824707031"/>
+                                        <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="134.33332824707031"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1v4-pe-yoq" id="E2N-7N-TpW">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="133.33332824707031"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="428" height="134.33332824707031"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rv1-F9-GEl" customClass="CardView" customModule="Sweep_Tracker" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="10.999999999999993" width="388" height="111.33333333333331"/>
+                                                    <rect key="frame" x="20" y="10.999999999999993" width="388" height="112.33333333333331"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Bvx-z0-bLp">
-                                                            <rect key="frame" x="10" y="10" width="368" height="91.333333333333329"/>
+                                                            <rect key="frame" x="10" y="10" width="368" height="92.333333333333329"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lx2-i5-maY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="91.333333333333329"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="92.333333333333329"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="35" id="fEK-0M-cYB"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vIW-6H-5pr">
-                                                                    <rect key="frame" x="45" y="0.0" width="323" height="91.333333333333329"/>
+                                                                    <rect key="frame" x="45" y="0.0" width="323" height="92.333333333333329"/>
                                                                     <attributedString key="attributedText">
                                                                         <fragment content="Enjoying Sweep Tracker? Click here to give it a 5-star rating. Your positive rating will help others in Chicago avoid tickets.">
                                                                             <attributes>
@@ -2170,11 +2194,15 @@ Click on magnifying glass to view schedule.</string>
         <image name="model" width="33.333332061767578" height="33.333332061767578"/>
         <image name="new" width="33.333332061767578" height="33.333332061767578"/>
         <image name="phone" width="33.333332061767578" height="33.333332061767578"/>
+        <image name="search_circle" width="33.333332061767578" height="33.333332061767578"/>
         <image name="star_border" width="33.333332061767578" height="33.333332061767578"/>
         <image name="state" width="33.333332061767578" height="33.333332061767578"/>
         <image name="time" width="33.333332061767578" height="33.333332061767578"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

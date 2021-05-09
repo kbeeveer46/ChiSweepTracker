@@ -6,14 +6,15 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
 	// Controls
     @IBOutlet weak var addressTextField: UITextField!
-    @IBOutlet weak var searchAddressButton: UIButton!
+    //@IBOutlet weak var searchAddressButton: UIButton!
 	@IBOutlet weak var chicagoMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
 	@IBOutlet weak var searchStackView: UIStackView!
 	@IBOutlet weak var messageLabel: UILabel!
 	@IBOutlet weak var messageCardView: CardView!
-	
+    @IBOutlet weak var findSweepScheduleCardView: CardView!
+    
 	// Classes
     let schedule = ScheduleModel()
     let common = Common()
@@ -45,11 +46,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
         
-        // Create a gesture recognizer (tap gesture) for message card view
-        //let messageCardViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMessageCardViewTap(sender:)))
+        // Create a gesture recognizer (tap gesture) for find sweep schedule card view
+        let findSweepScheduleCardViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(findSweepScheduleButtonTapped(sender:)))
                 
-        // Add the gesture recognizer to the message card view
-        //messageCardView.addGestureRecognizer(messageCardViewTapGesture)
+        // Add the gesture recognizer to the find sweep schedule card view
+        findSweepScheduleCardView.addGestureRecognizer(findSweepScheduleCardViewTapGesture)
 		
 	}
 	
@@ -129,6 +130,49 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 //            })
 //        }
 //    }
+    
+    @objc func findSweepScheduleButtonTapped(sender: UITapGestureRecognizer) {
+        
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        // Stop updating user's location to save battery
+        locationManager.stopUpdatingLocation()
+        
+        // If Use My Location was selected revert it back to Enter Address.
+        // Otherwise, if the user goes back to the search page it looks like it's still using their location when it's not
+        if self.searchTypeSegment.selectedSegmentIndex == 2 {
+            self.searchTypeSegment.selectedSegmentIndex = 0
+        }
+        
+        // Get address from text field for searching
+        var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        
+        // Add "Chicago" to address if it doesn't contain it to help find address
+        if !address.lowercased().contains("chicago") && !address.isEmpty {
+            address = address + " Chicago"
+        }
+        
+        // Alert user if they didn't enter an address
+        if address.isEmpty {
+            self.common.showAlert("Address cannot be blank", "")
+            return
+        }
+        
+        // Set default address to be used when app is re-opened
+        self.userDefaults.set(address, forKey: "defaultAddress")
+        
+        // Find address and go to select section view or schedule view
+        self.populateSchedule(address, true,  completion: { schedule in
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                destinationViewController.schedule = schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        })
+        
+    }
     
     // Add annotation when Chicago map is tapped
 	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
@@ -578,41 +622,47 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	}
 	
 	// Search address button is tapped
-	@IBAction func searchAddressTapped(_ sender: Any) {
-		
-		// Add haptic feedback
-		let generator = UISelectionFeedbackGenerator()
-		generator.prepare()
-		generator.selectionChanged()
-		
-		// Stop updating user's location to save battery
-		locationManager.stopUpdatingLocation()
-				
-		// Get address from text field for searching
-		var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-		
-		// Add "Chicago" to address if it doesn't contain it to help find address
-		if !address.lowercased().contains("chicago") && !address.isEmpty {
-			address = address + " Chicago"
-		}
-		
-		// Alert user if they didn't enter an address
-		if address.isEmpty {
-			self.common.showAlert("Address cannot be blank", "")
-			return
-		}
-		
-		// Set default address to be used when app is re-opened
-		self.userDefaults.set(address, forKey: "defaultAddress")
-		
-		// Find address and go to select section view or schedule view
-        self.populateSchedule(address, true,  completion: { schedule in
-            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                destinationViewController.schedule = schedule
-                self.navigationController?.pushViewController(destinationViewController, animated: true)
-            }
-        })
-	}
+//	@IBAction func searchAddressTapped(_ sender: Any) {
+//
+//		// Add haptic feedback
+//		let generator = UISelectionFeedbackGenerator()
+//		generator.prepare()
+//		generator.selectionChanged()
+//
+//		// Stop updating user's location to save battery
+//		locationManager.stopUpdatingLocation()
+//
+//        // If Use My Location was selected revert it back to Enter Address.
+//        // Otherwise, if the user goes back to the search page it looks like it's still using their location when it's not
+//        if self.searchTypeSegment.selectedSegmentIndex == 2 {
+//            self.searchTypeSegment.selectedSegmentIndex = 0
+//        }
+//
+//		// Get address from text field for searching
+//		var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+//
+//		// Add "Chicago" to address if it doesn't contain it to help find address
+//		if !address.lowercased().contains("chicago") && !address.isEmpty {
+//			address = address + " Chicago"
+//		}
+//
+//		// Alert user if they didn't enter an address
+//		if address.isEmpty {
+//			self.common.showAlert("Address cannot be blank", "")
+//			return
+//		}
+//
+//		// Set default address to be used when app is re-opened
+//		self.userDefaults.set(address, forKey: "defaultAddress")
+//
+//		// Find address and go to select section view or schedule view
+//        self.populateSchedule(address, true,  completion: { schedule in
+//            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+//                destinationViewController.schedule = schedule
+//                self.navigationController?.pushViewController(destinationViewController, animated: true)
+//            }
+//        })
+//	}
 	
     // MARK: Location Manager
     
@@ -686,7 +736,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         // Style and add images to buttons
-        self.common.styleButton(searchAddressButton, "search_circle")
+        //self.common.styleButton(searchAddressButton, "search_circle")
 
     }
 }

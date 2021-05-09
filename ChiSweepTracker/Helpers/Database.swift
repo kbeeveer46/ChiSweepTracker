@@ -207,6 +207,8 @@ public class Database {
         })
     }
     
+    //MARK: Misc
+    
     func getValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
         self.userDefaults.setValue(true, forKey: "gettingValuesFromDatabase")
