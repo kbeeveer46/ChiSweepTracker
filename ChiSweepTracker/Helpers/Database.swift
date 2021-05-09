@@ -121,7 +121,7 @@ public class Database {
             // insert address into database
             self.insertAddressIntoDatabase(address: favoriteAddress,
                                            notificationsEnabled: self.common.defaults.notificationsToggled() ? 1 : 0,
-                                           notificationsWhen: self.common.defaults.notificationWhen(),
+                                           notificationsWhen: self.common.defaults.notificationWhen() != "" ? self.common.defaults.notificationWhen() : "Day Of Sweep",
                                            notificationsHour: self.common.defaults.notificationHour(),
                                            notificationsMinute: self.common.defaults.notificationMinute(),
                                            completion: { result in
