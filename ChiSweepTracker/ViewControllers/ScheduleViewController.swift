@@ -16,9 +16,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// Shared
     let generator = UISelectionFeedbackGenerator()
     let currentYear = Calendar.current.component(.year, from: Date())
+    let userDefaults = UserDefaults.standard
     
 	// Classes
 	let common = Common()
+    let defaults = Defaults()
+    let database = Database()
     var schedule = ScheduleModel()
     
     // In-app purchase
@@ -30,7 +33,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         
 		// Set title using latest app version (year)
-		self.title = "Sweep Schedule - \(self.common.latestAppVersion())"
+		self.title = "Sweep Schedule - \(self.defaults.latestAppVersion())"
 		
         // Show options menu in the top right
         self.showSaveFavoriteMenuItem()
@@ -41,7 +44,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
         
-        if (self.currentYear > self.common.latestAppVersion()) {
+        if (self.currentYear > self.defaults.latestAppVersion()) {
             self.comingSoonStackView.isHidden = false
             self.comingSoonYearLabel.text = "The \(self.currentYear) sweeping schedule is coming soon"
         }
@@ -81,30 +84,30 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             case .purchasing:
                 break
             case .purchased:
-                defaults.set(true, forKey: "enableMultipleAddresses")
+                self.userDefaults.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 self.common.showAlert("Purchase Complete", "Saving multiple addresses is now enabled. Click on the plus icon to save this address.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .restored:
-                defaults.set(true, forKey: "enableMultipleAddresses")
+                self.userDefaults.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 self.common.showAlert("Purchase Restored", "Saving multiple addresses is now enabled. Click on the plus icon to save this address.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .failed:
-                defaults.set(false, forKey: "enableMultipleAddresses")
+                self.userDefaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 self.common.showAlert("Unable To Purchase", "There was an issue and your device did not complete the purchase.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .deferred:
-                defaults.set(false, forKey: "enableMultipleAddresses")
+                self.userDefaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 break
             default:
-                defaults.set(false, forKey: "enableMultipleAddresses")
+                self.userDefaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 break
@@ -134,7 +137,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// Method is called when user chooses yes to add a favorite
     @objc func saveAddress() {
         
-        self.common.getAddresses(completion: { addresses in
+        self.database.getAddresses(completion: { addresses in
             
             let favoriteAddressCount = addresses.count
             
@@ -145,12 +148,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 self.generator.selectionChanged()
                 
                 if favoriteAddressCount == 0  ||
-                    favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == true ||
-                    favoriteAddressCount >= 1  && self.common.enableMultipleAddresses() == false && self.myProduct == nil {
+                    favoriteAddressCount >= 1  && self.defaults.enableMultipleAddresses() == true ||
+                    favoriteAddressCount >= 1  && self.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
                 
                     self.navigationItem.rightBarButtonItem = nil
                             
-                    self.common.insertAddressIntoDatabase(address: self.schedule.address,
+                    self.database.insertAddressIntoDatabase(address: self.schedule.address,
                                                           notificationsEnabled: 0,
                                                           notificationsWhen: "Day Of Sweep",
                                                           notificationsHour: 0,
@@ -225,7 +228,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     // Show settings button in the top right
     func showSaveFavoriteMenuItem() {
         
-        self.common.getAddresses(address: self.schedule.address, completion: { addresses in
+        self.database.getAddresses(address: self.schedule.address, completion: { addresses in
             
             var doNotShowOptionsMenu = false
             
@@ -365,7 +368,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// If month equals the current month then change the labels to blue
 		let date = Date()
 		if (date.month.uppercased() == schedule.months[indexPath.row].name.uppercased()) &&
-           (self.currentYear == self.common.latestAppVersion()) {
+           (self.currentYear == self.defaults.latestAppVersion()) {
 			daysLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
 			daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
 			monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)

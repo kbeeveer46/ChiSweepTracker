@@ -8,11 +8,13 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // Classes
     let common = Common()
+    let defaults = Defaults()
     
     // Shared
     var updatesList = [UpdatesModel]()
     var updatesLastViewedDate = ""
     let dateFormatter = DateFormatter()
+    let userDefaults = UserDefaults.standard
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -33,11 +35,11 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
         dateFormatter.locale = .current
         
         // Get the date and time the last time the user views the updates page
-        updatesLastViewedDate = self.common.updatesLastViewDate()
+        updatesLastViewedDate = self.defaults.updatesLastViewDate()
         
         // Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
         let currentDate = self.dateFormatter.string(from: Date())
-        defaults.set(currentDate, forKey: "updatesLastViewDate")
+        userDefaults.set(currentDate, forKey: "updatesLastViewDate")
         
         // Get list of latest updates
         getLatestUpdates()

@@ -20,6 +20,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	
 	// Classes
 	let common = Common()
+    let defaults = Defaults()
 	
 	// Shared
 	var makes: [String] = []
@@ -67,7 +68,7 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 
 		// Create SODA query
-		let towedQuery = towedClient.query(dataset: self.common.towedDataset()).limit(500)
+        let towedQuery = towedClient.query(dataset: self.defaults.towedDataset()).limit(500)
 
 		towedQuery.get { res in
 			switch res {
@@ -84,10 +85,10 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 					for (_, item) in data.enumerated() {
 
 						// Get values for each towed vehicle
-						let make = item[self.common.towedMakeTitle()] as? String ?? ""
-						let model = item[self.common.towedModelTitle()] as? String ?? ""
-						let color = item[self.common.towedColorTitle()] as? String ?? ""
-						let state = item[self.common.towedStateTitle()] as? String ?? ""
+						let make = item[self.defaults.towedMakeTitle()] as? String ?? ""
+						let model = item[self.defaults.towedModelTitle()] as? String ?? ""
+						let color = item[self.defaults.towedColorTitle()] as? String ?? ""
+						let state = item[self.defaults.towedStateTitle()] as? String ?? ""
 
 						if !self.makes.contains(where: { $0.uppercased() == make.uppercased()}) && make != "" {
 							self.makes.append(make.uppercased())
@@ -210,19 +211,19 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		let plate = licensePlateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().replacingOccurrences(of: " ", with: "")
 		
 		// Create filter to be used in query
-		var filter = selectedMake != "" ? "\(self.common.towedMakeTitle()) = '\(selectedMake)'" : ""
-		filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedModelTitle())) = '\(selectedModel)'" : ""
-		filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedColorTitle())) = '\(selectedColor)'" : ""
-		filter += selectedState != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedStateTitle())) = '\(selectedState)'" : ""
-		filter += plate! != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.towedPlateTitle())) like '%\(plate!)%'" : ""
+		var filter = selectedMake != "" ? "\(self.defaults.towedMakeTitle()) = '\(selectedMake)'" : ""
+		filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") upper(\(self.defaults.towedModelTitle())) = '\(selectedModel)'" : ""
+		filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") upper(\(self.defaults.towedColorTitle())) = '\(selectedColor)'" : ""
+		filter += selectedState != "" ? " \(filter != "" ? " AND" : "") upper(\(self.defaults.towedStateTitle())) = '\(selectedState)'" : ""
+		filter += plate! != "" ? " \(filter != "" ? " AND" : "") upper(\(self.defaults.towedPlateTitle())) like '%\(plate!)%'" : ""
 		
 		// Create SODA client
 		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
 		
 		// Create SODA query
-		let towedQuery = towedClient.query(dataset: self.common.towedDataset())
+		let towedQuery = towedClient.query(dataset: self.defaults.towedDataset())
 			.filter(filter)
-			.orderAscending(self.common.towedMakeTitle())
+			.orderAscending(self.defaults.towedMakeTitle())
 		    .limit(500)
 			
 			towedQuery.get { res in
@@ -235,16 +236,16 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 					for (_, item) in data.enumerated() {
 						
 						// Get values for each towed vehicle
-						var towedDate = item[self.common.towedDateTitle()] as? String ?? ""
-						let make = item[self.common.towedMakeTitle()] as? String ?? ""
-						let model = item[self.common.towedModelTitle()] as? String ?? ""
-						let style = item[self.common.towedStyleTitle()] as? String ?? ""
-						let color = item[self.common.towedColorTitle()] as? String ?? ""
-						let plate = item[self.common.towedPlateTitle()] as? String ?? ""
-						let state = item[self.common.towedStateTitle()] as? String ?? ""
-						let inventoryNumber = item[self.common.towedInventoryNumberTitle()] as? String ?? ""
-						let towedToAddress = item[self.common.towedToAddressTitle()] as? String ?? ""
-						let towedToPhone = item[self.common.towedToPhoneTitle()] as? String ?? ""
+						var towedDate = item[self.defaults.towedDateTitle()] as? String ?? ""
+						let make = item[self.defaults.towedMakeTitle()] as? String ?? ""
+						let model = item[self.defaults.towedModelTitle()] as? String ?? ""
+						let style = item[self.defaults.towedStyleTitle()] as? String ?? ""
+						let color = item[self.defaults.towedColorTitle()] as? String ?? ""
+						let plate = item[self.defaults.towedPlateTitle()] as? String ?? ""
+						let state = item[self.defaults.towedStateTitle()] as? String ?? ""
+						let inventoryNumber = item[self.defaults.towedInventoryNumberTitle()] as? String ?? ""
+						let towedToAddress = item[self.defaults.towedToAddressTitle()] as? String ?? ""
+						let towedToPhone = item[self.defaults.towedToPhoneTitle()] as? String ?? ""
 						
 						// Change date to MM/dd/yyyy
 						towedDate = Date.getFormattedDate(towedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS")

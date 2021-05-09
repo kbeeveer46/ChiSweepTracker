@@ -25,6 +25,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     // Classes
     let common = Common()
+    let defaults = Defaults()
+    let userDefaults = UserDefaults.standard
+    let database = Database()
     var schedule = ScheduleModel()
     
     // Shared
@@ -75,8 +78,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.favoriteMapView.removeOverlays(favoriteMapView.overlays)
         self.favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
-        let selectedAnnotationLongitude = self.common.selectedAnnotationLongitude()
-        let selectedAnnotationLatitude = self.common.selectedAnnotationLatitude()
+        let selectedAnnotationLongitude = self.defaults.selectedAnnotationLongitude()
+        let selectedAnnotationLatitude = self.defaults.selectedAnnotationLatitude()
         var mapOverlayCoordinates = [CLLocationCoordinate2D]()
         
         for coordinate in self.schedule.polygonCoordinates {
@@ -93,8 +96,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let location =  CLLocation(latitude: self.schedule.locationCoordinate.latitude, longitude: self.schedule.locationCoordinate.longitude)
         let selectedAnnotationLocation = CLLocation(latitude: selectedAnnotationLatitude, longitude: selectedAnnotationLongitude)
         
-        defaults.set(0, forKey: "selectedAnnotationLongitude")
-        defaults.set(0, forKey: "selectedAnnotationLatitude")
+        self.userDefaults.set(0, forKey: "selectedAnnotationLongitude")
+        self.userDefaults.set(0, forKey: "selectedAnnotationLatitude")
         
         // Add Divvy stations to map
         addDivvyStationsToMap(location)
@@ -127,7 +130,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func addRelocationVehiclesToMap(_ favoriteLocation: CLLocation) {
         
         // Get show relocated vehicle setting from defaults
-        let showTowedVehicles = self.common.showTowedVehicles()
+        let showTowedVehicles = self.defaults.showTowedVehicles()
         
         self.relocatedVehicleCount = 0
         
@@ -138,8 +141,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             let relocatedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
             
             // Create SODA query
-            let relocatedQuery = relocatedClient.query(dataset: self.common.relocatedDataset())
-                .filter("\(self.common.relocatedFromLatitudeTitle()) IS NOT NULL AND \(self.common.relocatedFromLongitudeTitle()) IS NOT NULL")
+            let relocatedQuery = relocatedClient.query(dataset: self.defaults.relocatedDataset())
+                .filter("\(self.defaults.relocatedFromLatitudeTitle()) IS NOT NULL AND \(self.defaults.relocatedFromLongitudeTitle()) IS NOT NULL")
                 .limit(5000)
             
             relocatedQuery.get { res in
@@ -152,20 +155,20 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         for (_, item) in data.enumerated() {
                             
                             // Get values for each relocated vehicle
-                            var relocatedDate = item[self.common.relocatedDateTitle()] as? String ?? ""
-                            let make = item[self.common.relocatedMakeTitle()] as? String ?? ""
-                            let color = item[self.common.relocatedColorTitle()] as? String ?? ""
-                            let plate = item[self.common.relocatedPlateTitle()] as? String ?? ""
-                            let state = item[self.common.relocatedStateTitle()] as? String ?? ""
-                            let relocatedToAddressNumber = item[self.common.relocatedToAddressNumberTitle()] as? String ?? ""
-                            let relocatedToDirection = item[self.common.relocatedToDirectionTitle()] as? String ?? ""
-                            let relocatedToStreet = item[self.common.relocatedToStreetTitle()] as? String ?? ""
-                            let relocatedReason = item[self.common.relocatedReasonTitle()] as? String ?? ""
-                            let relocatedFromLatitude = item[self.common.relocatedFromLatitudeTitle()] as? String ?? ""
-                            let relocatedFromLongitude = item[self.common.relocatedFromLongitudeTitle()] as? String ?? ""
-                            let relocatedFromAddressNumber = item[self.common.relocatedFromAddressNumberTitle()] as? String ?? ""
-                            let relocatedFromDirection = item[self.common.relocatedFromDirectionTitle()] as? String ?? ""
-                            let relocatedFromStreet = item[self.common.relocatedFromStreetTitle()] as? String ?? ""
+                            var relocatedDate = item[self.defaults.relocatedDateTitle()] as? String ?? ""
+                            let make = item[self.defaults.relocatedMakeTitle()] as? String ?? ""
+                            let color = item[self.defaults.relocatedColorTitle()] as? String ?? ""
+                            let plate = item[self.defaults.relocatedPlateTitle()] as? String ?? ""
+                            let state = item[self.defaults.relocatedStateTitle()] as? String ?? ""
+                            let relocatedToAddressNumber = item[self.defaults.relocatedToAddressNumberTitle()] as? String ?? ""
+                            let relocatedToDirection = item[self.defaults.relocatedToDirectionTitle()] as? String ?? ""
+                            let relocatedToStreet = item[self.defaults.relocatedToStreetTitle()] as? String ?? ""
+                            let relocatedReason = item[self.defaults.relocatedReasonTitle()] as? String ?? ""
+                            let relocatedFromLatitude = item[self.defaults.relocatedFromLatitudeTitle()] as? String ?? ""
+                            let relocatedFromLongitude = item[self.defaults.relocatedFromLongitudeTitle()] as? String ?? ""
+                            let relocatedFromAddressNumber = item[self.defaults.relocatedFromAddressNumberTitle()] as? String ?? ""
+                            let relocatedFromDirection = item[self.defaults.relocatedFromDirectionTitle()] as? String ?? ""
+                            let relocatedFromStreet = item[self.defaults.relocatedFromStreetTitle()] as? String ?? ""
                             
                             if (relocatedFromLatitude != "" && relocatedFromLongitude != "") {
                                 
@@ -222,7 +225,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func addDivvyStationsToMap(_ favoriteLocation: CLLocation) {
         
         // Get show Divvy station setting from defaults
-        let showDivvyStations = self.common.showDivvyStations()
+        let showDivvyStations = self.defaults.showDivvyStations()
         
         self.divvyStationCount = 0
         
@@ -233,7 +236,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             let divvyClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
             
             // Create SODA query
-            let divvyQuery = divvyClient.query(dataset: self.common.divvyDataset())
+            let divvyQuery = divvyClient.query(dataset: self.defaults.divvyDataset())
             
             divvyQuery.get { res in
                 switch res {
@@ -245,12 +248,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         for (_, item) in data.enumerated() {
                             
                             // Get values for each Divvy station
-                            let latitude = item[self.common.divvyLatitudeTitle()] as? String ?? ""
-                            let longitude = item[self.common.divvyLongitudeTitle()] as? String ?? ""
-                            let name = item[self.common.divvyStationNameTitle()] as? String ?? ""
-                            let docksInService = item[self.common.divvyDocksInServiceTitle()] as? String ?? ""
-                            let status = item[self.common.divvyStatusTitle()] as? String ?? ""
-                            let id = item[self.common.divvyIdTitle()] as? String ?? ""
+                            let latitude = item[self.defaults.divvyLatitudeTitle()] as? String ?? ""
+                            let longitude = item[self.defaults.divvyLongitudeTitle()] as? String ?? ""
+                            let name = item[self.defaults.divvyStationNameTitle()] as? String ?? ""
+                            let docksInService = item[self.defaults.divvyDocksInServiceTitle()] as? String ?? ""
+                            let status = item[self.defaults.divvyStatusTitle()] as? String ?? ""
+                            let id = item[self.defaults.divvyIdTitle()] as? String ?? ""
                             
                             if (latitude != "" && longitude != "") {
                                 
@@ -304,8 +307,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         generator.selectionChanged()
         
         // Get values from defaults
-        let showDivvyStations = self.common.showDivvyStations()
-        let showTowedVehicles = self.common.showTowedVehicles()
+        let showDivvyStations = self.defaults.showDivvyStations()
+        let showTowedVehicles = self.defaults.showTowedVehicles()
         
         // Create options alert
         let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
@@ -319,7 +322,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
-                self.common.deleteAddressFromDatabase(address: self.schedule.address, deleteAddressResult: { message in
+                self.database.deleteAddressFromDatabase(address: self.schedule.address, deleteAddressResult: { message in
                     
                     DispatchQueue.main.async {
                         
@@ -365,7 +368,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         // Create nearby Divvy stations options for alert
         if (showDivvyStations == false) {
             let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
-                defaults.set(true, forKey: "showDivvyStations")
+                self.userDefaults.set(true, forKey: "showDivvyStations")
                 self.loadFavoriteMap()
             })
             let showDivvyStationsImage = UIImage(named: "bike")
@@ -376,7 +379,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         else {
             let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations (\(divvyStationCount))", style: .default, handler:{ action in
-                defaults.set(false, forKey: "showDivvyStations")
+                self.userDefaults.set(false, forKey: "showDivvyStations")
                 self.loadFavoriteMap()
             })
             let hideDivvyStationsImage = UIImage(named: "bike")
@@ -389,7 +392,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         // Create nearby towed/relocated vehicle options for alert
         if (showTowedVehicles == false) {
             let showRelocatedAction = UIAlertAction(title: "Show Nearby Relocated Vehicles", style: .default, handler:{ action in
-                defaults.set(true, forKey: "showTowedVehicles")
+                self.userDefaults.set(true, forKey: "showTowedVehicles")
                 self.loadFavoriteMap()
             })
             let showRelocatedVehiclesImage = UIImage(named: "pin-address")
@@ -400,7 +403,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         else {
             let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles (\(relocatedVehicleCount))", style: .default, handler:{ action in
-                defaults.set(false, forKey: "showTowedVehicles")
+                self.userDefaults.set(false, forKey: "showTowedVehicles")
                 self.loadFavoriteMap()
             })
             let hideRelocatedVehiclesImage = UIImage(named: "pin-address")
@@ -439,19 +442,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
     }
     
-    @objc func timePickerChanged(picker: UIDatePicker) {
-        
-        // Save form values
-        self.saveDefaultNotificationValues()
-        
-        // Update notifications when picker is changed
-        if self.pushNotificationsSwitch.isOn {
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
-                self.getSchedule(true)
-            })
-        }
-    }
-    
     func loadNotificationControlValues() {
         
         self.navigationItem.title = self.schedule.address
@@ -469,7 +459,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         var minute = 0
         var notificationsToggled = false
         
-        self.common.getAddresses(address: self.schedule.address, completion: { addresses in
+        self.database.getAddresses(address: self.schedule.address, completion: { addresses in
             
             if addresses.count > 0 {
                 
@@ -516,7 +506,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         let urlTo = self.common.constants.websiteURL + "/update-address.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
-                          "uuid": self.common.deviceUUID(),
+                          "uuid": self.defaults.deviceUUID(),
                           "address": self.schedule.address,
                           "notificationsWhen": when,
                           "notificationsHour": hour,
@@ -542,7 +532,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         
         let geocoder = CLGeocoder()
-        
         geocoder.geocodeAddressString(self.schedule.address) { placemarks, error in
             
             if error != nil {
@@ -560,8 +549,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
-                let wardQuery = wardClient.query(dataset: self.common.wardDataset())
-                    .filter("intersects(\(self.common.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
+                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -570,10 +559,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.common.wardTitle()] as? String ?? ""
-                            let section = data[0][self.common.sectionTitle()] as? String ?? ""
-                            let the_geom = data[0][self.common.geomTitle()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.coordinatesTitle()] as? NSMutableArray
+                            let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
+                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.defaults.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             self.schedule.polygonCoordinates.removeAll()
@@ -599,9 +588,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                 self.schedule.section = favoriteSection
                             }
                             
-                            let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-                                .filter("\(self.common.wardTitle()) = '\(ward)' AND \(self.common.sectionTitle()) = '\(self.schedule.section)'")
-                                .orderAscending(self.common.monthNumberTitle())
+                            let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
+                                .filter("\(self.defaults.wardTitle()) = '\(ward)' AND \(self.defaults.sectionTitle()) = '\(self.schedule.section)'")
+                                .orderAscending(self.defaults.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -613,9 +602,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.common.monthNameTitle()] as? String ?? ""
-                                            let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
-                                            let dates = item[self.common.dates()] as? String ?? ""
+                                            let monthName = item[self.defaults.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.defaults.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.defaults.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
                                             let month = MonthModel()
@@ -682,7 +671,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                         
                                                         //let center = UNUserNotificationCenter.current()
                                                         let calendar = Calendar.current
-                                                        let currentYear = self.common.latestAppVersion()
+                                                        let currentYear = self.defaults.latestAppVersion()
                                                         let notificationWhenDefault = when
                                                         let notificationHourDefault = hour
                                                         let notificationMinuteDefault = minute
@@ -738,7 +727,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                     let sweepDay = "\(monthInSchedule.number)/\(dayInMonth.date)"
                                                                     let notificationTime = "\(String(format: "%02d", triggerComponents.month!))/\(String(format: "%02d", triggerComponents.day!))/\(triggerComponents.year!) \(String(format: "%02d", triggerComponents.hour!)):\(String(format: "%02d", triggerComponents.minute!)):\(String(format: "%02d", triggerComponents.second!))"
                                                                     
-                                                                    self.insertNotificatinIntoDatabase(address: self.schedule.address, notificationTime: notificationTime, sweepDay: sweepDay, tableName: self.common.constants.notificationsDatabaseName)
+                                                                    self.database.insertNotificatinIntoDatabase(address: self.schedule.address, notificationTime: notificationTime, sweepDay: sweepDay)
                                                                     
                                                                 }
                                                             }
@@ -767,41 +756,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
     }
     
-    func insertNotificatinIntoDatabase(address: String, notificationTime: String, sweepDay: String, tableName: String) {
-        
-        if self.common.notificationOneSignalPlayerId() != "" {
-            
-            let host = self.common.constants.websiteURL + "/insert-notification.php"
-            let url = NSURL(string: host)
-            var request = URLRequest(url: url! as URL)
-            request.httpMethod = "POST"
-            
-            var params = "playerId=\(self.common.notificationOneSignalPlayerId())"
-            params += "&address=\(address)"
-            params += "&notificationTime=\(notificationTime)"
-            params += "&sweepDay=\(sweepDay)"
-            params += "&tableName=\(tableName)"
-            
-            let data = params.data(using: .utf8)
-            do
-            {
-                let task = URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-                    
-                    if error != nil {
-                        print("Error adding notification to database")
-                    }
-                    else
-                    {
-                        //if let response = String(data: data!, encoding: .utf8) {
-                        //    print("Response:\(response)")
-                        //}
-                    }
-                }
-                task.resume()
-            }
-        }
-    }
-    
     // When and time picker methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -818,7 +772,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         // Update notifications after picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
                 self.getSchedule(true)
             })
         }
@@ -893,8 +847,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         if let annotation = view.annotation as? CustomAnnotation {
             
-            defaults.set(annotation.coordinate.longitude, forKey: "selectedAnnotationLongitude")
-            defaults.set(annotation.coordinate.latitude, forKey: "selectedAnnotationLatitude")
+            self.userDefaults.set(annotation.coordinate.longitude, forKey: "selectedAnnotationLongitude")
+            self.userDefaults.set(annotation.coordinate.latitude, forKey: "selectedAnnotationLatitude")
             
             if (annotation.customImageName == "pin-relocated") {
                 
@@ -918,17 +872,30 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     //MARK: Actions
     
+    @objc func timePickerChanged(picker: UIDatePicker) {
+        
+        // Save form values
+        self.saveDefaultNotificationValues()
+        
+        // Update notifications when picker is changed
+        if self.pushNotificationsSwitch.isOn {
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
+                self.getSchedule(true)
+            })
+        }
+    }
+    
     // Push notifications toggle switch event
     @IBAction func pushNotificationsTapped(_ sender: Any) {
         
         if pushNotificationsSwitch.isOn == true {
             
-            let latestAppVersion = self.common.latestAppVersion()
-            let latestDatasetVersion = self.common.latestDatasetVersion()
+            let latestAppVersion = self.defaults.latestAppVersion()
+            let latestDatasetVersion = self.defaults.latestDatasetVersion()
             
             // Save settings to defaults
-            defaults.set(latestAppVersion, forKey: "notificationsYear")
-            defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+            self.userDefaults.set(latestAppVersion, forKey: "notificationsYear")
+            self.userDefaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
             
             // Enable when and time controls
             self.timePicker.isUserInteractionEnabled = true
@@ -937,7 +904,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             // Save form values to defaults
             self.saveDefaultNotificationValues()
             
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
                 self.getSchedule(true)
             })
             
@@ -951,9 +918,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             self.onPicker.isUserInteractionEnabled = false
             
             // Delete notifications in database for address that was disabled
-            self.common.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
             
         }
-        
     }
 }

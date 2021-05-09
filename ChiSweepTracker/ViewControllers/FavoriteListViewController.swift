@@ -12,6 +12,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     // Classes
     let common = Common()
+    let defaults = Defaults()
+    let constants = Constants()
+    let database = Database()
     var addresses = [AddressModel]()
     
     // Shared
@@ -27,7 +30,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListTableView.delegate = self
         
         // Get addresses from database and use the data in the map and table
-        self.common.getAddresses(completion: { addresses in
+        self.database.getAddresses(completion: { addresses in
             
             self.addresses = addresses
             
@@ -61,11 +64,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                 // Get coordinates from address
                 let geocoder = CLGeocoder()
                 geocoder.geocodeAddressString(address.address) { placemarks, error in
-                    
-                    // No internet connection will cause an error
-                    //if error != nil {
-                        //return
-                    //}
                     
                     if placemarks != nil {
                     
@@ -165,7 +163,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             
             // No internet connection will cause an error
             if error != nil {
-                return
+                completion(schedule)
             }
             
             if placemarks != nil {
@@ -185,8 +183,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
                 // Query SODA API to get ward and section
-                let wardQuery = wardClient.query(dataset: self.common.wardDataset())
-                    .filter("intersects(\(self.common.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
+                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -196,10 +194,10 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         if data.count > 0 {
                             
                             // Get values from json query
-                            let ward = data[0][self.common.wardTitle()] as? String ?? ""
-                            let section = data[0][self.common.sectionTitle()] as? String ?? ""
-                            let the_geom = data[0][self.common.geomTitle()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.common.coordinatesTitle()] as? NSMutableArray
+                            let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
+                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.defaults.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             // Loop through coordinates array
@@ -224,9 +222,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                             schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             // Query SODA API to get months and days
-                            let scheduleQuery = wardClient.query(dataset: self.common.scheduleDataset())
-                                .filter("\(self.common.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.common.sectionTitle()) = '\(section)'" : "") ")
-                                .orderAscending(self.common.monthNumberTitle())
+                            let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
+                                .filter("\(self.defaults.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.defaults.sectionTitle()) = '\(section)'" : "") ")
+                                .orderAscending(self.defaults.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -238,9 +236,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                                         for (_, item) in data.enumerated() {
                                             
                                             // Get values from json data
-                                            let monthName = item[self.common.monthNameTitle()] as? String ?? ""
-                                            let monthNumber = item[self.common.monthNumberTitle()] as? String ?? ""
-                                            let dates = item[self.common.dates()] as? String ?? ""
+                                            let monthName = item[self.defaults.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.defaults.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.defaults.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
                                             // Create month object
@@ -282,13 +280,18 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
+                                    completion(schedule)
                                 }
                             }
                         }
                     case .error (let err):
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
+                        completion(schedule)
                     }
                 }
+            }
+            else {
+                completion(schedule)
             }
         }
     }
@@ -342,7 +345,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
                 
-                self.common.deleteAddressFromDatabase(address: address, deleteAddressResult: { message in
+                self.database.deleteAddressFromDatabase(address: address, deleteAddressResult: { message in
                     
                     DispatchQueue.main.async {
                         self.favoriteListTableView.beginUpdates()

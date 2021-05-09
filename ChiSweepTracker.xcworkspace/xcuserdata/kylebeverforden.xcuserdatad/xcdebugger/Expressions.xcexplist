@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "closure #1 in SearchViewController.populateSchedule(_:_:completion:):SearchViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.constants.SODADomain">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FavoriteListViewController.tableView(_:numberOfRowsInSection:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -117,6 +125,20 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "Database.getAddresses(address:completion:):Database.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.common.constants.addressesDatabaseName">
+            </PersistentString>
+            <PersistentString
+               value = "self.common.defaults.deviceUUID()">
+            </PersistentString>
+            <PersistentString
+               value = "self.constants.addressesDatabaseName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "AppDelegate.userNotificationCenter(_:willPresent:withCompletionHandler:):AppDelegate.swift">
       </ContextState>
       <ContextState
@@ -219,6 +241,25 @@
          contextName = "FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "SceneDelegate.sceneDidBecomeActive(_:):SceneDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "settings.authorizationStatus">
+            </PersistentString>
+            <PersistentString
+               value = "self.common.notificationOneSignalPlayerId()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Database.getValuesFromDatabase(completion:):Database.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.constants.schedulesDatabaseName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in FavoriteListViewController.viewWillAppear(_:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -269,6 +310,17 @@
       </ContextState>
       <ContextState
          contextName = "closure #1 in closure #1 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in SceneDelegate.sceneDidBecomeActive(_:):SceneDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "settings.authorizationStatus">
+            </PersistentString>
+            <PersistentString
+               value = "self.common.notificationOneSignalPlayerId()">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>

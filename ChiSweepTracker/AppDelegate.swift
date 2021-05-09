@@ -10,6 +10,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 	
 	// Classes
     let common = Common()
+    let defaults = Defaults()
+    let database = Database()
+    
+    // Shared
+    let userDefaults = UserDefaults.standard
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -21,10 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 //        defaults.set(30, forKey: "notificationMinute")
         
         // Get UUID and save it to defaults so it can be used throughout the app and database
-        if self.common.deviceUUID() == "" {
-            defaults.set(UUID().uuidString, forKey: "deviceUUID")
+        if self.defaults.deviceUUID() == "" {
+            userDefaults.set(UUID().uuidString, forKey: "deviceUUID")
         }
-        print("uuid: \(self.common.deviceUUID())")
+        print("uuid: \(self.defaults.deviceUUID())")
 		
         // Required for didReceive when mass notification is opened
 		UNUserNotificationCenter.current().delegate = self
@@ -69,10 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         
         // Get data from database tables and update notifications
-        let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
+        let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
-            self.common.getValuesFromDatabase(completion: { message in
-                defaults.setValue(false, forKey: "gettingValuesFromDatabase")
+            self.database.getValuesFromDatabase(completion: { message in
+                self.userDefaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
         
@@ -88,10 +93,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 
                 // Set the playerId in defaults
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
-                defaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
+                self.userDefaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
              
                 // Update notifications so user has the latest notifications
-                self.common.updateNotifications()
+                self.database.updateNotificationsAndSweepDayInDatabase()
             }
         }
         
@@ -108,16 +113,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it and comes back to the app.
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { (settings) in
-            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
+            if(settings.authorizationStatus == .authorized && self.defaults.notificationOneSignalPlayerId() == "") {
                 OneSignal.disablePush(false)
             }
         }
 
 		// Get data from database tables and update notifications
-        let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
+        let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
-            self.common.getValuesFromDatabase(completion: { message in
-                defaults.setValue(false, forKey: "gettingValuesFromDatabase")
+            self.database.getValuesFromDatabase(completion: { message in
+                self.userDefaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
     }

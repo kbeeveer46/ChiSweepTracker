@@ -8,6 +8,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	// Classes
 	let common = Common()
+    let defaults = Defaults()
+    let database = Database()
 
     @available(iOS 13.0, *)
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -36,16 +38,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it.
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { (settings) in
-            if(settings.authorizationStatus == .authorized && self.common.notificationOneSignalPlayerId() == "") {
+            if(settings.authorizationStatus == .authorized && self.defaults.notificationOneSignalPlayerId() == "") {
                 OneSignal.disablePush(false)
             }
         }
         
 		// Get data from database tables and update notifications
-        let gettingValuesFromDatabase = self.common.gettingValuesFromDatabase()
+        let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
-            self.common.getValuesFromDatabase(completion: { message in
-                defaults.setValue(false, forKey: "gettingValuesFromDatabase")
+            self.database.getValuesFromDatabase(completion: { message in
+                userDefaults.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
     }

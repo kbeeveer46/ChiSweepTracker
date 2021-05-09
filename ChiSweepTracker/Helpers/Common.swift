@@ -2,176 +2,22 @@ import UIKit
 import MapKit
 import Alamofire
 
-let defaults = UserDefaults.standard
+let userDefaults = UserDefaults.standard
 
-class Common {
+public class Common {
     
     let constants = Constants()
-    
-    //MARK: Defaults
-    
-    // Shared
-    
-    func deviceUUID() -> String { return defaults.string(forKey: "deviceUUID") ?? ""}
-    func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
-    func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
-    func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
-    func enableMultipleAddresses() -> Bool {return defaults.bool(forKey: "enableMultipleAddresses")}
-    func gettingValuesFromDatabase() -> Bool {return defaults.bool(forKey: "gettingValuesFromDatabase")}
-    
-    func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
-    func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
-    func defaultLatitude() -> Double {return defaults.double(forKey: "defaultLatitude")}
-    func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
-    func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
-    func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
-        
-    // Schedule
-    
-    func dates() -> String {return defaults.string(forKey: "datesTitle") ?? ""}
-    func monthNumberTitle() -> String {return defaults.string(forKey: "monthNumberTitle") ?? ""}
-    func monthNameTitle() -> String {return defaults.string(forKey: "monthNameTitle") ?? ""}
-    func coordinatesTitle() -> String {return defaults.string(forKey: "coordinatesTitle") ?? ""}
-    func sectionTitle() -> String {return defaults.string(forKey: "sectionTitle") ?? ""}
-    func wardTitle() -> String {return defaults.string(forKey: "wardTitle") ?? ""}
-    func geomTitle() -> String {return defaults.string(forKey: "geomTitle") ?? ""}
-    func scheduleDataset() -> String {return defaults.string(forKey: "scheduleDataset") ?? ""}
-    func wardDataset() -> String {return defaults.string(forKey: "wardDataset") ?? ""}
-    
-    // Divvy
-    
-    func divvyDataset() -> String {return defaults.string(forKey: "divvyDataset") ?? ""}
-    func divvyIdTitle() -> String {return defaults.string(forKey: "divvyIdTitle") ?? ""}
-    func divvyDocksInServiceTitle() -> String {return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""}
-    func divvyLatitudeTitle() -> String {return defaults.string(forKey: "divvyLatitudeTitle") ?? ""}
-    func divvyLongitudeTitle() -> String {return defaults.string(forKey: "divvyLongitudeTitle") ?? ""}
-    func divvyStationNameTitle() -> String {return defaults.string(forKey: "divvyStationNameTitle") ?? ""}
-    func divvyStatusTitle() -> String {return defaults.string(forKey: "divvyStatusTitle") ?? ""}
-    
-    func divvyJSONUrl() -> String {return defaults.string(forKey: "divvyJSONUrl") ?? ""}
-    func divvyJSONBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONBikesAvailableTitle") ?? ""}
-    func divvyJSONEBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONEBikesAvailableTitle") ?? ""}
-    func divvyJSONDocksAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONDocksAvailableTitle") ?? ""}
-    func divvyJSONDataTitle() -> String {return defaults.string(forKey: "divvyJSONDataTitle") ?? ""}
-    func divvyJSONStationsTitle() -> String {return defaults.string(forKey: "divvyJSONStationsTitle") ?? ""}
-    func divvyJSONIdTitle() -> String {return defaults.string(forKey: "divvyJSONIdTitle") ?? ""}
-    func divvyJSONLastUpdatedTitle() -> String {return defaults.string(forKey: "divvyJSONLastUpdatedTitle") ?? ""}
-    
-    // Towed vehicles
-    
-    func towedDataset() -> String {return defaults.string(forKey: "towedDataset") ?? ""}
-    func towedColorTitle() -> String {return defaults.string(forKey: "towedColorTitle") ?? ""}
-    func towedInventoryNumberTitle() -> String {return defaults.string(forKey: "towedInventoryNumberTitle") ?? ""}
-    func towedMakeTitle() -> String {return defaults.string(forKey: "towedMakeTitle") ?? ""}
-    func towedModelTitle() -> String {return defaults.string(forKey: "towedModelTitle") ?? ""}
-    func towedPlateTitle() -> String {return defaults.string(forKey: "towedPlateTitle") ?? ""}
-    func towedStateTitle() -> String {return defaults.string(forKey: "towedStateTitle") ?? ""}
-    func towedStyleTitle() -> String {return defaults.string(forKey: "towedStyleTitle") ?? ""}
-    func towedDateTitle() -> String {return defaults.string(forKey: "towedDateTitle") ?? ""}
-    func towedToAddressTitle() -> String {return defaults.string(forKey: "towedToAddressTitle") ?? ""}
-    func towedToPhoneTitle() -> String {return defaults.string(forKey: "towedToPhoneTitle") ?? ""}
-    
-    // Relocated vehicles
-    
-    func relocatedDataset() -> String {return defaults.string(forKey: "relocatedDataset") ?? ""}
-    func relocatedColorTitle() -> String {return defaults.string(forKey: "relocatedColorTitle") ?? ""}
-    func relocatedMakeTitle() -> String {return defaults.string(forKey: "relocatedMakeTitle") ?? ""}
-    func relocatedPlateTitle() -> String {return defaults.string(forKey: "relocatedPlateTitle") ?? ""}
-    func relocatedDateTitle() -> String {return defaults.string(forKey: "relocatedDateTitle") ?? ""}
-    func relocatedFromLatitudeTitle() -> String {return defaults.string(forKey: "relocatedFromLatitudeTitle") ?? ""}
-    func relocatedFromLongitudeTitle() -> String {return defaults.string(forKey: "relocatedFromLongitudeTitle") ?? ""}
-    func relocatedFromAddressNumberTitle() -> String {return defaults.string(forKey: "relocatedFromAddressNumberTitle") ?? ""}
-    func relocatedFromDirectionTitle() -> String {return defaults.string(forKey: "relocatedFromDirectionTitle") ?? ""}
-    func relocatedFromStreetTitle() -> String {return defaults.string(forKey: "relocatedFromStreetTitle") ?? ""}
-    func relocatedReasonTitle() -> String {return defaults.string(forKey: "relocatedReasonTitle") ?? ""}
-    func relocatedToAddressNumberTitle() -> String {return defaults.string(forKey: "relocatedToAddressNumberTitle") ?? ""}
-    func relocatedToDirectionTitle() -> String {return defaults.string(forKey: "relocatedToDirectionTitle") ?? ""}
-    func relocatedToStreetTitle() -> String {return defaults.string(forKey: "relocatedToStreetTitle") ?? ""}
-    func relocatedStateTitle() -> String {return defaults.string(forKey: "relocatedStateTitle") ?? ""}
-    
-    // Favorites
-    
-    func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
-    func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
-    func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
-    
-    // Notifications
-    
-    func notificationWhen() -> String {return defaults.string(forKey: "notificationWhen") ?? ""}
-    func notificationHour() -> Int {return defaults.integer(forKey: "notificationHour")}
-    func notificationMinute() -> Int {return defaults.integer(forKey: "notificationMinute")}
-    func notificationsToggled() -> Bool {return defaults.bool(forKey: "notificationsToggled")}
-    func notificationsYear() -> Int {return defaults.integer(forKey: "notificationsYear")}
-    func notificationOneSignalPlayerId() -> String {return defaults.string(forKey: "notificationOneSignalPlayerId") ?? ""}
-    
-    // Updates
-    
-    func updatesLastViewDate() -> String {return defaults.string(forKey: "updatesLastViewDate") ?? ""}
-    
-    //MARK: Constants
-    
-    class Constants {
-        
-        // Database tables
-        #if DEBUG
-        let debugMode = true
-        let addressesDatabaseName = "addresses_dev"
-        let schedulesDatabaseName = "schedules_dev"
-        let updatesDatabaseName = "updates_dev"
-        let divvysDatabaseName = "divvys_dev"
-        let towedDatabaseName = "towed_vehicles_dev"
-        let relocatedDatabaseName = "relocated_vehicles_dev"
-        let newsDatabaseName = "news_dev"
-        let infoDatabaseName = "info_dev"
-        let notificationsDatabaseName = "notifications_dev"
-        #else
-        let debugMode = false
-        let addressesDatabaseName = "addresses"
-        let schedulesDatabaseName = "schedules"
-        let updatesDatabaseName = "updates"
-        let divvysDatabaseName = "divvys"
-        let towedDatabaseName = "towed_vehicles"
-        let relocatedDatabaseName = "relocated_vehicles"
-        let newsDatabaseName = "news"
-        let infoDatabaseName = "info"
-        let notificationsDatabaseName = "notifications"
-        #endif
-        
-        // One Signal
-        let OneSignalAppId = "2a6b2ed6-b4a7-4da0-8917-899cef558a0a"
-        
-        // Multiple addresses in-app purchase
-        let multipleAddressIAPurchase = "com.kylebeverforden.chisweeptracker.savemultipleaddresses"
-        
-        // SODA
-        let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
-        let SODADomain = "data.cityofchicago.org"
-        
-        // Strings
-        let websiteURL = "https://chicagosweeptracker.info"
-        
-        let errorTitle = "Something went wrong..."
-        let notFound = "Unable to find sweep schedule. Address must reside in Chicago."
-        
-        let finishedScheduleMessage = "Sweeping has ended for _currentYear_."
-        let beginScheduleMessage = "Sweeping will begin on April 1st in _amount_ day(s)."
-        let noInternetConnectionSearchMessage = "Unable to find sweep schedule. This may be caused by not having an internet connection or the Chicago API may be down for scheduled maintenance. Please try again in a few hours."
-        
-        // Colors
-        let systemRed = "#ff3b30"
-        let systemBlue = "#007aff"
-        let divvy = "#3fb5e7"
-        let background = "#f2f2f2"
-    }
+    let defaults = Defaults()
     
     //MARK: Methods
     
     func displayNewOrUpdatedScheduleAlerts() {
         
-        let latestDatasetVersion = self.latestDatasetVersion()
-        let userDatasetVersion = self.userDatasetVersion()
-        let notificationsYear = self.notificationsYear()
-        let latestAppVersion = self.latestAppVersion()
+        let latestDatasetVersion = defaults.latestDatasetVersion()
+        let userDatasetVersion = defaults.userDatasetVersion()
+        
+        let notificationsYear = defaults.notificationsYear()
+        let latestAppVersion = defaults.latestAppVersion()
         
         // Set the latest dataset version when notifications were updated
         // Use the value to alert them if they loaded the app after Chicago changed the schedule
@@ -193,95 +39,16 @@ class Common {
             rootViewController?.present(datasetUpdatedAlert, animated: true, completion: nil)
             
         }
-        defaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+        userDefaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
         
         // Set the last year when notifications were updated.
         // Use the value to alert them if they loaded the app after a new year came out
         if notificationsYear != 0 && notificationsYear < latestAppVersion {
             self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
         }
-        defaults.set(latestAppVersion, forKey: "notificationsYear")
+        userDefaults.set(latestAppVersion, forKey: "notificationsYear")
         
     }
-    
-    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void) {
-        let urlTo = self.constants.websiteURL + "/delete-notification.php"
-        let parameters = ["playerId": self.notificationOneSignalPlayerId(),
-                          "address": address,
-                          "tableName": tableName] as [String : String]
-        
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            completion(true)
-        }
-    }
-    
-    func getAddresses(address: String = "", completion: @escaping (_ message: [AddressModel]) -> ()) {
-        
-        var addresses = [AddressModel]()
-        var parameters = [String: String]()
-        let urlTo = self.constants.websiteURL + "/get-address-data.php"
-        
-        if address == "" {
-            parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
-        }
-        else {
-            parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID(), "address": address]
-        }
-        
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-                completion(addresses)
-            case .success:
-                if let value = response.data {
-                    
-                    let json =  (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "M/dd/yyyy"
-                    
-                    for item in json.enumerated() {
-                        
-                        let address = AddressModel()
-                        address.address = item.element["address"]!
-                        address.notificationsEnabled = item.element["notificationsEnabled"]!
-                        address.notificationsWhen = item.element["notificationsWhen"]!
-                        address.notificationsHour = item.element["notificationsHour"]!
-                        address.notificationsMinute = item.element["notificationsMinute"]!
-                        
-                        let nextSweepDay = item.element["nextSweepDay"]!
-                        if nextSweepDay != "" {
-                            address.nextSweepDay = dateFormatter.date(from: nextSweepDay)!
-                        }
-                        
-                        addresses.append(address)
-                    }
-                    
-                    completion(addresses)
-                }
-            }
-        }
-    }
-    
-//    func getAddressNotificationCount(uuid: String, completion: @escaping (_ message: Int) -> ()) {
-//        
-//        let urlTo = self.constants.websiteURL + "/get-address-notification-count.php"
-//        let parameters = ["tableName": self.constants.addressesDatabaseName, "uuid": self.deviceUUID()]
-//
-//        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
-//            switch response.result {
-//            case .failure(let error):
-//                print(error)
-//                completion(0)
-//            case .success(let count as Int):
-//                completion(count)
-//            default:
-//                completion(0)
-//            }
-//        }
-//    }
-    
     
     func getNextSweepDay(address: String, completion: @escaping (Date?) -> ()) {
         
@@ -318,8 +85,8 @@ class Common {
                 let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
                 
                 // Query SODA API to get ward and section
-                let wardQuery = wardClient.query(dataset: self.wardDataset())
-                    .filter("intersects(\(self.geomTitle()),'POINT(\(coordinates.longitude) \(coordinates.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
+                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(coordinates.longitude) \(coordinates.latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -329,13 +96,13 @@ class Common {
                         if data.count > 0 {
                             
                             // Get values from json query
-                            let ward = data[0][self.wardTitle()] as? String ?? ""
-                            let section = data[0][self.sectionTitle()] as? String ?? ""
+                            let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
+                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
                             
                             // Query SODA API to get months and days
-                            let scheduleQuery = wardClient.query(dataset: self.scheduleDataset())
-                                .filter("\(self.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.sectionTitle()) = '\(section)'" : "") ")
-                                .orderAscending(self.monthNumberTitle())
+                            let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
+                                .filter("\(self.defaults.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.defaults.sectionTitle()) = '\(section)'" : "") ")
+                                .orderAscending(self.defaults.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -347,9 +114,9 @@ class Common {
                                         for (_, item) in data.enumerated() {
                                             
                                             // Get values from json data
-                                            let monthName = item[self.monthNameTitle()] as? String ?? ""
-                                            let monthNumber = item[self.monthNumberTitle()] as? String ?? ""
-                                            let dates = item[self.dates()] as? String ?? ""
+                                            let monthName = item[self.defaults.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.defaults.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.defaults.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
                                             // Create month object
@@ -386,7 +153,7 @@ class Common {
                                                 
                                                     // Specify date components
                                                     var dateComponents = DateComponents()
-                                                    dateComponents.year = self.latestAppVersion()
+                                                    dateComponents.year = self.defaults.latestAppVersion()
                                                     dateComponents.month = Int(month.number)
                                                     dateComponents.day = date.date
 
@@ -427,389 +194,6 @@ class Common {
         }
     }
     
-    func deleteAddressFromDatabase(address: String, deleteAddressResult: @escaping (Bool) -> Void) {
-        let urlTo = self.constants.websiteURL + "/delete-address.php"
-        let parameters = ["tableName": self.constants.addressesDatabaseName,
-                          "uuid": self.deviceUUID(),
-                          "address": address] as [String : Any]
-        
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            self.deleteNotificationsFromDatabase(address, self.constants.notificationsDatabaseName, completion: {completion in
-                deleteAddressResult(completion)
-            })
-        }
-    }
-    
-    func updateAddressesNextSweepDay(address: String, day: String) {
-        
-        let urlTo = self.constants.websiteURL + "/update-address-next-sweep-day.php"
-        let parameters = ["tableName": self.constants.addressesDatabaseName,
-                          "nextSweepDay": day,
-                          "uuid": self.deviceUUID(),
-                          "address": address] as [String : Any]
-        
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
-
-    }
-    
-    func insertAddressIntoDatabase(address: String,
-                                   notificationsEnabled: Int,
-                                   notificationsWhen: String,
-                                   notificationsHour: Int,
-                                   notificationsMinute: Int,
-                                   completion: @escaping (Bool) -> Void) {
-        
-        self.getNextSweepDay(address: address, completion: { date in
-            
-            var nextSweepDayFormatted = ""
-            
-            if date != nil {
-                let calendar = Calendar.current
-                let components = calendar.dateComponents([.year, .month, .day], from: date!)
-                nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
-            }
-        
-            let urlTo = self.constants.websiteURL + "/insert-address.php"
-            let parameters = ["tableName": self.constants.addressesDatabaseName,
-                              "uuid": self.deviceUUID(),
-                              "address": address,
-                              "notificationsWhen": notificationsWhen,
-                              "notificationsHour": notificationsHour,
-                              "notificationsMinute": notificationsMinute,
-                              "notificationsEnabled": notificationsEnabled,
-                              "nextSweepDay": nextSweepDayFormatted] as [String : Any]
-            
-            AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-                completion(true)
-            }
-        })
-    }
-    
-    func getValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
-        
-        defaults.setValue(true, forKey: "gettingValuesFromDatabase")
-        
-        // Get schedule data
-        AF.request(self.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.constants.schedulesDatabaseName]).validate().responseJSON() { response in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success:
-                if let value = response.data {
-                    
-                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    let schedule = json.first!
-                    
-                    let latestAppVersionString = schedule["year"]
-                    let latestAppVersion = Int(latestAppVersionString!)
-                    let wardDataset = schedule["wardDataset"]
-                    let scheduleDataset = schedule["scheduleDataset"]
-                    let coordinatesTitle = schedule["coordinatesTitle"]
-                    let datesTitle = schedule["datesTitle"]
-                    let geomTitle = schedule["geomTitle"]
-                    let monthNameTitle = schedule["monthNameTitle"]
-                    let monthNumberTitle = schedule["monthNumberTitle"]
-                    let sectionTitle = schedule["sectionTitle"]
-                    let wardTitle = schedule["wardTitle"]
-                    
-                    defaults.set(latestAppVersion, forKey: "latestAppVersion")
-                    defaults.set(wardDataset, forKey: "wardDataset")
-                    defaults.set(scheduleDataset, forKey: "scheduleDataset")
-                    defaults.set(coordinatesTitle, forKey: "coordinatesTitle")
-                    defaults.set(datesTitle, forKey: "datesTitle")
-                    defaults.set(geomTitle, forKey: "geomTitle")
-                    defaults.set(monthNameTitle, forKey: "monthNameTitle")
-                    defaults.set(monthNumberTitle, forKey: "monthNumberTitle")
-                    defaults.set(sectionTitle, forKey: "sectionTitle")
-                    defaults.set(wardTitle, forKey: "wardTitle")
-                    
-                    AF.request(self.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.constants.updatesDatabaseName, "year": String(self.latestAppVersion())]).validate().responseJSON() { response in
-                        switch response.result {
-                        case .failure(let error):
-                            print(error)
-                        case .success:
-                            if let value = response.data {
-                                
-                                let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                                let update = json.first!
-                                
-                                let latestDatasetVersionString = update["version"]
-                                let latestDatasetVersion = Int(latestDatasetVersionString!)
-                                
-                                defaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
-                                
-                                DispatchQueue.main.async {
-                                    self.updateNotifications()
-                                    self.displayNewOrUpdatedScheduleAlerts()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Get Divvys data
-        AF.request(self.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.constants.divvysDatabaseName]).validate().responseJSON() { response in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success:
-                if let value = response.data {
-                    
-                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    let divvy = json.first!
-                    
-                    let divvyDataset = divvy["divvyDataset"]
-                    let divvyIdTitle = divvy["idTitle"]
-                    let divvyDocksInServiceTitle = divvy["docksInServiceTitle"]
-                    let divvyLatitudeTitle = divvy["latitudeTitle"]
-                    let divvyLongitudeTitle = divvy["longitudeTitle"]
-                    let divvyStationNameTitle = divvy["stationNameTitle"]
-                    let divvyStatusTitle = divvy["statusTitle"]
-                    
-                    let divvyJSONUrl = divvy["divvyJSONUrl"]
-                    let divvyJSONBikesAvailableTitle = divvy["divvyJSONBikesAvailableTitle"]
-                    let divvyJSONEBikesAvailableTitle = divvy["divvyJSONEBikesAvailableTitle"]
-                    let divvyJSONDocksAvailableTitle = divvy["divvyJSONDocksAvailableTitle"]
-                    let divvyJSONDataTitle = divvy["divvyJSONDataTitle"]
-                    let divvyJSONStationsTitle = divvy["divvyJSONStationsTitle"]
-                    let divvyJSONIdTitle = divvy["divvyJSONIdTitle"]
-                    let divvyJSONLastUpdatedTitle = divvy["divvyJSONLastUpdatedTitle"]
-                    
-                    defaults.set(divvyDataset, forKey: "divvyDataset")
-                    defaults.set(divvyIdTitle, forKey: "divvyIdTitle")
-                    defaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
-                    defaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
-                    defaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
-                    defaults.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
-                    defaults.set(divvyStatusTitle, forKey: "divvyStatusTitle")
-                    
-                    defaults.set(divvyJSONUrl, forKey: "divvyJSONUrl")
-                    defaults.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
-                    defaults.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
-                    defaults.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
-                    defaults.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
-                    defaults.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
-                    defaults.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
-                    defaults.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
-                    
-                }
-            }
-        }
-        
-        // Get relocated vehicles data
-        AF.request(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.relocatedDatabaseName]).validate().responseJSON() { response in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success:
-                if let value = response.data {
-                    
-                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    let relocated = json.first!
-                    
-                    let relocatedDataset = relocated["relocatedDataset"]
-                    let relocatedColorTitle = relocated["colorTitle"]
-                    let relocatedMakeTitle = relocated["makeTitle"]
-                    let relocatedPlateTitle = relocated["plateTitle"]
-                    let relocatedDateTitle = relocated["relocatedDateTitle"]
-                    let relocatedFromLatitudeTitle = relocated["relocatedFromLatitudeTitle"]
-                    let relocatedFromLongitudeTitle = relocated["relocatedFromLongitudeTitle"]
-                    let relocatedFromAddressNumberTitle = relocated["relocatedFromAddressNumberTitle"]
-                    let relocatedFromDirectionTitle = relocated["relocatedFromDirectionTitle"]
-                    let relocatedFromStreetTitle = relocated["relocatedFromStreetTitle"]
-                    let relocatedReasonTitle = relocated["relocatedReasonTitle"]
-                    let relocatedToAddressNumberTitle = relocated["relocatedToAddressNumberTitle"]
-                    let relocatedToDirectionTitle = relocated["relocatedToDirectionTitle"]
-                    let relocatedToStreetTitle = relocated["relocatedToStreetTitle"]
-                    let relocatedStateTitle = relocated["stateTitle"]
-                    
-                    defaults.set(relocatedDataset, forKey: "relocatedDataset")
-                    defaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
-                    defaults.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
-                    defaults.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
-                    defaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
-                    defaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
-                    defaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
-                    defaults.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
-                    defaults.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
-                    defaults.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
-                    defaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
-                    defaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
-                    defaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
-                    defaults.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
-                    defaults.set(relocatedStateTitle, forKey: "relocatedStateTitle")
-                }
-            }
-        }
-        
-        // Get towed vehicles data
-        AF.request(self.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.constants.towedDatabaseName]).validate().responseJSON() { response in
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success:
-                if let value = response.data {
-                    
-                    let json = (try? JSONSerialization.jsonObject(with: value)) as! [[String: String]]
-                    let towed = json.first!
-                    
-                    let towedDataset = towed["towedDataset"]
-                    let towedColorTitle = towed["colorTitle"]
-                    let towedInventoryNumberTitle = towed["inventoryNumberTitle"]
-                    let towedMakeTitle = towed["makeTitle"]
-                    let towedModelTitle = towed["modelTitle"]
-                    let towedPlateTitle = towed["plateTitle"]
-                    let towedStateTitle = towed["stateTitle"]
-                    let towedStyleTitle = towed["styleTitle"]
-                    let towedDateTitle = towed["towedDateTitle"]
-                    let towedToAddressTitle = towed["towedToAddressTitle"]
-                    let towedToPhoneTitle = towed["towedToPhoneTitle"]
-                    
-                    defaults.set(towedDataset, forKey: "towedDataset")
-                    defaults.set(towedColorTitle, forKey: "towedColorTitle")
-                    defaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
-                    defaults.set(towedMakeTitle, forKey: "towedMakeTitle")
-                    defaults.set(towedModelTitle, forKey: "towedModelTitle")
-                    defaults.set(towedPlateTitle, forKey: "towedPlateTitle")
-                    defaults.set(towedStateTitle, forKey: "towedStateTitle")
-                    defaults.set(towedStyleTitle, forKey: "towedStyleTitle")
-                    defaults.set(towedDateTitle, forKey: "towedDateTitle")
-                    defaults.set(towedToAddressTitle, forKey: "towedToAddressTitle")
-                    defaults.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
-                }
-            }
-        }
-        
-        //        let lastUpdatesViewDateString = self.updatesLastViewDate()
-        //        if !lastUpdatesViewDateString.isEmpty {
-        //
-        //            let dateFormatter = DateFormatter()
-        //            //dateFormatter.locale = .current
-        //            dateFormatter.timeZone = .current
-        //            //dateFormatter.dateFormat = "M/dd/yyyy H:m:ss"
-        //
-        //            getRequest(self.constants.websiteURL + "/get-news-data.php", parameters: ["tableName": self.constants.newsDatabaseName]) { responseObject, error in
-        //                guard let response = responseObject, error == nil else {
-        //                    print(error ?? "Unknown error")
-        //                    return
-        //                }
-        //
-        //                if response.count > 0 {
-        //
-        //                    var newCount = 0
-        //
-        //                    for update in response.enumerated() {
-        //
-        //                        let date = update.element["date"] as! String
-        //                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        //                        let dateFormattedDate = dateFormatter.date(from: date)
-        //                        let dateFormattedString = dateFormatter.string(from: dateFormattedDate!)
-        //
-        //                        dateFormatter.dateFormat = "M/dd/yyyy HH:mm:ss"
-        //
-        //                        let lastUpdatesViewDate = dateFormatter.date(from: lastUpdatesViewDateString)!
-        //                        let lastUpdatesViewDateString2 = dateFormatter.string(from: lastUpdatesViewDate)
-        //
-        //                        print(date)
-        //                        print(dateFormattedDate!)
-        //                        print(dateFormattedString)
-        //                        print(lastUpdatesViewDate)
-        //                        print(lastUpdatesViewDateString2)
-        //
-        //
-        //
-        //
-        //                        //if dateFormatted > lastUpdatesViewDate {
-        //                            newCount += 1
-        //                        //}
-        //                    }
-        //
-        //                    DispatchQueue.main.async {
-        //                        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-        //                            if let navigationController = rootViewController as? UINavigationController {
-        //                                if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
-        //                                    tabBarController.tabBar.items?.last!.badgeValue = newCount > 0 ? "\(newCount)" : nil
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        
-        
-        completion("Finished getting data from database")
-    }
-    
-    // Do not remove. This code is required for old users migrating to the new app with multiple address
-    func migrateOldUsersToUseDatabase(completion: @escaping (_ completion: Bool) -> Void) {
-    
-        let favoriteAddress = self.favoriteAddress()
-        
-        if favoriteAddress != "" {
-                
-            // insert address into database
-            self.insertAddressIntoDatabase(address: favoriteAddress,
-                                           notificationsEnabled: self.notificationsToggled() ? 1 : 0,
-                                           notificationsWhen: self.notificationWhen(),
-                                           notificationsHour: self.notificationHour(),
-                                           notificationsMinute: self.notificationMinute(),
-                                           completion: { result in
-                                            
-                                            // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
-                                            defaults.set("", forKey: "favoriteAddress")
-                                            completion(true)
-                                           
-                                           })
-        }
-        else {
-            completion(true)
-        }
-    }
-    
-    func updateNotifications() {
-        
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
-        let favoriteViewController = FavoriteViewController()
-        
-        migrateOldUsersToUseDatabase(completion: { completion in
-            
-            self.getAddresses(completion: { addresses in
-                
-                for address in addresses {
-                    
-                    // Update next sweep day
-                    self.getNextSweepDay(address: address.address, completion: { date in
-                        
-                        var nextSweepDayFormatted = ""
-                        
-                        if date != nil {
-                            let calendar = Calendar.current
-                            let components = calendar.dateComponents([.year, .month, .day], from: date!)
-                            nextSweepDayFormatted = "\(components.month!)/\(components.day!)/\(components.year!)"
-                        }
-
-                        self.updateAddressesNextSweepDay(address: address.address, day: nextSweepDayFormatted)
-                    })
-                    
-                    // Update notifications
-                    let notificationsToggled = address.notificationsEnabled == "1" ? true : false
-                    let notificationsWhen = address.notificationsWhen
-                    let notificationsHour = Int(address.notificationsHour)
-                    let notificationsMinute = Int(address.notificationsMinute)
-                    
-                    self.deleteNotificationsFromDatabase(address.address, self.constants.notificationsDatabaseName, completion: {completion in
-                        if notificationsToggled == true {
-                            favoriteViewController.getSchedule(true, true, address.address, notificationsWhen, notificationsHour!, notificationsMinute!)
-                        }
-                    })
-                }
-            })
-        })
-    }
-    
     // This is run when a sweep notification is opened. It redirects the user to the schedule page
     func goToScheduleFromNotification(_ address: String) {
         
@@ -843,8 +227,8 @@ class Common {
                 let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
                 
                 // Query SODA API to get ward and section
-                let wardQuery = wardClient.query(dataset: self.wardDataset())
-                    .filter("intersects(\(self.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
+                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(schedule.locationCoordinate.longitude) \(schedule.locationCoordinate.latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -854,10 +238,10 @@ class Common {
                         if data.count > 0 {
                             
                             // Get values from json query
-                            let ward = data[0][self.wardTitle()] as? String ?? ""
-                            let section = data[0][self.sectionTitle()] as? String ?? ""
-                            let the_geom = data[0][self.geomTitle()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.coordinatesTitle()] as? NSMutableArray
+                            let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
+                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.defaults.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             // Loop through coordinates array
@@ -882,9 +266,9 @@ class Common {
                             schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
                             // Query SODA API to get months and days
-                            let scheduleQuery = wardClient.query(dataset: self.scheduleDataset())
-                                .filter("\(self.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.sectionTitle()) = '\(section)'" : "") ")
-                                .orderAscending(self.monthNumberTitle())
+                            let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
+                                .filter("\(self.defaults.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.defaults.sectionTitle()) = '\(section)'" : "") ")
+                                .orderAscending(self.defaults.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -896,9 +280,9 @@ class Common {
                                         for (_, item) in data.enumerated() {
                                             
                                             // Get values from json data
-                                            let monthName = item[self.monthNameTitle()] as? String ?? ""
-                                            let monthNumber = item[self.monthNumberTitle()] as? String ?? ""
-                                            let dates = item[self.dates()] as? String ?? ""
+                                            let monthName = item[self.defaults.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.defaults.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.defaults.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
                                             // Create month object
@@ -1002,6 +386,162 @@ class Common {
     //        return dateFormatter.string(from: dt!)
     //    }
     
+    //MARK: Defaults
+    
+//    // Shared
+//    
+//    func deviceUUID() -> String { return defaults.string(forKey: "deviceUUID") ?? ""}
+//    func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
+//    func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
+//    func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
+//    func enableMultipleAddresses() -> Bool {return defaults.bool(forKey: "enableMultipleAddresses")}
+//    func gettingValuesFromDatabase() -> Bool {return defaults.bool(forKey: "gettingValuesFromDatabase")}
+//    
+//    func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
+//    func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
+//    func defaultLatitude() -> Double {return defaults.double(forKey: "defaultLatitude")}
+//    func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
+//    func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
+//    func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
+//    
+//    // Schedule
+//    
+//    func dates() -> String {return defaults.string(forKey: "datesTitle") ?? ""}
+//    func monthNumberTitle() -> String {return defaults.string(forKey: "monthNumberTitle") ?? ""}
+//    func monthNameTitle() -> String {return defaults.string(forKey: "monthNameTitle") ?? ""}
+//    func coordinatesTitle() -> String {return defaults.string(forKey: "coordinatesTitle") ?? ""}
+//    func sectionTitle() -> String {return defaults.string(forKey: "sectionTitle") ?? ""}
+//    func wardTitle() -> String {return defaults.string(forKey: "wardTitle") ?? ""}
+//    func geomTitle() -> String {return defaults.string(forKey: "geomTitle") ?? ""}
+//    func scheduleDataset() -> String {return defaults.string(forKey: "scheduleDataset") ?? ""}
+//    func wardDataset() -> String {return defaults.string(forKey: "wardDataset") ?? ""}
+//    
+//    // Divvy
+//    
+//    func divvyDataset() -> String {return defaults.string(forKey: "divvyDataset") ?? ""}
+//    func divvyIdTitle() -> String {return defaults.string(forKey: "divvyIdTitle") ?? ""}
+//    func divvyDocksInServiceTitle() -> String {return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""}
+//    func divvyLatitudeTitle() -> String {return defaults.string(forKey: "divvyLatitudeTitle") ?? ""}
+//    func divvyLongitudeTitle() -> String {return defaults.string(forKey: "divvyLongitudeTitle") ?? ""}
+//    func divvyStationNameTitle() -> String {return defaults.string(forKey: "divvyStationNameTitle") ?? ""}
+//    func divvyStatusTitle() -> String {return defaults.string(forKey: "divvyStatusTitle") ?? ""}
+//    
+//    func divvyJSONUrl() -> String {return defaults.string(forKey: "divvyJSONUrl") ?? ""}
+//    func divvyJSONBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONBikesAvailableTitle") ?? ""}
+//    func divvyJSONEBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONEBikesAvailableTitle") ?? ""}
+//    func divvyJSONDocksAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONDocksAvailableTitle") ?? ""}
+//    func divvyJSONDataTitle() -> String {return defaults.string(forKey: "divvyJSONDataTitle") ?? ""}
+//    func divvyJSONStationsTitle() -> String {return defaults.string(forKey: "divvyJSONStationsTitle") ?? ""}
+//    func divvyJSONIdTitle() -> String {return defaults.string(forKey: "divvyJSONIdTitle") ?? ""}
+//    func divvyJSONLastUpdatedTitle() -> String {return defaults.string(forKey: "divvyJSONLastUpdatedTitle") ?? ""}
+//    
+//    // Towed vehicles
+//    
+//    func towedDataset() -> String {return defaults.string(forKey: "towedDataset") ?? ""}
+//    func towedColorTitle() -> String {return defaults.string(forKey: "towedColorTitle") ?? ""}
+//    func towedInventoryNumberTitle() -> String {return defaults.string(forKey: "towedInventoryNumberTitle") ?? ""}
+//    func towedMakeTitle() -> String {return defaults.string(forKey: "towedMakeTitle") ?? ""}
+//    func towedModelTitle() -> String {return defaults.string(forKey: "towedModelTitle") ?? ""}
+//    func towedPlateTitle() -> String {return defaults.string(forKey: "towedPlateTitle") ?? ""}
+//    func towedStateTitle() -> String {return defaults.string(forKey: "towedStateTitle") ?? ""}
+//    func towedStyleTitle() -> String {return defaults.string(forKey: "towedStyleTitle") ?? ""}
+//    func towedDateTitle() -> String {return defaults.string(forKey: "towedDateTitle") ?? ""}
+//    func towedToAddressTitle() -> String {return defaults.string(forKey: "towedToAddressTitle") ?? ""}
+//    func towedToPhoneTitle() -> String {return defaults.string(forKey: "towedToPhoneTitle") ?? ""}
+//    
+//    // Relocated vehicles
+//    
+//    func relocatedDataset() -> String {return defaults.string(forKey: "relocatedDataset") ?? ""}
+//    func relocatedColorTitle() -> String {return defaults.string(forKey: "relocatedColorTitle") ?? ""}
+//    func relocatedMakeTitle() -> String {return defaults.string(forKey: "relocatedMakeTitle") ?? ""}
+//    func relocatedPlateTitle() -> String {return defaults.string(forKey: "relocatedPlateTitle") ?? ""}
+//    func relocatedDateTitle() -> String {return defaults.string(forKey: "relocatedDateTitle") ?? ""}
+//    func relocatedFromLatitudeTitle() -> String {return defaults.string(forKey: "relocatedFromLatitudeTitle") ?? ""}
+//    func relocatedFromLongitudeTitle() -> String {return defaults.string(forKey: "relocatedFromLongitudeTitle") ?? ""}
+//    func relocatedFromAddressNumberTitle() -> String {return defaults.string(forKey: "relocatedFromAddressNumberTitle") ?? ""}
+//    func relocatedFromDirectionTitle() -> String {return defaults.string(forKey: "relocatedFromDirectionTitle") ?? ""}
+//    func relocatedFromStreetTitle() -> String {return defaults.string(forKey: "relocatedFromStreetTitle") ?? ""}
+//    func relocatedReasonTitle() -> String {return defaults.string(forKey: "relocatedReasonTitle") ?? ""}
+//    func relocatedToAddressNumberTitle() -> String {return defaults.string(forKey: "relocatedToAddressNumberTitle") ?? ""}
+//    func relocatedToDirectionTitle() -> String {return defaults.string(forKey: "relocatedToDirectionTitle") ?? ""}
+//    func relocatedToStreetTitle() -> String {return defaults.string(forKey: "relocatedToStreetTitle") ?? ""}
+//    func relocatedStateTitle() -> String {return defaults.string(forKey: "relocatedStateTitle") ?? ""}
+//    
+//    // Favorites
+//    
+//    func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
+//    func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
+//    func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
+//    
+//    // Notifications
+//    
+//    func notificationWhen() -> String {return defaults.string(forKey: "notificationWhen") ?? ""}
+//    func notificationHour() -> Int {return defaults.integer(forKey: "notificationHour")}
+//    func notificationMinute() -> Int {return defaults.integer(forKey: "notificationMinute")}
+//    func notificationsToggled() -> Bool {return defaults.bool(forKey: "notificationsToggled")}
+//    func notificationsYear() -> Int {return defaults.integer(forKey: "notificationsYear")}
+//    func notificationOneSignalPlayerId() -> String {return defaults.string(forKey: "notificationOneSignalPlayerId") ?? ""}
+//    
+//    // Updates
+//    
+//    func updatesLastViewDate() -> String {return defaults.string(forKey: "updatesLastViewDate") ?? ""}
+    
+    //MARK: Constants
+    
+//    class Constants {
+//        
+//        // Database tables
+//        #if DEBUG
+//        let debugMode = true
+//        let addressesDatabaseName = "addresses_dev"
+//        let schedulesDatabaseName = "schedules_dev"
+//        let updatesDatabaseName = "updates_dev"
+//        let divvysDatabaseName = "divvys_dev"
+//        let towedDatabaseName = "towed_vehicles_dev"
+//        let relocatedDatabaseName = "relocated_vehicles_dev"
+//        let newsDatabaseName = "news_dev"
+//        let infoDatabaseName = "info_dev"
+//        let notificationsDatabaseName = "notifications_dev"
+//        #else
+//        let debugMode = false
+//        let addressesDatabaseName = "addresses"
+//        let schedulesDatabaseName = "schedules"
+//        let updatesDatabaseName = "updates"
+//        let divvysDatabaseName = "divvys"
+//        let towedDatabaseName = "towed_vehicles"
+//        let relocatedDatabaseName = "relocated_vehicles"
+//        let newsDatabaseName = "news"
+//        let infoDatabaseName = "info"
+//        let notificationsDatabaseName = "notifications"
+//        #endif
+//        
+//        // One Signal
+//        let OneSignalAppId = "2a6b2ed6-b4a7-4da0-8917-899cef558a0a"
+//        
+//        // Multiple addresses in-app purchase
+//        let multipleAddressIAPurchase = "com.kylebeverforden.chisweeptracker.savemultipleaddresses"
+//        
+//        // SODA
+//        let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
+//        let SODADomain = "data.cityofchicago.org"
+//        
+//        // Strings
+//        let websiteURL = "https://chicagosweeptracker.info"
+//        
+//        let errorTitle = "Something went wrong..."
+//        let notFound = "Unable to find sweep schedule. Address must reside in Chicago."
+//        
+//        let finishedScheduleMessage = "Sweeping has ended for _currentYear_."
+//        let beginScheduleMessage = "Sweeping will begin on April 1st in _amount_ day(s)."
+//        let noInternetConnectionSearchMessage = "Unable to find sweep schedule. This may be caused by not having an internet connection or the Chicago API may be down for scheduled maintenance. Please try again in a few hours."
+//        
+//        // Colors
+//        let systemRed = "#ff3b30"
+//        let systemBlue = "#007aff"
+//        let divvy = "#3fb5e7"
+//        let background = "#f2f2f2"
+//    }
+//    
 }
 
 // MARK: Extensions
