@@ -20,7 +20,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
 	// Classes
 	let common = Common()
-    let defaults = Defaults()
     let database = Database()
     var schedule = ScheduleModel()
     
@@ -33,7 +32,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         
 		// Set title using latest app version (year)
-		self.title = "Sweep Schedule - \(self.defaults.latestAppVersion())"
+		self.title = "Sweep Schedule - \(self.common.defaults.latestAppVersion())"
 		
         // Show options menu in the top right
         self.showSaveFavoriteMenuItem()
@@ -44,7 +43,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
         
-        if (self.currentYear > self.defaults.latestAppVersion()) {
+        if (self.currentYear > self.common.defaults.latestAppVersion()) {
             self.comingSoonStackView.isHidden = false
             self.comingSoonYearLabel.text = "The \(self.currentYear) sweeping schedule is coming soon"
         }
@@ -148,8 +147,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 self.generator.selectionChanged()
                 
                 if favoriteAddressCount == 0  ||
-                    favoriteAddressCount >= 1  && self.defaults.enableMultipleAddresses() == true ||
-                    favoriteAddressCount >= 1  && self.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
+                    favoriteAddressCount >= 1  && self.common.defaults.enableMultipleAddresses() == true ||
+                    favoriteAddressCount >= 1  && self.common.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
                 
                     self.navigationItem.rightBarButtonItem = nil
                             
@@ -368,7 +367,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// If month equals the current month then change the labels to blue
 		let date = Date()
 		if (date.month.uppercased() == schedule.months[indexPath.row].name.uppercased()) &&
-           (self.currentYear == self.defaults.latestAppVersion()) {
+           (self.currentYear == self.common.defaults.latestAppVersion()) {
 			daysLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
 			daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
 			monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)

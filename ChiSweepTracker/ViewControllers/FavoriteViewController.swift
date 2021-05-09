@@ -25,7 +25,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     // Classes
     let common = Common()
-    let defaults = Defaults()
     let userDefaults = UserDefaults.standard
     let database = Database()
     var schedule = ScheduleModel()
@@ -78,8 +77,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         self.favoriteMapView.removeOverlays(favoriteMapView.overlays)
         self.favoriteMapView.removeAnnotations(favoriteMapView.annotations)
         
-        let selectedAnnotationLongitude = self.defaults.selectedAnnotationLongitude()
-        let selectedAnnotationLatitude = self.defaults.selectedAnnotationLatitude()
+        let selectedAnnotationLongitude = self.common.defaults.selectedAnnotationLongitude()
+        let selectedAnnotationLatitude = self.common.defaults.selectedAnnotationLatitude()
         var mapOverlayCoordinates = [CLLocationCoordinate2D]()
         
         for coordinate in self.schedule.polygonCoordinates {
@@ -130,7 +129,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func addRelocationVehiclesToMap(_ favoriteLocation: CLLocation) {
         
         // Get show relocated vehicle setting from defaults
-        let showTowedVehicles = self.defaults.showTowedVehicles()
+        let showTowedVehicles = self.common.defaults.showTowedVehicles()
         
         self.relocatedVehicleCount = 0
         
@@ -141,8 +140,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             let relocatedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
             
             // Create SODA query
-            let relocatedQuery = relocatedClient.query(dataset: self.defaults.relocatedDataset())
-                .filter("\(self.defaults.relocatedFromLatitudeTitle()) IS NOT NULL AND \(self.defaults.relocatedFromLongitudeTitle()) IS NOT NULL")
+            let relocatedQuery = relocatedClient.query(dataset: self.common.defaults.relocatedDataset())
+                .filter("\(self.common.defaults.relocatedFromLatitudeTitle()) IS NOT NULL AND \(self.common.defaults.relocatedFromLongitudeTitle()) IS NOT NULL")
                 .limit(5000)
             
             relocatedQuery.get { res in
@@ -155,20 +154,20 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         for (_, item) in data.enumerated() {
                             
                             // Get values for each relocated vehicle
-                            var relocatedDate = item[self.defaults.relocatedDateTitle()] as? String ?? ""
-                            let make = item[self.defaults.relocatedMakeTitle()] as? String ?? ""
-                            let color = item[self.defaults.relocatedColorTitle()] as? String ?? ""
-                            let plate = item[self.defaults.relocatedPlateTitle()] as? String ?? ""
-                            let state = item[self.defaults.relocatedStateTitle()] as? String ?? ""
-                            let relocatedToAddressNumber = item[self.defaults.relocatedToAddressNumberTitle()] as? String ?? ""
-                            let relocatedToDirection = item[self.defaults.relocatedToDirectionTitle()] as? String ?? ""
-                            let relocatedToStreet = item[self.defaults.relocatedToStreetTitle()] as? String ?? ""
-                            let relocatedReason = item[self.defaults.relocatedReasonTitle()] as? String ?? ""
-                            let relocatedFromLatitude = item[self.defaults.relocatedFromLatitudeTitle()] as? String ?? ""
-                            let relocatedFromLongitude = item[self.defaults.relocatedFromLongitudeTitle()] as? String ?? ""
-                            let relocatedFromAddressNumber = item[self.defaults.relocatedFromAddressNumberTitle()] as? String ?? ""
-                            let relocatedFromDirection = item[self.defaults.relocatedFromDirectionTitle()] as? String ?? ""
-                            let relocatedFromStreet = item[self.defaults.relocatedFromStreetTitle()] as? String ?? ""
+                            var relocatedDate = item[self.common.defaults.relocatedDateTitle()] as? String ?? ""
+                            let make = item[self.common.defaults.relocatedMakeTitle()] as? String ?? ""
+                            let color = item[self.common.defaults.relocatedColorTitle()] as? String ?? ""
+                            let plate = item[self.common.defaults.relocatedPlateTitle()] as? String ?? ""
+                            let state = item[self.common.defaults.relocatedStateTitle()] as? String ?? ""
+                            let relocatedToAddressNumber = item[self.common.defaults.relocatedToAddressNumberTitle()] as? String ?? ""
+                            let relocatedToDirection = item[self.common.defaults.relocatedToDirectionTitle()] as? String ?? ""
+                            let relocatedToStreet = item[self.common.defaults.relocatedToStreetTitle()] as? String ?? ""
+                            let relocatedReason = item[self.common.defaults.relocatedReasonTitle()] as? String ?? ""
+                            let relocatedFromLatitude = item[self.common.defaults.relocatedFromLatitudeTitle()] as? String ?? ""
+                            let relocatedFromLongitude = item[self.common.defaults.relocatedFromLongitudeTitle()] as? String ?? ""
+                            let relocatedFromAddressNumber = item[self.common.defaults.relocatedFromAddressNumberTitle()] as? String ?? ""
+                            let relocatedFromDirection = item[self.common.defaults.relocatedFromDirectionTitle()] as? String ?? ""
+                            let relocatedFromStreet = item[self.common.defaults.relocatedFromStreetTitle()] as? String ?? ""
                             
                             if (relocatedFromLatitude != "" && relocatedFromLongitude != "") {
                                 
@@ -225,7 +224,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func addDivvyStationsToMap(_ favoriteLocation: CLLocation) {
         
         // Get show Divvy station setting from defaults
-        let showDivvyStations = self.defaults.showDivvyStations()
+        let showDivvyStations = self.common.defaults.showDivvyStations()
         
         self.divvyStationCount = 0
         
@@ -236,7 +235,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             let divvyClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
             
             // Create SODA query
-            let divvyQuery = divvyClient.query(dataset: self.defaults.divvyDataset())
+            let divvyQuery = divvyClient.query(dataset: self.common.defaults.divvyDataset())
             
             divvyQuery.get { res in
                 switch res {
@@ -248,12 +247,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         for (_, item) in data.enumerated() {
                             
                             // Get values for each Divvy station
-                            let latitude = item[self.defaults.divvyLatitudeTitle()] as? String ?? ""
-                            let longitude = item[self.defaults.divvyLongitudeTitle()] as? String ?? ""
-                            let name = item[self.defaults.divvyStationNameTitle()] as? String ?? ""
-                            let docksInService = item[self.defaults.divvyDocksInServiceTitle()] as? String ?? ""
-                            let status = item[self.defaults.divvyStatusTitle()] as? String ?? ""
-                            let id = item[self.defaults.divvyIdTitle()] as? String ?? ""
+                            let latitude = item[self.common.defaults.divvyLatitudeTitle()] as? String ?? ""
+                            let longitude = item[self.common.defaults.divvyLongitudeTitle()] as? String ?? ""
+                            let name = item[self.common.defaults.divvyStationNameTitle()] as? String ?? ""
+                            let docksInService = item[self.common.defaults.divvyDocksInServiceTitle()] as? String ?? ""
+                            let status = item[self.common.defaults.divvyStatusTitle()] as? String ?? ""
+                            let id = item[self.common.defaults.divvyIdTitle()] as? String ?? ""
                             
                             if (latitude != "" && longitude != "") {
                                 
@@ -307,8 +306,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         generator.selectionChanged()
         
         // Get values from defaults
-        let showDivvyStations = self.defaults.showDivvyStations()
-        let showTowedVehicles = self.defaults.showTowedVehicles()
+        let showDivvyStations = self.common.defaults.showDivvyStations()
+        let showTowedVehicles = self.common.defaults.showTowedVehicles()
         
         // Create options alert
         let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
@@ -506,7 +505,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         let urlTo = self.common.constants.websiteURL + "/update-address.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
-                          "uuid": self.defaults.deviceUUID(),
+                          "uuid": self.common.defaults.deviceUUID(),
                           "address": self.schedule.address,
                           "notificationsWhen": when,
                           "notificationsHour": hour,
@@ -549,8 +548,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                 
                 let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
-                let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
-                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+                let wardQuery = wardClient.query(dataset: self.common.defaults.wardDataset())
+                    .filter("intersects(\(self.common.defaults.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -559,10 +558,10 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         
                         if data.count > 0 {
                             
-                            let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
-                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
-                            let the_geom = data[0][self.defaults.geomTitle()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.defaults.coordinatesTitle()] as? NSMutableArray
+                            let ward = data[0][self.common.defaults.wardTitle()] as? String ?? ""
+                            let section = data[0][self.common.defaults.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.common.defaults.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
                             
                             self.schedule.polygonCoordinates.removeAll()
@@ -588,9 +587,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                 self.schedule.section = favoriteSection
                             }
                             
-                            let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
-                                .filter("\(self.defaults.wardTitle()) = '\(ward)' AND \(self.defaults.sectionTitle()) = '\(self.schedule.section)'")
-                                .orderAscending(self.defaults.monthNumberTitle())
+                            let scheduleQuery = wardClient.query(dataset: self.common.defaults.scheduleDataset())
+                                .filter("\(self.common.defaults.wardTitle()) = '\(ward)' AND \(self.common.defaults.sectionTitle()) = '\(self.schedule.section)'")
+                                .orderAscending(self.common.defaults.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -602,9 +601,9 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                         
                                         for (_, item) in data.enumerated() {
                                             
-                                            let monthName = item[self.defaults.monthNameTitle()] as? String ?? ""
-                                            let monthNumber = item[self.defaults.monthNumberTitle()] as? String ?? ""
-                                            let dates = item[self.defaults.dates()] as? String ?? ""
+                                            let monthName = item[self.common.defaults.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.common.defaults.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.common.defaults.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
                                             let month = MonthModel()
@@ -671,7 +670,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                         
                                                         //let center = UNUserNotificationCenter.current()
                                                         let calendar = Calendar.current
-                                                        let currentYear = self.defaults.latestAppVersion()
+                                                        let currentYear = self.common.defaults.latestAppVersion()
                                                         let notificationWhenDefault = when
                                                         let notificationHourDefault = hour
                                                         let notificationMinuteDefault = minute
@@ -890,8 +889,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         if pushNotificationsSwitch.isOn == true {
             
-            let latestAppVersion = self.defaults.latestAppVersion()
-            let latestDatasetVersion = self.defaults.latestDatasetVersion()
+            let latestAppVersion = self.common.defaults.latestAppVersion()
+            let latestDatasetVersion = self.common.defaults.latestDatasetVersion()
             
             // Save settings to defaults
             self.userDefaults.set(latestAppVersion, forKey: "notificationsYear")

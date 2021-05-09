@@ -12,7 +12,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 	
 	// Classes
 	let common = Common()
-    let defaults = Defaults()
 	var schedule = ScheduleModel()
 	
 	// Shared
@@ -39,7 +38,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
 		
 		// Get latest app version (year)
-        currentYear = self.defaults.latestAppVersion()
+        currentYear = self.common.defaults.latestAppVersion()
         
 		// Get selected month name from schedule view and set it as the title
         selectedMonthName = selectedMonthName.lowercased().capitalizingFirstLetter()

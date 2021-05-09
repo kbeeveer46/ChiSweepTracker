@@ -17,9 +17,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Classes
     let schedule = ScheduleModel()
     let common = Common()
-    let defaults = Defaults()
     let database = Database()
-    let constants = Constants()
     
 	// Shared
     let userDefaults = UserDefaults.standard
@@ -71,7 +69,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	func showStatusMessage() {
 
 		if currentMonth > 11 {
-            self.messageLabel.text = self.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
+            self.messageLabel.text = self.common.constants.finishedScheduleMessage.replacingOccurrences(of: "_currentYear_", with: "\(currentYear)")
 		}
 		else if currentMonth < 4 {
 
@@ -82,7 +80,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			let end = dateFormatter.date(from: "4/1/\(currentYear)")!
 			let diff = Date.daysBetween(start: start, end: end)
 
-			self.messageLabel.text = self.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
+            self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
             getNextSweepDay()
@@ -192,7 +190,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             
 			// No internet connection will cause an error
             if error != nil {
-				self.common.showAlert(self.constants.errorTitle, self.constants.noInternetConnectionSearchMessage)
+				self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
                 return
             }
             
@@ -216,11 +214,11 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 }
 				
 				// Create SODA client using domain and token
-				let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
+				let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
                 
 				// Query SODA API to get ward and section
-				let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
-                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
+				let wardQuery = wardClient.query(dataset: self.common.defaults.wardDataset())
+                    .filter("intersects(\(self.common.defaults.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")
 					.limit(1)
                 
                 wardQuery.get { res in
@@ -230,10 +228,10 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                         if data.count > 0 {
                             
 							// Get values from json query
-                            let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
-                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
-                            let the_geom = data[0][self.defaults.geomTitle()] as? [String: Any] ?? [:]
-                            let coordinatesWrapper = the_geom[self.defaults.coordinatesTitle()] as? NSMutableArray
+                            let ward = data[0][self.common.defaults.wardTitle()] as? String ?? ""
+                            let section = data[0][self.common.defaults.sectionTitle()] as? String ?? ""
+                            let the_geom = data[0][self.common.defaults.geomTitle()] as? [String: Any] ?? [:]
+                            let coordinatesWrapper = the_geom[self.common.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
 							
 							// Set default polygon array to be used in all the views
@@ -267,9 +265,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             }
                             
                             // Query SODA API to get months and days
-							let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
-								.filter("\(self.defaults.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.defaults.sectionTitle()) = '\(section)'" : "") ")
-								.orderAscending(self.defaults.monthNumberTitle())
+							let scheduleQuery = wardClient.query(dataset: self.common.defaults.scheduleDataset())
+								.filter("\(self.common.defaults.wardTitle()) = '\(ward)' \(section != "" ? "AND \(self.common.defaults.sectionTitle()) = '\(section)'" : "") ")
+								.orderAscending(self.common.defaults.monthNumberTitle())
                             
                             scheduleQuery.get { res in
                                 switch res {
@@ -281,9 +279,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                         for (_, item) in data.enumerated() {
                                             
 											// Get values from json data
-                                            let monthName = item[self.defaults.monthNameTitle()] as? String ?? ""
-                                            let monthNumber = item[self.defaults.monthNumberTitle()] as? String ?? ""
-                                            let dates = item[self.defaults.dates()] as? String ?? ""
+                                            let monthName = item[self.common.defaults.monthNameTitle()] as? String ?? ""
+                                            let monthNumber = item[self.common.defaults.monthNumberTitle()] as? String ?? ""
+                                            let dates = item[self.common.defaults.dates()] as? String ?? ""
                                             let datesArray = dates.components(separatedBy: ",").sorted {$0.localizedStandardCompare($1) == .orderedAscending}
                                             
 											// Create month object
@@ -318,21 +316,21 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
-                                    self.common.showAlert(self.constants.errorTitle, self.constants.noInternetConnectionSearchMessage)
+                                    self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
                                 }
                             }
                         }
                         else {
-                            self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                            self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
                         }
                     case .error (let err):
                         print("searchForSchedule Unable to get ward data from the City of Chicago: \(err.localizedDescription)")
-                        self.common.showAlert(self.constants.errorTitle, self.constants.noInternetConnectionSearchMessage)
+                        self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
                     }
                 }
             }
             else {
-                self.common.showAlert(self.constants.errorTitle, self.constants.notFound)
+                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.notFound)
             }
         }
     }
@@ -379,7 +377,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				
 				// Stop updating location if user appears to be offline
 				self.locationManager.stopUpdatingLocation()
-                self.common.showAlert(self.constants.errorTitle, self.constants.noInternetConnectionSearchMessage)
+                self.common.showAlert(self.common.constants.errorTitle, self.common.constants.noInternetConnectionSearchMessage)
 				return
 			}
 			
@@ -446,9 +444,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		chicagoMapView.delegate = self
 		
 		// Get values from defaults
-		let addressFromDefaults = self.defaults.defaultAddress()
-		let longitudeFromDefaults = self.defaults.defaultLongitude()
-		let latitudeFromDefaults = self.defaults.defaultLatitude()
+		let addressFromDefaults = self.common.defaults.defaultAddress()
+		let longitudeFromDefaults = self.common.defaults.defaultLongitude()
+		let latitudeFromDefaults = self.common.defaults.defaultLatitude()
 		
 		// Put address in address text box
 		addressTextField.text = addressFromDefaults
