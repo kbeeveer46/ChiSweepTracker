@@ -2,8 +2,10 @@ import Alamofire
 
 public class Database {
     
+    // Classes
     let common = Common()
     
+    // Shared
     let userDefaults = UserDefaults.standard
     
     //MARK: Addresses
@@ -58,7 +60,6 @@ public class Database {
     }
     
     func deleteAddressFromDatabase(address: String, deleteAddressResult: @escaping (Bool) -> Void) {
-        
         let urlTo = self.common.constants.websiteURL + "/delete-address.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
                           "uuid": self.common.defaults.deviceUUID(),
@@ -69,7 +70,6 @@ public class Database {
                 deleteAddressResult(completion)
             })
         }
-        
     }
     
     func insertAddressIntoDatabase(address: String, notificationsEnabled: Int, notificationsWhen: String, notificationsHour: Int, notificationsMinute: Int, completion: @escaping (Bool) -> Void) {
@@ -101,7 +101,6 @@ public class Database {
     }
     
     func updateAddressesNextSweepDay(address: String, day: String) {
-        
         let urlTo = self.common.constants.websiteURL + "/update-address-next-sweep-day.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
                           "nextSweepDay": day,
@@ -109,7 +108,6 @@ public class Database {
                           "address": address] as [String : Any]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
-        
     }
     
     func migrateOldUsersToUseDatabase(completion: @escaping (_ completion: Bool) -> Void) {

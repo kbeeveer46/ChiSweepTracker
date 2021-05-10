@@ -1,4 +1,3 @@
-import UIKit
 import MapKit
 import THLabel
 import Alamofire

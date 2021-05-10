@@ -1,4 +1,3 @@
-import UIKit
 import CoreLocation
 import MapKit
 import THLabel

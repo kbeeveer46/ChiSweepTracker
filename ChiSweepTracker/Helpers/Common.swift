@@ -1,6 +1,4 @@
-import UIKit
 import MapKit
-import Alamofire
 
 let userDefaults = UserDefaults.standard
 
@@ -11,6 +9,8 @@ public class Common {
     
     //MARK: Methods
     
+    // This runs every time the app is opened after gettin the latest dataset number and app version from the database.
+    // It will alert the user if the schedule has been released for the year or if there have been any updates to the schedule
     func displayNewOrUpdatedScheduleAlerts() {
         
         let latestDatasetVersion = defaults.latestDatasetVersion()
@@ -22,29 +22,14 @@ public class Common {
         // Set the latest dataset version when notifications were updated
         // Use the value to alert them if they loaded the app after Chicago changed the schedule
         if userDatasetVersion != 0 && userDatasetVersion < latestDatasetVersion && notificationsYear == latestAppVersion {
-            
-            // Create dataset updated alert
-            let datasetUpdatedAlert = UIAlertController(title: "Notifications Updated", message: "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.", preferredStyle: .alert)
-            
-            // Create and add OK option for dataset updated alert
-            datasetUpdatedAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            
-            var rootViewController = UIApplication.shared.keyWindow?.rootViewController
-            
-            if let navigationController = rootViewController as? UINavigationController {
-                rootViewController = navigationController.viewControllers.first
-            }
-            
-            // Present dataset updated alert
-            rootViewController?.present(datasetUpdatedAlert, animated: true, completion: nil)
-            
+            self.showAlert("Schedule Updated", "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
         }
         userDefaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
         
         // Set the last year when notifications were updated.
         // Use the value to alert them if they loaded the app after a new year came out
         if notificationsYear != 0 && notificationsYear < latestAppVersion {
-            self.showAlert("Notifications Updated", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
+            self.showAlert("Schedule Released", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
         }
         userDefaults.set(latestAppVersion, forKey: "notificationsYear")
         
@@ -73,20 +58,16 @@ public class Common {
                 // Get first placemark in list
                 let placemark = placemarks?.first
                 
-                // Create coorindates from placemark
-                var coordinates = CLLocationCoordinate2D()
-                coordinates.latitude = placemark?.location?.coordinate.latitude ?? 0
-                coordinates.longitude = placemark?.location?.coordinate.longitude ?? 0
-                
-                // Set schedule location coordinates
-                //schedule.locationCoordinate = coordinates
+                // Get lat and long from placemark
+                let latitude = placemark?.location?.coordinate.latitude ?? 0
+                let longitude = placemark?.location?.coordinate.longitude ?? 0
                                 
                 // Create SODA client using domain and token
                 let wardClient = SODAClient(domain: self.constants.SODADomain, token: self.constants.SODAToken)
                 
                 // Query SODA API to get ward and section
                 let wardQuery = wardClient.query(dataset: self.defaults.wardDataset())
-                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(coordinates.longitude) \(coordinates.latitude))')")
+                    .filter("intersects(\(self.defaults.geomTitle()),'POINT(\(longitude) \(latitude))')")
                     .limit(1)
                 
                 wardQuery.get { res in
@@ -359,6 +340,7 @@ public class Common {
     }
     
     // Style button with image and background color
+    // This can go away after changing all the buttons to card views (towed vehicle search page)
     func styleButton(_ button: UIButton, _ image: String?, _ color: String? = nil) {
         
         button.backgroundColor = .systemBlue
@@ -386,162 +368,6 @@ public class Common {
     //        return dateFormatter.string(from: dt!)
     //    }
     
-    //MARK: Defaults
-    
-//    // Shared
-//    
-//    func deviceUUID() -> String { return defaults.string(forKey: "deviceUUID") ?? ""}
-//    func latestAppVersion() -> Int { return defaults.integer(forKey: "latestAppVersion")}
-//    func latestDatasetVersion() -> Int {return defaults.integer(forKey: "latestDatasetVersion")}
-//    func userDatasetVersion() -> Int {return defaults.integer(forKey: "userDatasetVersion")}
-//    func enableMultipleAddresses() -> Bool {return defaults.bool(forKey: "enableMultipleAddresses")}
-//    func gettingValuesFromDatabase() -> Bool {return defaults.bool(forKey: "gettingValuesFromDatabase")}
-//    
-//    func defaultAddress() -> String {return defaults.string(forKey: "defaultAddress") ?? ""}
-//    func defaultLongitude() -> Double {return defaults.double(forKey: "defaultLongitude")}
-//    func defaultLatitude() -> Double {return defaults.double(forKey: "defaultLatitude")}
-//    func defaultCoordinatesArray() -> [[NSArray]] {return defaults.object(forKey: "defaultCoordinatesArray") as! [[NSArray]]}
-//    func selectedAnnotationLongitude() -> Double {return defaults.double(forKey: "selectedAnnotationLongitude")}
-//    func selectedAnnotationLatitude() -> Double {return defaults.double(forKey: "selectedAnnotationLatitude")}
-//    
-//    // Schedule
-//    
-//    func dates() -> String {return defaults.string(forKey: "datesTitle") ?? ""}
-//    func monthNumberTitle() -> String {return defaults.string(forKey: "monthNumberTitle") ?? ""}
-//    func monthNameTitle() -> String {return defaults.string(forKey: "monthNameTitle") ?? ""}
-//    func coordinatesTitle() -> String {return defaults.string(forKey: "coordinatesTitle") ?? ""}
-//    func sectionTitle() -> String {return defaults.string(forKey: "sectionTitle") ?? ""}
-//    func wardTitle() -> String {return defaults.string(forKey: "wardTitle") ?? ""}
-//    func geomTitle() -> String {return defaults.string(forKey: "geomTitle") ?? ""}
-//    func scheduleDataset() -> String {return defaults.string(forKey: "scheduleDataset") ?? ""}
-//    func wardDataset() -> String {return defaults.string(forKey: "wardDataset") ?? ""}
-//    
-//    // Divvy
-//    
-//    func divvyDataset() -> String {return defaults.string(forKey: "divvyDataset") ?? ""}
-//    func divvyIdTitle() -> String {return defaults.string(forKey: "divvyIdTitle") ?? ""}
-//    func divvyDocksInServiceTitle() -> String {return defaults.string(forKey: "divvyDocksInServiceTitle") ?? ""}
-//    func divvyLatitudeTitle() -> String {return defaults.string(forKey: "divvyLatitudeTitle") ?? ""}
-//    func divvyLongitudeTitle() -> String {return defaults.string(forKey: "divvyLongitudeTitle") ?? ""}
-//    func divvyStationNameTitle() -> String {return defaults.string(forKey: "divvyStationNameTitle") ?? ""}
-//    func divvyStatusTitle() -> String {return defaults.string(forKey: "divvyStatusTitle") ?? ""}
-//    
-//    func divvyJSONUrl() -> String {return defaults.string(forKey: "divvyJSONUrl") ?? ""}
-//    func divvyJSONBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONBikesAvailableTitle") ?? ""}
-//    func divvyJSONEBikesAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONEBikesAvailableTitle") ?? ""}
-//    func divvyJSONDocksAvailableTitle() -> String {return defaults.string(forKey: "divvyJSONDocksAvailableTitle") ?? ""}
-//    func divvyJSONDataTitle() -> String {return defaults.string(forKey: "divvyJSONDataTitle") ?? ""}
-//    func divvyJSONStationsTitle() -> String {return defaults.string(forKey: "divvyJSONStationsTitle") ?? ""}
-//    func divvyJSONIdTitle() -> String {return defaults.string(forKey: "divvyJSONIdTitle") ?? ""}
-//    func divvyJSONLastUpdatedTitle() -> String {return defaults.string(forKey: "divvyJSONLastUpdatedTitle") ?? ""}
-//    
-//    // Towed vehicles
-//    
-//    func towedDataset() -> String {return defaults.string(forKey: "towedDataset") ?? ""}
-//    func towedColorTitle() -> String {return defaults.string(forKey: "towedColorTitle") ?? ""}
-//    func towedInventoryNumberTitle() -> String {return defaults.string(forKey: "towedInventoryNumberTitle") ?? ""}
-//    func towedMakeTitle() -> String {return defaults.string(forKey: "towedMakeTitle") ?? ""}
-//    func towedModelTitle() -> String {return defaults.string(forKey: "towedModelTitle") ?? ""}
-//    func towedPlateTitle() -> String {return defaults.string(forKey: "towedPlateTitle") ?? ""}
-//    func towedStateTitle() -> String {return defaults.string(forKey: "towedStateTitle") ?? ""}
-//    func towedStyleTitle() -> String {return defaults.string(forKey: "towedStyleTitle") ?? ""}
-//    func towedDateTitle() -> String {return defaults.string(forKey: "towedDateTitle") ?? ""}
-//    func towedToAddressTitle() -> String {return defaults.string(forKey: "towedToAddressTitle") ?? ""}
-//    func towedToPhoneTitle() -> String {return defaults.string(forKey: "towedToPhoneTitle") ?? ""}
-//    
-//    // Relocated vehicles
-//    
-//    func relocatedDataset() -> String {return defaults.string(forKey: "relocatedDataset") ?? ""}
-//    func relocatedColorTitle() -> String {return defaults.string(forKey: "relocatedColorTitle") ?? ""}
-//    func relocatedMakeTitle() -> String {return defaults.string(forKey: "relocatedMakeTitle") ?? ""}
-//    func relocatedPlateTitle() -> String {return defaults.string(forKey: "relocatedPlateTitle") ?? ""}
-//    func relocatedDateTitle() -> String {return defaults.string(forKey: "relocatedDateTitle") ?? ""}
-//    func relocatedFromLatitudeTitle() -> String {return defaults.string(forKey: "relocatedFromLatitudeTitle") ?? ""}
-//    func relocatedFromLongitudeTitle() -> String {return defaults.string(forKey: "relocatedFromLongitudeTitle") ?? ""}
-//    func relocatedFromAddressNumberTitle() -> String {return defaults.string(forKey: "relocatedFromAddressNumberTitle") ?? ""}
-//    func relocatedFromDirectionTitle() -> String {return defaults.string(forKey: "relocatedFromDirectionTitle") ?? ""}
-//    func relocatedFromStreetTitle() -> String {return defaults.string(forKey: "relocatedFromStreetTitle") ?? ""}
-//    func relocatedReasonTitle() -> String {return defaults.string(forKey: "relocatedReasonTitle") ?? ""}
-//    func relocatedToAddressNumberTitle() -> String {return defaults.string(forKey: "relocatedToAddressNumberTitle") ?? ""}
-//    func relocatedToDirectionTitle() -> String {return defaults.string(forKey: "relocatedToDirectionTitle") ?? ""}
-//    func relocatedToStreetTitle() -> String {return defaults.string(forKey: "relocatedToStreetTitle") ?? ""}
-//    func relocatedStateTitle() -> String {return defaults.string(forKey: "relocatedStateTitle") ?? ""}
-//    
-//    // Favorites
-//    
-//    func favoriteAddress() -> String {return defaults.string(forKey: "favoriteAddress") ?? ""}
-//    func showDivvyStations() -> Bool {return defaults.bool(forKey: "showDivvyStations")}
-//    func showTowedVehicles() -> Bool {return defaults.bool(forKey: "showTowedVehicles")}
-//    
-//    // Notifications
-//    
-//    func notificationWhen() -> String {return defaults.string(forKey: "notificationWhen") ?? ""}
-//    func notificationHour() -> Int {return defaults.integer(forKey: "notificationHour")}
-//    func notificationMinute() -> Int {return defaults.integer(forKey: "notificationMinute")}
-//    func notificationsToggled() -> Bool {return defaults.bool(forKey: "notificationsToggled")}
-//    func notificationsYear() -> Int {return defaults.integer(forKey: "notificationsYear")}
-//    func notificationOneSignalPlayerId() -> String {return defaults.string(forKey: "notificationOneSignalPlayerId") ?? ""}
-//    
-//    // Updates
-//    
-//    func updatesLastViewDate() -> String {return defaults.string(forKey: "updatesLastViewDate") ?? ""}
-    
-    //MARK: Constants
-    
-//    class Constants {
-//        
-//        // Database tables
-//        #if DEBUG
-//        let debugMode = true
-//        let addressesDatabaseName = "addresses_dev"
-//        let schedulesDatabaseName = "schedules_dev"
-//        let updatesDatabaseName = "updates_dev"
-//        let divvysDatabaseName = "divvys_dev"
-//        let towedDatabaseName = "towed_vehicles_dev"
-//        let relocatedDatabaseName = "relocated_vehicles_dev"
-//        let newsDatabaseName = "news_dev"
-//        let infoDatabaseName = "info_dev"
-//        let notificationsDatabaseName = "notifications_dev"
-//        #else
-//        let debugMode = false
-//        let addressesDatabaseName = "addresses"
-//        let schedulesDatabaseName = "schedules"
-//        let updatesDatabaseName = "updates"
-//        let divvysDatabaseName = "divvys"
-//        let towedDatabaseName = "towed_vehicles"
-//        let relocatedDatabaseName = "relocated_vehicles"
-//        let newsDatabaseName = "news"
-//        let infoDatabaseName = "info"
-//        let notificationsDatabaseName = "notifications"
-//        #endif
-//        
-//        // One Signal
-//        let OneSignalAppId = "2a6b2ed6-b4a7-4da0-8917-899cef558a0a"
-//        
-//        // Multiple addresses in-app purchase
-//        let multipleAddressIAPurchase = "com.kylebeverforden.chisweeptracker.savemultipleaddresses"
-//        
-//        // SODA
-//        let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
-//        let SODADomain = "data.cityofchicago.org"
-//        
-//        // Strings
-//        let websiteURL = "https://chicagosweeptracker.info"
-//        
-//        let errorTitle = "Something went wrong..."
-//        let notFound = "Unable to find sweep schedule. Address must reside in Chicago."
-//        
-//        let finishedScheduleMessage = "Sweeping has ended for _currentYear_."
-//        let beginScheduleMessage = "Sweeping will begin on April 1st in _amount_ day(s)."
-//        let noInternetConnectionSearchMessage = "Unable to find sweep schedule. This may be caused by not having an internet connection or the Chicago API may be down for scheduled maintenance. Please try again in a few hours."
-//        
-//        // Colors
-//        let systemRed = "#ff3b30"
-//        let systemBlue = "#007aff"
-//        let divvy = "#3fb5e7"
-//        let background = "#f2f2f2"
-//    }
-//    
 }
 
 // MARK: Extensions
@@ -559,9 +385,9 @@ extension UIImage {
     
 }
 
-// Capitalize first lett of month name
 extension String {
     
+    // Capitalize first lett of month name
     func capitalizingFirstLetter() -> String {
         return prefix(1).capitalized + dropFirst()
     }
@@ -572,13 +398,6 @@ extension String {
 }
 
 extension Date {
-    
-//    public var removeTimeStamp : Date? {
-//        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else {
-//            return nil
-//        }
-//        return date
-//    }
     
     func daysBetween(date: Date) -> Int {
         return Date.daysBetween(start: self, end: date)

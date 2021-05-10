@@ -1,4 +1,3 @@
-import UIKit
 import Alamofire
 
 class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {

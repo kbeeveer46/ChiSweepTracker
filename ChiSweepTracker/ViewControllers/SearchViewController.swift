@@ -1,4 +1,3 @@
-import UIKit
 import CoreLocation
 import MapKit
 
@@ -6,7 +5,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     
 	// Controls
     @IBOutlet weak var addressTextField: UITextField!
-    //@IBOutlet weak var searchAddressButton: UIButton!
 	@IBOutlet weak var chicagoMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var chicagoMapView: MKMapView!
     @IBOutlet weak var searchTypeSegment: UISegmentedControl!
