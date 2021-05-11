@@ -21,7 +21,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	// Shared
     let userDefaults = UserDefaults.standard
 	let locationManager = CLLocationManager()
-    var addressFromTextField = ""
     var addressFromCoordinates = ""
 	let currentDay = Calendar.current.component(.day, from: Date())
 	let currentMonth = Calendar.current.component(.month, from: Date())
@@ -32,14 +31,14 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-		// Show finished schedule button if month is < 4 or greater than 11
+		// Show finished schedule button if month is < 4 or > 11
 		self.showStatusMessage()
 		
 		// Load map with user default lat and long or Chicago
 		self.loadSearchMap()
 		
 		// Style controls
-		self.styleControls()
+		self.initializeControls()
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
@@ -64,7 +63,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
 	
-	// Show finished schedule button if the current month is less thatn 4 (April) or greater than 11 (November)
+	// Show finished schedule message or sweeping will start in XX days message
 	func showStatusMessage() {
 
 		if currentMonth > 11 {
@@ -114,62 +113,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 }
             }
         })
-    }
-
-    // Search for schedule when message card view is tapped
-    // This doesn't work with multiple addresses
-//    @objc func handleMessageCardViewTap(sender: UITapGestureRecognizer) {
-//        if (self.common.favoriteAddress() != "") {
-//            self.searchForSchedule(self.common.favoriteAddress(), completion: { schedule in
-//                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-//                    destinationViewController.schedule = schedule
-//                    self.navigationController?.pushViewController(destinationViewController, animated: true)
-//                }
-//            })
-//        }
-//    }
-    
-    @objc func findSweepScheduleButtonTapped(sender: UITapGestureRecognizer) {
-        
-        // Add haptic feedback
-        let generator = UISelectionFeedbackGenerator()
-        generator.prepare()
-        generator.selectionChanged()
-        
-        // Stop updating user's location to save battery
-        locationManager.stopUpdatingLocation()
-        
-        // If Use My Location was selected revert it back to Enter Address.
-        // Otherwise, if the user goes back to the search page it looks like it's still using their location when it's not
-        if self.searchTypeSegment.selectedSegmentIndex == 2 {
-            self.searchTypeSegment.selectedSegmentIndex = 0
-        }
-        
-        // Get address from text field for searching
-        var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        
-        // Add "Chicago" to address if it doesn't contain it to help find address
-        if !address.lowercased().contains("chicago") && !address.isEmpty {
-            address = address + " Chicago"
-        }
-        
-        // Alert user if they didn't enter an address
-        if address.isEmpty {
-            self.common.showAlert("Address cannot be blank", "")
-            return
-        }
-        
-        // Set default address to be used when app is re-opened
-        self.userDefaults.set(address, forKey: "defaultAddress")
-        
-        // Find address and go to select section view or schedule view
-        self.populateSchedule(address, true,  completion: { schedule in
-            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                destinationViewController.schedule = schedule
-                self.navigationController?.pushViewController(destinationViewController, animated: true)
-            }
-        })
-        
     }
     
     // Add annotation when Chicago map is tapped
@@ -333,9 +276,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             
 											// Loop through dates
                                             for day in datesArray {
-                                                
-                                                //print("searchForSchedule date: \(day)")
-                                                
+                                                                                                
 												// Add date to month
                                                 if !day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                                     
@@ -459,21 +400,18 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	func showLocationDisabledAlert() {
 		
 		// Create alert
-		let alert = UIAlertController(title: "Location Access Disabled", message: "You will have to drop a pin on the map or enter your address", preferredStyle: .alert)
-		
-		// Cancel option
-		alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+		let alert = UIAlertController(title: "Location Disabled In Settings", message: "You will have to drop a pin on the map or enter your address. Would you like to open settings to enable location access?", preferredStyle: .alert)
 		
 		// Yes option. Opening settings only available in iOS 10 and later
-		if #available(iOS 10.0, *) {
-            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
-				if let url = URL(string: UIApplication.openSettingsURLString) {
-					UIApplication.shared.open(url, options: [:], completionHandler: nil)
-				}
-			}
-			
-			alert.addAction(openAction)
-		}
+        let openAction = UIAlertAction(title: "Yes", style: .default) { (action) in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+		alert.addAction(openAction)
+        
+        // Cancel option
+        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
 		
 		// Present alert
 		self.present(alert, animated: true, completion: nil)
@@ -619,48 +557,48 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		}
 	}
 	
-	// Search address button is tapped
-//	@IBAction func searchAddressTapped(_ sender: Any) {
-//
-//		// Add haptic feedback
-//		let generator = UISelectionFeedbackGenerator()
-//		generator.prepare()
-//		generator.selectionChanged()
-//
-//		// Stop updating user's location to save battery
-//		locationManager.stopUpdatingLocation()
-//
-//        // If Use My Location was selected revert it back to Enter Address.
-//        // Otherwise, if the user goes back to the search page it looks like it's still using their location when it's not
-//        if self.searchTypeSegment.selectedSegmentIndex == 2 {
-//            self.searchTypeSegment.selectedSegmentIndex = 0
-//        }
-//
-//		// Get address from text field for searching
-//		var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-//
-//		// Add "Chicago" to address if it doesn't contain it to help find address
-//		if !address.lowercased().contains("chicago") && !address.isEmpty {
-//			address = address + " Chicago"
-//		}
-//
-//		// Alert user if they didn't enter an address
-//		if address.isEmpty {
-//			self.common.showAlert("Address cannot be blank", "")
-//			return
-//		}
-//
-//		// Set default address to be used when app is re-opened
-//		self.userDefaults.set(address, forKey: "defaultAddress")
-//
-//		// Find address and go to select section view or schedule view
-//        self.populateSchedule(address, true,  completion: { schedule in
-//            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-//                destinationViewController.schedule = schedule
-//                self.navigationController?.pushViewController(destinationViewController, animated: true)
-//            }
-//        })
-//	}
+    @objc func findSweepScheduleButtonTapped(sender: UITapGestureRecognizer) {
+        
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        // Stop updating user's location to save battery
+        locationManager.stopUpdatingLocation()
+        
+        // If Use My Location was selected revert it back to Enter Address.
+        // Otherwise, if the user goes back to the search page it looks like it's still using their location when it's not
+        if self.searchTypeSegment.selectedSegmentIndex == 2 {
+            self.searchTypeSegment.selectedSegmentIndex = 0
+        }
+        
+        // Get address from text field for searching
+        var address = addressTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        
+        // Add "Chicago" to address if it doesn't contain it to help find address
+        if !address.lowercased().contains("chicago") && !address.isEmpty {
+            address = address + " Chicago"
+        }
+        
+        // Alert user if they didn't enter an address
+        if address.isEmpty {
+            self.common.showAlert("Address cannot be blank", "")
+            return
+        }
+        
+        // Set default address to be used when app is re-opened
+        self.userDefaults.set(address, forKey: "defaultAddress")
+        
+        // Find address and go to select section view or schedule view
+        self.populateSchedule(address, true,  completion: { schedule in
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                destinationViewController.schedule = schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        })
+        
+    }
 	
     // MARK: Location Manager
     
@@ -714,7 +652,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         return false
     }
     
-    func styleControls() {
+    func initializeControls() {
 		
 		// Make enter key close keyboard
 		self.addressTextField.delegate = self
@@ -732,10 +670,6 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
             searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
         }
-        
-        // Style and add images to buttons
-        //self.common.styleButton(searchAddressButton, "search_circle")
-
     }
 }
 

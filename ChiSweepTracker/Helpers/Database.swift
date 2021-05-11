@@ -66,7 +66,7 @@ public class Database {
                           "address": address] as [String : Any]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            self.deleteNotificationsFromDatabase(address, self.common.constants.notificationsDatabaseName, completion: {completion in
+            self.deleteNotificationsFromDatabase(address, completion: {completion in
                 deleteAddressResult(completion)
             })
         }
@@ -152,11 +152,11 @@ public class Database {
         }
     }
     
-    func deleteNotificationsFromDatabase(_ address: String, _ tableName: String, completion: @escaping (_ message: Bool) -> Void) {
+    func deleteNotificationsFromDatabase(_ address: String, completion: @escaping (_ message: Bool) -> Void) {
         let urlTo = self.common.constants.websiteURL + "/delete-notification.php"
         let parameters = ["playerId": self.common.defaults.notificationOneSignalPlayerId(),
                           "address": address,
-                          "tableName": tableName] as [String : String]
+                          "tableName": self.common.constants.notificationsDatabaseName] as [String : String]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
             completion(true)
@@ -195,9 +195,9 @@ public class Database {
                     let notificationsHour = Int(address.notificationsHour)
                     let notificationsMinute = Int(address.notificationsMinute)
                     
-                    self.deleteNotificationsFromDatabase(address.address, self.common.constants.notificationsDatabaseName, completion: {completion in
+                    self.deleteNotificationsFromDatabase(address.address, completion: {completion in
                         if notificationsToggled == true {
-                            favoriteViewController.getSchedule(true, true, address.address, notificationsWhen, notificationsHour!, notificationsMinute!)
+                            favoriteViewController.getScheduleAndAddNotifications(true, true, address.address, notificationsWhen, notificationsHour!, notificationsMinute!)
                         }
                     })
                 }

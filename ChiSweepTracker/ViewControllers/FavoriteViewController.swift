@@ -24,11 +24,11 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     // Classes
     let common = Common()
-    let userDefaults = UserDefaults.standard
     let database = Database()
     var schedule = ScheduleModel()
     
     // Shared
+    let userDefaults = UserDefaults.standard
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     var relocatedVehicleCount = 0
     var divvyStationCount = 0
@@ -315,7 +315,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let removeFavoriteAction = UIAlertAction(title: "Remove Address", style: .default, handler:{ action in
             
             // Create remove favorite alert
-            let removeFavoriteAlert = UIAlertController(title: "Are you sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+            let removeFavoriteAlert = UIAlertController(title: "Are You Sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
             
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -517,13 +517,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     // Populate schedule model and add notifications if applicable
     // useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
-    func getSchedule(_ registerForPushNotifications: Bool,
-                     _ useDefaultNotificationValues: Bool = false,
-                     _ address: String = "",
-                     _ when: String = "",
-                     _ hour: Int = 0,
-                     _ minute: Int = 0,
-                     _ favoriteSection: String = "") {
+    func getScheduleAndAddNotifications(_ addNotifications: Bool,
+                                         _ useNotificationParameters: Bool = false,
+                                         _ address: String = "",
+                                         _ when: String = "",
+                                         _ hour: Int = 0,
+                                         _ minute: Int = 0) {
         
         if (address != "") {
             self.schedule.address = address
@@ -581,11 +580,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                             self.schedule.ward = ward
                             self.schedule.section = String(section).trimmingCharacters(in: .whitespaces)
                             
-                            if self.schedule.section.isEmpty {
-                                //self.schedule.section = self.common.favoriteSection()
-                                self.schedule.section = favoriteSection
-                            }
-                            
                             let scheduleQuery = wardClient.query(dataset: self.common.defaults.scheduleDataset())
                                 .filter("\(self.common.defaults.wardTitle()) = '\(ward)' AND \(self.common.defaults.sectionTitle()) = '\(self.schedule.section)'")
                                 .orderAscending(self.common.defaults.monthNumberTitle())
@@ -626,7 +620,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                             
                                         }
                                         
-                                        if registerForPushNotifications == true {
+                                        if addNotifications == true {
                                             
                                             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                                                 granted, error in
@@ -636,7 +630,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                     // User's notifications are disabled in settings. Prompt them to open settings
                                                     DispatchQueue.main.async {
                                                         
-                                                        let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Do you want to go to settings and turn notifications back on?", preferredStyle: .alert)
+                                                        let alertController = UIAlertController (title: "Notifications Are Disabled", message: "Would you like to settings and turn notifications back on?", preferredStyle: .alert)
                                                         
                                                         let settingsAction = UIAlertAction(title: "Yes", style: .default) { (_) -> Void in
                                                             
@@ -667,7 +661,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                     // Do not remove DispatchQueue
                                                     DispatchQueue.main.async {
                                                         
-                                                        //let center = UNUserNotificationCenter.current()
                                                         let calendar = Calendar.current
                                                         let currentYear = self.common.defaults.latestAppVersion()
                                                         let notificationWhenDefault = when
@@ -677,7 +670,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                         var minute = 0
                                                         var when = ""
                                                         
-                                                        if useDefaultNotificationValues == true {
+                                                        if useNotificationParameters == true {
                                                             hour = notificationHourDefault
                                                             minute = notificationMinuteDefault
                                                             when = notificationWhenDefault
@@ -754,6 +747,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
     }
     
+    //MARK: Picker view methods
+    
     // When and time picker methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -770,8 +765,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         // Update notifications after picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
-                self.getSchedule(true)
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
+                self.getScheduleAndAddNotifications(true)
             })
         }
     }
@@ -779,6 +774,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return whenData[row]
     }
+    
+    //MARK: Map view methods
     
     // Required to load polygons on favorites map
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -817,7 +814,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             annotationLabel.font = .boldSystemFont(ofSize: 11)
             annotationLabel.text = annotation.title!
             annotationLabel.strokeColor = UIColor.white
-            annotationLabel.strokeSize = 1 //self.common.selectedAnnotationStrokeSize()
+            annotationLabel.strokeSize = 1
             annotationView.addSubview(annotationLabel)
             
         }
@@ -872,13 +869,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     
     @objc func timePickerChanged(picker: UIDatePicker) {
         
-        // Save form values
+        // Save notification control values
         self.saveDefaultNotificationValues()
         
         // Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in
-                self.getSchedule(true)
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
+                self.getScheduleAndAddNotifications(true)
             })
         }
     }
@@ -888,27 +885,22 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         if pushNotificationsSwitch.isOn == true {
             
-            let latestAppVersion = self.common.defaults.latestAppVersion()
-            let latestDatasetVersion = self.common.defaults.latestDatasetVersion()
-            
-            // Save settings to defaults
-            self.userDefaults.set(latestAppVersion, forKey: "notificationsYear")
-            self.userDefaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
-            
             // Enable when and time controls
             self.timePicker.isUserInteractionEnabled = true
             self.onPicker.isUserInteractionEnabled = true
             
-            // Save form values to defaults
+            // Save notification control values
             self.saveDefaultNotificationValues()
             
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {(completion)-> Void in
-                self.getSchedule(true)
+            // Delete notifications and then re-add them
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: { completion in
+                self.getScheduleAndAddNotifications(true)
             })
             
         }
         else {
             
+            // Save notification control values
             self.saveDefaultNotificationValues()
             
             // Disable when and time controls
@@ -916,7 +908,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             self.onPicker.isUserInteractionEnabled = false
             
             // Delete notifications in database for address that was disabled
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, self.common.constants.notificationsDatabaseName, completion: {completion in })
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
             
         }
     }

@@ -45,6 +45,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListMapView.delegate = self
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
         
+        self.mapLocations.removeAll()
+        
         if self.addresses.count > 0 {
             
             self.tabBarController?.navigationItem.title = "Saved Addresses"
@@ -54,8 +56,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                 $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
             })
 
-            self.mapLocations.removeAll()
-        
             for (_, address) in self.addresses.enumerated() {
                                           
                 // Get coordinates from address
@@ -84,6 +84,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         if address.nextSweepDay != nil {
                             let calenderDate = Calendar.current.dateComponents([.day, .year, .month], from: address.nextSweepDay!)
                             annotation.title = "Next Sweep: \(calenderDate.month!)/\(calenderDate.day!)/\(calenderDate.year!)"
+                        }
+                        else {
+                            annotation.title = "Next Sweep: No more sweeps at this address in \(self.common.defaults.latestAppVersion())"
                         }
                         
                         // Populate schedule based on address. This is so the user can click on the callout and go to schedule page
@@ -263,7 +266,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                                             
                                         }
                                         
-                                        // Segue to schedule view
+                                        // Segue to favorite page
                                         if goToFavoritePage {
                                             if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
                                                 destinationViewController.schedule = schedule
@@ -292,6 +295,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             }
         }
     }
+    
+    //MARK: Map view methods
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
@@ -326,6 +331,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         return annotationView
     }
     
+    //MARK: Table view methods
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -337,7 +344,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             let address = self.addresses[indexPath.row].address
             
             // Create remove favorite alert
-            let removeFavoriteAlert = UIAlertController(title: "Are you sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+            let removeFavoriteAlert = UIAlertController(title: "Are You Sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
             
             // Create yes option for remove favorite alert
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
@@ -367,11 +374,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         }
     }
         
-    // Table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return self.addresses.count
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
