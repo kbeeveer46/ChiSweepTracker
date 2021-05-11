@@ -2,7 +2,7 @@ import UIKit
 
 class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 	
-	// Controls
+	// MARK: Controls
 	@IBOutlet weak var searchTowedVehiclesButton: UIButton!
 	@IBOutlet weak var searchTowedVehiclesButtonPaddingConstraint: NSLayoutConstraint!
 	@IBOutlet weak var makePicker: UIPickerView!
@@ -18,10 +18,10 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 	@IBOutlet weak var stateImageView: UIImageView!
 	@IBOutlet weak var plateImageView: UIImageView!
 	
-	// Classes
+	// MARK: Classes
 	let common = Common()
 
-	// Shared
+	// MARK: Shared
 	var makes: [String] = []
 	var models: [String] = []
 	var colors: [String] = []
@@ -32,15 +32,15 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		// Style controls
-		self.styleControls()
+		// Initialize controls
+		self.initializeControls()
+        
+        // Initialize controls per device
+        self.initializeControlsPerDevice()
 		
 		// Get towed vehicle data to populate pickers
 		self.getTowedVehicleData()
 		
-		// Initialize controls per device
-		self.initializeControlsPerDevice()
-
 	}
 	
 	// Change constraints and sizes per device
@@ -130,6 +130,114 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		}
 	}
 
+    func initializeControls() {
+        
+        // Make enter key close keyboard
+        self.licensePlateTextField.delegate = self
+        
+        // Set the title or else the title is used from another tab
+        self.navigationItem.title = "Search For Towed Vehicles"
+        
+        // Style and add images to button
+        self.common.styleButton(searchTowedVehiclesButton, "search_circle")
+        
+    }
+    
+    // Make enter key close keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    // MARK: Action methods
+    
+    @IBAction func searchTowedVehiclesTapped(_ sender: Any) {
+        
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        var towedVehicles = [VehicleModel]()
+        
+        // Get selected values from controls
+        let selectedMake = self.makePicker.selectedRow(inComponent: 0) > 0 ? self.makes[self.makePicker.selectedRow(inComponent: 0) - 1] : ""
+        let selectedModel = self.modelPicker.selectedRow(inComponent: 0) > 0 ? self.models[self.modelPicker.selectedRow(inComponent: 0) - 1] : ""
+        let selectedColor = self.colorPicker.selectedRow(inComponent: 0) > 0 ? self.colors[self.colorPicker.selectedRow(inComponent: 0) - 1] : ""
+        let selectedState = self.statePicker.selectedRow(inComponent: 0) > 0 ? self.states[self.statePicker.selectedRow(inComponent: 0) - 1] : ""
+        let plate = licensePlateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().replacingOccurrences(of: " ", with: "")
+        
+        // Create filter to be used in query
+        var filter = selectedMake != "" ? "\(self.common.defaults.towedMakeTitle()) = '\(selectedMake)'" : ""
+        filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedModelTitle())) = '\(selectedModel)'" : ""
+        filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedColorTitle())) = '\(selectedColor)'" : ""
+        filter += selectedState != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedStateTitle())) = '\(selectedState)'" : ""
+        filter += plate! != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedPlateTitle())) like '%\(plate!)%'" : ""
+        
+        // Create SODA client
+        let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
+        
+        // Create SODA query
+        let towedQuery = towedClient.query(dataset: self.common.defaults.towedDataset())
+            .filter(filter)
+            .orderAscending(self.common.defaults.towedMakeTitle())
+            .limit(500)
+        
+        towedQuery.get { res in
+            switch res {
+            case .dataset (let data):
+                
+                if data.count > 0 {
+                    
+                    // Loop through towed vehicle data
+                    for (_, item) in data.enumerated() {
+                        
+                        // Get values for each towed vehicle
+                        var towedDate = item[self.common.defaults.towedDateTitle()] as? String ?? ""
+                        let make = item[self.common.defaults.towedMakeTitle()] as? String ?? ""
+                        let model = item[self.common.defaults.towedModelTitle()] as? String ?? ""
+                        let style = item[self.common.defaults.towedStyleTitle()] as? String ?? ""
+                        let color = item[self.common.defaults.towedColorTitle()] as? String ?? ""
+                        let plate = item[self.common.defaults.towedPlateTitle()] as? String ?? ""
+                        let state = item[self.common.defaults.towedStateTitle()] as? String ?? ""
+                        let inventoryNumber = item[self.common.defaults.towedInventoryNumberTitle()] as? String ?? ""
+                        let towedToAddress = item[self.common.defaults.towedToAddressTitle()] as? String ?? ""
+                        let towedToPhone = item[self.common.defaults.towedToPhoneTitle()] as? String ?? ""
+                        
+                        // Change date to MM/dd/yyyy
+                        towedDate = Date.getFormattedDate(towedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                        
+                        let vehicle = VehicleModel()
+                        vehicle.towedDate = towedDate
+                        vehicle.make = make
+                        vehicle.model = model
+                        vehicle.style = style
+                        vehicle.color = color
+                        vehicle.plate = plate
+                        vehicle.state = state
+                        vehicle.towedToAddress = towedToAddress
+                        vehicle.towedToPhone = towedToPhone
+                        vehicle.inventoryNumber = inventoryNumber
+                        towedVehicles.append(vehicle)
+                    }
+                    
+                    // Segue to towed result view
+                    if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedResultsViewController") as? TowedResultsViewController {
+                        destinationViewController.towedVehicles = towedVehicles
+                        self.navigationController?.pushViewController(destinationViewController, animated: true)
+                    }
+                }
+                else {
+                    self.common.showAlert("Search Completed", "No vehicles matching your search criteria were found.")
+                }
+            case .error (let err):
+                print((err as NSError).userInfo.debugDescription)
+            }
+        }
+    }
+    
+    // MARK: Picker view methods
+    
 	func numberOfComponents(in pickerView: UIPickerView) -> Int {
 		return 1
 	}
@@ -172,109 +280,4 @@ class TowedSearchViewController: UIViewController, UIPickerViewDelegate, UIPicke
 		}
 	}
 	
-	func styleControls() {
-		
-		// Make enter key close keyboard
-		self.licensePlateTextField.delegate = self
-		
-		// Set the title or else the title is used from another tab
-		self.navigationItem.title = "Search For Towed Vehicles"
-		
-		// Style and add images to button
-		self.common.styleButton(searchTowedVehiclesButton, "search_circle")
-		
-	}
-	
-	// Make enter key close keyboard
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		self.view.endEditing(true)
-		return false
-	}
-	
-	// MARK: Actions
-	
-	@IBAction func searchTowedVehiclesTapped(_ sender: Any) {
-		
-		// Add haptic feedback
-		let generator = UISelectionFeedbackGenerator()
-		generator.prepare()
-		generator.selectionChanged()
-		
-		var towedVehicles = [VehicleModel]()
-		
-		// Get selected values from controls
-		let selectedMake = self.makePicker.selectedRow(inComponent: 0) > 0 ? self.makes[self.makePicker.selectedRow(inComponent: 0) - 1] : ""
-		let selectedModel = self.modelPicker.selectedRow(inComponent: 0) > 0 ? self.models[self.modelPicker.selectedRow(inComponent: 0) - 1] : ""
-		let selectedColor = self.colorPicker.selectedRow(inComponent: 0) > 0 ? self.colors[self.colorPicker.selectedRow(inComponent: 0) - 1] : ""
-		let selectedState = self.statePicker.selectedRow(inComponent: 0) > 0 ? self.states[self.statePicker.selectedRow(inComponent: 0) - 1] : ""
-		let plate = licensePlateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().replacingOccurrences(of: " ", with: "")
-		
-		// Create filter to be used in query
-		var filter = selectedMake != "" ? "\(self.common.defaults.towedMakeTitle()) = '\(selectedMake)'" : ""
-		filter += selectedModel != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedModelTitle())) = '\(selectedModel)'" : ""
-		filter += selectedColor != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedColorTitle())) = '\(selectedColor)'" : ""
-		filter += selectedState != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedStateTitle())) = '\(selectedState)'" : ""
-		filter += plate! != "" ? " \(filter != "" ? " AND" : "") upper(\(self.common.defaults.towedPlateTitle())) like '%\(plate!)%'" : ""
-		
-		// Create SODA client
-		let towedClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-		
-		// Create SODA query
-		let towedQuery = towedClient.query(dataset: self.common.defaults.towedDataset())
-			.filter(filter)
-			.orderAscending(self.common.defaults.towedMakeTitle())
-		    .limit(500)
-			
-			towedQuery.get { res in
-			switch res {
-			case .dataset (let data):
-				
-				if data.count > 0 {
-					
-					// Loop through towed vehicle data
-					for (_, item) in data.enumerated() {
-						
-						// Get values for each towed vehicle
-						var towedDate = item[self.common.defaults.towedDateTitle()] as? String ?? ""
-						let make = item[self.common.defaults.towedMakeTitle()] as? String ?? ""
-						let model = item[self.common.defaults.towedModelTitle()] as? String ?? ""
-						let style = item[self.common.defaults.towedStyleTitle()] as? String ?? ""
-						let color = item[self.common.defaults.towedColorTitle()] as? String ?? ""
-						let plate = item[self.common.defaults.towedPlateTitle()] as? String ?? ""
-						let state = item[self.common.defaults.towedStateTitle()] as? String ?? ""
-						let inventoryNumber = item[self.common.defaults.towedInventoryNumberTitle()] as? String ?? ""
-						let towedToAddress = item[self.common.defaults.towedToAddressTitle()] as? String ?? ""
-						let towedToPhone = item[self.common.defaults.towedToPhoneTitle()] as? String ?? ""
-						
-						// Change date to MM/dd/yyyy
-						towedDate = Date.getFormattedDate(towedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-						
-						let vehicle = VehicleModel()
-						vehicle.towedDate = towedDate
-						vehicle.make = make
-						vehicle.model = model
-						vehicle.style = style
-						vehicle.color = color
-						vehicle.plate = plate
-						vehicle.state = state
-						vehicle.towedToAddress = towedToAddress
-						vehicle.towedToPhone = towedToPhone
-						vehicle.inventoryNumber = inventoryNumber
-						towedVehicles.append(vehicle)
-					}
-					
-					// Segue to towed result view
-					if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedResultsViewController") as? TowedResultsViewController {
-						destinationViewController.towedVehicles = towedVehicles
-						self.navigationController?.pushViewController(destinationViewController, animated: true)
-					}
-				}
-				else {
-					self.common.showAlert("Search Completed", "No vehicles matching your search criteria were found.")
-				}
-			case .error (let err):
-				print((err as NSError).userInfo.debugDescription)
-			}
-		}
-	}
 }

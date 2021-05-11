@@ -5,22 +5,22 @@ import StoreKit
 
 class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     
-	// Controls
+	// MARK: Controls
     @IBOutlet weak var scheduleMapView: MKMapView!
     @IBOutlet weak var scheduleTableView: UITableView!
     @IBOutlet weak var scheduleMapViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var comingSoonStackView: UIStackView!
     @IBOutlet weak var comingSoonYearLabel: UILabel!
     
-	// Shared
+    // MARK: Classes
+    let common = Common()
+    let database = Database()
+    var schedule = ScheduleModel()
+    
+	// MARK: Shared
     let generator = UISelectionFeedbackGenerator()
     let currentYear = Calendar.current.component(.year, from: Date())
     let userDefaults = UserDefaults.standard
-    
-	// Classes
-	let common = Common()
-    let database = Database()
-    var schedule = ScheduleModel()
     
     // In-app purchase
     var myProduct: SKProduct?
@@ -38,9 +38,20 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
 		// Load map with annotations and overlays
 		self.loadScheduleMap()
+        
+        // Initialize controls
+        self.initializeControls()
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
+        
+
+        // Gets and sets the multiple addresses in-app purchase so users can buy it
+        getMultipleAddressesInAppPurchase()
+        
+	}
+    
+    func initializeControls() {
         
         if (self.currentYear > self.common.defaults.latestAppVersion()) {
             self.comingSoonStackView.isHidden = false
@@ -49,16 +60,26 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         else {
             self.comingSoonStackView.isHidden = true
         }
-		
-		// Set required properties for schedule table view
-		self.scheduleTableView.dataSource = self
-		self.scheduleTableView.delegate = self
-		self.scheduleTableView.reloadData()
         
-        // Gets and sets the multiple addresses in-app purchase so users can buy it
-        getMultipleAddressesInAppPurchase()
+        // Set required properties for schedule table view
+        self.scheduleTableView.dataSource = self
+        self.scheduleTableView.delegate = self
+        self.scheduleTableView.reloadData()
         
-	}
+    }
+    
+    func initializeControlsPerDevice() {
+        
+        switch UIDevice().type {
+        case .iPhoneSE:
+            scheduleMapViewHeightConstraint.constant = 175
+            scheduleTableView.rowHeight = 37
+        default:
+            break
+        }
+    }
+    
+    //MARK: In-app purchase methods
     
     // Gets the multiple addresses in-app purchase
     func getMultipleAddressesInAppPurchase() {
@@ -96,7 +117,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             case .failed:
                 self.userDefaults.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Unable To Purchase", "There was an issue and your device did not complete the purchase.")
+                self.common.showAlert("Unable To Purchase", "There was an issue and your device did not complete the purchase. Please try again.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .deferred:
@@ -113,24 +134,17 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }
     }
     
-//    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-//        print(error.localizedDescription)
-//    }
-//
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        self.userDefaults.set(false, forKey: "enableMultipleAddresses")
+        self.common.showAlert("Unable To Restore", "There was an issue and your device did not restore the purchase. Please try again.")
+        print(error.localizedDescription)
+    }
+
 //    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
 //        print(queue)
 //    }
-	
-	func initializeControlsPerDevice() {
-		
-		switch UIDevice().type {
-		case .iPhoneSE:
-			scheduleMapViewHeightConstraint.constant = 175
-			scheduleTableView.rowHeight = 37
-		default:
-			break
-		}
-	}
+    
+    //MARK: Top menu methods
     
 	// Method is called when user chooses yes to add a favorite
     @objc func saveAddress() {
@@ -141,13 +155,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         
         self.database.getAddresses(completion: { addresses in
             
-            let favoriteAddressCount = addresses.count
+            let addressCount = addresses.count
             
             DispatchQueue.main.async {
                 
-                if favoriteAddressCount == 0  ||
-                    favoriteAddressCount >= 1  && self.common.defaults.enableMultipleAddresses() == true ||
-                    favoriteAddressCount >= 1  && self.common.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
+                if addressCount == 0  ||
+                    addressCount >= 1  && self.common.defaults.enableMultipleAddresses() == true ||
+                    addressCount >= 1  && self.common.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
                 
                     self.navigationItem.rightBarButtonItem = nil
                             
@@ -183,7 +197,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                                                             
                     })
                 }
-                else if favoriteAddressCount != -1 {
+                else if addressCount != -1 {
                     
                     // Create alert
                     let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one addresses requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
@@ -310,6 +324,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 	}
 
+    //MARK: Table view methods
+    
     // Months/Days table view methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return schedule.months.count
@@ -375,6 +391,8 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         return cell
         
     }
+    
+    //MARK: Map view methods
     
 	// Method required to add polygons to schedule map
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

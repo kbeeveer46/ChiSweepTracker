@@ -3,7 +3,7 @@ import MapKit
 
 class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
-	// Controls
+	// MARK: Controls
     @IBOutlet weak var addressTextField: UITextField!
 	@IBOutlet weak var chicagoMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var chicagoMapView: MKMapView!
@@ -13,12 +13,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	@IBOutlet weak var messageCardView: CardView!
     @IBOutlet weak var findSweepScheduleCardView: CardView!
     
-	// Classes
+	// MARK: Classes
     let schedule = ScheduleModel()
     let common = Common()
     let database = Database()
     
-	// Shared
+	// MARK: Shared
     let userDefaults = UserDefaults.standard
 	let locationManager = CLLocationManager()
     var addressFromCoordinates = ""
@@ -51,6 +51,26 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 		
 	}
 	
+    func initializeControls() {
+        
+        // Make enter key close keyboard
+        self.addressTextField.delegate = self
+        
+        // Navigation items in tab bar are the same for every tab so they need to be set to nil when not needed
+        self.tabBarController?.navigationItem.rightBarButtonItem = nil
+        self.tabBarController?.navigationItem.leftBarButtonItem = nil
+        
+        // Set the title or else the title is used from another tab
+        self.tabBarController?.navigationItem.title = "Search For Sweep Schedule"
+        
+        // Style segmented search type control with blue background on selected item
+        if #available(iOS 13.0, *) {
+            self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+            let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
+        }
+    }
+    
 	func initializeControlsPerDevice() {
 		
 		switch UIDevice().type {
@@ -115,51 +135,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         })
     }
     
-    // Add annotation when Chicago map is tapped
-	@objc func addDroppedPin(gesture: UIGestureRecognizer) {
-		
-		if gesture.state == .ended {
-			
-			// Change segmented control to drop pin
-			searchTypeSegment.selectedSegmentIndex = 1
-			
-			// Stop updating location if user drops pin
-			locationManager.stopUpdatingLocation()
-			
-			// Create point from dropped pin
-			let point = gesture.location(in: chicagoMapView)
-			
-			// Get coordinates from point
-			let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
-			
-			// Create location from coordinates
-			let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-			
-			// Create map span from coordinates
-			let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
-			
-			// Create map region from spam
-			let region = MKCoordinateRegion(center: location.coordinate, span: span)
-			
-			// Get address from lat and long
-			getAddressFromCoordinates(location)
-			
-			// Create annotation
-			let annotation = CustomAnnotation()
-			annotation.customImageName = "pin-address"
-			annotation.coordinate = location.coordinate
-
-			// Add annotation to map
-			chicagoMapView.removeAnnotations(chicagoMapView.annotations)
-			chicagoMapView.addAnnotation(annotation)
-			
-			// Set map region
-			chicagoMapView.setRegion(region, animated: true)
-			
-		}
-	}
-    
-	// Search for schedule when search button is tapped
+    // Search for schedule when search button is tapped
     func populateSchedule(_ address: String,_ setDefaultLatLong: Bool = false, completion: @escaping (ScheduleModel)->()) {
         
 		// Clear all months and polygons so there are no duplicates
@@ -478,85 +454,103 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 			chicagoMapView.setRegion(region, animated: false)
 		}
 	}
-	
-	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-		
-		let reuseIdentifier = "pin"
-		
-		var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
-		
-		if annotationView == nil {
-			
-			annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-			annotationView?.canShowCallout = true
-			
-		}
-		else {
-			
-			annotationView?.annotation = annotation
-			
-		}
-		
-		let customPointAnnotation = annotation as! CustomAnnotation
-		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
-		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
-		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
-		
-		return annotationView
-	}
-	
-	// MARK: Actions
-	
-	// Search type segmented control option changed event
-	@IBAction func searchTypeTapped(_ sender: Any) {
-		
-		// Add haptic feedback
-		let generator = UISelectionFeedbackGenerator()
-		generator.prepare()
-		generator.selectionChanged()
-		
-		// Remove map annotations
-		chicagoMapView.removeAnnotations(chicagoMapView.annotations)
-		
-		// Enter address
-		if searchTypeSegment.selectedSegmentIndex == 0 {
-						
-			// Clear search text box
-			addressTextField.text = ""
-			
-			// Stop updating location if user selects "enter address"
-			locationManager.stopUpdatingLocation()
-			
-		}
-		// Drop pin
-		else if searchTypeSegment.selectedSegmentIndex == 1 {
-			
-			// Stop updating location if user selects "drop pin"
-			locationManager.stopUpdatingLocation()
-						
-		}
-		// Use my location
-		else if searchTypeSegment.selectedSegmentIndex == 2 {
-						
-			// Request location access. If access granted, start updating location and update map
-			locationManager.requestWhenInUseAuthorization()
-						
-			// Check if location services in enabled
-			if CLLocationManager.locationServicesEnabled() {
-				
-				// Set location manager properties
-				locationManager.delegate = self
-				locationManager.desiredAccuracy = kCLLocationAccuracyBest
-
-				// Start getting user's location
-				locationManager.startUpdatingLocation()
+    
+    // MARK: Action methods
+    
+    // Add annotation when Chicago map is tapped
+    @objc func addDroppedPin(gesture: UIGestureRecognizer) {
+        
+        if gesture.state == .ended {
+            
+            // Change segmented control to drop pin
+            searchTypeSegment.selectedSegmentIndex = 1
+            
+            // Stop updating location if user drops pin
+            locationManager.stopUpdatingLocation()
+            
+            // Create point from dropped pin
+            let point = gesture.location(in: chicagoMapView)
+            
+            // Get coordinates from point
+            let coordinate = chicagoMapView.convert(point, toCoordinateFrom: chicagoMapView)
+            
+            // Create location from coordinates
+            let location: CLLocation =  CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            
+            // Create map span from coordinates
+            let span = MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+            
+            // Create map region from spam
+            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+            
+            // Get address from lat and long
+            getAddressFromCoordinates(location)
+            
+            // Create annotation
+            let annotation = CustomAnnotation()
+            annotation.customImageName = "pin-address"
+            annotation.coordinate = location.coordinate
+            
+            // Add annotation to map
+            chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+            chicagoMapView.addAnnotation(annotation)
+            
+            // Set map region
+            chicagoMapView.setRegion(region, animated: true)
+            
+        }
+    }
+    
+    // Search type segmented control option changed event
+    @IBAction func searchTypeTapped(_ sender: Any) {
+        
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        // Remove map annotations
+        chicagoMapView.removeAnnotations(chicagoMapView.annotations)
+        
+        // Enter address
+        if searchTypeSegment.selectedSegmentIndex == 0 {
+            
+            // Clear search text box
+            addressTextField.text = ""
+            
+            // Stop updating location if user selects "enter address"
+            locationManager.stopUpdatingLocation()
+            
+        }
+        // Drop pin
+        else if searchTypeSegment.selectedSegmentIndex == 1 {
+            
+            // Stop updating location if user selects "drop pin"
+            locationManager.stopUpdatingLocation()
+            
+        }
+        // Use my location
+        else if searchTypeSegment.selectedSegmentIndex == 2 {
+            
+            // Request location access. If access granted, start updating location and update map
+            locationManager.requestWhenInUseAuthorization()
+            
+            // Check if location services in enabled
+            if CLLocationManager.locationServicesEnabled() {
+                
+                // Set location manager properties
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                
+                // Start getting user's location
+                locationManager.startUpdatingLocation()
             }
-			else {
-				print("Location services are not enabled")
-			}
-		}
-	}
-	
+            else {
+                print("Location services are not enabled")
+            }
+        }
+    }
+    
     @objc func findSweepScheduleButtonTapped(sender: UITapGestureRecognizer) {
         
         // Add haptic feedback
@@ -600,7 +594,36 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         
     }
 	
-    // MARK: Location Manager
+    // MARK: Map view methods
+    
+	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+		
+		let reuseIdentifier = "pin"
+		
+		var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
+		
+		if annotationView == nil {
+			
+			annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+			annotationView?.canShowCallout = true
+			
+		}
+		else {
+			
+			annotationView?.annotation = annotation
+			
+		}
+		
+		let customPointAnnotation = annotation as! CustomAnnotation
+		annotationView?.image = UIImage(named: customPointAnnotation.customImageName)
+		annotationView?.centerOffset = CGPoint(x: 0, y: -(annotationView?.image!.size.height)!/2)
+		annotationView?.subviews.forEach({ $0.removeFromSuperview() })
+		
+		return annotationView
+	}
+
+	
+    // MARK: Location methods
     
     // Get user's last location and get address from coordinates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -644,7 +667,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
     }
     
-    // MARK: Helpers
+    // MARK: Helper methods
     
     // Make enter key close keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -652,24 +675,5 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         return false
     }
     
-    func initializeControls() {
-		
-		// Make enter key close keyboard
-		self.addressTextField.delegate = self
-        
-		// Navigation items in tab bar are the same for every tab so they need to be set to nil when not needed
-		self.tabBarController?.navigationItem.rightBarButtonItem = nil
-		self.tabBarController?.navigationItem.leftBarButtonItem = nil
-		
-		// Set the title or else the title is used from another tab
-		self.tabBarController?.navigationItem.title = "Search For Sweep Schedule"
-		
-        // Style segmented search type control with blue background on selected item
-        if #available(iOS 13.0, *) {
-            self.searchTypeSegment.selectedSegmentTintColor = UIColor(red: 1.0/255.0, green: 122.0/255.0, blue: 255.0/255.0, alpha: 1.0)
-            let fontAttribute = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            searchTypeSegment.setTitleTextAttributes(fontAttribute, for: .selected)
-        }
-    }
 }
 

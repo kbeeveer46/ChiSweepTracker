@@ -2,17 +2,19 @@ import Alamofire
 
 class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    // Controls
+    // MARK: Controls
     @IBOutlet weak var newsTableView: UITableView!
     
-    // Classes
+    // MARK: Classes
     let common = Common()
     
-    // Shared
+    // MARK: Shared
     var updatesList = [UpdatesModel]()
     var updatesLastViewedDate = ""
     let dateFormatter = DateFormatter()
     let userDefaults = UserDefaults.standard
+    
+    // MARK: Methods
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -126,6 +128,8 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         return false
     }
+    
+    // MARK: Table view methods
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return updatesList.count

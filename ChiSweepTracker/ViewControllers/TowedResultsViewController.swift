@@ -2,13 +2,13 @@ import UIKit
 
 class TowedResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
 
-	// Controls
+	// MARK: Controls
 	@IBOutlet weak var towedVehiclesTableView: UITableView!
 	
-	// Shared
+	// MARK: Shared
 	var towedVehicles = [VehicleModel]()
 	
-	// Classes
+	// MARK: Classes
 	let common = Common()
 		
 	// MARK: Methods
@@ -27,6 +27,8 @@ class TowedResultsViewController: UIViewController, UITableViewDelegate, UITable
 		
 	}
 	
+    // MARK: Table view methods
+    
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return towedVehicles.count
 	}

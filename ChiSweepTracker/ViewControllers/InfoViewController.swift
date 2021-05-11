@@ -3,18 +3,20 @@ import Alamofire
 
 class InfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-	// Controls
+	// MARK: Controls
 	@IBOutlet weak var infoTableView: UITableView!
 	
-	// Classes
+	// MARK: Classes
 	let common = Common()
 	
-	// Shared
+	// MARK: Shared
 	var infoList = [InfoModel]()
 	var rateCardView = CardView()
 	var requestCardView = CardView()
 	let generator = UISelectionFeedbackGenerator()
 	
+    // MARK: Methods
+    
 	override func viewWillAppear(_ animated: Bool) {
         
 		// Set title
@@ -72,6 +74,8 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
 	}
 
+    // MARK: Action methods
+    
 	@objc func rateCardTapped(_ sender:UITapGestureRecognizer){
 		
 		if #available(iOS 10.3, *) {
@@ -125,6 +129,8 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 		})
 	}
 	
+    // MARK: Tablew view methods
+    
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return infoList.count
 	}

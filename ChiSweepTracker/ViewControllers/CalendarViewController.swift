@@ -5,16 +5,16 @@ import THLabel
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
    
-	// Controls
+	//MARK: Controls
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var calendarMapView: MKMapView!
 	@IBOutlet weak var calendarMapViewHeightConstraint: NSLayoutConstraint!
 	
-	// Classes
+	//MARK: Classes
 	let common = Common()
 	var schedule = ScheduleModel()
 	
-	// Shared
+	//MARK: Shared
 	var currentYear = 0
     var selectedMonthNumber = 0
     var selectedMonthName = ""
@@ -119,6 +119,54 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
+    // Calculates the number of "empty" boxes at the start of every month
+    func calculateStartDateDayPosition() {
+        
+        switch direction {
+        
+        case 0:
+            
+            numberOfEmptyBox = weekDayNumberOfFirstDayOfSweepingInMonth
+            dayCounter = firstDayOfSweepingInMonth
+            
+            while dayCounter > 0 {
+                
+                numberOfEmptyBox = numberOfEmptyBox - 1
+                dayCounter = dayCounter - 1
+                
+                if numberOfEmptyBox == 0 {
+                    numberOfEmptyBox = 7
+                }
+            }
+            
+            if numberOfEmptyBox == 7 {
+                numberOfEmptyBox = 0
+            }
+            
+            positionIndex = numberOfEmptyBox
+            
+        case 1...:
+            
+            nextNumberOfEmptyBox = (positionIndex + daysInMonths[selectedMonthNumber])%7
+            positionIndex = nextNumberOfEmptyBox
+            
+        case -1:
+            
+            previousNumberOfEmptyBox = (7 - (daysInMonths[selectedMonthNumber] - positionIndex)%7)
+            
+            if previousNumberOfEmptyBox == 7 {
+                previousNumberOfEmptyBox = 0
+            }
+            
+            positionIndex = previousNumberOfEmptyBox
+            
+        default:
+            return
+        }
+    }
+    
+    // MARK: Map view methods
+    
 	// Required method to add polygons to calendar map
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
@@ -172,52 +220,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		return annotationView
 	}
     
-    // Calculates the number of "empty" boxes at the start of every month
-    func calculateStartDateDayPosition() {
-		
-        switch direction {
-			
-        case 0:
-			
-            numberOfEmptyBox = weekDayNumberOfFirstDayOfSweepingInMonth
-            dayCounter = firstDayOfSweepingInMonth
-			
-            while dayCounter > 0 {
-				
-                numberOfEmptyBox = numberOfEmptyBox - 1
-                dayCounter = dayCounter - 1
-				
-                if numberOfEmptyBox == 0 {
-                    numberOfEmptyBox = 7
-                }
-            }
-			
-            if numberOfEmptyBox == 7 {
-                numberOfEmptyBox = 0
-            }
-			
-            positionIndex = numberOfEmptyBox
-			
-        case 1...:
-			
-            nextNumberOfEmptyBox = (positionIndex + daysInMonths[selectedMonthNumber])%7
-            positionIndex = nextNumberOfEmptyBox
-            
-        case -1:
-			
-            previousNumberOfEmptyBox = (7 - (daysInMonths[selectedMonthNumber] - positionIndex)%7)
-			
-            if previousNumberOfEmptyBox == 7 {
-                previousNumberOfEmptyBox = 0
-            }
-			
-            positionIndex = previousNumberOfEmptyBox
-			
-        default:
-			return
-        }
-    }
-
+    // MARK: Collection view methods
+    
 	// Required method for calendar collection view
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		

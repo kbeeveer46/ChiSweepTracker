@@ -4,7 +4,7 @@ import THLabel
 
 class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 
-	// Controls
+	// MARK: Controls
 	@IBOutlet weak var relocatedDetailMap: MKMapView!
 	@IBOutlet weak var relocatedDetailMapHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var makeLabel: UILabel!
@@ -17,14 +17,16 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var reasonLabel: UILabel!
 	@IBOutlet weak var relocatedDetailStackView: UIStackView!
 	
-    // Classes
+    // MARK: Classes
     let common = Common()
     
-	// Shared
+	// MARK: Shared
 	var relocatedVehicle = VehicleModel()
 	var toLatitude = 0.0
 	var toLongitude = 0.0
 	
+    // MARK: Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -155,16 +157,41 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 			}
 		}
 	}
-	
-//	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-//
-//		assert(overlay is MKPolyline, "overlay must be polyline")
-//
-//		let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-//		polylineRenderer.strokeColor = UIColor(hexString: "#FF7832")
-//		polylineRenderer.lineWidth = 3
-//		return polylineRenderer
-//	}
+    
+    // MARK: Action methods
+    
+    @IBAction func relocatedFromAddressTapped(_ sender: Any) {
+        
+        let coordinates = CLLocationCoordinate2DMake(Double(self.relocatedVehicle.relocatedFromLatitude)!, Double(self.relocatedVehicle.relocatedFromLongitude)!)
+        
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        
+        let mapItem = MKMapItem(placemark: placemark)
+        
+        mapItem.name = relocatedVehicle.relocatedFromAddress
+        
+        mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
+        
+    }
+    
+    @IBAction func addressButtonTapped(_ sender: Any) {
+        
+        let coordinates = CLLocationCoordinate2DMake(self.toLatitude, self.toLongitude)
+        
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        
+        let mapItem = MKMapItem(placemark: placemark)
+        
+        mapItem.name = relocatedVehicle.relocatedToAddress
+        
+        mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
+    }
+    
+    // MARK: Map view methods
 	
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 		
@@ -197,35 +224,5 @@ class RelocatedDetailViewController: UIViewController, MKMapViewDelegate {
 		return annotationView
 	}
 	
-	@IBAction func relocatedFromAddressTapped(_ sender: Any) {
-		
-		let coordinates = CLLocationCoordinate2DMake(Double(self.relocatedVehicle.relocatedFromLatitude)!, Double(self.relocatedVehicle.relocatedFromLongitude)!)
-		
-		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
-		
-		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
-		
-		let mapItem = MKMapItem(placemark: placemark)
-		
-		mapItem.name = relocatedVehicle.relocatedFromAddress
-		
-		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
-		
-	}
-	
-	@IBAction func addressButtonTapped(_ sender: Any) {
-		
-		let coordinates = CLLocationCoordinate2DMake(self.toLatitude, self.toLongitude)
-		
-		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
-		
-		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
-		
-		let mapItem = MKMapItem(placemark: placemark)
-		
-		mapItem.name = relocatedVehicle.relocatedToAddress
-		
-		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
-	}
 	
 }

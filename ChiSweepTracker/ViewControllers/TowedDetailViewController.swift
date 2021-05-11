@@ -4,7 +4,7 @@ import THLabel
 
 class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	
-	// Controls
+	// MARK: Controls
 	@IBOutlet weak var towedDetailMapView: MKMapView!
 	@IBOutlet weak var towedDetailMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var makeLabel: UILabel!
@@ -18,14 +18,16 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var inventoryNumberLabel: UILabel!
 	@IBOutlet weak var towedVehicleStackView: UIStackView!
 	
-    // Classes
+    // MARK: Classes
     let common = Common()
     
-	// Shared
+	// MARK: Shared
 	var towedVehicle = VehicleModel()
 	var latitude = 0.0
 	var longitude = 0.0
 	
+    // MARK: Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -136,6 +138,39 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		}
 	}
 	
+    // MARK: Action methods
+    
+    @IBAction func towedToPhoneTapped(_ sender: Any) {
+        
+        var phone = towedVehicle.towedToPhone
+        phone = phone.replacingOccurrences(of: "(", with: "")
+        phone = phone.replacingOccurrences(of: ")", with: "")
+        phone = phone.replacingOccurrences(of: " ", with: "")
+        phone = phone.replacingOccurrences(of: "-", with: "")
+        
+        let url = URL(string: "tel://+1\(phone)")
+        
+        UIApplication.shared.open(url!, options: [:], completionHandler:nil)
+        
+    }
+    
+    @IBAction func towedToAddressTapped(_ sender: Any) {
+        
+        let coordinates = CLLocationCoordinate2DMake(self.latitude, self.longitude)
+        
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        
+        let mapItem = MKMapItem(placemark: placemark)
+        
+        mapItem.name = towedVehicle.towedToAddress
+        mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
+        
+    }
+    
+    // MARK: Map view methods
+    
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 		
 		let reuseIdentifier = "pin"
@@ -167,34 +202,4 @@ class TowedDetailViewController: UIViewController, MKMapViewDelegate {
 		return annotationView
 	}
 	
-	// MARK: Events
-	
-	@IBAction func towedToPhoneTapped(_ sender: Any) {
-	
-		var phone = towedVehicle.towedToPhone
-		phone = phone.replacingOccurrences(of: "(", with: "")
-		phone = phone.replacingOccurrences(of: ")", with: "")
-		phone = phone.replacingOccurrences(of: " ", with: "")
-		phone = phone.replacingOccurrences(of: "-", with: "")
-		
-		let url = URL(string: "tel://+1\(phone)")
-	
-		UIApplication.shared.open(url!, options: [:], completionHandler:nil)
-		
-	}
-	
-	@IBAction func towedToAddressTapped(_ sender: Any) {
-	
-		let coordinates = CLLocationCoordinate2DMake(self.latitude, self.longitude)
-
-		let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
-
-		let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
-
-		let mapItem = MKMapItem(placemark: placemark)
-
-		mapItem.name = towedVehicle.towedToAddress
-		mapItem.openInMaps(launchOptions:[MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center)] as [String : Any])
-
-	}
 }

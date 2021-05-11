@@ -6,7 +6,7 @@ import Alamofire
 
 class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, MKMapViewDelegate {
     
-    // Controls
+    // MARK: Controls
     @IBOutlet weak var pushNotificationsSwitch: UISwitch!
     @IBOutlet weak var onPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
@@ -22,12 +22,12 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     @IBOutlet weak var cardViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var cardViewTopConstraint: NSLayoutConstraint!
     
-    // Classes
+    // MARK: Classes
     let common = Common()
     let database = Database()
     var schedule = ScheduleModel()
     
-    // Shared
+    // MARK: Shared
     let userDefaults = UserDefaults.standard
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     var relocatedVehicleCount = 0
@@ -297,149 +297,6 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
     }
     
-    @objc func openOptionsMenu() {
-        
-        // Add haptic feedback
-        let generator = UISelectionFeedbackGenerator()
-        generator.prepare()
-        generator.selectionChanged()
-        
-        // Get values from defaults
-        let showDivvyStations = self.common.defaults.showDivvyStations()
-        let showTowedVehicles = self.common.defaults.showTowedVehicles()
-        
-        // Create options alert
-        let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
-        
-        // Create remove favorite option for options alert
-        let removeFavoriteAction = UIAlertAction(title: "Remove Address", style: .default, handler:{ action in
-            
-            // Create remove favorite alert
-            let removeFavoriteAlert = UIAlertController(title: "Are You Sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
-            
-            // Create yes option for remove favorite alert
-            let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
-                
-                self.database.deleteAddressFromDatabase(address: self.schedule.address, deleteAddressResult: { message in
-                    
-                    DispatchQueue.main.async {
-                        
-                        // If on a view with a tab control then use it to go to the favorite list view
-                        self.tabBarController?.selectedIndex = 1
-                        
-                        // If not on a view with a tab control, use navigation controller to go to favorite list view
-                        if self.tabBarController == nil {
-                            self.navigationController?.popViewController(animated: true)
-                        }
-                    }
-                })
-                
-            })
-            yesAction.setValue(UIColor.red, forKey: "titleTextColor")
-            
-            // Create and add no option for remove favorite alert
-            removeFavoriteAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-            
-            // Add yes option to remove favorite alert
-            removeFavoriteAlert.addAction(yesAction)
-            
-            // Present remove favorite alert
-            self.present(removeFavoriteAlert, animated: true, completion: nil)
-            
-        })
-        removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
-        
-        // Create view schedule options for alert
-        let viewScheduleAction = UIAlertAction(title: "View Sweep Schedule", style: .default, handler:{ action in
-            // Segue to schedule view
-            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                destinationViewController.schedule = self.schedule
-                self.navigationController?.pushViewController(destinationViewController, animated: true)
-            }
-        })
-        let viewScheduleImage = UIImage(named: "list")
-        if let icon = viewScheduleImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-            viewScheduleAction.setValue(icon, forKey: "image")
-        }
-        optionsAlert.addAction(viewScheduleAction)
-        
-        // Create nearby Divvy stations options for alert
-        if (showDivvyStations == false) {
-            let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
-                self.userDefaults.set(true, forKey: "showDivvyStations")
-                self.loadFavoriteMap()
-            })
-            let showDivvyStationsImage = UIImage(named: "bike")
-            if let icon = showDivvyStationsImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-                showDivvyAction.setValue(icon, forKey: "image")
-            }
-            optionsAlert.addAction(showDivvyAction)
-        }
-        else {
-            let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations (\(divvyStationCount))", style: .default, handler:{ action in
-                self.userDefaults.set(false, forKey: "showDivvyStations")
-                self.loadFavoriteMap()
-            })
-            let hideDivvyStationsImage = UIImage(named: "bike")
-            if let icon = hideDivvyStationsImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-                hideDivvyAction.setValue(icon, forKey: "image")
-            }
-            optionsAlert.addAction(hideDivvyAction)
-        }
-        
-        // Create nearby towed/relocated vehicle options for alert
-        if (showTowedVehicles == false) {
-            let showRelocatedAction = UIAlertAction(title: "Show Nearby Relocated Vehicles", style: .default, handler:{ action in
-                self.userDefaults.set(true, forKey: "showTowedVehicles")
-                self.loadFavoriteMap()
-            })
-            let showRelocatedVehiclesImage = UIImage(named: "pin-address")
-            if let icon = showRelocatedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-                showRelocatedAction.setValue(icon, forKey: "image")
-            }
-            optionsAlert.addAction(showRelocatedAction)
-        }
-        else {
-            let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles (\(relocatedVehicleCount))", style: .default, handler:{ action in
-                self.userDefaults.set(false, forKey: "showTowedVehicles")
-                self.loadFavoriteMap()
-            })
-            let hideRelocatedVehiclesImage = UIImage(named: "pin-address")
-            if let icon = hideRelocatedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-                hideRelocatedAction.setValue(icon, forKey: "image")
-            }
-            optionsAlert.addAction(hideRelocatedAction)
-        }
-        
-        let showTowedAction = UIAlertAction(title: "Search Towed Vehicles", style: .default, handler:{ action in
-            // Segue to towed search view
-            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedSearchViewController") as? TowedSearchViewController {
-                self.navigationController?.pushViewController(destinationViewController, animated: true)
-            }
-        })
-        let searchTowedVehiclesImage = UIImage(named: "search-fill")
-        if let icon = searchTowedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-            showTowedAction.setValue(icon, forKey: "image")
-        }
-        optionsAlert.addAction(showTowedAction)
-        
-        // Create cancel option for options alert
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        
-        // Add options to options alert
-        optionsAlert.addAction(cancelAction)
-        
-        let removeFavoriteImage = UIImage(named: "house_alt")
-        if let icon = removeFavoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
-            removeFavoriteAction.setValue(icon, forKey: "image")
-        }
-        optionsAlert.addAction(removeFavoriteAction)
-        
-        // Present options alert
-        self.present(optionsAlert, animated: true, completion: nil)
-        
-    }
-    
     func loadNotificationControlValues() {
         
         self.navigationItem.title = self.schedule.address
@@ -462,7 +319,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             if addresses.count > 0 {
                 
                 let address = addresses.first!
-                                
+                
                 notificationsToggled = (address.notificationsEnabled == "1" ? true : false)
                 when = address.notificationsWhen
                 whenIndex = self.whenData.firstIndex(of: when) ?? 0
@@ -479,7 +336,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                     self.timePicker.date = date!
                     self.timePicker.addTarget(self, action: #selector(self.timePickerChanged(picker:)), for: .valueChanged)
                     self.timePicker.isUserInteractionEnabled = notificationsToggled
-
+                    
                     self.pushNotificationsSwitch.isOn = notificationsToggled
                     self.pushNotificationsSwitch.isUserInteractionEnabled = true
                     
@@ -518,11 +375,11 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     // Populate schedule model and add notifications if applicable
     // useDefaultNotificationValues is set to true when running getSchedule from outside notifications view controller
     func getScheduleAndAddNotifications(_ addNotifications: Bool,
-                                         _ useNotificationParameters: Bool = false,
-                                         _ address: String = "",
-                                         _ when: String = "",
-                                         _ hour: Int = 0,
-                                         _ minute: Int = 0) {
+                                        _ useNotificationParameters: Bool = false,
+                                        _ address: String = "",
+                                        _ when: String = "",
+                                        _ hour: Int = 0,
+                                        _ minute: Int = 0) {
         
         if (address != "") {
             self.schedule.address = address
@@ -747,6 +604,199 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
     }
     
+    //MARK: Actions methods
+    
+    @objc func timePickerChanged(picker: UIDatePicker) {
+        
+        // Save notification control values
+        self.saveDefaultNotificationValues()
+        
+        // Update notifications when picker is changed
+        if self.pushNotificationsSwitch.isOn {
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
+                self.getScheduleAndAddNotifications(true)
+            })
+        }
+    }
+    
+    // Push notifications toggle switch event
+    @IBAction func pushNotificationsTapped(_ sender: Any) {
+        
+        if pushNotificationsSwitch.isOn == true {
+            
+            // Enable when and time controls
+            self.timePicker.isUserInteractionEnabled = true
+            self.onPicker.isUserInteractionEnabled = true
+            
+            // Save notification control values
+            self.saveDefaultNotificationValues()
+            
+            // Delete notifications and then re-add them
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: { completion in
+                self.getScheduleAndAddNotifications(true)
+            })
+            
+        }
+        else {
+            
+            // Save notification control values
+            self.saveDefaultNotificationValues()
+            
+            // Disable when and time controls
+            self.timePicker.isUserInteractionEnabled = false
+            self.onPicker.isUserInteractionEnabled = false
+            
+            // Delete notifications in database for address that was disabled
+            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
+            
+        }
+    }
+    
+    // MARK: Top menu methods
+    
+    @objc func openOptionsMenu() {
+        
+        // Add haptic feedback
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+        
+        // Get values from defaults
+        let showDivvyStations = self.common.defaults.showDivvyStations()
+        let showTowedVehicles = self.common.defaults.showTowedVehicles()
+        
+        // Create options alert
+        let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
+        
+        // Create remove favorite option for options alert
+        let removeFavoriteAction = UIAlertAction(title: "Remove Address", style: .default, handler:{ action in
+            
+            // Create remove favorite alert
+            let removeFavoriteAlert = UIAlertController(title: "Are You Sure?", message: "You will no longer receive notifications for this address", preferredStyle: .alert)
+            
+            // Create yes option for remove favorite alert
+            let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                
+                self.database.deleteAddressFromDatabase(address: self.schedule.address, deleteAddressResult: { message in
+                    
+                    DispatchQueue.main.async {
+                        
+                        // If on a view with a tab control then use it to go to the favorite list view
+                        self.tabBarController?.selectedIndex = 1
+                        
+                        // If not on a view with a tab control, use navigation controller to go to favorite list view
+                        if self.tabBarController == nil {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
+                })
+                
+            })
+            yesAction.setValue(UIColor.red, forKey: "titleTextColor")
+            
+            // Create and add no option for remove favorite alert
+            removeFavoriteAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            // Add yes option to remove favorite alert
+            removeFavoriteAlert.addAction(yesAction)
+            
+            // Present remove favorite alert
+            self.present(removeFavoriteAlert, animated: true, completion: nil)
+            
+        })
+        removeFavoriteAction.setValue(UIColor.red, forKey: "titleTextColor")
+        
+        // Create view schedule options for alert
+        let viewScheduleAction = UIAlertAction(title: "View Sweep Schedule", style: .default, handler:{ action in
+            // Segue to schedule view
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
+                destinationViewController.schedule = self.schedule
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        })
+        let viewScheduleImage = UIImage(named: "list")
+        if let icon = viewScheduleImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+            viewScheduleAction.setValue(icon, forKey: "image")
+        }
+        optionsAlert.addAction(viewScheduleAction)
+        
+        // Create nearby Divvy stations options for alert
+        if (showDivvyStations == false) {
+            let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
+                self.userDefaults.set(true, forKey: "showDivvyStations")
+                self.loadFavoriteMap()
+            })
+            let showDivvyStationsImage = UIImage(named: "bike")
+            if let icon = showDivvyStationsImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+                showDivvyAction.setValue(icon, forKey: "image")
+            }
+            optionsAlert.addAction(showDivvyAction)
+        }
+        else {
+            let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations (\(divvyStationCount))", style: .default, handler:{ action in
+                self.userDefaults.set(false, forKey: "showDivvyStations")
+                self.loadFavoriteMap()
+            })
+            let hideDivvyStationsImage = UIImage(named: "bike")
+            if let icon = hideDivvyStationsImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+                hideDivvyAction.setValue(icon, forKey: "image")
+            }
+            optionsAlert.addAction(hideDivvyAction)
+        }
+        
+        // Create nearby towed/relocated vehicle options for alert
+        if (showTowedVehicles == false) {
+            let showRelocatedAction = UIAlertAction(title: "Show Nearby Relocated Vehicles", style: .default, handler:{ action in
+                self.userDefaults.set(true, forKey: "showTowedVehicles")
+                self.loadFavoriteMap()
+            })
+            let showRelocatedVehiclesImage = UIImage(named: "pin-address")
+            if let icon = showRelocatedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+                showRelocatedAction.setValue(icon, forKey: "image")
+            }
+            optionsAlert.addAction(showRelocatedAction)
+        }
+        else {
+            let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles (\(relocatedVehicleCount))", style: .default, handler:{ action in
+                self.userDefaults.set(false, forKey: "showTowedVehicles")
+                self.loadFavoriteMap()
+            })
+            let hideRelocatedVehiclesImage = UIImage(named: "pin-address")
+            if let icon = hideRelocatedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+                hideRelocatedAction.setValue(icon, forKey: "image")
+            }
+            optionsAlert.addAction(hideRelocatedAction)
+        }
+        
+        let showTowedAction = UIAlertAction(title: "Search Towed Vehicles", style: .default, handler:{ action in
+            // Segue to towed search view
+            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "TowedSearchViewController") as? TowedSearchViewController {
+                self.navigationController?.pushViewController(destinationViewController, animated: true)
+            }
+        })
+        let searchTowedVehiclesImage = UIImage(named: "search-fill")
+        if let icon = searchTowedVehiclesImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+            showTowedAction.setValue(icon, forKey: "image")
+        }
+        optionsAlert.addAction(showTowedAction)
+        
+        // Create cancel option for options alert
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        // Add options to options alert
+        optionsAlert.addAction(cancelAction)
+        
+        let removeFavoriteImage = UIImage(named: "house_alt")
+        if let icon = removeFavoriteImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+            removeFavoriteAction.setValue(icon, forKey: "image")
+        }
+        optionsAlert.addAction(removeFavoriteAction)
+        
+        // Present options alert
+        self.present(optionsAlert, animated: true, completion: nil)
+        
+    }
+    
     //MARK: Picker view methods
     
     // When and time picker methods
@@ -865,51 +915,5 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
     }
     
-    //MARK: Actions
     
-    @objc func timePickerChanged(picker: UIDatePicker) {
-        
-        // Save notification control values
-        self.saveDefaultNotificationValues()
-        
-        // Update notifications when picker is changed
-        if self.pushNotificationsSwitch.isOn {
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in
-                self.getScheduleAndAddNotifications(true)
-            })
-        }
-    }
-    
-    // Push notifications toggle switch event
-    @IBAction func pushNotificationsTapped(_ sender: Any) {
-        
-        if pushNotificationsSwitch.isOn == true {
-            
-            // Enable when and time controls
-            self.timePicker.isUserInteractionEnabled = true
-            self.onPicker.isUserInteractionEnabled = true
-            
-            // Save notification control values
-            self.saveDefaultNotificationValues()
-            
-            // Delete notifications and then re-add them
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: { completion in
-                self.getScheduleAndAddNotifications(true)
-            })
-            
-        }
-        else {
-            
-            // Save notification control values
-            self.saveDefaultNotificationValues()
-            
-            // Disable when and time controls
-            self.timePicker.isUserInteractionEnabled = false
-            self.onPicker.isUserInteractionEnabled = false
-            
-            // Delete notifications in database for address that was disabled
-            self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: {completion in })
-            
-        }
-    }
 }

@@ -4,20 +4,22 @@ import Alamofire
 
 class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate  {
 
-    // Controls
+    // MARK: Controls
     @IBOutlet weak var favoriteListMapView: MKMapView!
     @IBOutlet weak var favoriteListTableView: UITableView!
     @IBOutlet weak var favoriteListViewHeaderLabel: UILabel!
     
-    // Classes
+    // MARK: Classes
     let common = Common()
     let database = Database()
     var addresses = [AddressModel]()
     
-    // Shared
+    // MARK: Shared
     let generator = UISelectionFeedbackGenerator()
     var favoriteAddresses = [[String]]()
     var mapLocations = [CLLocationCoordinate2D]()
+    
+    // MARK: Methods
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

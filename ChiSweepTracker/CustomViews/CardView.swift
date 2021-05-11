@@ -3,6 +3,7 @@ import UIKit
 
 @IBDesignable class CardView : UIView {
 	
+    // MARK: Shared
 	@IBInspectable var cornerRadius : CGFloat = 7
 	@IBInspectable var shadowColor : UIColor? = UIColor.black
 	@IBInspectable var shadowOffsetWidth : Int = 0

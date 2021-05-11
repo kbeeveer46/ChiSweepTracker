@@ -2,8 +2,8 @@
 public class Constants {
     
     // Database tables
+    
     #if DEBUG
-    let debugMode = true
     let addressesDatabaseName = "addresses_dev"
     let schedulesDatabaseName = "schedules_dev"
     let updatesDatabaseName = "updates_dev"
@@ -14,7 +14,6 @@ public class Constants {
     let infoDatabaseName = "info_dev"
     let notificationsDatabaseName = "notifications_dev"
     #else
-    let debugMode = false
     let addressesDatabaseName = "addresses"
     let schedulesDatabaseName = "schedules"
     let updatesDatabaseName = "updates"

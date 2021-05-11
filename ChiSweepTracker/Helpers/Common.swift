@@ -4,6 +4,7 @@ let userDefaults = UserDefaults.standard
 
 public class Common {
     
+    // MARK: Shared
     let constants = Constants()
     let defaults = Defaults()
     

@@ -4,7 +4,7 @@ import THLabel
 
 class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 
-	// Controls
+	// MARK: Controls
 	@IBOutlet weak var stationMapView: MKMapView!
 	@IBOutlet weak var stationMapViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var nameLabel: UILabel!
@@ -14,12 +14,14 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var docksAvailableLabel: UILabel!
 	@IBOutlet weak var lastUpdatedLabel: UILabel!
 	
-	// Classes
+	// MARK: Classes
 	let common = Common()
 	
-	// Shared
+	// MARK: Shared
 	var station = DivvyStationModel()
 	
+    // MARK: Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -133,6 +135,8 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 		stationMapView.addAnnotation(annotation)
 	}
 	
+    // MARK: Map view methods
+    
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 		
 		let reuseIdentifier = "pin"

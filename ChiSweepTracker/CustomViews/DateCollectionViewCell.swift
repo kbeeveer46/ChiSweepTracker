@@ -4,9 +4,11 @@ import UIKit
 
 class DateCollectionViewCell: UICollectionViewCell {
     
-	// Controls
+	// MARK: Controls
     @IBOutlet weak var DateLabel: UILabel!
     @IBOutlet weak var Circle: UIView!
+    
+    // MARK: Methods
     
     func DrawCircle() {
         
