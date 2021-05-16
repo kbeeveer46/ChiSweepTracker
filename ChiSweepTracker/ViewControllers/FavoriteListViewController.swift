@@ -24,9 +24,10 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Set required properties for favorite list table view
+        // Set required properties for favorite list table view and map
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
+        self.favoriteListMapView.delegate = self
         
         // Get addresses from database and use the data in the map and table
         self.database.getAddresses(completion: { addresses in
@@ -43,10 +44,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     //
     func loadFavoriteListMap() {
         
-        // Set required properties for map
-        self.favoriteListMapView.delegate = self
+        // Remove map annotions and clear map locations array
         self.favoriteListMapView.removeAnnotations(favoriteListMapView.annotations)
-        
         self.mapLocations.removeAll()
         
         if self.addresses.count > 0 {
@@ -90,11 +89,6 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                         else {
                             annotation.title = "Next Sweep: No more sweeps at this address in \(self.common.defaults.latestAppVersion())"
                         }
-                        
-                        // Populate schedule based on address. This is so the user can click on the callout and go to schedule page
-                        self.populateSchedule(address: address.address, goToFavoritePage: false, completion: { schedule in
-                            annotation.schedule = schedule
-                        })
                         
                         // Add annoation to map
                         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "address")
@@ -304,10 +298,13 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
         if let annotation = view.annotation as? CustomAnnotation {
             
-             // Segue to schedule view
+            // Segue to schedule view
             if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "ScheduleViewController") as? ScheduleViewController {
-                destinationViewController.schedule = annotation.schedule
-                self.navigationController?.pushViewController(destinationViewController, animated: true)
+                
+                self.populateSchedule(address: annotation.subtitle!, goToFavoritePage: false, completion: { schedule in
+                    destinationViewController.schedule = schedule
+                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                })
             }
         }
     }
