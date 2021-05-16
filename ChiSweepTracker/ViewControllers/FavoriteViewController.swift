@@ -545,6 +545,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                             for dayInMonth in monthInSchedule.dates {
                                                                 
                                                                 let currentDate = Date()
+                                                                let currenteDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
+                                                                
                                                                 let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: currentYear, month: Int(monthInSchedule.number), day: dayInMonth.date, hour: hour, minute: minute, second: 0)
                                                                 var date = calendar.date(from: dateComponents)
                                                                 
@@ -567,15 +569,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                     break
                                                                 }
                                                                 
-                                                                let currenteDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
-
                                                                 if dateComponents.month! > currenteDateComponents.month! ||
                                                                     (dateComponents.month == currenteDateComponents.month && dateComponents.day! >= currenteDateComponents.day!) {
-                                                                    
-                                                                //}
-                                                                
-                                                                
-                                                                //if date! >= currentDate {
                                                                     
                                                                     // Add notification to database
                                                                     
