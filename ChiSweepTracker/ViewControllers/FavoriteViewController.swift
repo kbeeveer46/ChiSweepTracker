@@ -567,7 +567,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                                                                     break
                                                                 }
                                                                 
-                                                                if date! >= currentDate {
+                                                                let currenteDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
+
+                                                                if dateComponents.month! > currenteDateComponents.month! ||
+                                                                    (dateComponents.month == currenteDateComponents.month && dateComponents.day! >= currenteDateComponents.day!) {
+                                                                    
+                                                                //}
+                                                                
+                                                                
+                                                                //if date! >= currentDate {
                                                                     
                                                                     // Add notification to database
                                                                     
