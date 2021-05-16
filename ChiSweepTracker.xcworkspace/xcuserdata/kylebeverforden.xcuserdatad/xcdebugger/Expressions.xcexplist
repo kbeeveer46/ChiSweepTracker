@@ -3,6 +3,20 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "closure #2 in closure #3 in closure #1 in closure #1 in closure #1 in FavoriteViewController.getScheduleAndAddNotifications(_:_:_:_:_:_:):FavoriteViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "dateComponents.date!">
+            </PersistentString>
+            <PersistentString
+               value = "dateComponents.month!">
+            </PersistentString>
+            <PersistentString
+               value = "currenteDateComponents.month!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in SearchViewController.populateSchedule(_:_:completion:):SearchViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -89,15 +103,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "UpdatesViewController.showNewImage(_:):UpdatesViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "FavoriteViewController.addDivvyStationsToMap(_:):FavoriteViewController.swift">
+         contextName = "Database.getAddresses(address:completion:):Database.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.divvyDataset()">
+               value = "self.common.constants.addressesDatabaseName">
+            </PersistentString>
+            <PersistentString
+               value = "self.common.defaults.deviceUUID()">
+            </PersistentString>
+            <PersistentString
+               value = "self.constants.addressesDatabaseName">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "UpdatesViewController.showNewImage(_:):UpdatesViewController.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
@@ -114,6 +134,14 @@
          contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
       </ContextState>
       <ContextState
+         contextName = "FavoriteViewController.addDivvyStationsToMap(_:):FavoriteViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.common.divvyDataset()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #2 in closure #3 in closure #1 in closure #1 in closure #1 in FavoriteViewController.getSchedule(_:_:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -121,20 +149,6 @@
             </PersistentString>
             <PersistentString
                value = " self.common.notificationOneSignalPlayerId()">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "Database.getAddresses(address:completion:):Database.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.common.constants.addressesDatabaseName">
-            </PersistentString>
-            <PersistentString
-               value = "self.common.defaults.deviceUUID()">
-            </PersistentString>
-            <PersistentString
-               value = "self.constants.addressesDatabaseName">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -224,13 +238,13 @@
          contextName = "FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.notificationOneSignalPlayerId()">
+               value = "self.common.constants.websiteURL">
             </PersistentString>
             <PersistentString
                value = "&quot;\(self.common.constants.websiteURL)/insert-notification.php?playerId=\(self.common.notificationOneSignalPlayerId())&amp;address=\(address)&amp;notificationTime=\(notificationTime)&amp;sweepDay=\(sweepDay)&amp;tableName=\(tableName)&quot;">
             </PersistentString>
             <PersistentString
-               value = "self.common.constants.websiteURL">
+               value = "self.common.notificationOneSignalPlayerId()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
