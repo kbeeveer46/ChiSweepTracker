@@ -387,9 +387,11 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         // Get cell from table view
         let cell = tableView.cellForRow(at: indexPath)!
         
+        // Get address label and set label text
         let addressLabel = cell.viewWithTag(1) as! UILabel
         let address = addressLabel.text!.trimmingCharacters(in: .whitespaces)
         
+        // Populate schedule and go to favorite page
         self.populateSchedule(address: address, goToFavoritePage: true, completion: { completion in })
         
     }
@@ -403,6 +405,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         let addressLabel = cell.viewWithTag(1) as! UILabel
         let image = cell.viewWithTag(2) as! UIImageView
         
+        // Show or hide notifications image if notifications are enabled or not
         let notificationsEnabled = addresses[indexPath.row].notificationsEnabled == "1" ? true : false
         if notificationsEnabled == false {
             image.isHidden = true

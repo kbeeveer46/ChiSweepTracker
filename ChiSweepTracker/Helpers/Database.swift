@@ -272,7 +272,7 @@ public class Database {
         }
         
         // Get Divvys data
-        AF.request(self.common.constants.websiteURL + "/get-divvy-data.php", parameters: ["tableName": self.common.constants.divvysDatabaseName]).validate().responseJSON() { response in
+        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.divvysDatabaseName]).validate().responseJSON() { response in
             switch response.result {
             case .failure(let error):
                 print(error)
