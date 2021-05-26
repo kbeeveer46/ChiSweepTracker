@@ -37,7 +37,7 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
                 }
             }
             else {
-                result("You do not have any saved addresses")
+                result("You do not have any saved addresses. You must save an address inside the Sweep Tracker app.")
             }
         })
     }
