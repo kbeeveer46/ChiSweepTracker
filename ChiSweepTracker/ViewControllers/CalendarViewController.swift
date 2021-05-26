@@ -260,27 +260,78 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
 		// Only allow user to create ane event on a sweep day
         if cell.Circle.isHidden == false {
-        
-			// Creat alert
-			let alert = UIAlertController(title: "Add Calendar Event?", message: "An event will be added to the calendar on your device on \(self.selectedMonthNumber)/\(date!)/\(currentYear).", preferredStyle: .alert)
             
-			// Yes option
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
+            // Create event store
+            let eventStore = EKEventStore()
+            
+            // Create options alert
+            let optionsAlert = UIAlertController(title: "\(self.selectedMonthNumber)/\(date!)/\(self.currentYear)", message: "Options", preferredStyle: .actionSheet)
+        
+            let reminderAction = UIAlertAction(title: "Add Reminder", style: .default, handler:{ action in
                 
-				// Create event store
-                let eventStore = EKEventStore()
+                eventStore.requestAccess(to: .reminder) { (granted, error) in
+                    
+                    if granted && error == nil {
+                        
+                        guard let calendar = eventStore.defaultCalendarForNewReminders() else { return }
+                        let newReminder = EKReminder(eventStore: eventStore)
+                        newReminder.calendar = calendar
+                        newReminder.title = "Street Sweeping"
+                        newReminder.priority = Int(EKReminderPriority.high.rawValue)
+                        newReminder.notes = "\(self.schedule.address)\nStreet sweeping between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
+                        
+                        var dateComponents = DateComponents()
+                        dateComponents.year = self.currentYear
+                        dateComponents.month = self.selectedMonthNumber
+                        dateComponents.hour = 9
+                        dateComponents.minute = 0
+                        dateComponents.day = Int(date!)
+                        let startDate = Foundation.Calendar.current.date(from: dateComponents)
+                        
+                        newReminder.dueDateComponents = Foundation.Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: startDate!)
 
-				// Request calendar access
+                        do {
+                            try eventStore.save(newReminder, commit: true)
+                            
+                            // Alert user event was added
+                            DispatchQueue.main.async {
+                                self.common.showAlert("Reminder Added", "Reminder named 'Street Sweeping' was added to your device.")
+                            }
+                            
+                        } catch {
+                            print("Error adding reminder to device: \(error)")
+                            self.common.showAlert(self.common.constants.errorTitle, "Unable to add reminder to your device")
+                        }
+                        
+                    }
+                    else {
+                        if error != nil {
+                            print("Error adding reminder to device: \(error!)")
+                            self.common.showAlert(self.common.constants.errorTitle, "Unable to add reminder to your device")
+                        }
+                    }
+                }
+                
+            })
+            let reminderImage = UIImage(named: "square_list")
+            if let icon = reminderImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+                reminderAction.setValue(icon, forKey: "image")
+            }
+            optionsAlert.addAction(reminderAction)
+            
+            let calendarAction = UIAlertAction(title: "Add Calendar Event", style: .default, handler:{ action in
+                
+                // Request calendar access
                 eventStore.requestAccess(to: .event) { (granted, error) in
-
+                    
                     if (granted) && (error == nil) {
-						
+                        
                         print("Event access granted: \(granted)")
-
-						// Create event
+                        
+                        // Create event
                         let event:EKEvent = EKEvent(eventStore: eventStore)
-
-						// Create begin date (9 am)
+                        
+                        // Create begin date (9 am)
                         var startDateComponents = DateComponents()
                         startDateComponents.year = self.currentYear
                         startDateComponents.month = self.selectedMonthNumber
@@ -289,7 +340,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         startDateComponents.day = Int(date!)
                         let startDate = Foundation.Calendar.current.date(from: startDateComponents)
                         
-						// Create end date (2 pm)
+                        // Create end date (2 pm)
                         var endDateComponents = DateComponents()
                         endDateComponents.year = self.currentYear
                         endDateComponents.month = self.selectedMonthNumber
@@ -298,48 +349,51 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
                         endDateComponents.day = Int(date!)
                         let endDate = Foundation.Calendar.current.date(from: endDateComponents)
                         
-						// Set event properties
+                        // Set event properties
                         event.title = "Street Sweeping"
                         event.startDate = startDate
                         event.endDate = endDate
-                        event.notes = "Street sweeping between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
+                        event.notes = "\(self.schedule.address)\nStreet sweeping between 9 am and 2 pm. Check for signage and move your vehicle to avoid tickets."
                         event.calendar = eventStore.defaultCalendarForNewEvents
                         
-						// Add reminder 30 minutes before event startDate
-//						let reminder = EKAlarm(relativeOffset: -1800)
-//						event.addAlarm(reminder)
-						
-						// Add event to calendar
-						do {
+                        // Add event to calendar
+                        do {
                             try eventStore.save(event, span: .thisEvent)
+                            
+                            // Alert user event was added
+                            DispatchQueue.main.async {
+                                self.common.showAlert("Event Added", "Event named 'Street Sweeping' was added to your calendar.")
+                            }
+                            
+                            print("Added event")
                         }
-						catch let error as NSError {
-							print("Failed to add event with error: \(error.localizedDescription)")
-							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to your calendar.")
+                        catch let error as NSError {
+                            print("Failed to add event with error: \(error.localizedDescription)")
+                            self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to your calendar.")
                         }
-                        
-						// Alert user event was added
-                        DispatchQueue.main.async {
-							self.common.showAlert("Event Added", "Event named 'Street Sweeping' was added to your calendar.")
-                        }
-                        
-                        print("Added event")
                     }
                     else{
                         if error != nil {
                             print("Error adding event to calendar: \(error!)")
-							self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to your calendar")
+                            self.common.showAlert(self.common.constants.errorTitle, "Unable to add event to your calendar")
                         }
                     }
                 }
-                
-            }))
+            })
+            let calendarImage = UIImage(named: "calendar_day")
+            if let icon = calendarImage?.imageWithSize(scaledToSize: CGSize(width: 32, height: 32)) {
+                calendarAction.setValue(icon, forKey: "image")
+            }
+            optionsAlert.addAction(calendarAction)
             
-			// No option
-            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            // Create cancel option for options alert
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
             
-			// Present alert
-            self.present(alert, animated: true, completion: nil)
+            // Add options to options alert
+            optionsAlert.addAction(cancelAction)
+            
+            // Present options alert
+            self.present(optionsAlert, animated: true, completion: nil)
             
         }
     }
