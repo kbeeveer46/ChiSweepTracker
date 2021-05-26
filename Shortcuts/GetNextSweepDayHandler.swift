@@ -3,17 +3,12 @@ import Alamofire
 
 class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
     
-    //let database = Database()
-    //let common = Common()
     let defaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
     
     func handle(intent: GetNextSweepDayIntent, completion: @escaping (GetNextSweepDayIntentResponse) -> Void) {
         
         getNextSweepDay(result: { nextSweepDay in
-            
-            //let nextSweepDay = "750 N Dearborn Chicago - 11/22/2021"
             completion(GetNextSweepDayIntentResponse.success(result: nextSweepDay))
-            
         })
         
     }
@@ -23,7 +18,6 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
 
         var sweepDates = [Date]()
 
-        //self.database.getAddresses(completion: { addresses in
         self.getAddresses(completion: { addresses in
             
             for address in addresses {
@@ -52,10 +46,8 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
         
         var addresses = [AddressModel]()
         var parameters = [String: String]()
-        //let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
         let urlTo = "https://chicagosweeptracker.info/get-address-data.php"
         
-        //parameters = ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.defaults.deviceUUID()]
         parameters = ["tableName": "addresses_dev", "uuid": self.defaults!.string(forKey: "deviceUUID") ?? ""]
 
         AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
@@ -93,6 +85,4 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
             }
         }
     }
-
-
 }

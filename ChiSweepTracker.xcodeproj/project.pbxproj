@@ -12,6 +12,11 @@
 		2040AF85264771A600D9B653 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF84264771A600D9B653 /* Database.swift */; };
 		2040AF872647775C00D9B653 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF862647775C00D9B653 /* Constants.swift */; };
 		2040AF8926477A6200D9B653 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF8826477A6200D9B653 /* Defaults.swift */; };
+		205043FE265E04CD00AEDF0C /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */; };
+		20504403265E058100AEDF0C /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7069F23E26B930017A14D /* CustomAnnotation.swift */; };
+		20504405265E05C300AEDF0C /* DivvyStationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */; };
+		20504406265E05D200AEDF0C /* VehicleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F869023E48DBB00194C47 /* VehicleModel.swift */; };
+		20504407265E05D700AEDF0C /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */; };
 		2050B3BD2634994A00C0EBC9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2050B3BC2634994800C0EBC9 /* StoreKit.framework */; };
 		20917114262C9C6F004AD1AC /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20917113262C9C6F004AD1AC /* NotificationService.swift */; };
 		20917118262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -581,9 +586,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				209DDE54265DD9EB003FB35C /* Intents.intentdefinition in Sources */,
+				20504403265E058100AEDF0C /* CustomAnnotation.swift in Sources */,
 				209DDE57265DDAFB003FB35C /* GetNextSweepDayHandler.swift in Sources */,
+				20504407265E05D700AEDF0C /* DateCollectionViewCell.swift in Sources */,
 				209DDE4B265DD9BB003FB35C /* IntentHandler.swift in Sources */,
+				205043FE265E04CD00AEDF0C /* ScheduleModel.swift in Sources */,
+				20504405265E05C300AEDF0C /* DivvyStationModel.swift in Sources */,
 				200C8F6F265DE848001603B6 /* AddressModel.swift in Sources */,
+				20504406265E05D200AEDF0C /* VehicleModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
