@@ -200,7 +200,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 else if addressCount != -1 {
                     
                     // Create alert
-                    let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one addresses requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one address requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
 
                     // Yes option
                     alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in

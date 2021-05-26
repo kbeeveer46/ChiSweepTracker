@@ -331,6 +331,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "userDefaultsOld.string(forKey: &quot;deviceUUID&quot;)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "SearchViewController.showStatusMessage():SearchViewController.swift">
          <PersistentStrings>
             <PersistentString

@@ -14,8 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     
     // Shared
     let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
+    let userDefaultsOld = UserDefaults.standard
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+          
+//        userDefaultsOld.set("123", forKey: "deviceUUID")
         
         // Testing code for when old users migrate to the new app with multiple addresses
 //        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
@@ -24,11 +27,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 //        defaults.set(8, forKey: "notificationHour")
 //        defaults.set(30, forKey: "notificationMinute")
         
-        // Get UUID and save it to defaults so it can be used throughout the app and database
-        if self.defaults.deviceUUID() == "" {
-            userDefaults!.set(UUID().uuidString, forKey: "deviceUUID")
-            userDefaults!.synchronize()
+        // Old user
+        if !(userDefaultsOld.string(forKey: "deviceUUID") ?? "").isEmpty && self.defaults.deviceUUID() == "" {
+            
+            // Migrate old defaults to new defaults
+            self.database.migrateOldUsersToUseNewDefaults()
         }
+        
+        // New user
+        else if (userDefaultsOld.string(forKey: "deviceUUID") ?? "").isEmpty && self.defaults.deviceUUID() == "" {
+            
+            // Get UUID and save it to defaults so it can be used throughout the app and database
+            userDefaults!.set(UUID().uuidString, forKey: "deviceUUID")
+        }
+        userDefaults!.synchronize()
         print("uuid: \(self.defaults.deviceUUID())")
         
 		

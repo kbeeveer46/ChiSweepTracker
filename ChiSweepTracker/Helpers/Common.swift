@@ -42,8 +42,6 @@ public class Common {
         var sweepDates = [Date]()
         let currentMonth = Calendar.current.component(.month, from: Date())
         let currentDay = Calendar.current.component(.day, from: Date())
-
-        //schedule.address = address
         
         // Get coordinates from address
         let geocoder = CLGeocoder()
