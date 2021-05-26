@@ -1,0 +1,35 @@
+//
+//  IntentHandler.swift
+//  Shortcuts
+//
+//  Created by Kyle Beverforden on 5/25/21.
+//  Copyright © 2021 Kyle Beverforden. All rights reserved.
+//
+
+//import Intents
+//
+//class IntentHandler: INExtension {
+//
+//    override func handler(for intent: INIntent) -> Any {
+//        // This is the default implementation.  If you want different objects to handle different intents,
+//        // you can override this and return the handler you want for that particular intent.
+//
+//        return self
+//    }
+//
+//}
+
+
+import Intents
+
+class IntentHandler: INExtension {
+    
+    override func handler(for intent: INIntent) -> Any {
+        switch intent {
+        case is GetNextSweepDayIntent:
+            return GetNextSweepDayIntentHandler()
+        default:
+            fatalError("No handler for this intent")
+        }
+    }
+}

@@ -3,11 +3,12 @@ import THLabel
 import Alamofire
 
 class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate  {
-
+    
     // MARK: Controls
     @IBOutlet weak var favoriteListMapView: MKMapView!
     @IBOutlet weak var favoriteListTableView: UITableView!
     @IBOutlet weak var favoriteListViewHeaderLabel: UILabel!
+    @IBOutlet weak var siriView: UIView!
     
     // MARK: Classes
     let common = Common()
@@ -23,7 +24,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+                
         // Set required properties for favorite list table view and map
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
@@ -420,4 +421,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         return cell
         
     }
+
 }
+
+

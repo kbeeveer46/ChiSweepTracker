@@ -40,6 +40,10 @@
 	<string>Calendar access is needed to add this event to your calendar.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location access is needed to automatically add a pin on the map.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>GetNextSweepDayIntent</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
