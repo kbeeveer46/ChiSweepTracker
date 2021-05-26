@@ -1,6 +1,6 @@
 import MapKit
 
-let userDefaults = UserDefaults.standard
+let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
 
 public class Common {
     
@@ -25,14 +25,14 @@ public class Common {
         if userDatasetVersion != 0 && userDatasetVersion < latestDatasetVersion && notificationsYear == latestAppVersion {
             self.showAlert("Schedule Updated", "Chicago has changed the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
         }
-        userDefaults.set(latestDatasetVersion, forKey: "userDatasetVersion")
+        userDefaults!.set(latestDatasetVersion, forKey: "userDatasetVersion")
         
         // Set the last year when notifications were updated.
         // Use the value to alert them if they loaded the app after a new year came out
         if notificationsYear != 0 && notificationsYear < latestAppVersion {
             self.showAlert("Schedule Released", "Chicago has released the \(latestAppVersion) schedule and your push notifications have been automatically updated if you have them enabled.")
         }
-        userDefaults.set(latestAppVersion, forKey: "notificationsYear")
+        userDefaults!.set(latestAppVersion, forKey: "notificationsYear")
         
     }
     

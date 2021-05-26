@@ -6,7 +6,7 @@ public class Database {
     let common = Common()
     
     // Shared
-    let userDefaults = UserDefaults.standard
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
     
     //MARK: Addresses
     
@@ -125,7 +125,7 @@ public class Database {
                                            completion: { result in
                                             
                                             // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
-                                            self.userDefaults.set("", forKey: "favoriteAddress")
+                                            self.userDefaults!.set("", forKey: "favoriteAddress")
                                             completion(true)
                                             
                                            })
@@ -209,7 +209,7 @@ public class Database {
     
     func getValuesFromDatabase(completion: @escaping (_ message: String) -> Void) {
         
-        self.userDefaults.setValue(true, forKey: "gettingValuesFromDatabase")
+        self.userDefaults!.setValue(true, forKey: "gettingValuesFromDatabase")
         
         // Get schedule data
         AF.request(self.common.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.common.constants.schedulesDatabaseName]).validate().responseJSON() { response in
@@ -234,16 +234,16 @@ public class Database {
                     let sectionTitle = schedule["sectionTitle"]
                     let wardTitle = schedule["wardTitle"]
                     
-                    self.userDefaults.set(latestAppVersion, forKey: "latestAppVersion")
-                    self.userDefaults.set(wardDataset, forKey: "wardDataset")
-                    self.userDefaults.set(scheduleDataset, forKey: "scheduleDataset")
-                    self.userDefaults.set(coordinatesTitle, forKey: "coordinatesTitle")
-                    self.userDefaults.set(datesTitle, forKey: "datesTitle")
-                    self.userDefaults.set(geomTitle, forKey: "geomTitle")
-                    self.userDefaults.set(monthNameTitle, forKey: "monthNameTitle")
-                    self.userDefaults.set(monthNumberTitle, forKey: "monthNumberTitle")
-                    self.userDefaults.set(sectionTitle, forKey: "sectionTitle")
-                    self.userDefaults.set(wardTitle, forKey: "wardTitle")
+                    self.userDefaults!.set(latestAppVersion, forKey: "latestAppVersion")
+                    self.userDefaults!.set(wardDataset, forKey: "wardDataset")
+                    self.userDefaults!.set(scheduleDataset, forKey: "scheduleDataset")
+                    self.userDefaults!.set(coordinatesTitle, forKey: "coordinatesTitle")
+                    self.userDefaults!.set(datesTitle, forKey: "datesTitle")
+                    self.userDefaults!.set(geomTitle, forKey: "geomTitle")
+                    self.userDefaults!.set(monthNameTitle, forKey: "monthNameTitle")
+                    self.userDefaults!.set(monthNumberTitle, forKey: "monthNumberTitle")
+                    self.userDefaults!.set(sectionTitle, forKey: "sectionTitle")
+                    self.userDefaults!.set(wardTitle, forKey: "wardTitle")
                     
                     AF.request(self.common.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.common.constants.updatesDatabaseName, "year": String(self.common.defaults.latestAppVersion())]).validate().responseJSON() { response in
                         switch response.result {
@@ -258,7 +258,7 @@ public class Database {
                                 let latestDatasetVersionString = update["version"]
                                 let latestDatasetVersion = Int(latestDatasetVersionString!)
                                 
-                                self.userDefaults.set(latestDatasetVersion, forKey: "latestDatasetVersion")
+                                self.userDefaults!.set(latestDatasetVersion, forKey: "latestDatasetVersion")
                                 
                                 DispatchQueue.main.async {
                                     self.updateNotificationsAndSweepDayInDatabase()
@@ -299,22 +299,22 @@ public class Database {
                     let divvyJSONIdTitle = divvy["divvyJSONIdTitle"]
                     let divvyJSONLastUpdatedTitle = divvy["divvyJSONLastUpdatedTitle"]
                     
-                    self.userDefaults.set(divvyDataset, forKey: "divvyDataset")
-                    self.userDefaults.set(divvyIdTitle, forKey: "divvyIdTitle")
-                    self.userDefaults.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
-                    self.userDefaults.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
-                    self.userDefaults.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
-                    self.userDefaults.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
-                    self.userDefaults.set(divvyStatusTitle, forKey: "divvyStatusTitle")
+                    self.userDefaults!.set(divvyDataset, forKey: "divvyDataset")
+                    self.userDefaults!.set(divvyIdTitle, forKey: "divvyIdTitle")
+                    self.userDefaults!.set(divvyDocksInServiceTitle, forKey: "divvyDocksInServiceTitle")
+                    self.userDefaults!.set(divvyLatitudeTitle, forKey: "divvyLatitudeTitle")
+                    self.userDefaults!.set(divvyLongitudeTitle, forKey: "divvyLongitudeTitle")
+                    self.userDefaults!.set(divvyStationNameTitle, forKey: "divvyStationNameTitle")
+                    self.userDefaults!.set(divvyStatusTitle, forKey: "divvyStatusTitle")
                     
-                    self.userDefaults.set(divvyJSONUrl, forKey: "divvyJSONUrl")
-                    self.userDefaults.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
-                    self.userDefaults.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
-                    self.userDefaults.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
-                    self.userDefaults.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
-                    self.userDefaults.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
-                    self.userDefaults.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
-                    self.userDefaults.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
+                    self.userDefaults!.set(divvyJSONUrl, forKey: "divvyJSONUrl")
+                    self.userDefaults!.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
+                    self.userDefaults!.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
+                    self.userDefaults!.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
+                    self.userDefaults!.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
+                    self.userDefaults!.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")
+                    self.userDefaults!.set(divvyJSONIdTitle, forKey: "divvyJSONIdTitle")
+                    self.userDefaults!.set(divvyJSONLastUpdatedTitle, forKey: "divvyJSONLastUpdatedTitle")
                     
                 }
             }
@@ -347,21 +347,21 @@ public class Database {
                     let relocatedToStreetTitle = relocated["relocatedToStreetTitle"]
                     let relocatedStateTitle = relocated["stateTitle"]
                     
-                    self.userDefaults.set(relocatedDataset, forKey: "relocatedDataset")
-                    self.userDefaults.set(relocatedColorTitle, forKey: "relocatedColorTitle")
-                    self.userDefaults.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
-                    self.userDefaults.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
-                    self.userDefaults.set(relocatedDateTitle, forKey: "relocatedDateTitle")
-                    self.userDefaults.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
-                    self.userDefaults.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
-                    self.userDefaults.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
-                    self.userDefaults.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
-                    self.userDefaults.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
-                    self.userDefaults.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
-                    self.userDefaults.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
-                    self.userDefaults.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
-                    self.userDefaults.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
-                    self.userDefaults.set(relocatedStateTitle, forKey: "relocatedStateTitle")
+                    self.userDefaults!.set(relocatedDataset, forKey: "relocatedDataset")
+                    self.userDefaults!.set(relocatedColorTitle, forKey: "relocatedColorTitle")
+                    self.userDefaults!.set(relocatedMakeTitle, forKey: "relocatedMakeTitle")
+                    self.userDefaults!.set(relocatedPlateTitle, forKey: "relocatedPlateTitle")
+                    self.userDefaults!.set(relocatedDateTitle, forKey: "relocatedDateTitle")
+                    self.userDefaults!.set(relocatedFromLatitudeTitle, forKey: "relocatedFromLatitudeTitle")
+                    self.userDefaults!.set(relocatedFromLongitudeTitle, forKey: "relocatedFromLongitudeTitle")
+                    self.userDefaults!.set(relocatedFromAddressNumberTitle, forKey: "relocatedFromAddressNumberTitle")
+                    self.userDefaults!.set(relocatedFromDirectionTitle, forKey: "relocatedFromDirectionTitle")
+                    self.userDefaults!.set(relocatedFromStreetTitle, forKey: "relocatedFromStreetTitle")
+                    self.userDefaults!.set(relocatedReasonTitle, forKey: "relocatedReasonTitle")
+                    self.userDefaults!.set(relocatedToAddressNumberTitle, forKey: "relocatedToAddressNumberTitle")
+                    self.userDefaults!.set(relocatedToDirectionTitle, forKey: "relocatedToDirectionTitle")
+                    self.userDefaults!.set(relocatedToStreetTitle, forKey: "relocatedToStreetTitle")
+                    self.userDefaults!.set(relocatedStateTitle, forKey: "relocatedStateTitle")
                 }
             }
         }
@@ -389,17 +389,17 @@ public class Database {
                     let towedToAddressTitle = towed["towedToAddressTitle"]
                     let towedToPhoneTitle = towed["towedToPhoneTitle"]
                     
-                    self.userDefaults.set(towedDataset, forKey: "towedDataset")
-                    self.userDefaults.set(towedColorTitle, forKey: "towedColorTitle")
-                    self.userDefaults.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
-                    self.userDefaults.set(towedMakeTitle, forKey: "towedMakeTitle")
-                    self.userDefaults.set(towedModelTitle, forKey: "towedModelTitle")
-                    self.userDefaults.set(towedPlateTitle, forKey: "towedPlateTitle")
-                    self.userDefaults.set(towedStateTitle, forKey: "towedStateTitle")
-                    self.userDefaults.set(towedStyleTitle, forKey: "towedStyleTitle")
-                    self.userDefaults.set(towedDateTitle, forKey: "towedDateTitle")
-                    self.userDefaults.set(towedToAddressTitle, forKey: "towedToAddressTitle")
-                    self.userDefaults.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
+                    self.userDefaults!.set(towedDataset, forKey: "towedDataset")
+                    self.userDefaults!.set(towedColorTitle, forKey: "towedColorTitle")
+                    self.userDefaults!.set(towedInventoryNumberTitle, forKey: "towedInventoryNumberTitle")
+                    self.userDefaults!.set(towedMakeTitle, forKey: "towedMakeTitle")
+                    self.userDefaults!.set(towedModelTitle, forKey: "towedModelTitle")
+                    self.userDefaults!.set(towedPlateTitle, forKey: "towedPlateTitle")
+                    self.userDefaults!.set(towedStateTitle, forKey: "towedStateTitle")
+                    self.userDefaults!.set(towedStyleTitle, forKey: "towedStyleTitle")
+                    self.userDefaults!.set(towedDateTitle, forKey: "towedDateTitle")
+                    self.userDefaults!.set(towedToAddressTitle, forKey: "towedToAddressTitle")
+                    self.userDefaults!.set(towedToPhoneTitle, forKey: "towedToPhoneTitle")
                 }
             }
         }

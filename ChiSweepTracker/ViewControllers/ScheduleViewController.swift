@@ -20,7 +20,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// MARK: Shared
     let generator = UISelectionFeedbackGenerator()
     let currentYear = Calendar.current.component(.year, from: Date())
-    let userDefaults = UserDefaults.standard
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
     
     // In-app purchase
     var myProduct: SKProduct?
@@ -103,30 +103,30 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
             case .purchasing:
                 break
             case .purchased:
-                self.userDefaults.set(true, forKey: "enableMultipleAddresses")
+                self.userDefaults!.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 self.common.showAlert("Purchase Complete", "Saving multiple addresses is now enabled. Click on the plus icon to save this address.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .restored:
-                self.userDefaults.set(true, forKey: "enableMultipleAddresses")
+                self.userDefaults!.set(true, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 self.common.showAlert("Purchase Restored", "Saving multiple addresses is now enabled. Click on the plus icon to save this address.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .failed:
-                self.userDefaults.set(false, forKey: "enableMultipleAddresses")
+                self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 self.common.showAlert("Unable To Purchase", "There was an issue and your device did not complete the purchase. Please try again.")
                 SKPaymentQueue.default().remove(self)
                 break
             case .deferred:
-                self.userDefaults.set(false, forKey: "enableMultipleAddresses")
+                self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 break
             default:
-                self.userDefaults.set(false, forKey: "enableMultipleAddresses")
+                self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 break
@@ -135,7 +135,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        self.userDefaults.set(false, forKey: "enableMultipleAddresses")
+        self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
         self.common.showAlert("Unable To Restore", "There was an issue and your device did not restore the purchase. Please try again.")
         print(error.localizedDescription)
     }

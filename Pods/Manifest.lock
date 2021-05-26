@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.4.3)
   - IQKeyboardManagerSwift (6.5.6)
-  - OneSignal (3.4.3)
+  - OneSignal (3.4.4)
   - THLabel (1.4.10)
 
 DEPENDENCIES:
@@ -20,9 +20,9 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
   IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
-  OneSignal: e4dfb1912410f302dc9661ce98fc829f6c18ff6a
+  OneSignal: d20ee5601f44496573c7abe95923a04d1b49977f
   THLabel: 3fc93a0f01f74e4eec7574df2819e576d57150b3
 
-PODFILE CHECKSUM: 0eca81a6d35cd8997ffce454c9389e9e7d94e985
+PODFILE CHECKSUM: c36d47cee402e915a0819ab482207302dad9afd0
 
 COCOAPODS: 1.10.1

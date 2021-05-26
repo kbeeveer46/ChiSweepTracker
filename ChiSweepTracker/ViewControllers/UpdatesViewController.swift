@@ -12,7 +12,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
     var updatesList = [UpdatesModel]()
     var updatesLastViewedDate = ""
     let dateFormatter = DateFormatter()
-    let userDefaults = UserDefaults.standard
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
     
     // MARK: Methods
     
@@ -39,7 +39,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // Save the current date to defaults so it can be used to determine if there are any new updates the next time the app is opened
         let currentDate = self.dateFormatter.string(from: Date())
-        userDefaults.set(currentDate, forKey: "updatesLastViewDate")
+        userDefaults!.set(currentDate, forKey: "updatesLastViewDate")
         
         // Get list of latest updates
         getLatestUpdates()

@@ -19,7 +19,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     let database = Database()
     
 	// MARK: Shared
-    let userDefaults = UserDefaults.standard
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
 	let locationManager = CLLocationManager()
     var addressFromCoordinates = ""
 	let currentDay = Calendar.current.component(.day, from: Date())
@@ -170,8 +170,8 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                 
 				// Set default lat and long to be used when user re-opens the app
                 if setDefaultLatLong {
-                    self.userDefaults.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
-                    self.userDefaults.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
+                    self.userDefaults!.set(placemark?.location?.coordinate.latitude, forKey: "defaultLatitude")
+                    self.userDefaults!.set(placemark?.location?.coordinate.longitude, forKey: "defaultLongitude")
                 }
 				
 				// Create SODA client using domain and token
@@ -196,7 +196,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
 							
 							// Set default polygon array to be used in all the views
-                            self.userDefaults.set(coordinatesArray, forKey: "defaultCoordinatesArray")
+                            self.userDefaults!.set(coordinatesArray, forKey: "defaultCoordinatesArray")
                             
 							// Loop through coordinates array
                             for(_, coordinate) in coordinatesArray!.enumerated() {
@@ -364,9 +364,9 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				self.addressTextField.text = self.addressFromCoordinates
 				
 				// Save defaults to be use when user re-opens app
-				self.userDefaults.set(self.addressFromCoordinates, forKey: "defaultAddress")
-				self.userDefaults.set(location.coordinate.latitude, forKey: "defaultLatitude")
-				self.userDefaults.set(location.coordinate.longitude, forKey: "defaultLongitude")
+                self.userDefaults!.set(self.addressFromCoordinates, forKey: "defaultAddress")
+                self.userDefaults!.set(location.coordinate.latitude, forKey: "defaultLatitude")
+                self.userDefaults!.set(location.coordinate.longitude, forKey: "defaultLongitude")
                                     
 			}
         })
@@ -582,7 +582,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         }
         
         // Set default address to be used when app is re-opened
-        self.userDefaults.set(address, forKey: "defaultAddress")
+        self.userDefaults!.set(address, forKey: "defaultAddress")
         
         // Find address and go to select section view or schedule view
         self.populateSchedule(address, true,  completion: { schedule in

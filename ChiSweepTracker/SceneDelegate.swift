@@ -47,7 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
             self.database.getValuesFromDatabase(completion: { message in
-                userDefaults.setValue(false, forKey: "gettingValuesFromDatabase")
+                userDefaults!.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
     }

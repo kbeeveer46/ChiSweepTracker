@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		200C8F6F265DE848001603B6 /* AddressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C5B035263797F70003D645 /* AddressModel.swift */; };
 		203B0F642520E49E00FEBEDA /* TowedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B0F632520E49E00FEBEDA /* TowedDetailViewController.swift */; };
 		2040AF85264771A600D9B653 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF84264771A600D9B653 /* Database.swift */; };
 		2040AF872647775C00D9B653 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF862647775C00D9B653 /* Constants.swift */; };
@@ -22,10 +23,12 @@
 		209DDE54265DD9EB003FB35C /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE53265DD9EB003FB35C /* Intents.intentdefinition */; };
 		209DDE55265DDA2F003FB35C /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE53265DD9EB003FB35C /* Intents.intentdefinition */; };
 		209DDE57265DDAFB003FB35C /* GetNextSweepDayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE56265DDAFB003FB35C /* GetNextSweepDayHandler.swift */; };
+		209DDE5B265DE5F7003FB35C /* GetNextSweepDayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE56265DDAFB003FB35C /* GetNextSweepDayHandler.swift */; };
 		20B02A4F26534FF5003A6062 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20B02A4D26534FF4003A6062 /* Intents.framework */; };
 		20B02A5026534FF5003A6062 /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20B02A4E26534FF5003A6062 /* IntentsUI.framework */; };
 		20C5B036263797F70003D645 /* AddressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C5B035263797F70003D645 /* AddressModel.swift */; };
 		8671EF8F9A11333CCA81DC4D /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 198A3D876EC906A9080C8069 /* Pods_OneSignalNotificationServiceExtension.framework */; };
+		CE3E64F3B5B25AAF16751E1B /* Pods_Shortcuts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B528133B59D9F6FC1CED12 /* Pods_Shortcuts.framework */; };
 		EC1322262FAD3247F257541B /* Pods_ChiSweepTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 289531459393EF044AEAC753 /* Pods_ChiSweepTracker.framework */; };
 		FA0EC350239AFB2600DD3127 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0EC34F239AFB2600DD3127 /* Assets.xcassets */; };
 		FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0EC355239B105F00DD3127 /* MapKit.framework */; };
@@ -94,6 +97,7 @@
 		0CE9ADB24482A7BE40C9DF3D /* Pods-ChiSweepTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.debug.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		198A3D876EC906A9080C8069 /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B1C203DC06708969BC519CB /* Pods-ChiSweepTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.release.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.release.xcconfig"; sourceTree = "<group>"; };
+		200C8F70265DEC41001603B6 /* Shortcuts.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shortcuts.entitlements; sourceTree = "<group>"; };
 		203B0F632520E49E00FEBEDA /* TowedDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TowedDetailViewController.swift; sourceTree = "<group>"; };
 		2040AF84264771A600D9B653 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		2040AF862647775C00D9B653 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -114,7 +118,9 @@
 		20B02A4E26534FF5003A6062 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		20C5B035263797F70003D645 /* AddressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressModel.swift; sourceTree = "<group>"; };
 		289531459393EF044AEAC753 /* Pods_ChiSweepTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChiSweepTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		51B528133B59D9F6FC1CED12 /* Pods_Shortcuts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shortcuts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A56E618D9F199388DBEF2003 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		BAE13AD97CAFC914E99B61A5 /* Pods-Shortcuts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shortcuts.release.xcconfig"; path = "Target Support Files/Pods-Shortcuts/Pods-Shortcuts.release.xcconfig"; sourceTree = "<group>"; };
 		FA0EC34F239AFB2600DD3127 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ChiSweepTracker/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		FA0EC355239B105F00DD3127 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA0EC357239B263200DD3127 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
@@ -146,6 +152,7 @@
 		FAD5595E2433E75700F11DA1 /* UpdatesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesModel.swift; sourceTree = "<group>"; };
 		FAD7069F23E26B930017A14D /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 		FAFB9B21243A600E00E5FBC5 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		FF33A8B2F77DECC8E4AB2F39 /* Pods-Shortcuts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shortcuts.debug.xcconfig"; path = "Target Support Files/Pods-Shortcuts/Pods-Shortcuts.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				209DDE48265DD9BB003FB35C /* Intents.framework in Frameworks */,
+				CE3E64F3B5B25AAF16751E1B /* Pods_Shortcuts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +201,7 @@
 		209DDE49265DD9BB003FB35C /* Shortcuts */ = {
 			isa = PBXGroup;
 			children = (
+				200C8F70265DEC41001603B6 /* Shortcuts.entitlements */,
 				209DDE4A265DD9BB003FB35C /* IntentHandler.swift */,
 				209DDE4C265DD9BB003FB35C /* Info.plist */,
 				209DDE53265DD9EB003FB35C /* Intents.intentdefinition */,
@@ -208,6 +217,8 @@
 				1B1C203DC06708969BC519CB /* Pods-ChiSweepTracker.release.xcconfig */,
 				0B7B2A2B019923307B86E705 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
 				A56E618D9F199388DBEF2003 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				FF33A8B2F77DECC8E4AB2F39 /* Pods-Shortcuts.debug.xcconfig */,
+				BAE13AD97CAFC914E99B61A5 /* Pods-Shortcuts.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -229,6 +240,7 @@
 				FA0EC355239B105F00DD3127 /* MapKit.framework */,
 				289531459393EF044AEAC753 /* Pods_ChiSweepTracker.framework */,
 				198A3D876EC906A9080C8069 /* Pods_OneSignalNotificationServiceExtension.framework */,
+				51B528133B59D9F6FC1CED12 /* Pods_Shortcuts.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -363,6 +375,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 209DDE50265DD9BB003FB35C /* Build configuration list for PBXNativeTarget "Shortcuts" */;
 			buildPhases = (
+				2DB1C23274D00A30568E1264 /* [CP] Check Pods Manifest.lock */,
 				209DDE43265DD9BB003FB35C /* Sources */,
 				209DDE44265DD9BB003FB35C /* Frameworks */,
 				209DDE45265DD9BB003FB35C /* Resources */,
@@ -469,6 +482,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2DB1C23274D00A30568E1264 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Shortcuts-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		73E4C6D49F18D3B20579B2C3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -548,6 +583,7 @@
 				209DDE54265DD9EB003FB35C /* Intents.intentdefinition in Sources */,
 				209DDE57265DDAFB003FB35C /* GetNextSweepDayHandler.swift in Sources */,
 				209DDE4B265DD9BB003FB35C /* IntentHandler.swift in Sources */,
+				200C8F6F265DE848001603B6 /* AddressModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,6 +609,7 @@
 				FA3F868F23E48BEF00194C47 /* TowedResultsViewController.swift in Sources */,
 				FA29464223985FE300A24FFC /* SceneDelegate.swift in Sources */,
 				FA184FA02398706200AB2FF6 /* ScheduleViewController.swift in Sources */,
+				209DDE5B265DE5F7003FB35C /* GetNextSweepDayHandler.swift in Sources */,
 				209DDE55265DDA2F003FB35C /* Intents.intentdefinition in Sources */,
 				FA2890D923F443A400695F0A /* RelocatedDetailViewController.swift in Sources */,
 				20C5B036263797F70003D645 /* AddressModel.swift in Sources */,
@@ -675,7 +712,9 @@
 		};
 		209DDE51265DD9BB003FB35C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF33A8B2F77DECC8E4AB2F39 /* Pods-Shortcuts.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Shortcuts/Shortcuts.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
@@ -698,7 +737,9 @@
 		};
 		209DDE52265DD9BB003FB35C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BAE13AD97CAFC914E99B61A5 /* Pods-Shortcuts.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Shortcuts/Shortcuts.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;

@@ -13,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     let database = Database()
     
     // Shared
-    let userDefaults = UserDefaults.standard
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -26,9 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         
         // Get UUID and save it to defaults so it can be used throughout the app and database
         if self.defaults.deviceUUID() == "" {
-            userDefaults.set(UUID().uuidString, forKey: "deviceUUID")
+            userDefaults!.set(UUID().uuidString, forKey: "deviceUUID")
         }
         print("uuid: \(self.defaults.deviceUUID())")
+        
 		
         // Required for didReceive when mass notification is opened
 		UNUserNotificationCenter.current().delegate = self
@@ -76,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
             self.database.getValuesFromDatabase(completion: { message in
-                self.userDefaults.setValue(false, forKey: "gettingValuesFromDatabase")
+                self.userDefaults!.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
         
@@ -92,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 
                 // Set the playerId in defaults
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
-                self.userDefaults.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
+                self.userDefaults!.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
              
                 // Update notifications so user has the latest notifications
                 self.database.updateNotificationsAndSweepDayInDatabase()
@@ -121,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
             self.database.getValuesFromDatabase(completion: { message in
-                self.userDefaults.setValue(false, forKey: "gettingValuesFromDatabase")
+                self.userDefaults!.setValue(false, forKey: "gettingValuesFromDatabase")
             })
         }
     }

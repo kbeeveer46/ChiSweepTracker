@@ -28,7 +28,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     var schedule = ScheduleModel()
     
     // MARK: Shared
-    let userDefaults = UserDefaults.standard
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     var relocatedVehicleCount = 0
     var divvyStationCount = 0
@@ -94,8 +94,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let location =  CLLocation(latitude: self.schedule.locationCoordinate.latitude, longitude: self.schedule.locationCoordinate.longitude)
         let selectedAnnotationLocation = CLLocation(latitude: selectedAnnotationLatitude, longitude: selectedAnnotationLongitude)
         
-        self.userDefaults.set(0, forKey: "selectedAnnotationLongitude")
-        self.userDefaults.set(0, forKey: "selectedAnnotationLatitude")
+        self.userDefaults!.set(0, forKey: "selectedAnnotationLongitude")
+        self.userDefaults!.set(0, forKey: "selectedAnnotationLatitude")
         
         // Add Divvy stations to map
         addDivvyStationsToMap(location)
@@ -726,7 +726,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         // Create nearby Divvy stations options for alert
         if (showDivvyStations == false) {
             let showDivvyAction = UIAlertAction(title: "Show Nearby Divvy Stations", style: .default, handler:{ action in
-                self.userDefaults.set(true, forKey: "showDivvyStations")
+                self.userDefaults!.set(true, forKey: "showDivvyStations")
                 self.loadFavoriteMap()
             })
             let showDivvyStationsImage = UIImage(named: "bike")
@@ -737,7 +737,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         else {
             let hideDivvyAction = UIAlertAction(title: "Hide Nearby Divvy Stations (\(divvyStationCount))", style: .default, handler:{ action in
-                self.userDefaults.set(false, forKey: "showDivvyStations")
+                self.userDefaults!.set(false, forKey: "showDivvyStations")
                 self.loadFavoriteMap()
             })
             let hideDivvyStationsImage = UIImage(named: "bike")
@@ -750,7 +750,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         // Create nearby towed/relocated vehicle options for alert
         if (showTowedVehicles == false) {
             let showRelocatedAction = UIAlertAction(title: "Show Nearby Relocated Vehicles", style: .default, handler:{ action in
-                self.userDefaults.set(true, forKey: "showTowedVehicles")
+                self.userDefaults!.set(true, forKey: "showTowedVehicles")
                 self.loadFavoriteMap()
             })
             let showRelocatedVehiclesImage = UIImage(named: "pin-address")
@@ -761,7 +761,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         }
         else {
             let hideRelocatedAction = UIAlertAction(title: "Hide Relocated Vehicles (\(relocatedVehicleCount))", style: .default, handler:{ action in
-                self.userDefaults.set(false, forKey: "showTowedVehicles")
+                self.userDefaults!.set(false, forKey: "showTowedVehicles")
                 self.loadFavoriteMap()
             })
             let hideRelocatedVehiclesImage = UIImage(named: "pin-address")
@@ -895,8 +895,8 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         
         if let annotation = view.annotation as? CustomAnnotation {
             
-            self.userDefaults.set(annotation.coordinate.longitude, forKey: "selectedAnnotationLongitude")
-            self.userDefaults.set(annotation.coordinate.latitude, forKey: "selectedAnnotationLatitude")
+            self.userDefaults!.set(annotation.coordinate.longitude, forKey: "selectedAnnotationLongitude")
+            self.userDefaults!.set(annotation.coordinate.latitude, forKey: "selectedAnnotationLatitude")
             
             if (annotation.customImageName == "pin-relocated") {
                 
