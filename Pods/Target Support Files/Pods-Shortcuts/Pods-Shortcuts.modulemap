@@ -1,0 +1,6 @@
+framework module Pods_Shortcuts {
+  umbrella header "Pods-Shortcuts-umbrella.h"
+
+  export *
+  module * { export * }
+}

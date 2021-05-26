@@ -17,13 +17,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in SceneDelegate.sceneDidBecomeActive(_:):SceneDelegate.swift">
+         contextName = "FavoriteListViewController.mapView(_:annotationView:calloutAccessoryControlTapped:):FavoriteListViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "settings.authorizationStatus">
-            </PersistentString>
-            <PersistentString
-               value = "self.common.notificationOneSignalPlayerId()">
+               value = "annotation.subtitle!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -61,6 +58,9 @@
                value = "address = userInfo[&quot;address&quot;] ">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in Database.insertAddressIntoDatabase(address:notificationsEnabled:notificationsWhen:notificationsHour:notificationsMinute:completion:):Database.swift">
       </ContextState>
       <ContextState
          contextName = "closure #2 in Common.getDataFromDatabase(completion:):Common.swift">
@@ -249,13 +249,13 @@
          contextName = "FavoriteViewController.insertNotificatinIntoDatabase(address:notificationTime:sweepDay:tableName:):FavoriteViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.common.constants.websiteURL">
+               value = "self.common.notificationOneSignalPlayerId()">
             </PersistentString>
             <PersistentString
                value = "&quot;\(self.common.constants.websiteURL)/insert-notification.php?playerId=\(self.common.notificationOneSignalPlayerId())&amp;address=\(address)&amp;notificationTime=\(notificationTime)&amp;sweepDay=\(sweepDay)&amp;tableName=\(tableName)&quot;">
             </PersistentString>
             <PersistentString
-               value = "self.common.notificationOneSignalPlayerId()">
+               value = "self.common.constants.websiteURL">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -320,6 +320,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in GetNextSweepDayIntentHandler.getNextSweepDay(result:):GetNextSweepDayHandler.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Your next sweeping is on \(components.month!)/\(components.day!)/\(components.year!)">
+            </PersistentString>
+            <PersistentString
+               value = "components.month!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "SearchViewController.showStatusMessage():SearchViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -342,15 +353,18 @@
          contextName = "FavoriteViewController.pushNotificationsTapped(_:):FavoriteViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #1 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "FavoriteListViewController.mapView(_:annotationView:calloutAccessoryControlTapped:):FavoriteListViewController.swift">
+         contextName = "closure #1 in SceneDelegate.sceneDidBecomeActive(_:):SceneDelegate.swift">
          <PersistentStrings>
             <PersistentString
-               value = "annotation.subtitle!">
+               value = "settings.authorizationStatus">
+            </PersistentString>
+            <PersistentString
+               value = "self.common.notificationOneSignalPlayerId()">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in FavoriteViewController.openOptionsMenu():FavoriteViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>
