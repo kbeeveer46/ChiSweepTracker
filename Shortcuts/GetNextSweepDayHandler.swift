@@ -16,19 +16,19 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
     // Get all addresses and find the next sweeping day
     func getNextSweepDay(result: @escaping (String) -> Void) {
 
-        var sweepDates = [Date]()
+        var sweepDays = [Date]()
 
         self.getAddresses(completion: { addresses in
             
             for address in addresses {
                 if address.nextSweepDay != nil {
-                    sweepDates.append(address.nextSweepDay!)
+                    sweepDays.append(address.nextSweepDay!)
                 }
             }
 
-            if sweepDates.count > 0 {
+            if sweepDays.count > 0 {
 
-                if let nextSweepDay = sweepDates.min() {
+                if let nextSweepDay = sweepDays.min() {
 
                     let calendar = Calendar.current
                     let components = calendar.dateComponents([.year, .month, .day], from: nextSweepDay)
@@ -42,13 +42,19 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
         })
     }
     
-    func getAddresses(address: String = "", completion: @escaping (_ message: [AddressModel]) -> ()) {
+    func getAddresses(completion: @escaping ([AddressModel]) -> Void) {
         
         var addresses = [AddressModel]()
         var parameters = [String: String]()
         let urlTo = "https://chicagosweeptracker.info/get-address-data.php"
         
-        parameters = ["tableName": "addresses_dev", "uuid": self.defaults!.string(forKey: "deviceUUID") ?? ""]
+        #if DEBUG
+        let addressesDatabaseName = "addresses_dev"
+        #else
+        let addressesDatabaseName = "addresses"
+        #endif
+        
+        parameters = ["tableName": addressesDatabaseName, "uuid": self.defaults!.string(forKey: "deviceUUID") ?? ""]
 
         AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
             switch response.result {
@@ -66,11 +72,6 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
                     for item in json.enumerated() {
                         
                         let address = AddressModel()
-                        address.address = item.element["address"]!
-                        address.notificationsEnabled = item.element["notificationsEnabled"]!
-                        address.notificationsWhen = item.element["notificationsWhen"]!
-                        address.notificationsHour = item.element["notificationsHour"]!
-                        address.notificationsMinute = item.element["notificationsMinute"]!
                         
                         let nextSweepDay = item.element["nextSweepDay"]!
                         if nextSweepDay != "" {

@@ -1,6 +1,8 @@
 import MapKit
 import THLabel
 import Alamofire
+//import Intents
+import IntentsUI
 
 class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate  {
     
@@ -42,6 +44,20 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         })
     }
     
+    func addSiriButton(to view: UIView) {
+        
+        siriView.isHidden = false
+        
+        let button = INUIAddVoiceShortcutButton(style: .whiteOutline)
+        button.shortcut = INShortcut(intent: intent)
+        button.delegate = self
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.subviews.forEach({ $0.removeFromSuperview() })
+        view.addSubview(button)
+        view.centerXAnchor.constraint(equalTo: button.centerXAnchor).isActive = true
+        view.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+    }
+
     //
     func loadFavoriteListMap() {
         
@@ -50,6 +66,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.mapLocations.removeAll()
         
         if self.addresses.count > 0 {
+            
+            addSiriButton(to: siriView)
             
             self.tabBarController?.navigationItem.title = "Saved Addresses"
             self.favoriteListViewHeaderLabel.text = "Click on address below to set up notifications.\nClick on magnifying glass to view schedule."
@@ -129,6 +147,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             }
         }
         else {
+            
+            siriView.isHidden = true
             
             self.tabBarController?.navigationItem.title = "No Saved Addresses"
             self.favoriteListViewHeaderLabel.text = "Use search tab to find and save addresses"
@@ -422,6 +442,52 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         
     }
 
+}
+
+extension FavoriteListViewController {
+    public var intent: GetNextSweepDayIntent {
+        let testIntent = GetNextSweepDayIntent()
+        testIntent.suggestedInvocationPhrase = "Get Next Sweep Day"
+        return testIntent
+    }
+}
+
+extension FavoriteListViewController: INUIAddVoiceShortcutButtonDelegate {
+    func present(_ addVoiceShortcutViewController: INUIAddVoiceShortcutViewController, for addVoiceShortcutButton: INUIAddVoiceShortcutButton) {
+        addVoiceShortcutViewController.delegate = self
+        addVoiceShortcutViewController.modalPresentationStyle = .formSheet
+        present(addVoiceShortcutViewController, animated: true, completion: nil)
+    }
+    
+    func present(_ editVoiceShortcutViewController: INUIEditVoiceShortcutViewController, for addVoiceShortcutButton: INUIAddVoiceShortcutButton) {
+        editVoiceShortcutViewController.delegate = self
+        editVoiceShortcutViewController.modalPresentationStyle = .formSheet
+        present(editVoiceShortcutViewController, animated: true, completion: nil)
+    }
+}
+
+extension FavoriteListViewController: INUIAddVoiceShortcutViewControllerDelegate {
+    func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension FavoriteListViewController: INUIEditVoiceShortcutViewControllerDelegate {
+    func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
 }
 
 
