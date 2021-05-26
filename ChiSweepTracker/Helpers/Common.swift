@@ -1,6 +1,6 @@
 import MapKit
 
-let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
 
 public class Common {
     

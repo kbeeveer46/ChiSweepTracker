@@ -12,7 +12,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
     var updatesList = [UpdatesModel]()
     var updatesLastViewedDate = ""
     let dateFormatter = DateFormatter()
-    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
     
     // MARK: Methods
     

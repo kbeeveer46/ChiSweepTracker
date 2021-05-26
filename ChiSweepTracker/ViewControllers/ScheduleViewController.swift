@@ -20,7 +20,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 	// MARK: Shared
     let generator = UISelectionFeedbackGenerator()
     let currentYear = Calendar.current.component(.year, from: Date())
-    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
     
     // In-app purchase
     var myProduct: SKProduct?

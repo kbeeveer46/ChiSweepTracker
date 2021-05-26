@@ -6,7 +6,7 @@ public class Database {
     let common = Common()
     
     // Shared
-    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
     
     //MARK: Addresses
     

@@ -1,6 +1,6 @@
 import Foundation
 
-let defaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+let defaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
 
 public class Defaults {
     

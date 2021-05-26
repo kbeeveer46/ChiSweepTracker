@@ -19,7 +19,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
     let database = Database()
     
 	// MARK: Shared
-    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
 	let locationManager = CLLocationManager()
     var addressFromCoordinates = ""
 	let currentDay = Calendar.current.component(.day, from: Date())

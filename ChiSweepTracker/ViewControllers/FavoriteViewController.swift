@@ -28,7 +28,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     var schedule = ScheduleModel()
     
     // MARK: Shared
-    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.ChiSweepTracker.defaults")
+    let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
     let whenData = ["Day Of Sweep", "1 Day Prior", "2 Days Prior", "3 Days Prior", "4 Days Prior", "5 Days Prior", "6 Days Prior", "7 Days Prior"]
     var relocatedVehicleCount = 0
     var divvyStationCount = 0
