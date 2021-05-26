@@ -25,6 +25,8 @@
 			<string>Gets your next sweep day among all your saved addresses</string>
 			<key>INIntentDescriptionID</key>
 			<string>Mi2Q6q</string>
+			<key>INIntentEligibleForWidgets</key>
+			<true/>
 			<key>INIntentLastParameterTag</key>
 			<integer>1</integer>
 			<key>INIntentManagedParameterCombinations</key>
@@ -33,6 +35,10 @@
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Get Next Sweeping</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>50RS7i</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
 					<true/>
 				</dict>
@@ -43,10 +49,14 @@
 			<dict>
 				<key></key>
 				<dict>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Gets your next sweep day among all your saved addresses</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>OFfsxi</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Get Next Sweep Day</string>
+					<string>Get Next Sweeping</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>QdPOnf</string>
 				</dict>
