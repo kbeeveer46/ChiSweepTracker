@@ -43,10 +43,12 @@
 			<dict>
 				<key></key>
 				<dict>
-					<key>INIntentParameterCombinationIsLinked</key>
-					<true/>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Get Next Sweep Day</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>QdPOnf</string>
 				</dict>
 			</dict>
 			<key>INIntentResponse</key>
