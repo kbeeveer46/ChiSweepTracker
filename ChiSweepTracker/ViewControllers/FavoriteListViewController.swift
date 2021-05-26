@@ -1,7 +1,6 @@
 import MapKit
 import THLabel
 import Alamofire
-//import Intents
 import IntentsUI
 
 class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate  {
@@ -70,7 +69,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             addSiriButton(to: siriView)
             
             self.tabBarController?.navigationItem.title = "Saved Addresses"
-            self.favoriteListViewHeaderLabel.text = "Click on address below to set up notifications.\nClick on magnifying glass to view schedule."
+            self.favoriteListViewHeaderLabel.text = "Click on address below to set up notifications.\nClick on magnifying glass in map to view schedule."
             
             let addressWithNextSweepDay = self.addresses.reduce(self.addresses[0], {
                 $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
@@ -446,9 +445,9 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
 
 extension FavoriteListViewController {
     public var intent: GetNextSweepDayIntent {
-        let testIntent = GetNextSweepDayIntent()
-        testIntent.suggestedInvocationPhrase = "Get Next Sweep Day"
-        return testIntent
+        let nextSweepDayIntent = GetNextSweepDayIntent()
+        nextSweepDayIntent.suggestedInvocationPhrase = "Get Next Sweeping"
+        return nextSweepDayIntent
     }
 }
 
@@ -458,7 +457,6 @@ extension FavoriteListViewController: INUIAddVoiceShortcutButtonDelegate {
         addVoiceShortcutViewController.modalPresentationStyle = .formSheet
         present(addVoiceShortcutViewController, animated: true, completion: nil)
     }
-    
     func present(_ editVoiceShortcutViewController: INUIEditVoiceShortcutViewController, for addVoiceShortcutButton: INUIAddVoiceShortcutButton) {
         editVoiceShortcutViewController.delegate = self
         editVoiceShortcutViewController.modalPresentationStyle = .formSheet
