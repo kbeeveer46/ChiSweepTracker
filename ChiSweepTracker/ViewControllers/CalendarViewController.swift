@@ -264,8 +264,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
             // Create event store
             let eventStore = EKEventStore()
             
+            var alertStyle = UIAlertController.Style.actionSheet
+            if (UIDevice.current.userInterfaceIdiom == .pad) {
+                alertStyle = UIAlertController.Style.alert
+            }
+            
             // Create options alert
-            let optionsAlert = UIAlertController(title: "\(self.selectedMonthNumber)/\(date!)/\(self.currentYear)", message: "Options", preferredStyle: .actionSheet)
+            let optionsAlert = UIAlertController(title: "\(self.selectedMonthNumber)/\(date!)/\(self.currentYear)", message: "Options", preferredStyle: alertStyle)
         
             let reminderAction = UIAlertAction(title: "Add Reminder", style: .default, handler:{ action in
                 

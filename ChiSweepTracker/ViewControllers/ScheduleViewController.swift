@@ -266,8 +266,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		generator.prepare()
 		generator.selectionChanged()
 		
+        var alertStyle = UIAlertController.Style.actionSheet
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            alertStyle = UIAlertController.Style.alert
+        }
+        
 		// Create options alert
-		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
+		let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: alertStyle)
 		
 		// Create add favorite option for options alert
 		let saveFavoriteAction = UIAlertAction(title: "Save Address", style: .default, handler:{ action in
@@ -288,7 +293,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Present options alert
 		self.present(optionsAlert, animated: true, completion: nil)
-		
+        		
 	}
 	
 	// Load schedule map with annotation and polygons

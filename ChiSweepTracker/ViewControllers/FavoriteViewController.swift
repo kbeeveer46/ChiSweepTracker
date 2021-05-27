@@ -668,8 +668,13 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let showDivvyStations = self.common.defaults.showDivvyStations()
         let showTowedVehicles = self.common.defaults.showTowedVehicles()
         
+        var alertStyle = UIAlertController.Style.actionSheet
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            alertStyle = UIAlertController.Style.alert
+        }
+        
         // Create options alert
-        let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: .actionSheet)
+        let optionsAlert = UIAlertController(title: nil, message: "Options", preferredStyle: alertStyle)
         
         // Create remove favorite option for options alert
         let removeFavoriteAction = UIAlertAction(title: "Remove Address", style: .default, handler:{ action in

@@ -7,6 +7,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     
     // MARK: Controls
     @IBOutlet weak var favoriteListMapView: MKMapView!
+    @IBOutlet weak var favoriteListMapViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var favoriteListTableView: UITableView!
     @IBOutlet weak var favoriteListViewHeaderLabel: UILabel!
     @IBOutlet weak var siriView: UIView!
@@ -26,6 +27,8 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
                 
+        self.initializeControlsPerDevice()
+        
         // Set required properties for favorite list table view and map
         self.favoriteListTableView.dataSource = self
         self.favoriteListTableView.delegate = self
@@ -41,6 +44,18 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                 self.loadFavoriteListMap()
             }
         })
+    }
+    
+    // Change constraints and sizes per device
+    func initializeControlsPerDevice() {
+        
+        switch UIDevice().type {
+        case .iPhoneSE:
+            favoriteListMapViewHeightConstraint.constant = 175
+            favoriteListViewHeaderLabel.font = UIFont.systemFont(ofSize: 11)
+        default:
+            break
+        }
     }
     
     func addSiriButton(to view: UIView) {
