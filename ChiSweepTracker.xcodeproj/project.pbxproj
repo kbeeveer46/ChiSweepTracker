@@ -12,6 +12,7 @@
 		2040AF85264771A600D9B653 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF84264771A600D9B653 /* Database.swift */; };
 		2040AF872647775C00D9B653 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF862647775C00D9B653 /* Constants.swift */; };
 		2040AF8926477A6200D9B653 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040AF8826477A6200D9B653 /* Defaults.swift */; };
+		204903E4265FD4A60099235F /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204903E3265FD4A60099235F /* SpinnerView.swift */; };
 		205043FE265E04CD00AEDF0C /* ScheduleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA184FA723987AEE00AB2FF6 /* ScheduleModel.swift */; };
 		20504403265E058100AEDF0C /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7069F23E26B930017A14D /* CustomAnnotation.swift */; };
 		20504405265E05C300AEDF0C /* DivvyStationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */; };
@@ -107,6 +108,7 @@
 		2040AF84264771A600D9B653 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		2040AF862647775C00D9B653 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2040AF8826477A6200D9B653 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		204903E3265FD4A60099235F /* SpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
 		2050B3BC2634994800C0EBC9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2073AF96262C9F5C008D5086 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -348,9 +350,10 @@
 		FA6AFEE623A1E16200F7E177 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				FAFB9B21243A600E00E5FBC5 /* CardView.swift */,
 				FAD7069F23E26B930017A14D /* CustomAnnotation.swift */,
 				FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */,
-				FAFB9B21243A600E00E5FBC5 /* CardView.swift */,
+				204903E3265FD4A60099235F /* SpinnerView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -607,6 +610,7 @@
 				FA184FAC23987BE900AB2FF6 /* SODAClient.swift in Sources */,
 				20959B332636DDF5000B2E75 /* NewsModel.swift in Sources */,
 				FAD5595F2433E75700F11DA1 /* UpdatesModel.swift in Sources */,
+				204903E4265FD4A60099235F /* SpinnerView.swift in Sources */,
 				FA5B0D9923F9E7FB00D90316 /* DivvyDetailViewController.swift in Sources */,
 				FA184FA823987AEE00AB2FF6 /* ScheduleModel.swift in Sources */,
 				FA11425F243B59D400E7E798 /* InfoModel.swift in Sources */,

@@ -9,7 +9,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var Calendar: UICollectionView!
     @IBOutlet weak var calendarMapView: MKMapView!
 	@IBOutlet weak var calendarMapViewHeightConstraint: NSLayoutConstraint!
-	
+    @IBOutlet weak var calendarCardViewRightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var calendarCardViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var calendarCardViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var calendarCardViewLeftConstraint: NSLayoutConstraint!
+    
 	//MARK: Classes
 	let common = Common()
 	var schedule = ScheduleModel()
@@ -75,7 +79,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
 		switch UIDevice().type {
 		case .iPhoneSE:
 			calendarMapViewHeightConstraint.constant = 175
-			self.title = "\(selectedMonthName) Schedule - \(currentYear)"
+            calendarCardViewRightConstraint.constant = 0
+            calendarCardViewLeftConstraint.constant = 0
+            calendarCardViewTopConstraint.constant = 0
+            calendarCardViewBottomConstraint.constant = 0
+            self.title = "\(selectedMonthName) Schedule - \(currentYear)"
+            
 		default:
 			break
 		}

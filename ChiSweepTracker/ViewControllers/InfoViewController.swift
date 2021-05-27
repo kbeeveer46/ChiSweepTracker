@@ -13,6 +13,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 	var infoList = [InfoModel]()
 	var rateCardView = CardView()
 	var requestCardView = CardView()
+    let spinnerView = SpinnerViewController()
 	let generator = UISelectionFeedbackGenerator()
 	
     // MARK: Methods
@@ -35,7 +36,30 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
 	
+    func addSpinnerView() {
+        
+        // add the spinner view controller
+        addChild(self.spinnerView)
+        self.spinnerView.view.frame = view.frame
+        view.addSubview(spinnerView.view)
+        self.spinnerView.didMove(toParent: self)
+        
+    }
+    
+    func removeSpinnerView() {
+        
+        DispatchQueue.main.async() {
+            // then remove the spinner view controller
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+        }
+        
+    }
+    
 	func getInfo() {
+        
+        self.addSpinnerView()
         
         let urlTo = self.common.constants.websiteURL + "/get-info-data.php"
         let parameters = ["tableName": self.common.constants.infoDatabaseName]
@@ -68,6 +92,7 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     DispatchQueue.main.async {
                         self.infoTableView.reloadData()
+                        self.removeSpinnerView()
                     }
                 }
             }

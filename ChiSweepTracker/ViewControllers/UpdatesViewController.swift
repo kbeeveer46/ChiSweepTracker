@@ -13,6 +13,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
     var updatesLastViewedDate = ""
     let dateFormatter = DateFormatter()
     let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
+    let spinnerView = SpinnerViewController()
     
     // MARK: Methods
     
@@ -45,7 +46,30 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
         getLatestUpdates()
     }
     
+    func addSpinnerView() {
+        
+        // add the spinner view controller
+        addChild(self.spinnerView)
+        self.spinnerView.view.frame = view.frame
+        view.addSubview(spinnerView.view)
+        self.spinnerView.didMove(toParent: self)
+        
+    }
+    
+    func removeSpinnerView() {
+        
+        DispatchQueue.main.async() {
+            // then remove the spinner view controller
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+        }
+        
+    }
+    
     func getLatestUpdates() {
+        
+        self.addSpinnerView()
         
         let urlTo = self.common.constants.websiteURL + "/get-news-data.php"
         let parameters = ["tableName": self.common.constants.newsDatabaseName]
@@ -102,8 +126,7 @@ class UpdatesViewController: UIViewController, UITableViewDelegate, UITableViewD
                         
                         self.newsTableView.reloadData()
                         
-                        // Clear updates tab bar badge
-                        //self.tabBarController?.tabBar.items?.last!.badgeValue = nil
+                        self.removeSpinnerView()
                     }
                 }
             }

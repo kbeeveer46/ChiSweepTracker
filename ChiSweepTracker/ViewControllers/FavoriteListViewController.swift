@@ -21,6 +21,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
     let generator = UISelectionFeedbackGenerator()
     var favoriteAddresses = [[String]]()
     var mapLocations = [CLLocationCoordinate2D]()
+    let spinnerView = SpinnerViewController()
     
     // MARK: Methods
     
@@ -34,6 +35,14 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
         self.favoriteListTableView.delegate = self
         self.favoriteListMapView.delegate = self
         
+        self.getAddresses()
+        
+    }
+    
+    func getAddresses() {
+        
+        self.addSpinnerView()
+        
         // Get addresses from database and use the data in the map and table
         self.database.getAddresses(completion: { addresses in
             
@@ -42,8 +51,31 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             DispatchQueue.main.async {
                 self.favoriteListTableView.reloadData()
                 self.loadFavoriteListMap()
+                self.removeSpinnerView()
             }
         })
+        
+    }
+    
+    func addSpinnerView() {
+        
+        // add the spinner view controller
+        addChild(self.spinnerView)
+        self.spinnerView.view.frame = view.frame
+        view.addSubview(spinnerView.view)
+        self.spinnerView.didMove(toParent: self)
+        
+    }
+    
+    func removeSpinnerView() {
+        
+        DispatchQueue.main.async() {
+            // then remove the spinner view controller
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+        }
+        
     }
     
     // Change constraints and sizes per device

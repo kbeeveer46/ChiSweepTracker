@@ -11,6 +11,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 	@IBOutlet weak var searchStackView: UIStackView!
 	@IBOutlet weak var messageLabel: UILabel!
 	@IBOutlet weak var messageCardView: CardView!
+    @IBOutlet weak var messageCardViewContainer: UIView!
     @IBOutlet weak var findSweepScheduleCardView: CardView!
     
 	// MARK: Classes
@@ -50,7 +51,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
         findSweepScheduleCardView.addGestureRecognizer(findSweepScheduleCardViewTapGesture)
 		
 	}
-	
+    
     func initializeControls() {
         
         // Make enter key close keyboard
