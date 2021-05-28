@@ -16,7 +16,7 @@ public class Database {
         var parameters = [String: String]()
         let urlTo = self.common.constants.websiteURL + "/get-address-data.php"
         
-        if address == "" {
+        if address.isEmpty {
             parameters = ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.defaults.deviceUUID()]
         }
         else {
@@ -46,7 +46,7 @@ public class Database {
                         address.notificationsMinute = item.element["notificationsMinute"]!
                         
                         let nextSweepDay = item.element["nextSweepDay"]!
-                        if nextSweepDay != "" {
+                        if !nextSweepDay.isEmpty {
                             address.nextSweepDay = dateFormatter.date(from: nextSweepDay)!
                         }
                         
@@ -100,6 +100,19 @@ public class Database {
         })
     }
     
+    func updateAddress(address: String, notificationsWhen: String, notificationsHour: Int, notificationsMinute: Int, notificationsEnabled: Int) {
+        let urlTo = self.common.constants.websiteURL + "/update-address.php"
+        let parameters = ["tableName": self.common.constants.addressesDatabaseName,
+                          "uuid": self.common.defaults.deviceUUID(),
+                          "address": address,
+                          "notificationsWhen": notificationsWhen,
+                          "notificationsHour": notificationsHour,
+                          "notificationsMinute": notificationsMinute,
+                          "notificationsEnabled": notificationsEnabled] as [String : Any]
+        
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+    }
+    
     func updateAddressesNextSweepDay(address: String, day: String) {
         let urlTo = self.common.constants.websiteURL + "/update-address-next-sweep-day.php"
         let parameters = ["tableName": self.common.constants.addressesDatabaseName,
@@ -108,35 +121,6 @@ public class Database {
                           "address": address] as [String : Any]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
-    }
-    
-    func migrateOldUsersToUseNewDefaults() {
-        
-        let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
-        let userDefaultsOld = UserDefaults.standard
-        
-        userDefaults!.set(userDefaultsOld.string(forKey: "deviceUUID"), forKey: "deviceUUID")
-        userDefaults!.set(userDefaultsOld.integer(forKey: "latestAppVersion"), forKey: "latestAppVersion")
-        userDefaults!.set(userDefaultsOld.integer(forKey: "latestDatasetVersion"), forKey: "latestDatasetVersion")
-        userDefaults!.set(userDefaultsOld.integer(forKey: "userDatasetVersion"), forKey: "userDatasetVersion")
-        userDefaults!.set(userDefaultsOld.bool(forKey: "enableMultipleAddresses"), forKey: "enableMultipleAddresses")
-        userDefaults!.set(userDefaultsOld.string(forKey: "defaultAddress"), forKey: "defaultAddress")
-        userDefaults!.set(userDefaultsOld.double(forKey: "defaultLongitude"), forKey: "defaultLongitude")
-        userDefaults!.set(userDefaultsOld.double(forKey: "defaultLatitude"), forKey: "defaultLatitude")
-        userDefaults!.set(userDefaultsOld.object(forKey: "defaultCoordinatesArray"), forKey: "defaultCoordinatesArray")
-        userDefaults!.set(userDefaultsOld.double(forKey: "selectedAnnotationLongitude"), forKey: "selectedAnnotationLongitude")
-        userDefaults!.set(userDefaultsOld.double(forKey: "selectedAnnotationLatitude"), forKey: "selectedAnnotationLatitude")
-        userDefaults!.set(userDefaultsOld.string(forKey: "favoriteAddress"), forKey: "favoriteAddress")
-        userDefaults!.set(userDefaultsOld.bool(forKey: "showDivvyStations"), forKey: "showDivvyStations")
-        userDefaults!.set(userDefaultsOld.bool(forKey: "showTowedVehicles"), forKey: "showTowedVehicles")
-        userDefaults!.set(userDefaultsOld.string(forKey: "notificationWhen"), forKey: "notificationWhen")
-        userDefaults!.set(userDefaultsOld.integer(forKey: "notificationHour"), forKey: "notificationHour")
-        userDefaults!.set(userDefaultsOld.integer(forKey: "notificationMinute"), forKey: "notificationMinute")
-        userDefaults!.set(userDefaultsOld.bool(forKey: "notificationsToggled"), forKey: "notificationsToggled")
-        userDefaults!.set(userDefaultsOld.integer(forKey: "notificationsYear"), forKey: "notificationsYear")
-        userDefaults!.set(userDefaultsOld.string(forKey: "notificationOneSignalPlayerId"), forKey: "notificationOneSignalPlayerId")
-        userDefaults!.set(userDefaultsOld.string(forKey: "updatesLastViewDate"), forKey: "updatesLastViewDate")
-        
     }
     
     func migrateOldUsersToUseDatabase(completion: @escaping (_ completion: Bool) -> Void) {

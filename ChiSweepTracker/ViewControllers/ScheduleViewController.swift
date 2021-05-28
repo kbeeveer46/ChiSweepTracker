@@ -45,7 +45,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
         
-
         // Gets and sets the multiple addresses in-app purchase so users can buy it
         getMultipleAddressesInAppPurchase()
         

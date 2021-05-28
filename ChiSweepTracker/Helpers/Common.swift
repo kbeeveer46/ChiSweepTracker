@@ -36,6 +36,35 @@ public class Common {
         
     }
     
+    func migrateOldUsersToUseNewDefaults() {
+        
+        let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
+        let userDefaultsOld = UserDefaults.standard
+        
+        userDefaults!.set(userDefaultsOld.string(forKey: "deviceUUID"), forKey: "deviceUUID")
+        userDefaults!.set(userDefaultsOld.integer(forKey: "latestAppVersion"), forKey: "latestAppVersion")
+        userDefaults!.set(userDefaultsOld.integer(forKey: "latestDatasetVersion"), forKey: "latestDatasetVersion")
+        userDefaults!.set(userDefaultsOld.integer(forKey: "userDatasetVersion"), forKey: "userDatasetVersion")
+        userDefaults!.set(userDefaultsOld.bool(forKey: "enableMultipleAddresses"), forKey: "enableMultipleAddresses")
+        userDefaults!.set(userDefaultsOld.string(forKey: "defaultAddress"), forKey: "defaultAddress")
+        userDefaults!.set(userDefaultsOld.double(forKey: "defaultLongitude"), forKey: "defaultLongitude")
+        userDefaults!.set(userDefaultsOld.double(forKey: "defaultLatitude"), forKey: "defaultLatitude")
+        userDefaults!.set(userDefaultsOld.object(forKey: "defaultCoordinatesArray"), forKey: "defaultCoordinatesArray")
+        userDefaults!.set(userDefaultsOld.double(forKey: "selectedAnnotationLongitude"), forKey: "selectedAnnotationLongitude")
+        userDefaults!.set(userDefaultsOld.double(forKey: "selectedAnnotationLatitude"), forKey: "selectedAnnotationLatitude")
+        userDefaults!.set(userDefaultsOld.string(forKey: "favoriteAddress"), forKey: "favoriteAddress")
+        userDefaults!.set(userDefaultsOld.bool(forKey: "showDivvyStations"), forKey: "showDivvyStations")
+        userDefaults!.set(userDefaultsOld.bool(forKey: "showTowedVehicles"), forKey: "showTowedVehicles")
+        userDefaults!.set(userDefaultsOld.string(forKey: "notificationWhen"), forKey: "notificationWhen")
+        userDefaults!.set(userDefaultsOld.integer(forKey: "notificationHour"), forKey: "notificationHour")
+        userDefaults!.set(userDefaultsOld.integer(forKey: "notificationMinute"), forKey: "notificationMinute")
+        userDefaults!.set(userDefaultsOld.bool(forKey: "notificationsToggled"), forKey: "notificationsToggled")
+        userDefaults!.set(userDefaultsOld.integer(forKey: "notificationsYear"), forKey: "notificationsYear")
+        userDefaults!.set(userDefaultsOld.string(forKey: "notificationOneSignalPlayerId"), forKey: "notificationOneSignalPlayerId")
+        userDefaults!.set(userDefaultsOld.string(forKey: "updatesLastViewDate"), forKey: "updatesLastViewDate")
+        
+    }
+    
     func getNextSweepDay(address: String, completion: @escaping (Date?) -> ()) {
         
         let schedule = ScheduleModel()

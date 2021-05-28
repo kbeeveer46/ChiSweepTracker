@@ -102,12 +102,12 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
             self.messageLabel.text = self.common.constants.beginScheduleMessage.replacingOccurrences(of: "_amount_", with: "\(diff)")
 		}
 		else {
-            getNextSweepDay()
+            getAndShowNextSweepDay()
 		}
 	}
     
     // Get all addresses and find the next sweeping day
-    func getNextSweepDay() {
+    func getAndShowNextSweepDay() {
         
         self.messageCardView.isHidden = true
         

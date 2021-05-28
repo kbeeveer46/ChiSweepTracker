@@ -351,7 +351,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     }
     
     // Save form values to defaults
-    func saveDefaultNotificationValues() {
+    func saveAddressNotificationValues() {
         
         let time = self.timePicker.date
         let comp = Calendar.current.dateComponents([.hour, .minute], from: time)
@@ -359,16 +359,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         let minute = comp.minute!
         let when = self.whenData[self.onPicker.selectedRow(inComponent: 0)]
         
-        let urlTo = self.common.constants.websiteURL + "/update-address.php"
-        let parameters = ["tableName": self.common.constants.addressesDatabaseName,
-                          "uuid": self.common.defaults.deviceUUID(),
-                          "address": self.schedule.address,
-                          "notificationsWhen": when,
-                          "notificationsHour": hour,
-                          "notificationsMinute": minute,
-                          "notificationsEnabled": self.pushNotificationsSwitch.isOn == true ? 1 : 0] as [String : Any]
-        
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+        self.database.updateAddress(address: self.schedule.address, notificationsWhen: when, notificationsHour: hour, notificationsMinute: minute, notificationsEnabled: self.pushNotificationsSwitch.isOn ? 1 : 0)
         
     }
     
@@ -612,7 +603,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     @objc func timePickerChanged(picker: UIDatePicker) {
         
         // Save notification control values
-        self.saveDefaultNotificationValues()
+        self.saveAddressNotificationValues()
         
         // Update notifications when picker is changed
         if self.pushNotificationsSwitch.isOn {
@@ -632,7 +623,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
             self.onPicker.isUserInteractionEnabled = true
             
             // Save notification control values
-            self.saveDefaultNotificationValues()
+            self.saveAddressNotificationValues()
             
             // Delete notifications and then re-add them
             self.database.deleteNotificationsFromDatabase(self.schedule.address, completion: { completion in
@@ -643,7 +634,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
         else {
             
             // Save notification control values
-            self.saveDefaultNotificationValues()
+            self.saveAddressNotificationValues()
             
             // Disable when and time controls
             self.timePicker.isUserInteractionEnabled = false
@@ -819,7 +810,7 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         // Save default notification form values when picker is changed
-        self.saveDefaultNotificationValues()
+        self.saveAddressNotificationValues()
         
         // Update notifications after picker is changed
         if self.pushNotificationsSwitch.isOn {

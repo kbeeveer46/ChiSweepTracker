@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         if !(self.userDefaultsOld.string(forKey: "deviceUUID") ?? "").isEmpty && self.defaults.deviceUUID().isEmpty {
             
             // Migrate old defaults to new defaults
-            self.database.migrateOldUsersToUseNewDefaults()
+            self.common.migrateOldUsersToUseNewDefaults()
         }
         
         // New user
