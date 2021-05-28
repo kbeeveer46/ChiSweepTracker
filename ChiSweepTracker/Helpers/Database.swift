@@ -66,9 +66,15 @@ public class Database {
                           "address": address] as [String : Any]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            self.deleteNotificationsFromDatabase(address, completion: {completion in
-                deleteAddressResult(completion)
-            })
+            switch response.result {
+            case .failure(let error):
+                print(error)
+                deleteAddressResult(false)
+            case .success:
+                self.deleteNotificationsFromDatabase(address, completion: {completion in
+                    deleteAddressResult(completion)
+                })
+            }
         }
     }
     
@@ -95,7 +101,13 @@ public class Database {
                               "nextSweepDay": nextSweepDayFormatted] as [String : Any]
             
             AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-                completion(true)
+                switch response.result {
+                case .failure(let error):
+                    print(error)
+                    completion(false)
+                case .success:
+                    completion(true)
+                }
             }
         })
     }
@@ -110,7 +122,14 @@ public class Database {
                           "notificationsMinute": notificationsMinute,
                           "notificationsEnabled": notificationsEnabled] as [String : Any]
         
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            //switch response.result {
+            //case .failure(let error):
+            //    print(error)
+            //case .success:
+            //    completion(true)
+            //}
+        }
     }
     
     func updateAddressesNextSweepDay(address: String, day: String) {
@@ -120,10 +139,18 @@ public class Database {
                           "uuid": self.common.defaults.deviceUUID(),
                           "address": address] as [String : Any]
         
-        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+        AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+            //switch response.result {
+            //case .failure(let error):
+            //    print(error)
+            //    completion(false)
+            //case .success:
+            //    completion(true)
+            //}
+        }
     }
     
-    func migrateOldUsersToUseDatabase(completion: @escaping (_ completion: Bool) -> Void) {
+    func migrateOldUsersToUseDatabase(completion: @escaping (Bool) -> Void) {
         
         let favoriteAddress = self.common.defaults.favoriteAddress()
         
@@ -137,11 +164,17 @@ public class Database {
                                            notificationsMinute: self.common.defaults.notificationMinute(),
                                            completion: { result in
                                             
-                                            // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
-                                            self.userDefaults!.set("", forKey: "favoriteAddress")
-                                            completion(true)
+                                            if result {
                                             
-                                           })
+                                                // Clear the old favorite address default so this migration code doesn't run again. This default field is no longer being used.
+                                                self.userDefaults!.set("", forKey: "favoriteAddress")
+                                                completion(true)
+                                                
+                                            }
+                                            else {
+                                                completion(false)
+                                            }
+            })
         }
         else {
             completion(true)
@@ -161,18 +194,32 @@ public class Database {
                               "notificationTime": notificationTime,
                               "sweepDay": sweepDay] as [String : Any]
             
-            AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in }
+            AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
+                //switch response.result {
+                //case .failure(let error):
+                //    print(error)
+                //    completion(false)
+                //case .success:
+                //    completion(true)
+                //}
+            }
         }
     }
     
-    func deleteNotificationsFromDatabase(_ address: String, completion: @escaping (_ message: Bool) -> Void) {
+    func deleteNotificationsFromDatabase(_ address: String, completion: @escaping (Bool) -> Void) {
         let urlTo = self.common.constants.websiteURL + "/delete-notification.php"
         let parameters = ["playerId": self.common.defaults.notificationOneSignalPlayerId(),
                           "address": address,
                           "tableName": self.common.constants.notificationsDatabaseName] as [String : String]
         
         AF.request(urlTo, method: .post, parameters: parameters).validate().response() { response in
-            completion(true)
+            switch response.result {
+            case .failure(let error):
+                print(error)
+                completion(false)
+            case .success:
+                completion(true)
+            }
         }
     }
     

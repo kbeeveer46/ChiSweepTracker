@@ -36,7 +36,7 @@ public class Constants {
     let SODADomain = "data.cityofchicago.org"
     
     // Strings
-    let websiteURL = "http://a0scb.hosts.cx" //"https://chicagosweeptracker.info"
+    let websiteURL = "https://chicagosweeptracker.info"
     
     let errorTitle = "Something went wrong..."
     let notFound = "Unable to find sweep schedule. Address must reside in Chicago."

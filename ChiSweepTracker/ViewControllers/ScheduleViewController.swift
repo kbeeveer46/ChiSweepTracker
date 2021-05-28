@@ -145,7 +145,7 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     
     //MARK: Top menu methods
     
-	// Method is called when user chooses yes to add a favorite
+	// Method is called when user chooses yes to save a favorite
     @objc func saveAddress() {
         
         // Add haptic feedback
@@ -161,8 +161,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                 if addressCount == 0  ||
                     addressCount >= 1  && self.common.defaults.enableMultipleAddresses() == true ||
                     addressCount >= 1  && self.common.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
-                
-                    self.navigationItem.rightBarButtonItem = nil
                             
                     self.database.insertAddressIntoDatabase(address: self.schedule.address,
                                                           notificationsEnabled: 0,
@@ -170,29 +168,36 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                                                           notificationsHour: 0,
                                                           notificationsMinute: 0,
                                                           completion: { result in
+                                
+                        if result {
                                                             
-                        // Create alert
-                        let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
-                        
-                        // Yes option
-                        let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                            self.navigationItem.rightBarButtonItem = nil
+                                                                
+                            // Create alert
+                            let alert = UIAlertController(title: "Address Saved", message: "Would you like to enable notifications?", preferredStyle: .alert)
                             
-                            // Segue to schedule view
-                            if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
-                                destinationViewController.schedule = self.schedule
-                                self.navigationController?.pushViewController(destinationViewController, animated: true)
-                            }
-                        })
-                        //yesAction.setValue(UIColor.systemBlue, forKey: "titleTextColor")
-                                                            
-                        // Add yes option to alert
-                        alert.addAction(yesAction)
-                        
-                        // No option
-                        alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-                        
-                        // Present alert
-                        self.present(alert, animated: true, completion: nil)
+                            // Yes option
+                            let yesAction = UIAlertAction(title: "Yes", style: .default, handler:{ action in
+                                
+                                // Segue to favorite page
+                                if let destinationViewController = self.storyboard?.instantiateViewController(withIdentifier: "FavoriteViewController") as? FavoriteViewController {
+                                    destinationViewController.schedule = self.schedule
+                                    self.navigationController?.pushViewController(destinationViewController, animated: true)
+                                }
+                            })
+                                                                
+                            // Add yes option to alert
+                            alert.addAction(yesAction)
+                            
+                            // No option
+                            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                            
+                            // Present alert
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                        else {
+                            
+                        }
                                                             
                     })
                 }
