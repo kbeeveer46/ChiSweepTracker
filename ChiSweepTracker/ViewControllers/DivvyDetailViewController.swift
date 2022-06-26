@@ -11,9 +11,10 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var statusLabel: UILabel!
 	@IBOutlet weak var bikesAvailableLabel: UILabel!
 	@IBOutlet weak var eBikesAvailableLabel: UILabel!
+    @IBOutlet weak var scootersAvailableLabel: UILabel!
 	@IBOutlet weak var docksAvailableLabel: UILabel!
 	@IBOutlet weak var lastUpdatedLabel: UILabel!
-	
+    
 	// MARK: Classes
 	let common = Common()
 	
@@ -74,6 +75,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 				
 				var bikesAvailable = 0
 				var eBikesAvailable = 0
+                var scootersAvailable = 0
 				var docksAvailable = 0
 				
 				// Loop through stations data to find matching station id and retrieve data
@@ -85,6 +87,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 						
 						bikesAvailable = item[self.common.defaults.divvyJSONBikesAvailableTitle()] as? Int ?? 0
 						eBikesAvailable = item[self.common.defaults.divvyJSONEBikesAvailableTitle()] as? Int ?? 0
+                        scootersAvailable = item[self.common.defaults.divvyJSONScootersAvailableTitle()] as? Int ?? 0
 						docksAvailable = item[self.common.defaults.divvyJSONDocksAvailableTitle()] as? Int ?? 0
 						
 						break
@@ -97,6 +100,7 @@ class DivvyDetailViewController: UIViewController, MKMapViewDelegate {
 					self.statusLabel.text = self.station.status
 					self.bikesAvailableLabel.text = "\(bikesAvailable)"
 					self.eBikesAvailableLabel.text = "\(eBikesAvailable)"
+                    self.scootersAvailableLabel.text = "\(scootersAvailable)"
 					self.docksAvailableLabel.text = "\(docksAvailable)"
 					self.lastUpdatedLabel.text = "\(lastUpdatedUTCDateFormatted)"
 				}

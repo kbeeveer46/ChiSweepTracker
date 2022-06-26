@@ -353,6 +353,7 @@ public class Database {
                     let divvyJSONUrl = divvy["divvyJSONUrl"]
                     let divvyJSONBikesAvailableTitle = divvy["divvyJSONBikesAvailableTitle"]
                     let divvyJSONEBikesAvailableTitle = divvy["divvyJSONEBikesAvailableTitle"]
+                    let divvyJSONScootersAvailableTitle = divvy["divvyJSONScootersAvailableTitle"]
                     let divvyJSONDocksAvailableTitle = divvy["divvyJSONDocksAvailableTitle"]
                     let divvyJSONDataTitle = divvy["divvyJSONDataTitle"]
                     let divvyJSONStationsTitle = divvy["divvyJSONStationsTitle"]
@@ -370,6 +371,7 @@ public class Database {
                     self.userDefaults!.set(divvyJSONUrl, forKey: "divvyJSONUrl")
                     self.userDefaults!.set(divvyJSONBikesAvailableTitle, forKey: "divvyJSONBikesAvailableTitle")
                     self.userDefaults!.set(divvyJSONEBikesAvailableTitle, forKey: "divvyJSONEBikesAvailableTitle")
+                    self.userDefaults!.set(divvyJSONScootersAvailableTitle, forKey: "divvyJSONScootersAvailableTitle")
                     self.userDefaults!.set(divvyJSONDocksAvailableTitle, forKey: "divvyJSONDocksAvailableTitle")
                     self.userDefaults!.set(divvyJSONDataTitle, forKey: "divvyJSONDataTitle")
                     self.userDefaults!.set(divvyJSONStationsTitle, forKey: "divvyJSONStationsTitle")

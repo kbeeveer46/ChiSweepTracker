@@ -396,6 +396,12 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 			daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
 			monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlue)
 		}
+        else {
+            daysLabel.font = UIFont.boldSystemFont(ofSize: 15.0)
+            daysLabel.textColor = UIColor(hexString: self.common.constants.systemBlack)
+            monthNameLabel.textColor = UIColor(hexString: self.common.constants.systemBlack)
+        }
+        
 
         return cell
         

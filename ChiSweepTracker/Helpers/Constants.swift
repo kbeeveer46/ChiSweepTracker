@@ -48,6 +48,7 @@ public class Constants {
     // Colors
     let systemRed = "#ff3b30"
     let systemBlue = "#007aff"
+    let systemBlack = "#000000"
     let divvy = "#3fb5e7"
     let background = "#f2f2f2"
 }

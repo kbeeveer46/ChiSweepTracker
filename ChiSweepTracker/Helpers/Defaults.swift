@@ -45,6 +45,7 @@ public class Defaults {
     func divvyJSONUrl() -> String {return defaults!.string(forKey: "divvyJSONUrl") ?? ""}
     func divvyJSONBikesAvailableTitle() -> String {return defaults!.string(forKey: "divvyJSONBikesAvailableTitle") ?? ""}
     func divvyJSONEBikesAvailableTitle() -> String {return defaults!.string(forKey: "divvyJSONEBikesAvailableTitle") ?? ""}
+    func divvyJSONScootersAvailableTitle() -> String {return defaults!.string(forKey: "divvyJSONScootersAvailableTitle") ?? ""}
     func divvyJSONDocksAvailableTitle() -> String {return defaults!.string(forKey: "divvyJSONDocksAvailableTitle") ?? ""}
     func divvyJSONDataTitle() -> String {return defaults!.string(forKey: "divvyJSONDataTitle") ?? ""}
     func divvyJSONStationsTitle() -> String {return defaults!.string(forKey: "divvyJSONStationsTitle") ?? ""}
