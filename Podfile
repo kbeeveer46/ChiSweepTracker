@@ -16,12 +16,12 @@ target 'OneSignalNotificationServiceExtension' do
   use_frameworks!
   
   pod 'OneSignal', '>= 3.0.0', '< 4.0'
+  
 end
 
 target 'Shortcuts' do
   use_frameworks!
   
-  # pod 'THLabel', '~> 1.4.0'
   pod 'Alamofire', '~> 5.2'
-  # pod 'OneSignal', '>= 3.0.0', '< 4.0'
+  
 end

@@ -271,8 +271,13 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
                                             
                                         }
                                         
+                                        
                                         completion(self.schedule)
                                 
+                                    }
+                                    else {
+                                        self.showNoScheduleFoundAlert()
+                                        return
                                     }
                                 case .error (let err):
                                     print("searchForSchedule Unable to get schedule data from the City of Chicago: \(err.localizedDescription)")
