@@ -119,7 +119,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
             self.favoriteListViewHeaderLabel.text = "Click on address below to set up notifications.\nClick on magnifying glass in map to view schedule."
             
             let addressWithNextSweepDay = self.addresses.reduce(self.addresses[0], {
-                $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 && $0.nextSweepDay != nil && $1.nextSweepDay != nil ? $0 : $1
+                $0.nextSweepDay != nil && $1.nextSweepDay != nil && $0.nextSweepDay!.timeIntervalSince1970 < $1.nextSweepDay!.timeIntervalSince1970 ? $0 : $1
             })
 
             for (_, address) in self.addresses.enumerated() {
@@ -152,7 +152,7 @@ class FavoriteListViewController: UIViewController, MKMapViewDelegate, UITableVi
                             annotation.title = "Next Sweep: \(calenderDate.month!)/\(calenderDate.day!)/\(calenderDate.year!)"
                         }
                         else {
-                            annotation.title = "Next Sweep: No more sweeps at this address in \(self.common.defaults.latestAppVersion())"
+                            annotation.title = "Next Sweep: \(self.common.defaults.latestAppVersion()) sweeping has ended"
                         }
                         
                         // Add annoation to map

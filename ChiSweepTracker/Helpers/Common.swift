@@ -583,6 +583,15 @@ public enum Model : String {
          iPhone12           = "iPhone 12",
          iPhone12Pro        = "iPhone 12 Pro",
          iPhone12ProMax     = "iPhone 12 Pro Max",
+         iPhone13Mini       = "iPhone 13 Mini",
+         iPhone13           = "iPhone 13",
+         iPhone13Pro        = "iPhone 13 Pro",
+         iPhone13ProMax     = "iPhone 13 Pro Max",
+         iPhoneSE3          = "iPhone SE 3rd gen",
+         iPhone14           = "iPhone 14",
+         iPhone14Plus       = "iPhone 14 Plus",
+         iPhone14Pro        = "iPhone 14 Pro",
+         iPhone14ProMax     = "iPhone 14 Pro Max",
          
          unrecognized       = "?unrecognized?"
 }
@@ -590,10 +599,15 @@ public enum Model : String {
 public extension UIDevice {
     
     var type: Model {
+        
         var systemInfo = utsname()
+        
         uname(&systemInfo)
+        
         let modelCode = withUnsafePointer(to: &systemInfo.machine) {
+            
             $0.withMemoryRebound(to: CChar.self, capacity: 1) {
+                
                 ptr in String.init(validatingUTF8: ptr)
             }
         }
@@ -712,7 +726,17 @@ public extension UIDevice {
             "iPhone13,1" : .iPhone12Mini,
             "iPhone13,2" : .iPhone12,
             "iPhone13,3" : .iPhone12Pro,
-            "iPhone13,4" : .iPhone12ProMax
+            "iPhone13,4" : .iPhone12ProMax,
+            "iPhone14,4" : .iPhone13Mini,
+            "iPhone14,5" : .iPhone13,
+            "iPhone14,2" : .iPhone13Pro,
+            "iPhone14,3" : .iPhone13ProMax,
+            "iPhone14,6" : .iPhoneSE3,
+            "iPhone14,7" : .iPhone14,
+            "iPhone14,8" : .iPhone14Plus,
+            "iPhone15,2" : .iPhone14Pro,
+            "iPhone15,3" : .iPhone14ProMax
+            
         ]
         
         if let model = modelMap[String.init(validatingUTF8: modelCode!)!] {
@@ -723,8 +747,10 @@ public extension UIDevice {
                     }
                 }
             }
+            
             return model
         }
+        
         return Model.unrecognized
     }
 }

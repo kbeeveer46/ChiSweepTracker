@@ -1,9 +1,8 @@
 import CoreLocation
 import MapKit
 import THLabel
-import StoreKit
 
-class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
 	// MARK: Controls
     @IBOutlet weak var scheduleMapView: MKMapView!
@@ -21,10 +20,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
     let generator = UISelectionFeedbackGenerator()
     let currentYear = Calendar.current.component(.year, from: Date())
     let userDefaults = UserDefaults(suiteName: "group.com.kylebeverforden.chisweeptracker.defaults")
-    
-    // In-app purchase
-    var myProduct: SKProduct?
-    var price: NSDecimalNumber?
     
 	// MARK: Methods
 	
@@ -44,9 +39,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
 		
 		// Initialize controls per device
 		self.initializeControlsPerDevice()
-        
-        // Gets and sets the multiple addresses in-app purchase so users can buy it
-        getMultipleAddressesInAppPurchase()
         
 	}
     
@@ -78,71 +70,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         }
     }
     
-    //MARK: In-app purchase methods
-    
-    // Gets the multiple addresses in-app purchase
-    func getMultipleAddressesInAppPurchase() {
-        let request = SKProductsRequest(productIdentifiers: [common.constants.multipleAddressIAPurchase])
-        request.delegate = self
-        request.start()
-    }
-    
-    // Sets the multiple addresses in-app purchase
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        if let product = response.products.first {
-            self.myProduct = product
-            self.price = product.price
-        }
-    }
-    
-    // Do not remove. Handles the in-app purchasing result
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                break
-            case .purchased:
-                self.userDefaults!.set(true, forKey: "enableMultipleAddresses")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Purchase Complete", "Saving multiple addresses is now enabled. Click on the plus icon to save this address.")
-                SKPaymentQueue.default().remove(self)
-                break
-            case .restored:
-                self.userDefaults!.set(true, forKey: "enableMultipleAddresses")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Purchase Restored", "Saving multiple addresses is now enabled. Click on the plus icon to save this address.")
-                SKPaymentQueue.default().remove(self)
-                break
-            case .failed:
-                self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                self.common.showAlert("Unable To Purchase", "There was an issue and your device did not complete the purchase. Please try again.")
-                SKPaymentQueue.default().remove(self)
-                break
-            case .deferred:
-                self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                break
-            default:
-                self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                break
-            }
-        }
-    }
-    
-    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        self.userDefaults!.set(false, forKey: "enableMultipleAddresses")
-        self.common.showAlert("Unable To Restore", "There was an issue and your device did not restore the purchase. Please try again.")
-        print(error.localizedDescription)
-    }
-
-//    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-//        print(queue)
-//    }
-    
     //MARK: Top menu methods
     
 	// Method is called when user chooses yes to save a favorite
@@ -152,23 +79,13 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
         self.generator.prepare()
         self.generator.selectionChanged()
         
-        self.database.getAddresses(completion: { addresses in
-            
-            let addressCount = addresses.count
-            
-            DispatchQueue.main.async {
-                
-                if addressCount == 0  ||
-                    addressCount >= 1  && self.common.defaults.enableMultipleAddresses() == true ||
-                    addressCount >= 1  && self.common.defaults.enableMultipleAddresses() == false && self.myProduct == nil {
-                            
-                    self.database.insertAddressIntoDatabase(address: self.schedule.address,
+    self.database.insertAddressIntoDatabase(address: self.schedule.address,
                                                           notificationsEnabled: 0,
                                                           notificationsWhen: "Day Of Sweep",
                                                           notificationsHour: 0,
                                                           notificationsMinute: 0,
                                                           completion: { result in
-                                
+        
                         if result {
                                                             
                             self.navigationItem.rightBarButtonItem = nil
@@ -200,45 +117,6 @@ class ScheduleViewController: UIViewController, MKMapViewDelegate, UITableViewDa
                         }
                                                             
                     })
-                }
-                else if addressCount != -1 {
-                    
-                    // Create alert
-                    let alert = UIAlertController(title: "Premium Feature", message: "Saving more than one address requires a one-time purchase of $\(self.price!). Would you like to proceed to the purchase screen?", preferredStyle: .alert)
-
-                    // Yes option
-                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler:{ action in
-                        
-                        guard let myProduct = self.myProduct else {
-                            return
-                        }
-            
-                        if SKPaymentQueue.canMakePayments() {
-                            let payment = SKPayment(product: myProduct)
-                            SKPaymentQueue.default().add(self)
-                            SKPaymentQueue.default().add(payment)
-                        }
-                        else {
-                            self.common.showAlert("Unable to purchase", "Your device does not have the required permissions to make this purchase.")
-                        }
-                
-                    }))
-                    
-                    // Restore option
-                    alert.addAction(UIAlertAction(title: "Restore Previous Purchase", style: .default, handler:{ action in
-                        SKPaymentQueue.default().add(self)
-                        SKPaymentQueue.default().restoreCompletedTransactions()
-                    }))
-                    
-                    // No option
-                    alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-                    
-                    // Present alert
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-            }
-        })
     }
     
     // Show settings button in the top right
