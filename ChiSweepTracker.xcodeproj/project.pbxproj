@@ -18,14 +18,13 @@
 		20504405265E05C300AEDF0C /* DivvyStationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5B0D9A23F9E8FA00D90316 /* DivvyStationModel.swift */; };
 		20504406265E05D200AEDF0C /* VehicleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F869023E48DBB00194C47 /* VehicleModel.swift */; };
 		20504407265E05D700AEDF0C /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6AFEE723A1E17600F7E177 /* DateCollectionViewCell.swift */; };
-		2050B3BD2634994A00C0EBC9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2050B3BC2634994800C0EBC9 /* StoreKit.framework */; };
 		20917114262C9C6F004AD1AC /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20917113262C9C6F004AD1AC /* NotificationService.swift */; };
-		20917118262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		20917118262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		20931B31262F8CC900D6EFBE /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20931B30262F8CC900D6EFBE /* FavoriteListViewController.swift */; };
 		20959B332636DDF5000B2E75 /* NewsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20959B322636DDF5000B2E75 /* NewsModel.swift */; };
 		209DDE48265DD9BB003FB35C /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20B02A4D26534FF4003A6062 /* Intents.framework */; };
 		209DDE4B265DD9BB003FB35C /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE4A265DD9BB003FB35C /* IntentHandler.swift */; };
-		209DDE4F265DD9BB003FB35C /* Shortcuts.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 209DDE47265DD9BB003FB35C /* Shortcuts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		209DDE4F265DD9BB003FB35C /* Shortcuts.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 209DDE47265DD9BB003FB35C /* Shortcuts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		209DDE54265DD9EB003FB35C /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE53265DD9EB003FB35C /* Intents.intentdefinition */; };
 		209DDE55265DDA2F003FB35C /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE53265DD9EB003FB35C /* Intents.intentdefinition */; };
 		209DDE57265DDAFB003FB35C /* GetNextSweepDayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209DDE56265DDAFB003FB35C /* GetNextSweepDayHandler.swift */; };
@@ -84,16 +83,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		20917119262C9C70004AD1AC /* Embed App Extensions */ = {
+		20917119262C9C70004AD1AC /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				209DDE4F265DD9BB003FB35C /* Shortcuts.appex in Embed App Extensions */,
-				20917118262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+				209DDE4F265DD9BB003FB35C /* Shortcuts.appex in Embed Foundation Extensions */,
+				20917118262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -109,7 +108,6 @@
 		2040AF862647775C00D9B653 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2040AF8826477A6200D9B653 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		204903E3265FD4A60099235F /* SpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
-		2050B3BC2634994800C0EBC9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2073AF96262C9F5C008D5086 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		20917111262C9C6F004AD1AC /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		20917113262C9C6F004AD1AC /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -184,7 +182,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2050B3BD2634994A00C0EBC9 /* StoreKit.framework in Frameworks */,
 				FA0EC356239B105F00DD3127 /* MapKit.framework in Frameworks */,
 				20B02A4F26534FF5003A6062 /* Intents.framework in Frameworks */,
 				20B02A5026534FF5003A6062 /* IntentsUI.framework in Frameworks */,
@@ -243,7 +240,6 @@
 			children = (
 				20B02A4D26534FF4003A6062 /* Intents.framework */,
 				20B02A4E26534FF5003A6062 /* IntentsUI.framework */,
-				2050B3BC2634994800C0EBC9 /* StoreKit.framework */,
 				FA0EC355239B105F00DD3127 /* MapKit.framework */,
 				289531459393EF044AEAC753 /* Pods_ChiSweepTracker.framework */,
 				198A3D876EC906A9080C8069 /* Pods_OneSignalNotificationServiceExtension.framework */,
@@ -406,7 +402,7 @@
 				FA29463923985FE300A24FFC /* Frameworks */,
 				FA29463A23985FE300A24FFC /* Resources */,
 				73E4C6D49F18D3B20579B2C3 /* [CP] Embed Pods Frameworks */,
-				20917119262C9C70004AD1AC /* Embed App Extensions */,
+				20917119262C9C70004AD1AC /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -426,7 +422,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = "Kyle Beverforden";
 				TargetAttributes = {
 					20917110262C9C6F004AD1AC = {
@@ -690,7 +686,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 31;
+				MARKETING_VERSION = 32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -715,7 +711,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 31;
+				MARKETING_VERSION = 32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -740,7 +736,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 31;
+				MARKETING_VERSION = 32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.Shortcuts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -765,7 +761,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 31;
+				MARKETING_VERSION = 32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.Shortcuts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -908,7 +904,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 31;
+				MARKETING_VERSION = 32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -934,7 +930,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 31;
+				MARKETING_VERSION = 32;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
