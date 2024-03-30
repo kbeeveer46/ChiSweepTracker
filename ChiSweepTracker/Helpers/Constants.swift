@@ -28,9 +28,6 @@ public class Constants {
     // One Signal
     let OneSignalAppId = "2a6b2ed6-b4a7-4da0-8917-899cef558a0a"
     
-    // Multiple addresses in-app purchase
-    let multipleAddressIAPurchase = "com.kylebeverforden.chisweeptracker.savemultipleaddresses"
-    
     // SODA
     let SODAToken = "dM3SUsRUNwyTWQGy83lvBv4X3"
     let SODADomain = "data.cityofchicago.org"
