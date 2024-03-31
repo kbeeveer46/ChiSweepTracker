@@ -32,6 +32,8 @@
 		20B02A4F26534FF5003A6062 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20B02A4D26534FF4003A6062 /* Intents.framework */; };
 		20B02A5026534FF5003A6062 /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20B02A4E26534FF5003A6062 /* IntentsUI.framework */; };
 		20C5B036263797F70003D645 /* AddressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C5B035263797F70003D645 /* AddressModel.swift */; };
+		275F47F22BB7AFE100ABA083 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 275F47F12BB7AFE100ABA083 /* PrivacyInfo.xcprivacy */; };
+		275F47F32BB7AFE100ABA083 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 275F47F12BB7AFE100ABA083 /* PrivacyInfo.xcprivacy */; };
 		A6217785A16E1F176B254692 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD83E9AD92E12FE3CB54A5C0 /* Pods_OneSignalNotificationServiceExtension.framework */; };
 		AD1999C8F60AD59CAC0D1E95 /* Pods_ChiSweepTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B42F50C4D782FC77F5AD77 /* Pods_ChiSweepTracker.framework */; };
 		C7A4C6FAF28724B9C8EECE21 /* Pods_Shortcuts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 717AF5BA4901B50CF223AA20 /* Pods_Shortcuts.framework */; };
@@ -121,6 +123,7 @@
 		20B02A4E26534FF5003A6062 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		20C5B035263797F70003D645 /* AddressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressModel.swift; sourceTree = "<group>"; };
 		230E1A073D58756A6DABA950 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		275F47F12BB7AFE100ABA083 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		30B366257AA7A58E8AB595A6 /* Pods-Shortcuts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shortcuts.release.xcconfig"; path = "Target Support Files/Pods-Shortcuts/Pods-Shortcuts.release.xcconfig"; sourceTree = "<group>"; };
 		66F10FD3F2C4C4844C0100E1 /* Pods-ChiSweepTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiSweepTracker.release.xcconfig"; path = "Target Support Files/Pods-ChiSweepTracker/Pods-ChiSweepTracker.release.xcconfig"; sourceTree = "<group>"; };
 		717AF5BA4901B50CF223AA20 /* Pods_Shortcuts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shortcuts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -296,6 +299,7 @@
 		FA29463323985FE300A24FFC = {
 			isa = PBXGroup;
 			children = (
+				275F47F12BB7AFE100ABA083 /* PrivacyInfo.xcprivacy */,
 				FA29463E23985FE300A24FFC /* ChiSweepTracker */,
 				20917112262C9C6F004AD1AC /* OneSignalNotificationServiceExtension */,
 				209DDE49265DD9BB003FB35C /* Shortcuts */,
@@ -468,6 +472,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				275F47F32BB7AFE100ABA083 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +480,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				275F47F22BB7AFE100ABA083 /* PrivacyInfo.xcprivacy in Resources */,
 				FA29464C23985FE600A24FFC /* LaunchScreen.storyboard in Resources */,
 				FA87EFD923AAEB960061DDBC /* notification.m4r in Resources */,
 				FAD5595B242FB49200F11DA1 /* logo-trash-1024.png in Resources */,
@@ -686,7 +692,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -711,7 +717,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 35;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -737,7 +743,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.Shortcuts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -762,7 +768,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.Shortcuts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -905,7 +911,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -931,7 +937,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";

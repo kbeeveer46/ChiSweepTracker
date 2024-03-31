@@ -3,7 +3,7 @@ import UIKit
 class SpinnerViewController: UIViewController {
     
     //var spinner = UIActivityIndicatorView(style: .whiteLarge)
-    var spinner = UIActivityIndicatorView(style: .gray)
+    var spinner = UIActivityIndicatorView(style: .medium)
     
     override func loadView() {
         

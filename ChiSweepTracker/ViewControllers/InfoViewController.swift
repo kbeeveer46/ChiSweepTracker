@@ -120,7 +120,10 @@ class InfoViewController: UIViewController, UITableViewDelegate, UITableViewData
 							self?.rateCardView.transform = .identity
 				},
 						   completion: { (_) -> Void in
-							SKStoreReviewController.requestReview()
+                            if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene 
+                            {
+                                SKStoreReviewController.requestReview(in: scene)
+                            }
 							
 			})
 		}

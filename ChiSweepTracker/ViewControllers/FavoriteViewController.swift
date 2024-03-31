@@ -405,10 +405,15 @@ class FavoriteViewController: UIViewController, UIPickerViewDelegate, UITextFiel
                         if data.count > 0 {
                             
                             let ward = data[0][self.common.defaults.wardTitle()] as? String ?? ""
-                            let section = data[0][self.common.defaults.sectionTitle()] as? String ?? ""
+                            var section = data[0][self.common.defaults.sectionTitle()] as? String ?? ""
                             let the_geom = data[0][self.common.defaults.geomTitle()] as? [String: Any] ?? [:]
                             let coordinatesWrapper = the_geom[self.common.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                            
+                            if (section.count == 1)
+                            {
+                                section = "0" + section
+                            }
                             
                             self.schedule.polygonCoordinates.removeAll()
                             

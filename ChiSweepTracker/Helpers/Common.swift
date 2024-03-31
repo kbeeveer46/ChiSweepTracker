@@ -106,7 +106,12 @@ public class Common {
                             
                             // Get values from json query
                             let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
-                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
+                            var section = data[0][self.defaults.sectionTitle()] as? String ?? ""
+                            
+                            if (section.count == 1)
+                            {
+                                section = "0" + section
+                            }
                             
                             // Query SODA API to get months and days
                             let scheduleQuery = wardClient.query(dataset: self.defaults.scheduleDataset())
@@ -248,10 +253,15 @@ public class Common {
                             
                             // Get values from json query
                             let ward = data[0][self.defaults.wardTitle()] as? String ?? ""
-                            let section = data[0][self.defaults.sectionTitle()] as? String ?? ""
+                            var section = data[0][self.defaults.sectionTitle()] as? String ?? ""
                             let the_geom = data[0][self.defaults.geomTitle()] as? [String: Any] ?? [:]
                             let coordinatesWrapper = the_geom[self.defaults.coordinatesTitle()] as? NSMutableArray
                             let coordinatesArray = coordinatesWrapper?[0] as? [[NSMutableArray]]
+                            
+                            if (section.count == 1)
+                            {
+                                section = "0" + section
+                            }
                             
                             // Loop through coordinates array
                             for(_, coordinate) in coordinatesArray!.enumerated() {
