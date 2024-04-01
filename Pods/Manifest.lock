@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.4.3)
-  - IQKeyboardManagerSwift (6.5.6)
+  - IQKeyboardManagerSwift (7.0.2)
   - OneSignal (3.12.7):
     - OneSignal/OneSignalCore (= 3.12.7)
     - OneSignal/OneSignalExtension (= 3.12.7)
@@ -28,7 +28,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
-  IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
+  IQKeyboardManagerSwift: d338c11a896e9f29603443700c4567e32f830c22
   OneSignal: 65c17edb3d9d26e355249f97340c1386d87e168c
   THLabel: 3fc93a0f01f74e4eec7574df2819e576d57150b3
 

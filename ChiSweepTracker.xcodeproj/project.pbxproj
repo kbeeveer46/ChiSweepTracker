@@ -692,7 +692,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 35;
+				MARKETING_VERSION = 37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -717,7 +717,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 35;
+				MARKETING_VERSION = 37;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -743,7 +743,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 35;
+				MARKETING_VERSION = 37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.Shortcuts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -768,7 +768,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 35;
+				MARKETING_VERSION = 37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker.Shortcuts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -911,7 +911,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 35;
+				MARKETING_VERSION = 37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -937,7 +937,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 35;
+				MARKETING_VERSION = 37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylebeverforden.ChiSweepTracker;
 				PRODUCT_NAME = "Sweep Tracker";
 				PROVISIONING_PROFILE_SPECIFIER = "";
