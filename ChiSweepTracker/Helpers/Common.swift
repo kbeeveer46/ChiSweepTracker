@@ -45,7 +45,6 @@ public class Common {
         userDefaults!.set(userDefaultsOld.integer(forKey: "latestAppVersion"), forKey: "latestAppVersion")
         userDefaults!.set(userDefaultsOld.integer(forKey: "latestDatasetVersion"), forKey: "latestDatasetVersion")
         userDefaults!.set(userDefaultsOld.integer(forKey: "userDatasetVersion"), forKey: "userDatasetVersion")
-        userDefaults!.set(userDefaultsOld.bool(forKey: "enableMultipleAddresses"), forKey: "enableMultipleAddresses")
         userDefaults!.set(userDefaultsOld.string(forKey: "defaultAddress"), forKey: "defaultAddress")
         userDefaults!.set(userDefaultsOld.double(forKey: "defaultLongitude"), forKey: "defaultLongitude")
         userDefaults!.set(userDefaultsOld.double(forKey: "defaultLatitude"), forKey: "defaultLatitude")

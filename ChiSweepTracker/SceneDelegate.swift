@@ -33,10 +33,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         
 	    // Clear badge number when app opens
+        
         UIApplication.shared.applicationIconBadgeNumber = 0
         
         // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it.
+        
         let center = UNUserNotificationCenter.current()
+        
         center.getNotificationSettings { (settings) in
             if(settings.authorizationStatus == .authorized && self.defaults.notificationOneSignalPlayerId() == "") {
                 OneSignal.disablePush(false)
@@ -44,7 +47,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
 		// Get data from database tables and update notifications
+        
         let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
+        
         if gettingValuesFromDatabase == false {
             self.database.getValuesFromDatabase(completion: { message in
                 userDefaults!.setValue(false, forKey: "gettingValuesFromDatabase")

@@ -10,7 +10,6 @@ public class Defaults {
     func latestAppVersion() -> Int { return defaults!.integer(forKey: "latestAppVersion")}
     func latestDatasetVersion() -> Int {return defaults!.integer(forKey: "latestDatasetVersion")}
     func userDatasetVersion() -> Int {return defaults!.integer(forKey: "userDatasetVersion")}
-    func enableMultipleAddresses() -> Bool {return defaults!.bool(forKey: "enableMultipleAddresses")}
     func gettingValuesFromDatabase() -> Bool {return defaults!.bool(forKey: "gettingValuesFromDatabase")}
     
     func defaultAddress() -> String {return defaults!.string(forKey: "defaultAddress") ?? ""}
@@ -98,9 +97,5 @@ public class Defaults {
     func notificationsToggled() -> Bool {return defaults!.bool(forKey: "notificationsToggled")}
     func notificationsYear() -> Int {return defaults!.integer(forKey: "notificationsYear")}
     func notificationOneSignalPlayerId() -> String {return defaults!.string(forKey: "notificationOneSignalPlayerId") ?? ""}
-    
-    // Updates
-    
-    func updatesLastViewDate() -> String {return defaults!.string(forKey: "updatesLastViewDate") ?? ""}
     
 }

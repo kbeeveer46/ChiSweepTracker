@@ -10,7 +10,6 @@ public class Constants {
     let divvysDatabaseName = "divvys_dev"
     let towedDatabaseName = "towed_vehicles_dev"
     let relocatedDatabaseName = "relocated_vehicles_dev"
-    let newsDatabaseName = "news_dev"
     let infoDatabaseName = "info_dev"
     let notificationsDatabaseName = "notifications_dev"
     #else
@@ -20,7 +19,6 @@ public class Constants {
     let divvysDatabaseName = "divvys"
     let towedDatabaseName = "towed_vehicles"
     let relocatedDatabaseName = "relocated_vehicles"
-    let newsDatabaseName = "news"
     let infoDatabaseName = "info"
     let notificationsDatabaseName = "notifications"
     #endif

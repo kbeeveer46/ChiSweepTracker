@@ -17,17 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     let userDefaultsOld = UserDefaults.standard
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-          
-//        userDefaultsOld.set("123", forKey: "deviceUUID")
-        
-        // Testing code for when old users migrate to the new app with multiple addresses
-//        defaults.set("750 N Dearborn St Chicago", forKey: "favoriteAddress")
-//        defaults.set(true, forKey: "notificationsToggled")
-//        defaults.set("1 Day Prior", forKey: "notificationWhen")
-//        defaults.set(8, forKey: "notificationHour")
-//        defaults.set(30, forKey: "notificationMinute")
         
         // Existing user with old defaults
+        
         if !(self.userDefaultsOld.string(forKey: "deviceUUID") ?? "").isEmpty && self.defaults.deviceUUID().isEmpty {
             
             // Migrate old defaults to new defaults
@@ -35,21 +27,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         
         // New user
+        
         else if (self.userDefaultsOld.string(forKey: "deviceUUID") ?? "").isEmpty && self.defaults.deviceUUID().isEmpty {
             
             // Get UUID and save it to defaults so it can be used throughout the app and database
             userDefaults!.set(UUID().uuidString, forKey: "deviceUUID")
         }
+        
         userDefaults!.synchronize()
+        
         print("uuid: \(self.defaults.deviceUUID())")
         
         // Required for didReceive when mass notification is opened
+        
 		UNUserNotificationCenter.current().delegate = self
 		
 		// Initilize custom keyboard (it allows the keyboard to rise and not cover text boxes)
+        
 		IQKeyboardManager.shared.enable = true
         
         // Set up an action to take when a user opens a remote One Signal sweep notificaton (not from a mass send)
+        
         let notificationOpenedBlock: OSNotificationOpenedBlock = { result in
             if let address = result.notification.additionalData?["address"] as? String {
                 if (address.trimmingCharacters(in: .whitespacesAndNewlines) != "") {
@@ -59,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         
         // OneSignal initialization
+        
         OneSignal.initWithLaunchOptions(launchOptions)
         OneSignal.setNotificationOpenedHandler(notificationOpenedBlock)
         OneSignal.setAppId(common.constants.OneSignalAppId)
@@ -66,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         OneSignal.setLogLevel(.LL_ERROR, visualLevel: .LL_NONE)
         
         // Request permission for notifications when app is first opened
+        
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
             granted, error in
                     
@@ -86,6 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
         
         // Get data from database tables and update notifications
+        
         let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
             self.database.getValuesFromDatabase(completion: { message in
@@ -97,6 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
     
     // This method will be called when the OneSignal notification subscription property changes.
+    
     func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges) {
         
         if !stateChanges.from.isSubscribed && stateChanges.to.isSubscribed {
@@ -104,10 +106,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             if let oneSignalDeviceStatus = OneSignal.getDeviceState() {
                 
                 // Set the playerId in defaults
+                
                 print("playerId: \(oneSignalDeviceStatus.userId ?? "")")
                 self.userDefaults!.set(oneSignalDeviceStatus.userId, forKey: "notificationOneSignalPlayerId")
              
                 // Update notifications so user has the latest notifications
+                
                 self.database.updateNotificationsAndSweepDayInDatabase()
             }
         }
@@ -120,9 +124,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     func applicationDidBecomeActive(_ application: UIApplication) {
 		
 		// Clear badge number when app opens
+        
         application.applicationIconBadgeNumber = 0
 
         // This is needed when a user initially doesn't allow notifications but then goes into the settings and enables it and comes back to the app.
+        
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { (settings) in
             if(settings.authorizationStatus == .authorized && self.defaults.notificationOneSignalPlayerId() == "") {
@@ -131,6 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         }
 
 		// Get data from database tables and update notifications
+        
         let gettingValuesFromDatabase = self.defaults.gettingValuesFromDatabase()
         if gettingValuesFromDatabase == false {
             self.database.getValuesFromDatabase(completion: { message in
@@ -146,6 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 		
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
+        
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
@@ -171,9 +179,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         //print(userInfo)
         
 		// Clear badge number when app opens
+        
         UIApplication.shared.applicationIconBadgeNumber = 0
         
         // Send the user to the updates tab
+        
         if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
             if let navigationController = rootViewController as? UINavigationController {
                 if let tabBarController = navigationController.viewControllers[0] as? UITabBarController {
