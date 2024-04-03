@@ -177,7 +177,7 @@ class SearchViewController: UIViewController, CLLocationManagerDelegate, UITextF
 				
 				// Create SODA client using domain and token
 				let wardClient = SODAClient(domain: self.common.constants.SODADomain, token: self.common.constants.SODAToken)
-                
+                                
 				// Query SODA API to get ward and section
 				let wardQuery = wardClient.query(dataset: self.common.defaults.wardDataset())
                     .filter("intersects(\(self.common.defaults.geomTitle()),'POINT(\(self.schedule.locationCoordinate.longitude) \(self.schedule.locationCoordinate.latitude))')")

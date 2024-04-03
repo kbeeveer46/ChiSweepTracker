@@ -23,7 +23,7 @@ public class Database {
             parameters = ["tableName": self.common.constants.addressesDatabaseName, "uuid": self.common.defaults.deviceUUID(), "address": address]
         }
         
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+        AF.request(urlTo, parameters: parameters).validate().responseData() { response in
             switch response.result {
             case .failure(let error):
                 print(error)
@@ -272,7 +272,7 @@ public class Database {
         self.userDefaults!.setValue(true, forKey: "gettingValuesFromDatabase")
         
         // Get schedule data
-        AF.request(self.common.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.common.constants.schedulesDatabaseName]).validate().responseJSON() { response in
+        AF.request(self.common.constants.websiteURL + "/get-schedule-data.php", parameters: ["tableName": self.common.constants.schedulesDatabaseName]).validate().responseData() { response in
             switch response.result {
             case .failure(let error):
                 print(error)
@@ -305,7 +305,7 @@ public class Database {
                     self.userDefaults!.set(sectionTitle, forKey: "sectionTitle")
                     self.userDefaults!.set(wardTitle, forKey: "wardTitle")
                     
-                    AF.request(self.common.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.common.constants.updatesDatabaseName, "year": String(self.common.defaults.latestAppVersion())]).validate().responseJSON() { response in
+                    AF.request(self.common.constants.websiteURL + "/get-update-data.php", parameters: ["tableName": self.common.constants.updatesDatabaseName, "year": String(self.common.defaults.latestAppVersion())]).validate().responseData() { response in
                         switch response.result {
                         case .failure(let error):
                             print(error)
@@ -332,7 +332,7 @@ public class Database {
         }
         
         // Get Divvys data
-        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.divvysDatabaseName]).validate().responseJSON() { response in
+        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.divvysDatabaseName]).validate().responseData() { response in
             switch response.result {
             case .failure(let error):
                 print(error)
@@ -383,7 +383,7 @@ public class Database {
         }
         
         // Get relocated vehicles data
-        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.relocatedDatabaseName]).validate().responseJSON() { response in
+        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.relocatedDatabaseName]).validate().responseData() { response in
             switch response.result {
             case .failure(let error):
                 print(error)
@@ -429,7 +429,7 @@ public class Database {
         }
         
         // Get towed vehicles data
-        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.towedDatabaseName]).validate().responseJSON() { response in
+        AF.request(self.common.constants.websiteURL + "/get-data.php", parameters: ["tableName": self.common.constants.towedDatabaseName]).validate().responseData() { response in
             switch response.result {
             case .failure(let error):
                 print(error)

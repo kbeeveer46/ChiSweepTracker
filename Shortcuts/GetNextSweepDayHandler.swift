@@ -56,7 +56,7 @@ class GetNextSweepDayIntentHandler: NSObject, GetNextSweepDayIntentHandling {
         
         parameters = ["tableName": addressesDatabaseName, "uuid": self.defaults!.string(forKey: "deviceUUID") ?? ""]
 
-        AF.request(urlTo, parameters: parameters).validate().responseJSON() { response in
+        AF.request(urlTo, parameters: parameters).validate().responseData() { response in
             switch response.result {
             case .failure(let error):
                 print(error)
